@@ -1,0 +1,16 @@
+{
+  "id": "web-after-state-fix",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "web"
+  ],
+  "started_utc": "2026-10-26T20:11:15.881612+00:00",
+  "duration_seconds": 16.576,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/web-after-state-fix.txt",
+  "sha256": "bcb300f8cb1dd0552c21804b62993f0220a3026555f8d069bd6ebed99c1bc04f"
+}

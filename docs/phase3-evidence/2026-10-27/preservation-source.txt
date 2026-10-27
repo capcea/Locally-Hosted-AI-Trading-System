@@ -1,0 +1,81 @@
+import importlib.util
+import json
+import subprocess
+from pathlib import Path
+
+import httpx
+from alembic.autogenerate import compare_metadata
+from alembic.migration import MigrationContext
+from sqlalchemy import create_engine
+from dotenv import dotenv_values
+from packages.persistence.models import Base
+import packages.market.models
+import packages.execution.models
+
+
+def output(*args):
+    return subprocess.check_output(list(args), text=True).strip()
+
+
+def query(sql):
+    return output('docker', 'compose', 'exec', '-T', 'postgres', 'psql', '-U', 'research', '-d', 'research', '-Atqc', sql)
+
+before=json.loads(Path('.cache/phase3/development-before.json').read_text())
+for name, expected in before['containers'].items():
+    actual=json.loads(output('docker','inspect','--format','{"id":{{json .Id}},"mounts":{{json .Mounts}}}','ai-trading-research-'+name+'-1'))
+    assert actual==expected, name
+print('PASSED: existing PostgreSQL, Redis and MinIO container IDs and all volume mounts unchanged.')
+changes=[]
+for table, expected in before['records'].items():
+    sql=f"SELECT count(*),md5(COALESCE(string_agg(row_to_json(t)::text,',' ORDER BY row_to_json(t)::text),'')) FROM {table} t"
+    actual=query(sql)
+    if actual != expected:
+        changes.append(table)
+        assert int(actual.split('|')[0]) >= int(expected.split('|')[0]), table
+assert set(changes)=={'audit_events','audit_head','login_sessions','prop_firms','rate_buckets','recovery_codes','security_state','users'}, changes
+print('PASSED: 17 of 25 legacy table fingerprints unchanged; no baseline table row count decreased.')
+print('OBSERVED: 8 authentication/bootstrap tables changed since backup; audit shows owner bootstrap/MFA at 2026-10-26 23:12-23:15 UTC, BEFORE Phase3 migration at 2026-10-27 01:28 UTC. No all-table-unchanged claim.')
+fresh=json.loads(Path('.cache/phase3/post-migration-fingerprints.json').read_text())
+for table, expected in fresh.items():
+    sql=f"SELECT count(*),md5(COALESCE(string_agg(row_to_json(t)::text,',' ORDER BY row_to_json(t)::text),'')) FROM {table} t"
+    assert query(sql)==expected, table
+print('PASSED: all 25 post-migration legacy table fingerprints unchanged during final rebuild/verification; owner enrollment records retained.')
+assert query('SELECT version_num FROM alembic_version')=='0004_execution_journal'
+print('PASSED: schema revision 0004_execution_journal.')
+for table in ('execution_events','simulation_commands','broker_observations','audit_events'):
+    for permission in ('UPDATE','DELETE','TRUNCATE'):
+        assert query(f"SELECT has_table_privilege('research_app','{table}','{permission}')")=='f'
+print('PASSED: runtime identity cannot UPDATE, DELETE or TRUNCATE journal commands/events/observations or audit events.')
+values=dotenv_values('.env')
+from packages.persistence.audit import verify_chain
+from packages.persistence.store import Store
+store=Store(values['DATABASE_URL'])
+with store.session() as session:
+    valid,count,_=verify_chain(session,values['AUTH_ENCRYPTION_KEY'])
+    assert valid
+    print('PASSED: development HMAC audit chain valid,', count, 'events.')
+store.engine.dispose()
+engine=create_engine(values['DATABASE_URL'])
+with engine.connect() as connection:
+    context=MigrationContext.configure(connection, opts={'include_object':lambda obj,name,type_,reflected,compare_to: name!='platform_metadata'})
+    changes=compare_metadata(context,Base.metadata)
+    assert not changes, repr(changes)
+engine.dispose()
+print('PASSED: no ORM/Alembic schema drift (foundation platform_metadata intentionally excluded).')
+for service in ('api','market-worker'):
+    info=json.loads(output('docker','inspect','ai-trading-research-'+service+'-1'))[0]
+    names={s.split('=',1)[0] for s in info['Config']['Env']}
+    assert not names.intersection({'POSTGRES_PASSWORD','MINIO_ROOT_USER','MINIO_ROOT_PASSWORD','AUTH_DATABASE_PASSWORD','CTRADER_CLIENT_SECRET','MT5_PASSWORD'})
+    assert not any('docker.sock' in s.get('Source','') for s in info['Mounts'])
+    check="import importlib.util,pathlib; assert not pathlib.Path('/app/services').exists(); assert importlib.util.find_spec('MetaTrader5') is None; print('main image excludes bridge source and MT5 SDK')"
+    assert 'excludes' in output('docker','compose','exec','-T',service,'/app/.venv/bin/python','-c',check)
+print('PASSED: API/worker exclude bridge source, MT5 SDK, admin/root/broker credential variables and Docker socket mounts.')
+with httpx.Client(timeout=15, trust_env=False) as client:
+    ready=client.get('http://127.0.0.1:18000/health/ready');ready.raise_for_status()
+    assert {s['id'] for s in ready.json()}=={'postgres','redis','storage'}
+    assert all(s['status']=='HEALTHY' for s in ready.json())
+    safety=client.get('http://127.0.0.1:18000/api/v1/safety');safety.raise_for_status()
+    assert all(safety.json()[flag] is False for flag in ('live_trading_enabled','order_submission_enabled','generated_code_execution'))
+    overview=client.get('http://127.0.0.1:18000/api/v1/overview');overview.raise_for_status();assert overview.json()['phase']==3
+    web=client.get('http://127.0.0.1:5173');web.raise_for_status()
+print('PASSED: readiness HTTP200, all 3 services HEALTHY, overview Phase3, Web HTTP200, all execution flags false.')

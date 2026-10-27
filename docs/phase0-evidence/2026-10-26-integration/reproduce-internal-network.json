@@ -1,0 +1,12 @@
+{
+  "id": "reproduce-internal-network",
+  "command": [
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T12:45:54.508246+00:00",
+  "duration_seconds": 0.834,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-26-integration/reproduce-internal-network.txt",
+  "sha256": "0489f961258ea56f768924a855ef7c456455a7727c5b8d0ba34c756a5e5412cc"
+}

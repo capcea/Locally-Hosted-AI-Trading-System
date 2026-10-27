@@ -1,0 +1,20 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+170 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+.venv/bin/python -m mypy
+packages/research/strategies.py:73: error: "float" has no attribute "sqrt"  [attr-defined]
+packages/research/strategies.py:73: error: Unsupported operand types for - ("Decimal" and "float")  [operator]
+packages/research/strategies.py:73: note: Right operand is of type "Decimal | float"
+packages/research/strategies.py:73: error: Generator has incompatible item type "Decimal | Any"; expected "bool"  [misc]
+packages/research/strategies.py:85: error: Unsupported operand types for * ("Decimal" and "float")  [operator]
+packages/research/strategies.py:85: note: Right operand is of type "Decimal | float"
+Found 4 errors in 1 file (checked 116 source files)
+make: *** [typecheck] Error 1

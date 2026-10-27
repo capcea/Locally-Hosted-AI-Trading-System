@@ -1,0 +1,12 @@
+{
+  "id": "seed-fixture",
+  "command": [
+    "make",
+    "seed-demo"
+  ],
+  "started_utc": "2026-10-25T17:07:25.662863+00:00",
+  "duration_seconds": 0.1,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/seed-fixture.txt",
+  "sha256": "27b621fb4d63e663303992793171a6d28e70b46dc985209c4e68bad104623265"
+}

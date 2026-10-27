@@ -1,0 +1,12 @@
+{
+  "id": "quality-final",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T01:27:59.564351+00:00",
+  "duration_seconds": 15.052,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/quality-final.txt",
+  "sha256": "7a0cb67f4b6921c122a09203313fd2b5572430688d2a139fddfe65fb7d34171a"
+}

@@ -1,0 +1,14 @@
+Listing tests:
+  [desktop] › phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login
+  [desktop] › phase2.spec.ts:13:1 › market data imports persist, pass quality and display only available stored prices
+  [desktop] › phase3.spec.ts:16:1 › synthetic orders persist, deduplicate, reconcile uncertainty and keep external execution denied
+  [desktop] › platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap
+  [desktop] › platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health
+  [desktop] › platform.spec.ts:43:1 › orders and activation remain refused through frontend proxy
+  [mobile] › phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login
+  [mobile] › phase2.spec.ts:13:1 › market data imports persist, pass quality and display only available stored prices
+  [mobile] › phase3.spec.ts:16:1 › synthetic orders persist, deduplicate, reconcile uncertainty and keep external execution denied
+  [mobile] › platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap
+  [mobile] › platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health
+  [mobile] › platform.spec.ts:43:1 › orders and activation remain refused through frontend proxy
+Total: 12 tests in 4 files

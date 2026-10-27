@@ -1,0 +1,14 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (104 > 100)
+  --> apps/api/catalog.py:30:101
+   |
+28 |         title="Simulare & brokeri demo",
+29 |         status="CURRENT",
+30 |         acceptance="Simulator și jurnal implementate; conectarea externă și browserul necesită dovezi.",
+   |                                                                                                     ^^^^
+31 |     ),
+32 |     Phase(
+   |
+
+Found 1 error.
+make: *** [lint] Error 1

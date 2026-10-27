@@ -1,0 +1,7 @@
+ Image ai-trading-research-web Building 
+ Image ai-trading-research-market-worker Building 
+ Image ai-trading-research-migrate Building 
+ Image ai-trading-research-risk-monitor Building 
+ Image ai-trading-research-api Building 
+failed to update builder last activity time: open /Users/andy/.docker/buildx/activity/.tmp-default1901696536: operation not permitted
+

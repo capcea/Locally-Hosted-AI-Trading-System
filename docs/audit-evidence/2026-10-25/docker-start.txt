@@ -1,0 +1,5 @@
+.venv/bin/python -m scripts.bootstrap
+Kept existing .env unchanged.
+docker compose up --build -d --wait --wait-timeout 180
+failed to connect to the docker API at unix:///Users/andy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/andy/.docker/run/docker.sock: connect: no such file or directory
+make: *** [dev] Error 1

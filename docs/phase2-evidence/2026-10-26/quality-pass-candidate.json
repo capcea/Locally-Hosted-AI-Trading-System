@@ -1,0 +1,12 @@
+{
+  "id": "quality-pass-candidate",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T19:39:22.523213+00:00",
+  "duration_seconds": 13.946,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/quality-pass-candidate.txt",
+  "sha256": "7b87566b750d9d16539dae0d6af732a6f1161e3a5f0802b01e6e0ef4f2639a0b"
+}

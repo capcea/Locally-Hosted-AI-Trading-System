@@ -1,0 +1,12 @@
+{
+  "id": "smoke-final",
+  "command": [
+    "make",
+    "smoke-demo"
+  ],
+  "started_utc": "2026-10-27T03:51:50.511830+00:00",
+  "duration_seconds": 0.489,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/smoke-final.txt",
+  "sha256": "be6147870901b36d75a5d3cf6104437dc132e4a59a3d36d799f9421326191a8c"
+}

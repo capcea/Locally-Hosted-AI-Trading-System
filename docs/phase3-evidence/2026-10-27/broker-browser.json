@@ -1,0 +1,18 @@
+{
+  "id": "broker-browser",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "E2E_ONLY_PROJECT=desktop",
+    "E2E_ONLY_SCENARIO=broker",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T22:32:48.895790+00:00",
+  "duration_seconds": 94.911,
+  "exit_code": 2,
+  "log": "docs/phase3-evidence/2026-10-27/broker-browser.txt",
+  "sha256": "fed505bceb5b5b223634c792b1e10ec43b7332998c0fdc20eb2f036c782accb9",
+  "pre_sanitization_sha256": "c4ee4c160b45c6eb4009e4c11f6f42f3ff08e03285c8707d09b66067a8934a20",
+  "sanitization": "A synthetic business idempotency identifier in failed source traceback was redacted after a generic-api-key scanner false positive; command status unchanged."
+}

@@ -1,0 +1,18 @@
+{
+  "id": "timezone-fix-images",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T20:22:04.301616+00:00",
+  "duration_seconds": 6.824,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/timezone-fix-images.txt",
+  "sha256": "f469ebb232415bf7b1a97ce83a4e2f1ed66a6ae53c55298962233fd421bb0928"
+}

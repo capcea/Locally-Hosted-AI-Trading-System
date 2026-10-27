@@ -1,0 +1,12 @@
+{
+  "id": "timezone-validation-fix",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T20:22:03.325969+00:00",
+  "duration_seconds": 21.448,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/timezone-validation-fix.txt",
+  "sha256": "315354dbbd9d5a7aac89325ba99572167c4842b9be0959d96b8a6b8227ac11c4"
+}

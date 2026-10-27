@@ -1,0 +1,19 @@
+{
+  "id": "final-stack-up",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web"
+  ],
+  "started_utc": "2026-10-26T14:37:41.125810+00:00",
+  "duration_seconds": 28.359,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/final-stack-up.txt",
+  "sha256": "b0e7a2dcb9bdd7821324c45eb0f82e186896ece665ea70d24363a7aba40d5862"
+}

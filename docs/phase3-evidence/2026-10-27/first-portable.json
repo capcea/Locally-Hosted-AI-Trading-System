@@ -1,0 +1,15 @@
+{
+  "id": "first-portable",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "-m",
+    "not infrastructure and not isolated_services"
+  ],
+  "started_utc": "2026-10-26T22:12:59.028884+00:00",
+  "duration_seconds": 3.791,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/first-portable.txt",
+  "sha256": "b39d8af739b89b4efaea5445e65bdc31c98693b84328cf2aa003ffac9412aceb"
+}

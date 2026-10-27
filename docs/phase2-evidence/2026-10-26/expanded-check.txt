@@ -1,0 +1,14 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+unformatted: File would be reformatted
+  --> apps/api/main.py:75:36
+   |
+74 |     app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts, www_redirect=False)
+   -     app.add_middleware(ImportLimit,max_bytes=config.market_upload_bytes+250000)
+75 +     app.add_middleware(ImportLimit, max_bytes=config.market_upload_bytes + 250000)
+76 |
+   |
+
+1 file would be reformatted, 99 files already formatted
+make: *** [lint] Error 1

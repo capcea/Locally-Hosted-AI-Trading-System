@@ -1,0 +1,37 @@
+{
+  "files": [
+    {
+      "path": "IMPLEMENTATION_STATUS.md",
+      "sha256": "4a77935ca8796ab85540d3750e515ec720c4225b307744dc12ac7acc37c3b7a6"
+    },
+    {
+      "path": "PHASE2_COMPLETION_REPORT.md",
+      "sha256": "bca3e8a8c426c7c0c48cb38a55b33a2e6847b843305b6577227c1c62992b7655"
+    },
+    {
+      "path": "README.md",
+      "sha256": "33616b7df7dea41a727eb47477996389761d4695fcbf4123be4ac17b4433562b"
+    },
+    {
+      "path": "apps/web/e2e/phase2.spec.ts",
+      "sha256": "bb3840453a2571ef32dc41a5a26065b2cccaacd4ae28e398a4b65da853ee6af3"
+    },
+    {
+      "path": "apps/web/src/MarketData.tsx",
+      "sha256": "8bc52f038587d789ed35d0eef4c9d560743f8604de4220a7cd4a65414419df9d"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "5d87f8a9ce4a32349e1156ce1a056290cb7b12c73976ca5245f97bc0b7ffc5ae"
+    },
+    {
+      "path": "scripts/browser_acceptance.py",
+      "sha256": "fd75efce5b956aa77bf60385c17acfc2f15a5cb6e7bcdbf6026e027795620878"
+    },
+    {
+      "path": "tests/test_integration_guards.py",
+      "sha256": "3f7972003fa01596b6d3a41cb39f9d2b3fed3ae295619e9f0d0cc19370f16271"
+    }
+  ],
+  "description": "Files edited during browser-fix follow-up; no Git commit created and no baseline diff attribution for other files."
+}

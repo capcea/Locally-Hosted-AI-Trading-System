@@ -1,0 +1,8 @@
+{
+  "origin": "apps/web/test-results/phase2-market-data-imports-345a4-nly-available-stored-prices-desktop/error-context.md",
+  "original_sha256": "319701f8ef080483df51dc85a20bda2582c43640f5e286663fd1d9ab82c7cf22",
+  "excerpt": "owner-failure.txt",
+  "status": "FAILED",
+  "runner_exit_code": "not captured in saved artifact; reported as 1 by owner",
+  "interpretation": "Global .market-json last() resolved to provider capabilities, not manifest. This is not a Chromium launch failure."
+}

@@ -1,0 +1,25 @@
+.venv/bin/python -m ruff check .
+B020 Loop control variable `project` overrides iterable it iterates
+  --> scripts/browser_acceptance.py:82:9
+   |
+80 |     )
+81 |     # A fresh database per viewport/scenario exercises owner setup through the real UI.
+82 |     for project, scenario in itertools.product(
+   |         ^^^^^^^
+83 |         (project,) if project else ("desktop", "mobile"),
+84 |         (scenario,) if scenario else ("foundation", "market"),
+   |
+
+B020 Loop control variable `scenario` overrides iterable it iterates
+  --> scripts/browser_acceptance.py:82:18
+   |
+80 |     )
+81 |     # A fresh database per viewport/scenario exercises owner setup through the real UI.
+82 |     for project, scenario in itertools.product(
+   |                  ^^^^^^^^
+83 |         (project,) if project else ("desktop", "mobile"),
+84 |         (scenario,) if scenario else ("foundation", "market"),
+   |
+
+Found 2 errors.
+make: *** [lint] Error 1

@@ -1,0 +1,14 @@
+{
+  "id": "final-strict-smoke",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "scripts.smoke_demo",
+    "--require-ready"
+  ],
+  "started_utc": "2026-10-26T20:32:37.479442+00:00",
+  "duration_seconds": 0.534,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-strict-smoke.txt",
+  "sha256": "bbb41db921966c93c1a04c7d919e5d6016ce2111d18baf76c3ddd82a2cb398a3"
+}

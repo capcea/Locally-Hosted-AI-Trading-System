@@ -1,0 +1,14 @@
+{
+  "id": "runtime-validation-path",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase4/validate_runtime.py"
+  ],
+  "started_utc": "2026-10-27T03:51:49.331468+00:00",
+  "duration_seconds": 9.169,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/runtime-validation-path.txt",
+  "sha256": "ed816b1db0775995f6504c05d74a8030b94af15378abe9c2ff16b04119fa51b4"
+}

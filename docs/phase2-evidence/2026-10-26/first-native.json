@@ -1,0 +1,12 @@
+{
+  "id": "first-native",
+  "command": [
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T19:25:33.702821+00:00",
+  "duration_seconds": 39.248,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26/first-native.txt",
+  "sha256": "c0a5e862bd7dad45c9da245897f37ee20cb186da5e0f0c99338ce0d591ab1349"
+}

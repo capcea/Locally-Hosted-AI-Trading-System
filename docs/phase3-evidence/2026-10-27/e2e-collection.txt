@@ -1,0 +1,44 @@
+Listing tests:
+Total: 0 tests in 0 files
+
+Error: Vitest failed to find the current suite. One of the following is possible:
+- "vitest" is imported directly without running "vitest" command
+- "vitest" is imported inside "globalSetup" (to fix this, use "setupFiles" instead, because "globalSetup" runs in a different context)
+- "vitest" is imported inside Vite / Vitest config file
+- Otherwise, it might be a Vitest bug. Please report it to https://github.com/vitest-dev/vitest/issues
+
+
+   at apps/web/src/api.test.ts:49
+
+  47 | }
+  48 |
+> 49 | afterEach(() => vi.unstubAllGlobals());
+     | ^
+  50 |
+  51 | describe('untrusted API payloads', () => {
+  52 |   it('accepts the explicit simulation-only contract', () => {
+    at assert (/Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2553:24)
+    at getCurrentSuite (/Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2588:2)
+    at afterEach (/Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2021:9)
+    at /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/src/api.test.ts:49:1
+
+Error: Vitest failed to find the current suite. One of the following is possible:
+- "vitest" is imported directly without running "vitest" command
+- "vitest" is imported inside "globalSetup" (to fix this, use "setupFiles" instead, because "globalSetup" runs in a different context)
+- "vitest" is imported inside Vite / Vitest config file
+- Otherwise, it might be a Vitest bug. Please report it to https://github.com/vitest-dev/vitest/issues
+
+
+   at apps/web/src/management-api.test.ts:4
+
+  2 | import { api, ApiError, parseSession } from './management-api';
+  3 |
+> 4 | afterEach(() => vi.unstubAllGlobals());
+    | ^
+  5 | describe('identity client boundary', () => {
+  6 |   it('rejects fabricated role and MFA session states', () => {
+  7 |     const session = {
+    at assert (/Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2553:24)
+    at getCurrentSuite (/Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2588:2)
+    at afterEach (/Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/node_modules/vitest/dist/chunks/run.BPv-BBRv.js:2021:9)
+    at /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web/src/management-api.test.ts:4:1

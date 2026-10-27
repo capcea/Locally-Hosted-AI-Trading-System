@@ -1,0 +1,177 @@
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build --pull never -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#3 DONE 0.8s
+
+#4 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#4 DONE 0.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 ...
+
+#8 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.4s done
+#8 DONE 0.4s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.5s done
+#7 DONE 0.5s
+
+#9 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#9 CACHED
+
+#10 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#10 CACHED
+
+#11 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#11 CACHED
+
+#12 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#12 CACHED
+
+#13 [build 2/5] WORKDIR /src
+#13 CACHED
+
+#14 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#14 CACHED
+
+#15 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:67eb98ca3e26f786f1477cd706c17f392aff61046d84c74f4d3ccda316a4f908 done
+#17 exporting config sha256:e9535def0bf484a8ccb060efa404a68dfda75728d70504b8adbbb194505c993a done
+#17 exporting attestation manifest sha256:77a120a46294683eeb3ed177d34eda1bf7f64260643ba163142b27c113d6ac33 done
+#17 exporting manifest list sha256:b3ed6215e0539edb58a3e344bff57501825d280a3d7fccebdb165978f502fac5 done
+#17 naming to docker.io/library/phase0-test-0b650782c83e4d2082afbcddf361c146-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-0b650782c83e4d2082afbcddf361c146-minio:latest done
+#17 DONE 0.0s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-0b650782c83e4d2082afbcddf361c146-minio Building 
+ Image phase0-test-0b650782c83e4d2082afbcddf361c146-minio Built 
+ Network phase0-test-0b650782c83e4d2082afbcddf361c146_default Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_postgres Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_storage Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_postgres Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_storage Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_redis Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_redis Creating 
+ Network phase0-test-0b650782c83e4d2082afbcddf361c146_default Creating 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_storage Created 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_storage Created 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_redis Created 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_redis Created 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_postgres Created 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_postgres Created 
+ Network phase0-test-0b650782c83e4d2082afbcddf361c146_default Created 
+ Network phase0-test-0b650782c83e4d2082afbcddf361c146_default Created 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Creating 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Creating 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Creating 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Created 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Created 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Created 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Starting 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Starting 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Starting 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Started 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Started 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Started 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Waiting 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Waiting 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Waiting 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Healthy 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Healthy 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-0b650782c83e4d2082afbcddf361c146_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+595ec1f4b62f6014fc1bcff2d62cf1bc4b2fec1749e31c52485c676a423afb55
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:61271
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 595ec1f4b62f6014fc1bcff2d62cf1bc4b2fec1749e31c52485c676a423afb55
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"61271"}]}
+PASSED: postgres 127.0.0.1:61271 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+5d59fda47bf0e9561b88000b3d7181b3a74a50fb37a20d2d3f4346f0feeadd37
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:61272
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 5d59fda47bf0e9561b88000b3d7181b3a74a50fb37a20d2d3f4346f0feeadd37
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"61272"}]}
+PASSED: redis 127.0.0.1:61272 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+9175f5e939830cf88497e0dcc7fa8d2441a8a5245b5545e63e4a1b188d17e163
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:61273
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 9175f5e939830cf88497e0dcc7fa8d2441a8a5245b5545e63e4a1b188d17e163
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"61273"}]}
+PASSED: minio 127.0.0.1:61273 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py tests/test_market_integration.py tests/test_execution_integration.py -m isolated_services -q
+.................................E                                       [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_phase2_valid_tick_replay_uses_actual_pinned_minio_data _
+file /Users/andy/Documents/ChatGPT/Sistem Trade Ai/tests/test_execution_integration.py, line 394
+  def test_phase2_valid_tick_replay_uses_actual_pinned_minio_data(market: System) -> None:
+E       fixture 'market' not found
+>       available fixtures: anyio_backend, anyio_backend_name, anyio_backend_options, cache, capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, client, doctest_namespace, execution, free_tcp_port, free_tcp_port_factory, free_udp_port, free_udp_port_factory, monkeypatch, platformdirs_isolated, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, settings, subtests, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/Users/andy/Documents/ChatGPT/Sistem Trade Ai/tests/test_execution_integration.py:394
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/test_execution_integration.py::test_phase2_valid_tick_replay_uses_actual_pinned_minio_data
+33 passed, 1 warning, 1 error in 41.17s
++ /usr/local/bin/docker compose --project-name phase0-test-0b650782c83e4d2082afbcddf361c146 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-f5zz8wc2/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Stopping 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Stopping 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Stopping 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Stopped 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Removing 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Stopped 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Removing 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-minio-1 Removed 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-redis-1 Removed 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Stopped 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Removing 
+ Container phase0-test-0b650782c83e4d2082afbcddf361c146-postgres-1 Removed 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_storage Removing 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_postgres Removing 
+ Network phase0-test-0b650782c83e4d2082afbcddf361c146_default Removing 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_redis Removing 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_redis Removed 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_postgres Removed 
+ Volume phase0-test-0b650782c83e4d2082afbcddf361c146_test_storage Removed 
+ Network phase0-test-0b650782c83e4d2082afbcddf361c146_default Removed 
+FAILED: Command exited 1; no service acceptance claimed
+make: *** [integration-services] Error 1

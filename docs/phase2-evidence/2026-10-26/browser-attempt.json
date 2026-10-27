@@ -1,0 +1,14 @@
+{
+  "id": "browser-attempt",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T19:43:25.204542+00:00",
+  "duration_seconds": 126.455,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26/browser-attempt.txt",
+  "sha256": "8d6dc9ec0f48ed2b54799c055b26aa93f8fb6432f533cfe939f452a4f55278b4"
+}

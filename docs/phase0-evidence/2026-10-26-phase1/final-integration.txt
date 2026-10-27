@@ -1,0 +1,234 @@
+.venv/bin/python -m pytest -m infrastructure
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0
+rootdir: /Users/andy/Documents/ChatGPT/Sistem Trade Ai
+configfile: pyproject.toml
+testpaths: tests
+plugins: hypothesis-6.170.9, anyio-4.15.1, platformdirs-4.13.5
+collected 102 items / 101 deselected / 1 selected
+
+tests/test_infrastructure.py .                                           [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 1 passed, 101 deselected, 1 warning in 0.40s =================
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile:
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#3 DONE 0.8s
+
+#4 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#4 DONE 0.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.4s done
+#7 DONE 0.4s
+
+#8 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.5s done
+#8 DONE 0.5s
+
+#9 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#9 CACHED
+
+#10 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#10 CACHED
+
+#11 [build 2/5] WORKDIR /src
+#11 CACHED
+
+#12 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#12 CACHED
+
+#13 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#13 CACHED
+
+#14 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#14 CACHED
+
+#15 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:3aff64d0c00db6e8005d8005e192a8817898d81f2654cb054bbe0f4883a6e75f done
+#17 exporting config sha256:ae9547c63705a78638e51a84722d6e20d09418ff82db068a5a39ee3e94a09f50 done
+#17 exporting attestation manifest sha256:cdabb0ed9bc40ea43305a1cc76a754d83006789dff153b688643d27c9bb85dc1 done
+#17 exporting manifest list sha256:18a34c1b62ffd509251981be292b3cec7af16ecd27d853c01512143244da6e8c done
+#17 naming to docker.io/library/phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio:latest done
+#17 DONE 0.0s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio Building 
+ Image phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio Built 
+ Network phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_redis Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_storage Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_storage Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_redis Creating 
+ Network phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_postgres Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_postgres Creating 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_storage Created 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_storage Created 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_postgres Created 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_postgres Created 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_redis Created 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_redis Created 
+ Network phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default Created 
+ Network phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default Created 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Creating 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Creating 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Creating 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Created 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Created 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Created 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Starting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Starting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Starting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Started 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Started 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Started 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Waiting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Waiting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Waiting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Healthy 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Healthy 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+118b0e5e1861b78b05fee96b7d585fe903fd50dbe7a74eb17867b191d55e1396
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:63250
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 118b0e5e1861b78b05fee96b7d585fe903fd50dbe7a74eb17867b191d55e1396
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"63250"}]}
+PASSED: postgres 127.0.0.1:63250 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+357259abd07f853f02a7e3ce7bcbeef42febe1a9adc35061ad5ae7dc3980663f
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:63249
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 357259abd07f853f02a7e3ce7bcbeef42febe1a9adc35061ad5ae7dc3980663f
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"63249"}]}
+PASSED: redis 127.0.0.1:63249 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+9dcd30aa50425c6cd845a89dd658320fa74bd9183aa13f943f6533b919f00e81
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:63248
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 9dcd30aa50425c6cd845a89dd658320fa74bd9183aa13f943f6533b919f00e81
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"63248"}]}
+PASSED: minio 127.0.0.1:63248 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py -m isolated_services -q
+....................                                                     [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+20 passed, 1 warning in 10.41s
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' stop postgres redis minio
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Stopping 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Stopping 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Stopping 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Stopped 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Stopped 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Stopped 
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up -d --wait --wait-timeout 180
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Starting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Starting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Starting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Started 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Started 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Started 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Waiting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Waiting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Waiting 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Healthy 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Healthy 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Healthy 
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+118b0e5e1861b78b05fee96b7d585fe903fd50dbe7a74eb17867b191d55e1396
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:63399
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 118b0e5e1861b78b05fee96b7d585fe903fd50dbe7a74eb17867b191d55e1396
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"63399"}]}
+PASSED: postgres 127.0.0.1:63399 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+357259abd07f853f02a7e3ce7bcbeef42febe1a9adc35061ad5ae7dc3980663f
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:63398
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 357259abd07f853f02a7e3ce7bcbeef42febe1a9adc35061ad5ae7dc3980663f
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"63398"}]}
+PASSED: redis 127.0.0.1:63398 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+9dcd30aa50425c6cd845a89dd658320fa74bd9183aa13f943f6533b919f00e81
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:63397
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 9dcd30aa50425c6cd845a89dd658320fa74bd9183aa13f943f6533b919f00e81
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"63397"}]}
+PASSED: minio 127.0.0.1:63397 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py -m isolated_services -q
+....................                                                     [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+20 passed, 1 warning in 9.90s
++ /usr/local/bin/docker compose --project-name phase0-test-80b66c6eeb934e09becdcdf5364f51cc --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k62zzaoj/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Stopping 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Stopping 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Stopping 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Stopped 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Removing 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-minio-1 Removed 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Stopped 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Removing 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-postgres-1 Removed 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Stopped 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Removing 
+ Container phase0-test-80b66c6eeb934e09becdcdf5364f51cc-redis-1 Removed 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_redis Removing 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_postgres Removing 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_storage Removing 
+ Network phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default Removing 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_postgres Removed 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_redis Removed 
+ Volume phase0-test-80b66c6eeb934e09becdcdf5364f51cc_test_storage Removed 
+ Network phase0-test-80b66c6eeb934e09becdcdf5364f51cc_default Removed 
+PASSED: isolated migrations, round trips and graceful-restart persistence.
+.venv/bin/python -m scripts.smoke_demo --require-ready
+API + execution-denial smoke: PASS. Infrastructure readiness: 200.

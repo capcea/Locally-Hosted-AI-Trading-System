@@ -1,0 +1,14 @@
+{
+  "id": "integration-packaging-fixed",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-27T01:34:58.463351+00:00",
+  "duration_seconds": 102.703,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/integration-packaging-fixed.txt",
+  "sha256": "98409e152d456f08af80ae46a1c7cfb688c52c5b8355fdbf7c5512923ba6a844"
+}

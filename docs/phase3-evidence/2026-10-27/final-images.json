@@ -1,0 +1,19 @@
+{
+  "id": "final-images",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-27T01:28:03.951780+00:00",
+  "duration_seconds": 3.518,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/final-images.txt",
+  "sha256": "2e0c9b84a8caf6c5395f6567215b402620619365494dcf2d2de7dde9351fdb25"
+}

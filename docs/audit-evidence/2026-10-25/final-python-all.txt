@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0
+rootdir: /Users/andy/Documents/ChatGPT/Sistem Trade Ai
+configfile: pyproject.toml
+testpaths: tests
+plugins: hypothesis-6.170.9, anyio-4.15.1, platformdirs-4.13.5
+collected 46 items
+
+tests/test_audit_regressions.py .......                                  [ 15%]
+tests/test_bootstrap.py ..                                               [ 19%]
+tests/test_health.py .......                                             [ 34%]
+tests/test_infrastructure.py F                                           [ 36%]
+tests/test_migrations.py ..                                              [ 41%]
+tests/test_safety.py ...........................                         [100%]
+
+=================================== FAILURES ===================================
+________________ test_compose_dependencies_and_schema_readiness ________________
+
+    @pytest.mark.infrastructure
+    def test_compose_dependencies_and_schema_readiness() -> None:
+        settings = Settings()
+        # A test must not mutate a database selected by ambient developer configuration.
+        # Compose's dedicated migration service applies schema changes before this read-only probe.
+        assert settings.database_url is not None
+        assert settings.database_url.get_secret_value().startswith("postgresql+psycopg://")
+        health = asyncio.run(infrastructure_health(settings))
+>       assert all(item.status == ServiceStatus.HEALTHY for item in health), [
+            (item.id, item.status) for item in health
+        ]
+E       AssertionError: [('postgres', <ServiceStatus.UNAVAILABLE: 'UNAVAILABLE'>), ('redis', <ServiceStatus.UNAVAILABLE: 'UNAVAILABLE'>), ('storage', <ServiceStatus.UNAVAILABLE: 'UNAVAILABLE'>)]
+E       assert False
+E        +  where False = all(<generator object test_compose_dependencies_and_schema_readiness.<locals>.<genexpr> at 0x11c261080>)
+
+tests/test_infrastructure.py:20: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_infrastructure.py::test_compose_dependencies_and_schema_readiness
+=================== 1 failed, 45 passed, 1 warning in 0.43s ====================

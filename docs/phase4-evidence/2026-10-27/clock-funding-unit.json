@@ -1,0 +1,16 @@
+{
+  "id": "clock-funding-unit",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_execution_engine.py",
+    "tests/test_risk_math.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T03:26:01.258770+00:00",
+  "duration_seconds": 2.039,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/clock-funding-unit.txt",
+  "sha256": "4924acf48e83de691c93c7fc54ec46c54f591da33bd1a4d9f234d65dba3db373"
+}

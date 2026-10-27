@@ -1,0 +1,2 @@
+.venv/bin/python -m scripts.smoke_demo
+API + execution-denial smoke: PASS. Infrastructure readiness: 503.

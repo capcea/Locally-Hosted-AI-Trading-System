@@ -1,0 +1,13 @@
+{
+  "id": "acceptance-preservation-and-boundaries",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json,subprocess,socket\nfrom pathlib import Path\nimport httpx\nrows=[]\nfor service in (\"postgres\",\"redis\",\"minio\"):\n    container=subprocess.check_output([\"docker\",\"compose\",\"ps\",\"-q\",service],text=True).strip()\n    raw=subprocess.check_output([\"docker\",\"inspect\",\"--format\",'{ \"id\":{{json .Id}},\"started\":{{json .State.StartedAt}},\"mounts\":{{json .Mounts}} }',container],text=True)\n    rows.append({\"service\":service,\"state\":json.loads(raw)})\nassert rows==json.loads(Path(\".cache/phase1/data-services-before.json\").read_text())\nprint(\"PASSED: data service IDs/start times/mounts unchanged from before migration.\")\nfor service in (\"postgres\",\"redis\",\"minio\",\"api\",\"web\"):\n    container=subprocess.check_output([\"docker\",\"compose\",\"ps\",\"-q\",service],text=True).strip()\n    ports=json.loads(subprocess.check_output([\"docker\",\"inspect\",\"--format\",\"{{json .NetworkSettings.Ports}}\",container],text=True))\n    for bindings in ports.values():\n        for binding in bindings or []:\n            assert binding[\"HostIp\"]==\"127.0.0.1\" and int(binding[\"HostPort\"])>=1024\n            with socket.create_connection((\"127.0.0.1\",int(binding[\"HostPort\"])),timeout=3): pass\n    print(\"PASSED:\",service,\"published ports are loopback-only, non-privileged and reachable.\")\nfor route in (\"/health/ready\",\"/api/v1/auth/status\",\"/api/v1/safety\"):\n    r=httpx.get(\"http://127.0.0.1:18000\"+route);r.raise_for_status();print(route,r.status_code,r.text)\nr=httpx.get(\"http://127.0.0.1:5173/\");r.raise_for_status()\nassert \"frame-ancestors 'none'\" in r.headers[\"content-security-policy\"]\nprint(\"PASSED: Nginx serves HTTP 200 and restrictive CSP header (browser enforcement unverified).\")\nquery=\"SELECT version_num FROM alembic_version; SELECT rolname,rolsuper,rolcreatedb,rolcreaterole FROM pg_roles WHERE rolname='research_app'; SELECT has_table_privilege('research_app','audit_events','UPDATE,DELETE,TRUNCATE');\"\nout=subprocess.check_output([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"psql\",\"-U\",\"research\",\"-d\",\"research\",\"-Atqc\",query],text=True)\nassert out.splitlines()==[\"0002_identity_governance\",\"research_app|f|f|f\",\"f\"]\nprint(\"PASSED: schema 0002; API role has no admin or audit rewrite privilege.\")\n"
+  ],
+  "started_utc": "2026-10-26T14:51:34.966241+00:00",
+  "duration_seconds": 1.47,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/acceptance-preservation-and-boundaries.txt",
+  "sha256": "fc96d7239c5ac97e57e30944ef899a1a2a7f070487053fe96f2c86791f8b87f2"
+}

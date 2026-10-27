@@ -1,0 +1,74 @@
+[project]
+name = "ai-trading-research-platform"
+version = "0.1.0"
+description = "Simulation-only foundation for an auditable trading research platform"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi==0.162.0",
+  "pydantic==2.14.1",
+  "pydantic-settings==2.16.1",
+  "uvicorn==0.54.0",
+  "sqlalchemy==2.1.6",
+  "alembic==1.20.1",
+  "psycopg[binary]==3.3.6",
+  "redis==5.3.1",
+  "arq==0.28.0",
+  "httpx==0.28.1",
+  "argon2-cffi==25.1.0",
+  "pyotp==2.10.0",
+  "cryptography==50.0.2",
+  "pyarrow==26.0.0",
+  "minio==7.2.20",
+  "python-multipart==0.0.32",
+  "websockets==17.3",
+]
+
+[dependency-groups]
+dev = [
+  "pytest==9.1.1",
+  "ruff==0.17.2",
+  "mypy==2.4.0",
+  "hypothesis==6.170.9",
+  "pre-commit==4.7.0",
+]
+
+[project.optional-dependencies]
+windows-bridge = [
+  "MetaTrader5==5.0.6231; sys_platform == 'win32'",
+  "pywin32==312; sys_platform == 'win32'",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+markers = [
+  "infrastructure: requires the local Docker Compose application services",
+  "isolated_services: requires the disposable service harness; never uses ambient app credentials",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+exclude = [".tools", "apps/web"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "S", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+strict = true
+files = ["apps/api", "packages", "workers", "scripts", "services", "tests"]
+exclude = ["apps/web"]
+
+[tool.pydantic-mypy]
+init_typed = true
+warn_required_dynamic_aliases = true
+

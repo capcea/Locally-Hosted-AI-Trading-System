@@ -1,0 +1,12 @@
+{
+  "id": "source-exclusions",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-26T14:46:50.758400+00:00",
+  "duration_seconds": 0.083,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/source-exclusions.txt",
+  "sha256": "975fad768317519601cae519d9df0f825fa78a5dd924339ba774bcf66f86de35"
+}

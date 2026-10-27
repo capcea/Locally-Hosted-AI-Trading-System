@@ -1,0 +1,17 @@
+{
+  "id": "local-packaging-build",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate"
+  ],
+  "started_utc": "2026-10-26T14:09:51.025994+00:00",
+  "duration_seconds": 2.256,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/local-packaging-build.txt",
+  "sha256": "d381ac978992c73a1d9bd29b42279b117755d45fb15287fa10fe5f68b6c00412"
+}

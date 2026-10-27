@@ -1,0 +1,17 @@
+{
+  "id": "e2e-collection",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-26T21:37:51.130448+00:00",
+  "duration_seconds": 1.013,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/e2e-collection.txt",
+  "sha256": "40dd49396bb2ea9effcdb8473a380ca91b951000ffa51e23168481fcdeb1ca72"
+}

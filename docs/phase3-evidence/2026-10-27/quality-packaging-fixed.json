@@ -1,0 +1,12 @@
+{
+  "id": "quality-packaging-fixed",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T01:30:39.382302+00:00",
+  "duration_seconds": 15.599,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/quality-packaging-fixed.txt",
+  "sha256": "cd15ee9302805861b0797ab4db4ed81020eae06e08c33a88c5d77d329bb2f8b0"
+}

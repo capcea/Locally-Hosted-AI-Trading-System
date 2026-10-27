@@ -1,0 +1,12 @@
+{
+  "id": "quality-coverage-regression",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T20:26:02.520722+00:00",
+  "duration_seconds": 16.611,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/quality-coverage-regression.txt",
+  "sha256": "378fba7b2293f6407219c13ce4c4cf75e216c3b042a4a1d3eb42a3bf004e8e9f"
+}

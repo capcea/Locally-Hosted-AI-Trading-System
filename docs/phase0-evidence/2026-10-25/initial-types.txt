@@ -1,0 +1,11 @@
+tests/test_integration_guards.py:48: error: Module "scripts.integration_services" does not explicitly export attribute "shutil"  [attr-defined]
+tests/test_integration_guards.py:68: error: Module "scripts.integration_services" does not explicitly export attribute "subprocess"  [attr-defined]
+tests/test_service_roundtrips.py:89: error: Item "Awaitable[Any]" of "Awaitable[Any] | Any" has no attribute "get"  [union-attr]
+tests/test_service_roundtrips.py:94: error: Argument 1 to "len" has incompatible type "Awaitable[Any] | Any"; expected "Sized"  [arg-type]
+tests/test_service_roundtrips.py:94: error: Value of type "Awaitable[Any] | Any" is not indexable  [index]
+tests/test_service_roundtrips.py:95: error: Value of type "Awaitable[Any] | Any" is not indexable  [index]
+tests/test_service_roundtrips.py:98: error: Argument 1 to "len" has incompatible type "Awaitable[Any] | Any"; expected "Sized"  [arg-type]
+tests/test_service_roundtrips.py:98: error: Value of type "Awaitable[Any] | Any" is not indexable  [index]
+tests/test_service_roundtrips.py:99: error: Value of type "Awaitable[Any] | Any" is not indexable  [index]
+tests/test_service_roundtrips.py:105: error: Value of type "Awaitable[Any] | Any" is not indexable  [index]
+Found 10 errors in 2 files (checked 29 source files)

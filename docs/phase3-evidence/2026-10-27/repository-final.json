@@ -1,0 +1,12 @@
+{
+  "id": "repository-final",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-27T01:41:25.301544+00:00",
+  "duration_seconds": 0.173,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/repository-final.txt",
+  "sha256": "5f2c6bd078e60cf2bbca371cd454ddee48f63c86958c7ac02dc70ff12075460b"
+}

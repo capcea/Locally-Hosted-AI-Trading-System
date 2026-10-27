@@ -1,0 +1,12 @@
+{
+  "id": "source-scan-release",
+  "command": [
+    "make",
+    "secret-scan"
+  ],
+  "started_utc": "2026-10-27T01:44:27.195819+00:00",
+  "duration_seconds": 1.218,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/source-scan-release.txt",
+  "sha256": "8a2a6e737b7f10c9c9d1149709844f7a8d8bb717610d72f93b20a5a82916ea73"
+}

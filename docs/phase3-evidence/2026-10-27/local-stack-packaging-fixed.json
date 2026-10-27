@@ -1,0 +1,23 @@
+{
+  "id": "local-stack-packaging-fixed",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-27T01:33:49.736926+00:00",
+  "duration_seconds": 24.775,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/local-stack-packaging-fixed.txt",
+  "sha256": "172d1ad0e8e1a362115cbe88535afc37e612e0ff5cb691f23410cd6364fa05ea"
+}

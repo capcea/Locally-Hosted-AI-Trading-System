@@ -1,0 +1,1 @@
+PASSED: Compose and Actions syntax, including independent connector image check. Remote CI NOT RUN.

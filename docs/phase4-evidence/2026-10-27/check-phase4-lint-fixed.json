@@ -1,0 +1,12 @@
+{
+  "id": "check-phase4-lint-fixed",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T03:48:05.485155+00:00",
+  "duration_seconds": 22.752,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/check-phase4-lint-fixed.txt",
+  "sha256": "d9f6b8c3129daf0558fb27512e1705ae0a223ea0585534ffdf49be7da637b6f2"
+}

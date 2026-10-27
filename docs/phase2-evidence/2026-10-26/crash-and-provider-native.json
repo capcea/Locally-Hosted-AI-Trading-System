@@ -1,0 +1,14 @@
+{
+  "id": "crash-and-provider-native",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T19:39:23.252215+00:00",
+  "duration_seconds": 122.543,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/crash-and-provider-native.txt",
+  "sha256": "cfc1e746231cd2d841879d4c923308b27b65fbd4dc0e3bdae52c8e719a82e5e6"
+}

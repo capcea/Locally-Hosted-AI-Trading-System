@@ -1,0 +1,12 @@
+{
+  "id": "baseline-integration",
+  "command": [
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-25T16:55:05.130545+00:00",
+  "duration_seconds": 1.463,
+  "exit_code": 2,
+  "log": "docs/audit-evidence/2026-10-25/baseline-integration.txt",
+  "sha256": "4d6b006d044a092d333033942dc8aefb758f180a667e1ae969e069061ad318ee"
+}

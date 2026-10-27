@@ -1,0 +1,11 @@
+Downloading pycryptodome (1.6MiB)
+ Downloaded pycryptodome
+Prepared 6 packages in 2.48s
+Installed 7 packages in 13ms
+ + argon2-cffi==25.1.0
+ + argon2-cffi-bindings==26.1.0
+ + cffi==2.1.1
+ + minio==7.2.20
+ + pycparser==3.12
+ + pycryptodome==4.2.0
+ + urllib3==2.8.0

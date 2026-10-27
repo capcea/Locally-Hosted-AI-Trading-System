@@ -1,0 +1,17 @@
+{
+  "id": "baseline-e2e-list",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-25T16:55:05.127580+00:00",
+  "duration_seconds": 1.543,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/baseline-e2e-list.txt",
+  "sha256": "23d1642aa78a212b33e5f6c26e7abcdea8a7258177e23f0555da015d53562312"
+}

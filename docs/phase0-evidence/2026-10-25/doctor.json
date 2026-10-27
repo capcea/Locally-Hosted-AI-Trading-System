@@ -1,0 +1,12 @@
+{
+  "id": "doctor",
+  "command": [
+    "make",
+    "doctor"
+  ],
+  "started_utc": "2026-10-25T22:27:01.502617+00:00",
+  "duration_seconds": 0.702,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-25/doctor.txt",
+  "sha256": "b6c7fe4c5e5972b639a56d356213ad2d0291b60d85f2312a6d63ab2d9d0f718e"
+}

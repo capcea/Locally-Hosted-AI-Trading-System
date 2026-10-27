@@ -1,0 +1,23 @@
+{
+  "id": "start-stack",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T19:43:26.349047+00:00",
+  "duration_seconds": 30.959,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/start-stack.txt",
+  "sha256": "a5537605356fb49658bb89c1d82fef39641c4e7e8165041eff11429b1ac02ba5"
+}

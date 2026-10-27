@@ -1,0 +1,12 @@
+{
+  "id": "expanded-native-integration-fixed",
+  "command": [
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T13:47:53.183294+00:00",
+  "duration_seconds": 28.252,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/expanded-native-integration-fixed.txt",
+  "sha256": "556d1e8b2e3d8b3dc378161194095f87eb097cb2d64c7ab3fab0f9f711a48777"
+}

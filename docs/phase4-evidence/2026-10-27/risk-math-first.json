@@ -1,0 +1,16 @@
+{
+  "id": "risk-math-first",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_risk_math.py",
+    "tests/test_execution_engine.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T02:21:18.440378+00:00",
+  "duration_seconds": 2.142,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/risk-math-first.txt",
+  "sha256": "360fd3c3fa2d6241c888fdd75f8aa76a12c42e3264f675ac1fce8be264dfd75a"
+}

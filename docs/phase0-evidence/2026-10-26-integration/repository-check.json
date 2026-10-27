@@ -1,0 +1,12 @@
+{
+  "id": "repository-check",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-26T12:54:05.937220+00:00",
+  "duration_seconds": 0.067,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-integration/repository-check.txt",
+  "sha256": "09eac14c75d8ec42f2a09cbe5f0f7070bcbe3fcbe63f84a70831f95c6f578afd"
+}

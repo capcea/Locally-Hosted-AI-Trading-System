@@ -1,0 +1,12 @@
+{
+  "id": "first-complete-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T13:45:56.169853+00:00",
+  "duration_seconds": 7.416,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/first-complete-check.txt",
+  "sha256": "5c174892ac47bc4abc4a43073394c083a9b5b75158f0de9563560ca2410d23ae"
+}

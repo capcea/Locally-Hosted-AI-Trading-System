@@ -1,0 +1,14 @@
+{
+  "id": "final-coverage-native",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T20:26:38.288130+00:00",
+  "duration_seconds": 120.142,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-coverage-native.txt",
+  "sha256": "879540863a78e593529f5862207b71223b62dac4a6fdb812c7d27620e7b2ab1d"
+}

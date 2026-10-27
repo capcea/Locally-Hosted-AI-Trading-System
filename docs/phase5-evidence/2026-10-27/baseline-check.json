@@ -1,0 +1,12 @@
+{
+  "id": "baseline-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T09:10:41.958459+00:00",
+  "duration_seconds": 2.325,
+  "exit_code": 2,
+  "log": "docs/phase5-evidence/2026-10-27/baseline-check.txt",
+  "sha256": "441257c8a853e5df0a1ce3209314680494a8c07aa21a6154e814fcd6719f2719"
+}

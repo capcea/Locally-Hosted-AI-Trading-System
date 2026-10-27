@@ -1,0 +1,14 @@
+{
+  "id": "final-derived-native",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T20:14:02.841647+00:00",
+  "duration_seconds": 98.772,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-derived-native.txt",
+  "sha256": "c9f380d3029550f0abfdeb971805e5ed946e4dd59e550c2d9b398b6ad5f6c102"
+}

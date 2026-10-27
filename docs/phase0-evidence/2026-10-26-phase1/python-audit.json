@@ -1,0 +1,19 @@
+{
+  "id": "python-audit",
+  "command": [
+    ".tools/bin/uv",
+    "run",
+    "--with",
+    "pip-audit==2.10.1",
+    "python",
+    "-m",
+    "pip_audit",
+    "--progress-spinner",
+    "off"
+  ],
+  "started_utc": "2026-10-26T14:13:02.668421+00:00",
+  "duration_seconds": 0.713,
+  "exit_code": 1,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/python-audit.txt",
+  "sha256": "6c830fbf6217c4ab9d0b3419e577db83ff0b2d0726e655e2eead6d0ae00832df"
+}

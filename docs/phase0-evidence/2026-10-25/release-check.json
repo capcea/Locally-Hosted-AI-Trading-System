@@ -1,0 +1,12 @@
+{
+  "id": "release-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-25T22:28:29.645570+00:00",
+  "duration_seconds": 5.418,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-25/release-check.txt",
+  "sha256": "ab66506723ddf566e22b3e9a9f54aa654862b5ee14652d666d4202fe9365423d"
+}

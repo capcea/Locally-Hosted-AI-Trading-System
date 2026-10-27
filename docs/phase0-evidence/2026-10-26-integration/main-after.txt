@@ -1,0 +1,81 @@
+{
+  "compose_sha256": "e6d318d963aceb9ee52abe77fce553ccb449b26d0c042c5740900e66d4a4eaab",
+  "containers": [
+    {
+      "id": "733f1e67b967aeda608ccb6b0d19e026e19d26420f9d4260414b5e27e332e28b",
+      "name": "/ai-trading-research-api-1",
+      "started": "2026-10-26T12:10:32.785836796Z",
+      "mounts": [],
+      "health": "healthy"
+    },
+    {
+      "id": "bdb61212969e56a43899c2bd8cabb47fee6d890363e1ce58a04ec42ca8938c93",
+      "name": "/ai-trading-research-migrate-1",
+      "started": "2026-10-26T12:10:31.718280421Z",
+      "mounts": [],
+      "health": null
+    },
+    {
+      "id": "8f0692f0549f2c3035f54132453c6de383d73c6cc73348bf452bb5d737383835",
+      "name": "/ai-trading-research-minio-1",
+      "started": "2026-10-26T12:10:26.098264835Z",
+      "mounts": [
+        {
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "ai-trading-research_object_data",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/ai-trading-research_object_data/_data",
+          "Type": "volume"
+        }
+      ],
+      "health": "healthy"
+    },
+    {
+      "id": "2ef16fcca13ef9c9177c5c107d9e2a629d069d3086f75f9f2f7d07aec5ccc3bd",
+      "name": "/ai-trading-research-postgres-1",
+      "started": "2026-10-26T12:10:26.09748546Z",
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "ai-trading-research_postgres_data",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/ai-trading-research_postgres_data/_data",
+          "Type": "volume"
+        }
+      ],
+      "health": "healthy"
+    },
+    {
+      "id": "e4470e8bf2d6cfe2c7894f7f219cf6a8dc29e9753faf0ac10179d412a967937e",
+      "name": "/ai-trading-research-redis-1",
+      "started": "2026-10-26T12:10:26.097756502Z",
+      "mounts": [
+        {
+          "Destination": "/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "ai-trading-research_redis_data",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/ai-trading-research_redis_data/_data",
+          "Type": "volume"
+        }
+      ],
+      "health": "healthy"
+    },
+    {
+      "id": "a1bcc8a13d3d1bba0cb134bb82e24b02e1abdd3a37053381e7ed9a0208a5fcbd",
+      "name": "/ai-trading-research-web-1",
+      "started": "2026-10-26T12:10:43.356869385Z",
+      "mounts": [],
+      "health": "healthy"
+    }
+  ]
+}
+readiness 200 [{"id":"postgres","name":"PostgreSQL","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":22},{"id":"redis","name":"Redis","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":23},{"id":"storage","name":"Stocare obiecte","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":23}]

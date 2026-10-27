@@ -1,0 +1,17 @@
+{
+  "id": "e2e-list",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-25T22:26:34.585198+00:00",
+  "duration_seconds": 0.477,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-25/e2e-list.txt",
+  "sha256": "5fb57a665487cd53e44bc656551423d6db98b05d0c000ff4d021e6bf0e07c54d"
+}

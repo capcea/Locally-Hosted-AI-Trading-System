@@ -1,0 +1,12 @@
+{
+  "id": "acceptance-quality",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T14:47:39.086959+00:00",
+  "duration_seconds": 13.776,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/acceptance-quality.txt",
+  "sha256": "d75678d3498192ca2e508b17b77b77c2b3b8a06772465edfd35237509f566e0b"
+}

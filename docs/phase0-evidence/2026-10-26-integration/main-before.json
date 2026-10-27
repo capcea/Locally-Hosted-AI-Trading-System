@@ -1,0 +1,13 @@
+{
+  "id": "main-before",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import hashlib,json,subprocess\nfrom pathlib import Path\nimport httpx\nids=subprocess.check_output([\"docker\",\"compose\",\"ps\",\"-a\",\"-q\"],text=True).split()\ncontainers=[]\nfor container in ids:\n    raw=subprocess.check_output([\"docker\",\"inspect\",\"--format\",'{\"id\":{{json .Id}},\"name\":{{json .Name}},\"started\":{{json .State.StartedAt}},\"mounts\":{{json .Mounts}},\"health\":{{json .State.Health}}}',container],text=True)\n    row=json.loads(raw)\n    health=row.pop(\"health\")\n    row[\"health\"]=health[\"Status\"] if health else None\n    containers.append(row)\nprint(json.dumps({\"compose_sha256\":hashlib.sha256(Path(\"compose.yaml\").read_bytes()).hexdigest(),\"containers\":containers},indent=2))\nr=httpx.get(\"http://127.0.0.1:18000/health/ready\")\nprint(\"readiness\",r.status_code,r.text)\nr.raise_for_status()\n"
+  ],
+  "started_utc": "2026-10-26T12:45:54.278188+00:00",
+  "duration_seconds": 0.185,
+  "exit_code": 1,
+  "log": "docs/phase0-evidence/2026-10-26-integration/main-before.txt",
+  "sha256": "075575f71cdcfb07b2a1c73cb17ec8cd53c6eb2e46cee3400128f6f298f9a6e1"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "integration-final",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-27T01:29:20.493222+00:00",
+  "duration_seconds": 106.163,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/integration-final.txt",
+  "sha256": "91bdf0cc043537b7cbb3a61535ea4c988c5741732959b829272f8d870a4d2017"
+}

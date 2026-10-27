@@ -1,0 +1,1 @@
+PASSED: PostgreSQL columns/types/indexes/foreign keys match Phase 1 ORM metadata; no schema mutations.

@@ -1,0 +1,15 @@
+{
+  "id": "focused-guards",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_integration_guards.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T12:47:43.283971+00:00",
+  "duration_seconds": 0.604,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-integration/focused-guards.txt",
+  "sha256": "7c3d53042b093e47b8bfb3ce42073b84c01f5b8d38e8a87fff5617768d827ece"
+}

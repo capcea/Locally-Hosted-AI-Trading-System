@@ -1,0 +1,19 @@
+{
+  "provenance": "SYNTHETIC_TEST_FIXTURE",
+  "actual_services": [
+    "PostgreSQL",
+    "Redis",
+    "MinIO"
+  ],
+  "rows": 30000,
+  "input_bytes": 3018955,
+  "upload_seconds": 0.13343908400020155,
+  "recovery_ingestion_seconds": 10.182986333999906,
+  "retrieval_2000_seconds": 0.25903466700037825,
+  "python": "3.12.14",
+  "platform": "darwin",
+  "actual_worker_sigkill": true,
+  "run_id": "ec88e14eb64c49f296eba96bae67a476",
+  "stage": "verify",
+  "measured_at_utc": "2026-10-26T20:28:35.048316+00:00"
+}

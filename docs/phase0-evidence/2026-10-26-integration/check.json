@@ -1,0 +1,12 @@
+{
+  "id": "check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T12:47:54.815203+00:00",
+  "duration_seconds": 0.047,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-26-integration/check.txt",
+  "sha256": "dda76f5af4df3b9e6de1378e362d74472b6d65074ce92252d47f89d6949b9df7"
+}

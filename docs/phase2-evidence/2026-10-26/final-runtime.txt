@@ -1,0 +1,12 @@
+PASSED: existing data container IDs and persistent volume mounts preserved; services resumed.
+PASSED: existing Phase 1 user/account/risk/policy/audit counts and digests unchanged (baseline empty).
+PASSED: postgres healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: redis healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: minio healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: api healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: web healthy; published bindings are loopback/non-privileged and TCP reachable.
+Traceback (most recent call last):
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase2/final_runtime_check.py", line 50, in <module>
+    assert not info['ports'] and 'AUTH_BOOTSTRAP_TOKEN' not in env_names
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

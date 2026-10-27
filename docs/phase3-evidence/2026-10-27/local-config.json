@@ -1,0 +1,13 @@
+{
+  "id": "local-config",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import subprocess; subprocess.run([\"docker\",\"compose\",\"config\",\"--quiet\"],check=True); subprocess.run([\".tools/bin/actionlint\"],check=True); print(\"PASSED: Compose configuration and pinned Actions syntax; remote CI not run.\")"
+  ],
+  "started_utc": "2026-10-27T01:35:00.040365+00:00",
+  "duration_seconds": 0.16,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/local-config.txt",
+  "sha256": "199e5d3bc7fe6cf5bcc6ca960a9d768b4c2ccb47de14e826868f1f65e985c107"
+}

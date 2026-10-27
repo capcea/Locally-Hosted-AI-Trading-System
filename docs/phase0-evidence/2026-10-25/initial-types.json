@@ -1,0 +1,13 @@
+{
+  "id": "initial-types",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "mypy"
+  ],
+  "started_utc": "2026-10-25T18:00:49.320386+00:00",
+  "duration_seconds": 0.732,
+  "exit_code": 1,
+  "log": "docs/phase0-evidence/2026-10-25/initial-types.txt",
+  "sha256": "8c602303409494b209477559a2af57a0416d27264c99ba34f909f6a0b224abab"
+}

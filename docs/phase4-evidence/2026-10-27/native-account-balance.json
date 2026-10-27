@@ -1,0 +1,14 @@
+{
+  "id": "native-account-balance",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T02:33:22.479501+00:00",
+  "duration_seconds": 59.476,
+  "exit_code": 2,
+  "log": "docs/phase4-evidence/2026-10-27/native-account-balance.txt",
+  "sha256": "7d15218bae439fbe200a801e901594b7d9fc65508d821277390584360e5c12a6"
+}

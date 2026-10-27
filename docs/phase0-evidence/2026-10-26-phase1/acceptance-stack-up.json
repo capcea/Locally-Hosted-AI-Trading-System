@@ -1,0 +1,19 @@
+{
+  "id": "acceptance-stack-up",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web"
+  ],
+  "started_utc": "2026-10-26T14:50:35.899589+00:00",
+  "duration_seconds": 14.715,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/acceptance-stack-up.txt",
+  "sha256": "eacf51fd35c7a3c6b55f4c90f96f954507b4bdc2927a5b59fcd0d8916aaace30"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "bridge-real-mtls",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_bridge_tls.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T22:41:48.354463+00:00",
+  "duration_seconds": 2.143,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/bridge-real-mtls.txt",
+  "sha256": "6d7c1113cc81a3b04e4b41ed4bfbec3aab3b91bb8233e18848e0eff5cf5c3ddd"
+}

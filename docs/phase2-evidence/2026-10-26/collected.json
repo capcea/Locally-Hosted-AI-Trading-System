@@ -1,0 +1,17 @@
+{
+  "id": "collected",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-26T19:45:37.135309+00:00",
+  "duration_seconds": 3.022,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/collected.txt",
+  "sha256": "40dd49396bb2ea9effcdb8473a380ca91b951000ffa51e23168481fcdeb1ca72"
+}

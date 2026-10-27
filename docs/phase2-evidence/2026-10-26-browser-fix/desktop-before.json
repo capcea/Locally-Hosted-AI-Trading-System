@@ -1,0 +1,16 @@
+{
+  "id": "desktop-before",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "E2E_ONLY_PROJECT=desktop",
+    "E2E_ONLY_SCENARIO=market",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T21:35:16.333583+00:00",
+  "duration_seconds": 81.382,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/desktop-before.txt",
+  "sha256": "c62672632b044d468c48d9012315591da61cfc43443c60c6cbd2394df0240385"
+}

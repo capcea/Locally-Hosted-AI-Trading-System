@@ -1,0 +1,276 @@
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#3 ...
+
+#4 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#4 DONE 0.7s
+
+#3 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#3 DONE 0.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.4s done
+#7 DONE 0.4s
+
+#8 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.4s done
+#8 DONE 0.4s
+
+#9 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#9 CACHED
+
+#10 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#10 CACHED
+
+#11 [build 2/5] WORKDIR /src
+#11 CACHED
+
+#12 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#12 CACHED
+
+#13 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#13 CACHED
+
+#14 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#14 CACHED
+
+#15 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:0e7dc69abc8af0254bf0e6e796ca1708155dee344503c8265d744ea9310a6199 done
+#17 exporting config sha256:41113337a1b22887a4d5a77bea8144213dd22950cd29b75892b483764a103a5f done
+#17 exporting attestation manifest sha256:e42a87e62385876ca840ad4fb9687ed3b040a90d5f388bdbd970e7bf248e6ebd done
+#17 exporting manifest list sha256:99d6d0dcae4be816da7570457ad2307410ad4f6ce12d2ef9ae0e90b74b8e38dd done
+#17 naming to docker.io/library/phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio:latest done
+#17 DONE 0.0s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio Building 
+ Image phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio Built 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_storage Creating 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_postgres Creating 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_redis Creating 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_storage Creating 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_postgres Creating 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_redis Creating 
+ Network phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default Creating 
+ Network phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default Creating 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_postgres Created 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_postgres Created 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_storage Created 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_storage Created 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_redis Created 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_redis Created 
+ Network phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default Created 
+ Network phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default Created 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Creating 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Creating 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Creating 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Created 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Created 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Created 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Starting 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Starting 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Starting 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Started 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Started 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Started 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Waiting 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Waiting 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Waiting 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Healthy 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Healthy 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+8de8bb7287282c363cfd47f31e7e5fe2b1141a0fc7cc6666301121a9983e2b2a
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:61302
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 8de8bb7287282c363cfd47f31e7e5fe2b1141a0fc7cc6666301121a9983e2b2a
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"61302"}]}
+PASSED: postgres 127.0.0.1:61302 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+9d093673f1d464943e2d4dc3d0f3106f80e4a2a84bb2c1190dced7d43689592f
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:61301
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 9d093673f1d464943e2d4dc3d0f3106f80e4a2a84bb2c1190dced7d43689592f
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"61301"}]}
+PASSED: redis 127.0.0.1:61301 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+11d77e68b82e75f6dd9423c1d394af663c43e8eb82886b21a4ae565a8c9337b6
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:61300
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 11d77e68b82e75f6dd9423c1d394af663c43e8eb82886b21a4ae565a8c9337b6
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"61300"}]}
+PASSED: minio 127.0.0.1:61300 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py -m isolated_services -q
+.............F...                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_all_metadata_entities_and_immutable_strategy_version ___________
+
+owner = <test_phase1_integration.System object at 0x10ea020f0>
+
+    def test_all_metadata_entities_and_immutable_strategy_version(owner: System) -> None:
+        account = owner.account()
+    
+        def create(kind: str, **fields: Any) -> dict[str, Any]:
+            response = owner.post(
+                f"/api/v1/records/{kind}",
+                {
+                    "kind": kind,
+                    "name": f"Synthetic {kind}",
+                    "source": "SYNTHETIC_TEST_FIXTURE",
+                    **fields,
+                },
+            )
+            assert response.status_code == 201
+            result = dict(response.json())
+            assert owner.client.get(f"/api/v1/records/{kind}/{result['id']}").status_code == 200
+            return result
+    
+        venue = create("venues", venue_type="CUSTOM")
+        create("instruments", venue_id=venue["id"], symbol="SYNTHETIC", asset_class="OTHER")
+        create("brokers", account_id=account["id"], adapter="CUSTOM")
+        strategy = create(
+            "strategies", account_id=account["id"], hypothesis="Synthetic hypothesis; no execution"
+        )
+>       version = create(
+            "strategy-versions", strategy_id=strategy["id"], version=1, artifact_digest="c" * 64
+        )
+
+tests/test_phase1_integration.py:600: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+kind = 'strategy-versions'
+fields = {'strategy_id': 'aff8e810-2922-41fd-8f20-57345cee9f1d', 'version': 1, 'artifact_digest': 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'}
+
+    def create(kind: str, **fields: Any) -> dict[str, Any]:
+        response = owner.post(
+            f"/api/v1/records/{kind}",
+            {
+                "kind": kind,
+                "name": f"Synthetic {kind}",
+                "source": "SYNTHETIC_TEST_FIXTURE",
+                **fields,
+            },
+        )
+        assert response.status_code == 201
+        result = dict(response.json())
+>       assert owner.client.get(f"/api/v1/records/{kind}/{result['id']}").status_code == 200
+E       AssertionError: assert 503 == 200
+E        +  where 503 = <Response [503 Service Unavailable]>.status_code
+E        +    where <Response [503 Service Unavailable]> = get('/api/v1/records/strategy-versions/b81982d5-163f-42ce-b3da-aff56797d28c')
+E        +      where get = <starlette.testclient.TestClient object at 0x10ea3c140>.get
+E        +        where <starlette.testclient.TestClient object at 0x10ea3c140> = <test_phase1_integration.System object at 0x10ea020f0>.client
+
+tests/test_phase1_integration.py:591: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.315108+00:00", "request_id": "315f9b66-3c14-4bdb-b105-5427dadd1e3e", "method": "POST", "status": 201, "duration_ms": 133}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.320249+00:00", "request_id": "e1706954-55b4-4705-830a-edeec52b90da", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.326917+00:00", "request_id": "ceb0edc9-1be8-4766-8c0a-51b2836f09e2", "method": "POST", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.331779+00:00", "request_id": "3531edbf-99f9-4bee-bac8-2484a9d91716", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.352325+00:00", "request_id": "3fe4af2d-ddef-48aa-8856-01cd627b0729", "method": "POST", "status": 200, "duration_ms": 19}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.315108+00:00", "request_id": "315f9b66-3c14-4bdb-b105-5427dadd1e3e", "method": "POST", "status": 201, "duration_ms": 133}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.320249+00:00", "request_id": "e1706954-55b4-4705-830a-edeec52b90da", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.326917+00:00", "request_id": "ceb0edc9-1be8-4766-8c0a-51b2836f09e2", "method": "POST", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.331779+00:00", "request_id": "3531edbf-99f9-4bee-bac8-2484a9d91716", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.352325+00:00", "request_id": "3fe4af2d-ddef-48aa-8856-01cd627b0729", "method": "POST", "status": 200, "duration_ms": 19}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.357190+00:00", "request_id": "925c75de-49e5-4093-af87-0a994788a580", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.368389+00:00", "request_id": "e6b4c49d-15b2-4e9b-ac85-b6b566d64475", "method": "POST", "status": 201, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.372873+00:00", "request_id": "4f5556ce-f144-44d3-bd5c-9ef2e1a7a004", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.379944+00:00", "request_id": "47048514-0f22-4505-afcb-4be7580cea52", "method": "POST", "status": 201, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.386389+00:00", "request_id": "a532fb56-4c3a-4bcd-8795-e3a853d48fe0", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.390584+00:00", "request_id": "f7319d87-ba9b-414e-858c-49039d19cf14", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.398415+00:00", "request_id": "6af37683-ad2c-4e23-ab13-59844c353a6e", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.404123+00:00", "request_id": "5113b58d-420e-4ca3-9dac-f25c6b31aed6", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.408316+00:00", "request_id": "134db816-feac-4836-96bb-36a255f3250d", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.416368+00:00", "request_id": "40294e30-e1c0-4d46-8228-9f9176b77402", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.421983+00:00", "request_id": "72d74f62-0f5a-4055-bb6b-1286dbdaa559", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.426221+00:00", "request_id": "af082557-eff6-4773-8bbc-0c31a9614b87", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.434599+00:00", "request_id": "7927ee05-5a30-4baf-b128-ec3d9f1b0dfd", "method": "POST", "status": 201, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.440162+00:00", "request_id": "6c1d6575-64c0-44e7-9236-c2401da2418f", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.444202+00:00", "request_id": "77b8fd31-8977-4af5-8cf4-ada8d3a185c7", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.451727+00:00", "request_id": "8185bf87-7515-4799-9948-e22b7d26c57e", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-26T13:46:09.457641+00:00", "request_id": "0ad1da9e-208c-4f7b-a1a2-bc03f873259d", "method": "GET", "status": 503, "duration_ms": 4}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.357190+00:00", "request_id": "925c75de-49e5-4093-af87-0a994788a580", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.368389+00:00", "request_id": "e6b4c49d-15b2-4e9b-ac85-b6b566d64475", "method": "POST", "status": 201, "duration_ms": 9}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.372873+00:00", "request_id": "4f5556ce-f144-44d3-bd5c-9ef2e1a7a004", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.379944+00:00", "request_id": "47048514-0f22-4505-afcb-4be7580cea52", "method": "POST", "status": 201, "duration_ms": 5}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.386389+00:00", "request_id": "a532fb56-4c3a-4bcd-8795-e3a853d48fe0", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.390584+00:00", "request_id": "f7319d87-ba9b-414e-858c-49039d19cf14", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.398415+00:00", "request_id": "6af37683-ad2c-4e23-ab13-59844c353a6e", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.404123+00:00", "request_id": "5113b58d-420e-4ca3-9dac-f25c6b31aed6", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.408316+00:00", "request_id": "134db816-feac-4836-96bb-36a255f3250d", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.416368+00:00", "request_id": "40294e30-e1c0-4d46-8228-9f9176b77402", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.421983+00:00", "request_id": "72d74f62-0f5a-4055-bb6b-1286dbdaa559", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.426221+00:00", "request_id": "af082557-eff6-4773-8bbc-0c31a9614b87", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.434599+00:00", "request_id": "7927ee05-5a30-4baf-b128-ec3d9f1b0dfd", "method": "POST", "status": 201, "duration_ms": 7}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.440162+00:00", "request_id": "6c1d6575-64c0-44e7-9236-c2401da2418f", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.444202+00:00", "request_id": "77b8fd31-8977-4af5-8cf4-ada8d3a185c7", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.451727+00:00", "request_id": "8185bf87-7515-4799-9948-e22b7d26c57e", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:72 {"event": "http_request", "timestamp": "2026-10-26T13:46:09.457641+00:00", "request_id": "0ad1da9e-208c-4f7b-a1a2-bc03f873259d", "method": "GET", "status": 503, "duration_ms": 4}
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_phase1_integration.py::test_all_metadata_entities_and_immutable_strategy_version
+1 failed, 16 passed, 1 warning in 9.18s
++ /usr/local/bin/docker compose --project-name phase0-test-dd03ee6d071e4d989b3220f8074eeebf --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-ex4mtcyd/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Stopping 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Stopping 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Stopping 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Stopped 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Removing 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-minio-1 Removed 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Stopped 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Removing 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-postgres-1 Removed 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Stopped 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Removing 
+ Container phase0-test-dd03ee6d071e4d989b3220f8074eeebf-redis-1 Removed 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_postgres Removing 
+ Network phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default Removing 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_redis Removing 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_storage Removing 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_postgres Removed 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_redis Removed 
+ Volume phase0-test-dd03ee6d071e4d989b3220f8074eeebf_test_storage Removed 
+ Network phase0-test-dd03ee6d071e4d989b3220f8074eeebf_default Removed 
+FAILED: Command exited 1; no service acceptance claimed
+make: *** [integration-services] Error 1

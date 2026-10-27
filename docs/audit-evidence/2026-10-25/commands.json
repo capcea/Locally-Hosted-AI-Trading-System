@@ -1,0 +1,314 @@
+[
+  {
+    "id": "baseline-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "started_utc": "2026-10-25T16:55:04.016763+00:00",
+    "duration_seconds": 5.246,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/baseline-check.txt",
+    "sha256": "9118d3ebc5ba28319fb5e4fbecccea39fa03dda866612f05c456b9c83faff952"
+  },
+  {
+    "id": "baseline-e2e-list",
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "started_utc": "2026-10-25T16:55:05.127580+00:00",
+    "duration_seconds": 1.543,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/baseline-e2e-list.txt",
+    "sha256": "23d1642aa78a212b33e5f6c26e7abcdea8a7258177e23f0555da015d53562312"
+  },
+  {
+    "id": "baseline-integration",
+    "command": [
+      "make",
+      "integration"
+    ],
+    "started_utc": "2026-10-25T16:55:05.130545+00:00",
+    "duration_seconds": 1.463,
+    "exit_code": 2,
+    "log": "docs/audit-evidence/2026-10-25/baseline-integration.txt",
+    "sha256": "4d6b006d044a092d333033942dc8aefb758f180a667e1ae969e069061ad318ee"
+  },
+  {
+    "id": "baseline-doctor",
+    "command": [
+      "make",
+      "doctor"
+    ],
+    "started_utc": "2026-10-25T16:55:05.138937+00:00",
+    "duration_seconds": 0.795,
+    "exit_code": 2,
+    "log": "docs/audit-evidence/2026-10-25/baseline-doctor.txt",
+    "sha256": "b6c7fe4c5e5972b639a56d356213ad2d0291b60d85f2312a6d63ab2d9d0f718e"
+  },
+  {
+    "id": "baseline-npm-audit",
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "audit",
+      "--audit-level=high"
+    ],
+    "started_utc": "2026-10-25T16:55:14.000699+00:00",
+    "duration_seconds": 0.807,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/baseline-npm-audit.txt",
+    "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+  },
+  {
+    "id": "baseline-pip-audit",
+    "command": [
+      ".tools/bin/uv",
+      "run",
+      "--with",
+      "pip-audit==2.10.1",
+      "python",
+      "-m",
+      "pip_audit",
+      "--progress-spinner",
+      "off",
+      "--cache-dir",
+      ".cache/pip-audit"
+    ],
+    "started_utc": "2026-10-25T16:55:14.003242+00:00",
+    "duration_seconds": 11.663,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/baseline-pip-audit.txt",
+    "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+  },
+  {
+    "id": "defect-reproductions",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_audit_regressions.py",
+      "-q"
+    ],
+    "started_utc": "2026-10-25T16:56:46.802828+00:00",
+    "duration_seconds": 0.657,
+    "exit_code": 1,
+    "log": "docs/audit-evidence/2026-10-25/defect-reproductions.txt",
+    "sha256": "7e33ab0e7168db61c88a045be11b1ad5fb56d9ae5e24229a5e4ca6daa49de3b5"
+  },
+  {
+    "id": "fixed-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "started_utc": "2026-10-25T16:59:51.614067+00:00",
+    "duration_seconds": 3.474,
+    "exit_code": 2,
+    "log": "docs/audit-evidence/2026-10-25/fixed-check.txt",
+    "sha256": "a5e7dbc7647ede1543e98b3e2a6b38ef5c86224098f5af806cbbd99976ffdbc7"
+  },
+  {
+    "id": "fixed-integration",
+    "command": [
+      "make",
+      "integration"
+    ],
+    "started_utc": "2026-10-25T16:59:52.308724+00:00",
+    "duration_seconds": 0.95,
+    "exit_code": 2,
+    "log": "docs/audit-evidence/2026-10-25/fixed-integration.txt",
+    "sha256": "20c404fb443cb92867c76c6a25b8aa069db5eb4506a06c25aa2624237638d6b9"
+  },
+  {
+    "id": "docker-start",
+    "command": [
+      "make",
+      "dev"
+    ],
+    "started_utc": "2026-10-25T16:59:53.303752+00:00",
+    "duration_seconds": 0.356,
+    "exit_code": 2,
+    "log": "docs/audit-evidence/2026-10-25/docker-start.txt",
+    "sha256": "c7ad77b57de39818487120ff73717d9a7537c028bfe6a15290437c32bb72830d"
+  },
+  {
+    "id": "compose-config",
+    "command": [
+      "docker",
+      "compose",
+      "config",
+      "--quiet"
+    ],
+    "started_utc": "2026-10-25T17:00:17.098857+00:00",
+    "duration_seconds": 0.253,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/compose-config.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "id": "shell-syntax",
+    "command": [
+      "bash",
+      "-n",
+      "scripts/setup.sh"
+    ],
+    "started_utc": "2026-10-25T17:00:17.391737+00:00",
+    "duration_seconds": 0.003,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/shell-syntax.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "id": "e2e-collection",
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "started_utc": "2026-10-25T17:00:17.423810+00:00",
+    "duration_seconds": 0.5,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/e2e-collection.txt",
+    "sha256": "5fb57a665487cd53e44bc656551423d6db98b05d0c000ff4d021e6bf0e07c54d"
+  },
+  {
+    "id": "final-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "started_utc": "2026-10-25T17:00:27.442544+00:00",
+    "duration_seconds": 5.125,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/final-check.txt",
+    "sha256": "3c4956da56d5e4ed6edc78ff8d60affdb8def0328eafeba96f3a0b4d132ff7f0"
+  },
+  {
+    "id": "final-python-all",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest"
+    ],
+    "started_utc": "2026-10-25T17:03:34.621839+00:00",
+    "duration_seconds": 1.047,
+    "exit_code": 1,
+    "log": "docs/audit-evidence/2026-10-25/final-python-all.txt",
+    "sha256": "d98c9ce540435fbcb875f67489300277eb814c195b21c26666bd90f13c701b8c"
+  },
+  {
+    "id": "final-npm-audit",
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "audit",
+      "--audit-level=high"
+    ],
+    "started_utc": "2026-10-25T17:03:34.621881+00:00",
+    "duration_seconds": 0.883,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/final-npm-audit.txt",
+    "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+  },
+  {
+    "id": "final-smoke",
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "started_utc": "2026-10-25T17:03:41.988499+00:00",
+    "duration_seconds": 0.181,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/final-smoke.txt",
+    "sha256": "0b0627cc2d13ad24a117c02ff3755f034e5967e5cfcf1a2797acf1ed3330bd23"
+  },
+  {
+    "id": "final-smoke-ready",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.smoke_demo",
+      "--require-ready"
+    ],
+    "started_utc": "2026-10-25T17:04:13.127396+00:00",
+    "duration_seconds": 0.133,
+    "exit_code": 1,
+    "log": "docs/audit-evidence/2026-10-25/final-smoke-ready.txt",
+    "sha256": "1136bf565363f837cf62994f036e75e0573dfaf230decd31ce262a64d046ac6e"
+  },
+  {
+    "id": "contract-generation",
+    "command": [
+      "make",
+      "contracts"
+    ],
+    "started_utc": "2026-10-25T17:04:46.721738+00:00",
+    "duration_seconds": 0.762,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/contract-generation.txt",
+    "sha256": "ac41cb712fff6061a9712ea5a7259074f72369b67083d7a10ed088f7907d462b"
+  },
+  {
+    "id": "seed-fixture",
+    "command": [
+      "make",
+      "seed-demo"
+    ],
+    "started_utc": "2026-10-25T17:07:25.662863+00:00",
+    "duration_seconds": 0.1,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/seed-fixture.txt",
+    "sha256": "27b621fb4d63e663303992793171a6d28e70b46dc985209c4e68bad104623265"
+  },
+  {
+    "id": "final-secret-scan",
+    "command": [
+      ".tools/bin/gitleaks",
+      "dir",
+      ".cache/audit-source-scan",
+      "--redact",
+      "--no-banner",
+      "--report-format",
+      "json",
+      "--report-path",
+      ".cache/audit-gitleaks.json"
+    ],
+    "started_utc": "2026-10-25T17:16:10.332884+00:00",
+    "duration_seconds": 0.31,
+    "exit_code": 1,
+    "log": "docs/audit-evidence/2026-10-25/final-secret-scan.txt",
+    "sha256": "861db1088757f33e2ea9825833a4194dd13f7a1e685f8ae14ec3eb4438aa1667"
+  },
+  {
+    "id": "final-secret-scan-clean",
+    "command": [
+      ".tools/bin/gitleaks",
+      "dir",
+      ".cache/audit-source-scan-clean",
+      "--redact",
+      "--no-banner",
+      "--report-format",
+      "json",
+      "--report-path",
+      ".cache/audit-gitleaks-clean.json"
+    ],
+    "started_utc": "2026-10-25T17:16:56.389296+00:00",
+    "duration_seconds": 0.355,
+    "exit_code": 0,
+    "log": "docs/audit-evidence/2026-10-25/final-secret-scan-clean.txt",
+    "sha256": "3d370b744b2b3d9ad326aba56b486fb758cda4567c399cf262c043d378e8a6b5"
+  }
+]

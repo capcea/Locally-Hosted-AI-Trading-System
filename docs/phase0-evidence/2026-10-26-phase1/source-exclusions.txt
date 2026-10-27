@@ -1,0 +1,3 @@
+.venv/bin/python -m scripts.repository_check
+PASSED: 19 sensitive-path exclusions; 328 regular source/evidence files.
+No files staged, no commit made, no remote created, no network request.

@@ -1,0 +1,19 @@
+{
+  "id": "final-image-verified",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T20:00:56.578501+00:00",
+  "duration_seconds": 17.576,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-image-verified.txt",
+  "sha256": "a92bac11917f4563db01ce34150c12b809bfcced529b18fcb0ac894a171ddee2"
+}

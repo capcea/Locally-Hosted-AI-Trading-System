@@ -1,0 +1,13 @@
+{
+  "id": "pre-migration-backup",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import hashlib,json,os,subprocess\nfrom pathlib import Path\npath=Path(\".cache/phase1/pre-migration.dump\")\nwith path.open(\"xb\") as output:\n    os.chmod(path,0o600)\n    result=subprocess.run([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"pg_dump\",\"-U\",\"research\",\"-d\",\"research\",\"--format=custom\"],stdout=output,stderr=subprocess.PIPE,check=False)\nif result.returncode:\n    raise RuntimeError(\"Pre-migration pg_dump failed\")\nprint(\"Private pre-migration backup:\",path,\"bytes:\",path.stat().st_size,\"sha256:\",hashlib.sha256(path.read_bytes()).hexdigest())\nrows=[]\nfor service in (\"postgres\",\"redis\",\"minio\"):\n    container=subprocess.check_output([\"docker\",\"compose\",\"ps\",\"-q\",service],text=True).strip()\n    raw=subprocess.check_output([\"docker\",\"inspect\",\"--format\",'{\"id\":{{json .Id}},\"started\":{{json .State.StartedAt}},\"mounts\":{{json .Mounts}}}',container],text=True)\n    rows.append({\"service\":service,\"state\":json.loads(raw)})\nPath(\".cache/phase1/data-services-before.json\").write_text(json.dumps(rows,indent=2))\nprint(\"Data service identity/mount snapshot saved; no contents printed.\")\n"
+  ],
+  "started_utc": "2026-10-26T14:02:12.614176+00:00",
+  "duration_seconds": 0.424,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/pre-migration-backup.txt",
+  "sha256": "9190f7754fa02336d03407e4ae339b17b09765df6bd29fdaed536fb1f027bc06"
+}

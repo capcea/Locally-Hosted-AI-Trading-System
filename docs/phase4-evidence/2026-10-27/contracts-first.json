@@ -1,0 +1,12 @@
+{
+  "id": "contracts-first",
+  "command": [
+    "make",
+    "contracts"
+  ],
+  "started_utc": "2026-10-27T02:35:27.468345+00:00",
+  "duration_seconds": 2.859,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/contracts-first.txt",
+  "sha256": "4f436a564862bb3ac92e1182d4c513f34b0a8f55cd98030646e3ca0c909b0f89"
+}

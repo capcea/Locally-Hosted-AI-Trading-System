@@ -1,0 +1,15 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+78 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+.venv/bin/python -m mypy
+tests/test_phase1_integration.py:785: error: Returning Any from function declared to return "int"  [no-any-return]
+Found 1 error in 1 file (checked 49 source files)
+make: *** [typecheck] Error 1

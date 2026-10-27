@@ -1,0 +1,114 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.03kB done
+#1 DONE 0.0s
+
+#2 [market-worker internal] load build definition from Dockerfile
+#2 transferring dockerfile: 846B 0.0s done
+#2 DONE 0.1s
+
+#3 [migrate internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#3 DONE 1.3s
+
+#4 [api internal] load .dockerignore
+#4 transferring context: 293B 0.0s done
+#4 DONE 0.1s
+
+#5 [api internal] load build context
+#5 DONE 0.0s
+
+#6 [api  1/13] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#6 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#6 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 1.0s done
+#6 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 1.0s done
+#6 DONE 1.0s
+
+#5 [migrate internal] load build context
+#5 transferring context: 9.94kB 0.0s done
+#5 DONE 0.0s
+
+#7 [market-worker  2/13] WORKDIR /app
+#7 CACHED
+
+#8 [market-worker  4/13] COPY pyproject.toml uv.lock ./
+#8 CACHED
+
+#9 [market-worker  6/13] COPY apps/api apps/api
+#9 CACHED
+
+#10 [market-worker  3/13] RUN pip install --no-cache-dir uv==0.13.5
+#10 CACHED
+
+#11 [market-worker  5/13] RUN uv sync --frozen --no-dev --no-cache
+#11 CACHED
+
+#12 [market-worker  7/13] COPY apps/__init__.py apps/__init__.py
+#12 CACHED
+
+#13 [api  8/13] COPY packages packages
+#13 DONE 0.0s
+
+#14 [api  9/13] COPY workers workers
+#14 DONE 0.0s
+
+#15 [migrate 10/13] COPY migrations migrations
+#15 DONE 0.1s
+
+#16 [migrate 11/13] COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/provision_market.py scripts/market_worker.py scripts/
+#16 DONE 0.1s
+
+#17 [market-worker 12/13] COPY alembic.ini ./
+#17 DONE 0.0s
+
+#18 [market-worker 13/13] RUN useradd --uid 10001 --create-home app
+#18 DONE 0.4s
+
+#19 [market-worker] exporting to image
+#19 exporting layers
+#19 exporting layers 0.3s done
+#19 exporting manifest sha256:6dfccd766e85eadca4c1e29cd306f549ae14c00257e391b9af1094ab4a837db5 0.0s done
+#19 exporting config sha256:35e957fa57013852af25ca8e80d8cff3bd82c06bdeb75c663c6c2f0f075acbe8 0.0s done
+#19 exporting attestation manifest sha256:2be68b0087c07b246035c7ff73458a58dae38a45e4c418eec0f32b739ab42c52
+#19 exporting attestation manifest sha256:2be68b0087c07b246035c7ff73458a58dae38a45e4c418eec0f32b739ab42c52 0.0s done
+#19 exporting manifest list sha256:9e80ca03bf4872cc254f910792f8641351a2391a08982412d1b7162f049c47f5 0.0s done
+#19 naming to docker.io/library/ai-trading-research-market-worker:latest 0.0s done
+#19 unpacking to docker.io/library/ai-trading-research-market-worker:latest
+#19 ...
+
+#20 [migrate] exporting to image
+#20 exporting layers 0.3s done
+#20 exporting manifest sha256:433d999e14b012b99b4ff50d65b3aed2abcd5d89ece0d8502dba2608413f252c 0.0s done
+#20 exporting config sha256:4c17c1ff558ed360e277db0bbc3525965438dcad7295917e87b0a269aa5af6af 0.0s done
+#20 exporting attestation manifest sha256:faefd5d94273be1da2cb62f458260506bf3fb8143aea782faf6041998ad0c799 0.0s done
+#20 exporting manifest list sha256:47b9ee1c0c6394c0054794e7507ef88d36f1c7fcc2a40a0313f9753a5ad6e034 0.0s done
+#20 naming to docker.io/library/ai-trading-research-migrate:latest 0.0s done
+#20 unpacking to docker.io/library/ai-trading-research-migrate:latest 0.2s done
+#20 DONE 0.8s
+
+#19 [market-worker] exporting to image
+#19 unpacking to docker.io/library/ai-trading-research-market-worker:latest 0.2s done
+#19 DONE 0.8s
+
+#21 [api] exporting to image
+#21 exporting layers 0.3s done
+#21 exporting manifest sha256:5232e41b504f0c8592cd1ebe5b47873a60c89c9afa467fa9d698d3788edc7b18 0.0s done
+#21 exporting config sha256:ad98c1461a50acaa070c618a9a9635e8f0e195e81911a142011c86d8f1e2212a 0.0s done
+#21 exporting attestation manifest sha256:9e04a7247ec15c5f96ec48884919f6f2f4e2f520a094b1520391356ed8a324d2 0.0s done
+#21 exporting manifest list sha256:65ed3dc23e2ef5a2aa851498043c2a2454456ec0a4110091b43050c349232471 0.0s done
+#21 naming to docker.io/library/ai-trading-research-api:latest 0.0s done
+#21 unpacking to docker.io/library/ai-trading-research-api:latest 0.2s done
+#21 DONE 0.9s
+
+#22 [api] resolving provenance for metadata file
+#22 DONE 0.3s
+
+#23 [migrate] resolving provenance for metadata file
+#23 DONE 0.2s
+
+#24 [market-worker] resolving provenance for metadata file
+#24 DONE 0.1s
+ Image ai-trading-research-market-worker Building 
+ Image ai-trading-research-migrate Building 
+ Image ai-trading-research-api Building 
+ Image ai-trading-research-market-worker Built 
+ Image ai-trading-research-api Built 
+ Image ai-trading-research-migrate Built 

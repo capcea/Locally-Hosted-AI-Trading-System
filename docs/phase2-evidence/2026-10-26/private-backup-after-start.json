@@ -1,0 +1,13 @@
+{
+  "id": "private-backup-after-start",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import hashlib,os,subprocess\nfrom pathlib import Path\npath=Path(\".cache/phase2/pre-migration-started.dump\")\nwith path.open(\"xb\") as output:\n    os.chmod(path,0o600)\n    result=subprocess.run([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"pg_dump\",\"-U\",\"research\",\"-d\",\"research\",\"--format=custom\"],stdout=output,stderr=subprocess.PIPE)\nif result.returncode: raise RuntimeError(\"Private backup failed\")\nprint(\"Private backup bytes:\",path.stat().st_size,\"SHA256:\",hashlib.sha256(path.read_bytes()).hexdigest())\n"
+  ],
+  "started_utc": "2026-10-26T19:40:33.624283+00:00",
+  "duration_seconds": 2.591,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/private-backup-after-start.txt",
+  "sha256": "2857c2788d41940dcbdcc656cda72d34579ae2932a1c41f6491233bb7061da2d"
+}

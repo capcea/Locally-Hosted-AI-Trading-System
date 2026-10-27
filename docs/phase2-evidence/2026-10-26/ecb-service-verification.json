@@ -1,0 +1,19 @@
+{
+  "provider": "ECB",
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A",
+  "start": "2026-10-19",
+  "end_exclusive": "2026-10-24",
+  "http_status": 200,
+  "bytes": 1366,
+  "sha256": "46c3a1b8fefbc66b6155d8eed0ca833353ccb702993ace91884074a3874f849f",
+  "record_count": 5,
+  "earliest": "2026-10-19",
+  "latest": "2026-10-23",
+  "retrieved_utc": "2026-10-26T20:04:56.002331+00:00",
+  "data_type": "DAILY_REFERENCE_NOT_OHLC",
+  "bid_ask": false,
+  "volume": false,
+  "rights_reference": "https://www.ecb.europa.eu/stats/ecb_statistics/governance_and_quality_framework/html/usage_policy.en.html",
+  "attribution": "Source: ECB statistics.",
+  "five_year_coverage_verified": false
+}

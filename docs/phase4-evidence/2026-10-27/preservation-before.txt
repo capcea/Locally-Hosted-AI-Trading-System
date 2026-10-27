@@ -1,0 +1,1 @@
+PASSED: fresh private pg_dump, all 30 legacy table fingerprints, data container IDs and mounts captured; schema 0004. No database mutation.

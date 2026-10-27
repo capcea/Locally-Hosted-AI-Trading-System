@@ -1,0 +1,12 @@
+{
+  "id": "integration",
+  "command": [
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-25T22:26:05.886871+00:00",
+  "duration_seconds": 1.426,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-25/integration.txt",
+  "sha256": "ca0a2537f4267d93302c3a1d6e8640e464f639777734e4508cf1fa101959dc04"
+}

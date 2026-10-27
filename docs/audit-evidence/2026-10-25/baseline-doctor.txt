@@ -1,0 +1,12 @@
+.venv/bin/python -m scripts.doctor
+OK: python3
+OK: node
+OK: npm
+OK: docker
+OK: make
+OK: .env
+OK: .venv/bin/python
+OK: apps/web/node_modules
+UNAVAILABLE: Start Docker Desktop for Compose.
+Safety: SIMULATED only; no live executor, model runner or broker connectors shipped.
+make: *** [doctor] Error 1

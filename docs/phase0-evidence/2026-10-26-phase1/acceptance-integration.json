@@ -1,0 +1,12 @@
+{
+  "id": "acceptance-integration",
+  "command": [
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-26T14:47:40.098385+00:00",
+  "duration_seconds": 52.119,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/acceptance-integration.txt",
+  "sha256": "a27a571442a894cea4bc811adc33ce7e5f47d02034475b50c83c6166b03030cc"
+}

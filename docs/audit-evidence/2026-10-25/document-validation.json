@@ -1,0 +1,14 @@
+{
+  "report_files_present": true,
+  "all_local_report_links_exist": true,
+  "requirement_ids_complete_unique": true,
+  "requirement_counts": {
+    "MOCKED": 3,
+    "MISSING": 49,
+    "FULLY FUNCTIONAL": 2,
+    "PARTIALLY IMPLEMENTED": 6
+  },
+  "source_hashes_verified": 86,
+  "original_spec_unchanged": true,
+  "runtime_tests": "See actual command records; this check validates documents/metadata only"
+}

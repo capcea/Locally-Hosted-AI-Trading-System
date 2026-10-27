@@ -1,0 +1,15 @@
+{
+  "id": "broker-contracts",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_broker_contracts.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T22:22:26.982154+00:00",
+  "duration_seconds": 2.337,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/broker-contracts.txt",
+  "sha256": "8dc5666f6eb46299a0a92d4304240819230fc20fe066a35bdd885ae97444ed99"
+}

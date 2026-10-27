@@ -1,0 +1,15 @@
+{
+  "id": "local-mtls",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_bridge_tls.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T22:40:51.424530+00:00",
+  "duration_seconds": 2.037,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/local-mtls.txt",
+  "sha256": "ba74344cc5ae76fe8de2487020c81bb23e31d0f9fc3759533ef6690ea5ff3f14"
+}

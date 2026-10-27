@@ -1,0 +1,12 @@
+{
+  "status": "BLOCKED_BY_ACCESS_POLICY",
+  "executed": false,
+  "planned_command": "npm --prefix apps/web run test:e2e",
+  "attempted_tool": "mcp__cua_repl.js: cua.createBrowserTab",
+  "target": "http://127.0.0.1:5173/",
+  "reason": "Browser access denied by saved permission or managed policy in this audit session. No alternate browser or Playwright execution attempted after denial.",
+  "collected_cases": 6,
+  "passed_cases": null,
+  "failed_cases": null,
+  "limitation": "Listing test names does not execute tests or validate UI rendering."
+}

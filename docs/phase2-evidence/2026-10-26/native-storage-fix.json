@@ -1,0 +1,14 @@
+{
+  "id": "native-storage-fix",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T19:30:10.440439+00:00",
+  "duration_seconds": 78.197,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/native-storage-fix.txt",
+  "sha256": "6ba2f75a0afb0b1953fc764c4f857ac3fd34d4a0821e5b889f19549e21faf0cf"
+}

@@ -1,0 +1,68 @@
+{
+  "updated": "2026-10-27",
+  "global_external_execution": "DENY_ALL",
+  "actual_external_connections_tested": false,
+  "providers": [
+    {
+      "provider": "SIMULATOR",
+      "source": "SIMULATED",
+      "contract_tests": "PASSED",
+      "native_journal_tests": "PASSED",
+      "external_connectivity": "NOT_APPLICABLE",
+      "synthetic_order_types": [
+        "MARKET",
+        "LIMIT",
+        "STOP"
+      ],
+      "synthetic_modes": [
+        "NETTING",
+        "HEDGING"
+      ],
+      "synthetic_oco": "EXPLICIT_MODEL_OPT_IN",
+      "synthetic_partial_fills": true,
+      "external_submit_cancel_modify": false,
+      "real_tradability_verified": false
+    },
+    {
+      "provider": "MT5",
+      "source_in_tests": "CONTRACT_FIXTURE",
+      "contract_tests": "PASSED_WITH_FAKE_SDK",
+      "actual_connectivity": "BLOCKED",
+      "windows_service_acceptance": "NOT_RUN",
+      "symbol_metadata": "READ_FROM_AUTHORIZED_TERMINAL_WHEN_AVAILABLE",
+      "sessions": null,
+      "margin": null,
+      "native_order_types": "OBSERVED_BITMASK_ONLY",
+      "account_mode": "OBSERVED_ONLY",
+      "read_only_requirements": [
+        "DEMO_ACCOUNT",
+        "PINNED_LOGIN_SERVER",
+        "INVESTOR_AUTHORIZATION",
+        "TERMINAL_API_TRADING_DISABLED"
+      ],
+      "external_submit_cancel_modify": false,
+      "real_tradability_verified": false
+    },
+    {
+      "provider": "CTRADER",
+      "source_in_tests": "CONTRACT_FIXTURE",
+      "contract_tests": "PASSED_WITH_PROTOCOL_FIXTURES",
+      "oauth_test": "MOCKED_HTTP_TRANSPORT",
+      "actual_connectivity": "BLOCKED",
+      "endpoint": "wss://demo.ctraderapi.com:5036",
+      "scope": "VERIFIED_SCOPE_VIEW_ONLY",
+      "symbols_quotes_orders_positions_history": "BOUNDED_READS_IMPLEMENTED_EXTERNAL_UNVERIFIED",
+      "sessions": null,
+      "margin": null,
+      "native_order_types": "UNKNOWN_UNTIL_OBSERVED",
+      "account_mode": "OBSERVED_ONLY",
+      "external_submit_cancel_modify": false,
+      "real_tradability_verified": false
+    }
+  ],
+  "notes": [
+    "Null represents unverified metadata, not zero cost or open sessions.",
+    "Instrument catalog inclusion does not imply broker tradability.",
+    "No matrix entry grants future risk or order authority."
+  ]
+}

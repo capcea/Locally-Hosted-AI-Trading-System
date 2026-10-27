@@ -1,0 +1,23 @@
+{
+  "id": "current-data-start",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "120",
+    "postgres",
+    "redis",
+    "minio"
+  ],
+  "started_utc": "2026-10-26T19:39:36.589142+00:00",
+  "duration_seconds": 5.898,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/current-data-start.txt",
+  "sha256": "169943868c6a05f426bd3483b8fac742f9d2133cba714dc6e381606d972d9848"
+}

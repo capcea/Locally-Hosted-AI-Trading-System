@@ -1,0 +1,13 @@
+{
+  "id": "preservation-final",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase4/preserve.py",
+    "after"
+  ],
+  "started_utc": "2026-10-27T03:52:11.682454+00:00",
+  "duration_seconds": 6.478,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/preservation-final.txt",
+  "sha256": "76ea73d1eb2990cf28b3e8ef36c6363874841413d0ce8740768c11b13d303b71"
+}

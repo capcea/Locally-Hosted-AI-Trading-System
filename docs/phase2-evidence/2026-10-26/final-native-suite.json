@@ -1,0 +1,14 @@
+{
+  "id": "final-native-suite",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-26T20:04:54.532357+00:00",
+  "duration_seconds": 79.031,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-native-suite.txt",
+  "sha256": "9bf8bb6fc4345da73815575afd0780a2e96c636e651f3c10e69951a6eba8b9f1"
+}

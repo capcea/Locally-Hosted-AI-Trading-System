@@ -1,0 +1,14 @@
+{
+  "id": "native-research-extended",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase5/focused_services.py"
+  ],
+  "started_utc": "2026-10-27T11:23:14.697170+00:00",
+  "duration_seconds": 43.069,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/native-research-extended.txt",
+  "sha256": "dd7283735ee6d9872b426563db841fd5f76f76579ee32a10208ff0401d3b04bb"
+}

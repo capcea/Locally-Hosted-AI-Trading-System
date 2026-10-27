@@ -1,0 +1,56 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (102 > 100)
+   --> scripts/integration_services.py:167:101
+    |
+166 |             test_stage("write")
+167 |             # Graceful stop/start retains this project's named volumes. This is not a power-loss test.
+    |                                                                                                     ^^
+168 |             run([*compose, "stop", "postgres", "redis", "minio"], timeout=60)
+169 |             run([*compose, "up", "-d", "--wait", "--wait-timeout", "180"])
+    |
+
+S607 Starting a process with a partial executable path
+  --> scripts/repository_check.py:32:9
+   |
+30 | def git(*args: str, input_data: bytes | None = None) -> bytes:
+31 |     return subprocess.run(  # noqa: S603,S607 -- fixed Git commands, no shell
+32 |         ["git", *args], input=input_data, capture_output=True, check=True
+   |         ^^^^^^^^^^^^^^
+33 |     ).stdout
+   |
+
+E501 Line too long (115 > 100)
+  --> scripts/repository_check.py:81:101
+   |
+79 |         args.manifest.write_bytes(b"".join(str(path).encode() + b"\0" for path in paths))
+80 |     print(
+81 |         f"PASSED: {len(SENSITIVE_EXAMPLES)} sensitive-path exclusions; {len(paths)} regular source/evidence files."
+   |                                                                                                     ^^^^^^^^^^^^^^^
+82 |     )
+83 |     print("No files staged, no commit made, no remote created, no network request.")
+   |
+
+E501 Line too long (110 > 100)
+  --> tests/test_service_roundtrips.py:52:101
+   |
+50 |                 connection.execute(
+51 |                     text(
+52 |                         "INSERT INTO platform_metadata (key, value, environment) VALUES (:key, :value, :mode)"
+   |                                                                                                     ^^^^^^^^^^
+53 |                     ),
+54 |                     {"key": "unsafe", "value": "TEST_FIXTURE", "mode": "LIVE"},
+   |
+
+E501 Line too long (110 > 100)
+  --> tests/test_service_roundtrips.py:62:101
+   |
+60 |                 connection.execute(
+61 |                     text(
+62 |                         "INSERT INTO platform_metadata (key, value, environment) VALUES (:key, :value, :mode)"
+   |                                                                                                     ^^^^^^^^^^
+63 |                     ),
+64 |                     {"key": "roundtrip", "value": isolated.run_id, "mode": "SIMULATED"},
+   |
+
+Found 5 errors.
+make: *** [lint] Error 1

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase4/validate_runtime.py", line 7, in <module>
+    from packages.persistence.models import Base
+ModuleNotFoundError: No module named 'packages'

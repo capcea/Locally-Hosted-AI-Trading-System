@@ -1,0 +1,14 @@
+{
+  "id": "preservation-verified",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase3/preservation.py"
+  ],
+  "started_utc": "2026-10-27T01:34:57.320200+00:00",
+  "duration_seconds": 10.876,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/preservation-verified.txt",
+  "sha256": "fc577df321e5ecc3ec2ba9f3d3dcfa76ea2647115c42a6b7871d17a9d0f1928b"
+}

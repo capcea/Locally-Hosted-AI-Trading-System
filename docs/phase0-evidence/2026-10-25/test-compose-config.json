@@ -1,0 +1,20 @@
+{
+  "id": "test-compose-config",
+  "command": [
+    "env",
+    "P0_DATABASE_NAME=phase0_syntax_validation",
+    "P0_DATABASE_PASSWORD=SYNTAX_ONLY",
+    "P0_STORAGE_PASSWORD=SYNTAX_ONLY",
+    "docker",
+    "compose",
+    "-f",
+    "compose.test.yaml",
+    "config",
+    "--quiet"
+  ],
+  "started_utc": "2026-10-25T22:27:01.500265+00:00",
+  "duration_seconds": 0.491,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-25/test-compose-config.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

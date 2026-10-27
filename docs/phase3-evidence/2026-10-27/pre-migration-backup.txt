@@ -1,0 +1,1 @@
+PASSED: private pre-migration backup 88133 bytes; SHA256 4002f5a9ffaca436168ddd05bed7f14bfe6640fe64ce46a6a9f686448cfcd3c0 ; legacy table fingerprints 25 ; data-container IDs/mounts recorded. No data changed.

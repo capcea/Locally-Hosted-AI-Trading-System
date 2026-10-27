@@ -1,0 +1,12 @@
+{
+  "id": "browser-acceptance",
+  "command": [
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T14:37:29.417846+00:00",
+  "duration_seconds": 74.203,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/browser-acceptance.txt",
+  "sha256": "00cd0d31c8faced156bee078e9be20b4e497fae51c15e184574b02cab33e82a8"
+}

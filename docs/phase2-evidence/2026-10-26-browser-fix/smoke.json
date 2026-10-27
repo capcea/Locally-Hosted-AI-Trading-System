@@ -1,0 +1,12 @@
+{
+  "id": "smoke",
+  "command": [
+    "make",
+    "smoke-demo"
+  ],
+  "started_utc": "2026-10-26T21:40:24.216393+00:00",
+  "duration_seconds": 0.323,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/smoke.txt",
+  "sha256": "be6147870901b36d75a5d3cf6104437dc132e4a59a3d36d799f9421326191a8c"
+}

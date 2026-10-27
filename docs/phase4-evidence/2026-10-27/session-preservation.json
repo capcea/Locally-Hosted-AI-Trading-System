@@ -1,0 +1,12 @@
+{
+  "id": "session-preservation",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase4/session_preservation.py"
+  ],
+  "started_utc": "2026-10-27T03:50:43.223168+00:00",
+  "duration_seconds": 0.238,
+  "exit_code": 1,
+  "log": "docs/phase4-evidence/2026-10-27/session-preservation.txt",
+  "sha256": "3cc53e4b6f4f8fa8d50ab0b2083b4e989024ec68f44b40d38c1dbb022fbb9bf5"
+}

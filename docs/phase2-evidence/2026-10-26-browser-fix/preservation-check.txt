@@ -1,0 +1,47 @@
+import json
+import re
+import subprocess
+from pathlib import Path
+
+import httpx
+
+
+def run(*args):
+    return subprocess.check_output(args, text=True).strip()
+
+
+before = json.loads(Path('.cache/phase2-browser-fix/dev-before.json').read_text())
+for service, expected in before['states'].items():
+    current = json.loads(run('docker', 'inspect', '--format',
+        '{"id":{{json .Id}},"mounts":{{json .Mounts}}}', 'ai-trading-research-' + service + '-1'))
+    assert current == expected, service
+for table, expected in before['records'].items():
+    assert table in {'users', 'trading_accounts', 'risk_profiles', 'firm_policies', 'audit_events'}
+    query = f"SELECT count(*),md5(COALESCE(string_agg(row_to_json(t)::text,',' ORDER BY row_to_json(t)::text),'')) FROM {table} t"
+    actual = run('docker', 'compose', 'exec', '-T', 'postgres', 'psql', '-U', 'research', '-d', 'research', '-Atqc', query)
+    assert actual == expected, table
+print('PASSED: development PostgreSQL/Redis/MinIO container IDs and mounts unchanged; Phase 1 record counts/digests unchanged.')
+
+folder = Path('docs/phase2-evidence/2026-10-26-browser-fix')
+projects = set()
+for label in ('desktop-before', 'desktop-after', 'full-e2e', 'integration'):
+    log = (folder / (label + '.txt')).read_text()
+    matches = set(re.findall(r'--project-name (phase0-test-[0-9a-f]{32})', log))
+    assert len(matches) == 1, label
+    projects.update(matches)
+assert len(projects) == 4
+for project in projects:
+    scope = 'label=com.docker.compose.project=' + project
+    assert not run('docker', 'ps', '-aq', '--filter', scope)
+    assert not run('docker', 'volume', 'ls', '-q', '--filter', scope)
+    assert not run('docker', 'network', 'ls', '-q', '--filter', scope)
+print('PASSED: all four UUID test projects removed their own containers, volumes and networks.')
+with httpx.Client(timeout=15, trust_env=False) as client:
+    ready = client.get('http://127.0.0.1:18000/health/ready')
+    assert ready.status_code == 200
+    safety = client.get('http://127.0.0.1:18000/api/v1/safety')
+    assert safety.status_code == 200
+    state = safety.json()
+    assert state['mode'] == 'SIMULATED' and state['executor_capability'] == 'DENY_ALL'
+    assert all(state[key] is False for key in ('live_trading_enabled', 'order_submission_enabled', 'generated_code_execution'))
+    print('PASSED: readiness HTTP 200; SIMULATED/DENY_ALL; live trading, broker order submission and generated-code execution false.')

@@ -1,0 +1,14 @@
+{
+  "id": "native-fill-buffer",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T02:36:54.433660+00:00",
+  "duration_seconds": 60.8,
+  "exit_code": 2,
+  "log": "docs/phase4-evidence/2026-10-27/native-fill-buffer.txt",
+  "sha256": "01be051775d70f3605b86a6db18b6a30901443229d11b3226056d8a3f3cb7c47"
+}

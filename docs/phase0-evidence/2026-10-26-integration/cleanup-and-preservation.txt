@@ -1,0 +1,4 @@
+PASSED: development Compose hash, container IDs/start times/health and persistent mounts unchanged.
+PASSED: phase0-test-3cb4a0a22c83459192676370e0c8b8c1: no containers, networks or volumes remain.
+PASSED: phase0-test-a33a8d00317146ac91c71f3664534782: no containers, networks or volumes remain.
+PASSED: phase0-test-d79e785cdd5c41b2b10893d538066c92: no containers, networks or volumes remain.

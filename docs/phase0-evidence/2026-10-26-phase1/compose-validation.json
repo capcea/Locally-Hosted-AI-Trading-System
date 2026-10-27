@@ -1,0 +1,14 @@
+{
+  "id": "compose-validation",
+  "command": [
+    "docker",
+    "compose",
+    "config",
+    "--quiet"
+  ],
+  "started_utc": "2026-10-26T14:13:38.783367+00:00",
+  "duration_seconds": 0.065,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/compose-validation.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

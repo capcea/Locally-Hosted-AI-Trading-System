@@ -1,0 +1,13 @@
+{
+  "id": "dependency-sync",
+  "command": [
+    ".tools/bin/uv",
+    "sync",
+    "--frozen"
+  ],
+  "started_utc": "2026-10-25T18:00:10.118916+00:00",
+  "duration_seconds": 2.569,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-25/dependency-sync.txt",
+  "sha256": "2ce64cf918a79bc714e26e78a0bb7c83100fe56631e0a0a24b6d4b15cf14558c"
+}

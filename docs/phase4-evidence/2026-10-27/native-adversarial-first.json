@@ -1,0 +1,14 @@
+{
+  "id": "native-adversarial-first",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T02:50:08.387633+00:00",
+  "duration_seconds": 156.704,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/native-adversarial-first.txt",
+  "sha256": "014c81f931bb597faa1c05a0386c54973d999658b0fd18c2395a57156af9d8ad"
+}

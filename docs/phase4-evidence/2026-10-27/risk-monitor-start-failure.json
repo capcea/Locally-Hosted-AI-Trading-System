@@ -1,0 +1,15 @@
+{
+  "id": "risk-monitor-start-failure",
+  "command": [
+    "docker",
+    "compose",
+    "logs",
+    "--no-color",
+    "risk-monitor"
+  ],
+  "started_utc": "2026-10-27T03:49:31.893787+00:00",
+  "duration_seconds": 0.12,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/risk-monitor-start-failure.txt",
+  "sha256": "320793274e1baf3cdd0afa5bf7ccc3d20a7083728bd5671e6b29f9139aca13d6"
+}

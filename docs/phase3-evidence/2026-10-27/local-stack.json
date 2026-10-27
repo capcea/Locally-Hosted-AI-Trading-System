@@ -1,0 +1,23 @@
+{
+  "id": "local-stack",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-27T01:28:18.603680+00:00",
+  "duration_seconds": 25.42,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/local-stack.txt",
+  "sha256": "b57f80e8f4db8a52f3b7062b4c2a7f06ce5353c5d48588058fe61a68c7458079"
+}

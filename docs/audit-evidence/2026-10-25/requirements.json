@@ -1,0 +1,485 @@
+{
+  "numbering_note": "A01–A60 are audit-derived criteria, not the unavailable original Q1–Q60 question identifiers.",
+  "requirements": [
+    {
+      "id": "A01",
+      "title": "Personal/prop accounts, $25k reference and multi-account partitions",
+      "status": "MOCKED",
+      "spec_sections": "§1, §4",
+      "evidence": "packages/domain/contracts.py; migrations/versions/0001_foundation.py",
+      "next_gate": "Only a labeled reference profile; implement account/broker/program entities and account-scoped authorization."
+    },
+    {
+      "id": "A02",
+      "title": "Versioned exact firm/program/phase/platform policies",
+      "status": "MISSING",
+      "spec_sections": "§1–2, §4, §7",
+      "evidence": "docs/RISK_POLICY.md; no policy engine",
+      "next_gate": "Implement signed/versioned PolicyPacks with source, validity, human verification and unknown/expired deny tests."
+    },
+    {
+      "id": "A03",
+      "title": "Honest simulation, source and performance labels",
+      "status": "FULLY FUNCTIONAL",
+      "spec_sections": "§0 invariants 7/10, §15",
+      "evidence": "packages/domain/contracts.py; scripts/seed_demo_data.py; tests/test_bootstrap.py; tests/test_health.py",
+      "next_gate": "Verified for shipped Phase 0 outputs only. Extend provenance enforcement when real datasets, fills and results exist."
+    },
+    {
+      "id": "A04",
+      "title": "Forex/metals/indices/crypto and broker-specific tradability",
+      "status": "MOCKED",
+      "spec_sections": "§1, §4, §14",
+      "evidence": "apps/web/src/App.tsx; apps/api/catalog.py",
+      "next_gate": "Static planned instruments/status cards are not broker capabilities; query and validate per-account symbol mappings."
+    },
+    {
+      "id": "A05",
+      "title": "Scalping/intraday profiles and prohibited-style filtering",
+      "status": "MISSING",
+      "spec_sections": "§1, §6–8",
+      "evidence": "No strategy/execution profile module",
+      "next_gate": "Implement deterministic timing profiles, duration constraints and policy exclusions; keep LLM inference off the order path."
+    },
+    {
+      "id": "A06",
+      "title": "Ticks and M1/M5/M15/H1/H4, optional D1",
+      "status": "MISSING",
+      "spec_sections": "§1, §5",
+      "evidence": "No ingestion/resampling module",
+      "next_gate": "Implement timestamp-correct tick/bar ingestion and deterministic aggregation tests."
+    },
+    {
+      "id": "A07",
+      "title": "UTC/DST, venue sessions, holidays, rollover/weekend handling",
+      "status": "MISSING",
+      "spec_sections": "§1, §5, §7",
+      "evidence": "docs/DATA_PROVENANCE.md only",
+      "next_gate": "Implement source zones, unambiguous conversion and venue calendars; test DST boundaries and closed sessions."
+    },
+    {
+      "id": "A08",
+      "title": "Economic calendar freshness and event blackouts",
+      "status": "MISSING",
+      "spec_sections": "§1, §5, §14",
+      "evidence": "No calendar provider or gate",
+      "next_gate": "Integrate permitted calendar data, publication/ingestion timestamps and stale/missing calendar denial."
+    },
+    {
+      "id": "A09",
+      "title": "Market orders with confirmed broker-side SL/TP",
+      "status": "MISSING",
+      "spec_sections": "§1, §7–8",
+      "evidence": "All order submissions are denied",
+      "next_gate": "Implement only in isolated demo executor after risk controls; test missing/rejected protection and partial fills."
+    },
+    {
+      "id": "A10",
+      "title": "Pending/modify/cancel/trailing/break-even/partial close/OCO",
+      "status": "MISSING",
+      "spec_sections": "§1, §7–8",
+      "evidence": "No BrokerAdapter or order state machine",
+      "next_gate": "Capability-gate every operation, enforce monotonic risk and reject unsupported OCO/emulation."
+    },
+    {
+      "id": "A11",
+      "title": "Continuous autonomous research bounded by resources",
+      "status": "MISSING",
+      "spec_sections": "§1, §9",
+      "evidence": "workers/safety.py denies; no runner",
+      "next_gate": "Implement durable scheduling with CPU/GPU/time/memory/budget quotas and recovery."
+    },
+    {
+      "id": "A12",
+      "title": "Restricted web research, evidence and citations",
+      "status": "MISSING",
+      "spec_sections": "§1, §9",
+      "evidence": "No research tool gateway",
+      "next_gate": "Implement allowlisted tools, evidence snapshots, dates and prompt-injection containment."
+    },
+    {
+      "id": "A13",
+      "title": "Nine research/review/orchestrator agent roles",
+      "status": "MISSING",
+      "spec_sections": "§9",
+      "evidence": "No agents package",
+      "next_gate": "Implement typed role outputs and independent review; test invalid/adversarial outputs."
+    },
+    {
+      "id": "A14",
+      "title": "Isolated code branches and controlled release promotion",
+      "status": "MISSING",
+      "spec_sections": "§0 invariant 4, §9, §15",
+      "evidence": "AGENTS.md describes future restrictions",
+      "next_gate": "Implement artifact-specific write capabilities and a release manager outside agent control."
+    },
+    {
+      "id": "A15",
+      "title": "Strategy families and non-ML baselines",
+      "status": "MISSING",
+      "spec_sections": "§1, §6",
+      "evidence": "No strategy implementations",
+      "next_gate": "Implement versioned deterministic baselines, stop/exit declarations and compliance filtering."
+    },
+    {
+      "id": "A16",
+      "title": "XGBoost, LightGBM, HMM/clustering comparisons",
+      "status": "MISSING",
+      "spec_sections": "§1, §6",
+      "evidence": "No ML training/evaluation module",
+      "next_gate": "Implement fold-local training, reproducible artifacts and baseline/OOS comparisons."
+    },
+    {
+      "id": "A17",
+      "title": "Time-available features and fold-local preprocessing",
+      "status": "MISSING",
+      "spec_sections": "§5–6",
+      "evidence": "docs/EXPERIMENT_PROTOCOL.md only",
+      "next_gate": "Enforce availability timestamps and fit transforms only within training folds; add leakage traps."
+    },
+    {
+      "id": "A18",
+      "title": "vectorbt screening",
+      "status": "MISSING",
+      "spec_sections": "§1, §3, §12 phase 5",
+      "evidence": "No vectorbt dependency or screening engine",
+      "next_gate": "Implement cost-aware screening with versioned inputs; screening cannot authorize promotion alone."
+    },
+    {
+      "id": "A19",
+      "title": "Event-driven backtest and executable signal parity",
+      "status": "MISSING",
+      "spec_sections": "§1, §6, §12 phase 5",
+      "evidence": "No event-driven simulation engine",
+      "next_gate": "Implement ordered event replay and identical deterministic signal/risk contracts in backtest and paper."
+    },
+    {
+      "id": "A20",
+      "title": "Bid/ask, spread, fees, slippage, latency, partial/rejected fills",
+      "status": "MISSING",
+      "spec_sections": "§5–7",
+      "evidence": "No cost/fill model or trade data",
+      "next_gate": "Define side-aware fills, adverse gaps, conservative ambiguous-bar rules and cost stress tests."
+    },
+    {
+      "id": "A21",
+      "title": "Chronological OOS and untouched final holdout",
+      "status": "MISSING",
+      "spec_sections": "§6",
+      "evidence": "docs/EXPERIMENT_PROTOCOL.md only",
+      "next_gate": "Enforce separate discovery/calibration/validation/final evaluation with holdout-access audit."
+    },
+    {
+      "id": "A22",
+      "title": "Walk-forward, purging/embargo and multiple-testing controls",
+      "status": "MISSING",
+      "spec_sections": "§1, §6",
+      "evidence": "No statistical evaluation module",
+      "next_gate": "Implement overlap-aware folds, trial registry and documented selection-bias controls."
+    },
+    {
+      "id": "A23",
+      "title": "Bootstrap/Monte Carlo, regimes, metrics and confidence",
+      "status": "MISSING",
+      "spec_sections": "§1, §6",
+      "evidence": "No metrics or backtest results",
+      "next_gate": "Implement deterministic numerical tests, block resampling, sample-size limits and uncertainty reporting."
+    },
+    {
+      "id": "A24",
+      "title": "Adaptive statistical/compliance gates for paper eligibility",
+      "status": "MISSING",
+      "spec_sections": "§0 invariant 5, §6",
+      "evidence": "No StrategyGate",
+      "next_gate": "Implement family/instrument thresholds outside candidate-agent authority with auditable decisions."
+    },
+    {
+      "id": "A25",
+      "title": "Measured five-year coverage target and incomplete-data gates",
+      "status": "MISSING",
+      "spec_sections": "§1, §5",
+      "evidence": "docs/DATA_PROVENANCE.md says no dataset",
+      "next_gate": "Implement per-source/symbol coverage reports and gap rejection; current zero coverage is honestly disclosed."
+    },
+    {
+      "id": "A26",
+      "title": "MT5/broker and legitimate public/licensed historical ingestion",
+      "status": "MISSING",
+      "spec_sections": "§2, §5",
+      "evidence": "No data connectors",
+      "next_gate": "Implement entitlement/provenance checks, resumable ingestion and separate actual-service tests."
+    },
+    {
+      "id": "A27",
+      "title": "Immutable Parquet/raw/derived manifests and PostgreSQL metadata",
+      "status": "PARTIALLY IMPLEMENTED",
+      "spec_sections": "§3–5",
+      "evidence": "migrations/versions/0001_foundation.py; compose.yaml",
+      "next_gate": "Only platform metadata migration and storage configuration; no dataset schema, Parquet, hashes or bucket operations."
+    },
+    {
+      "id": "A28",
+      "title": "Data QC: ordering, duplicates, collisions, gaps, prices and scaling",
+      "status": "MISSING",
+      "spec_sections": "§5",
+      "evidence": "No data-QC implementation",
+      "next_gate": "Build adversarial fixtures for crossed/negative quotes, same-ms sequences, spikes, units, sessions and suffix changes."
+    },
+    {
+      "id": "A29",
+      "title": "As-of cross-asset joins and realistic publication delays",
+      "status": "MISSING",
+      "spec_sections": "§5–6",
+      "evidence": "No feature/event timestamp enforcement",
+      "next_gate": "Reject future information using decision/availability timestamps and explicit delayed-data tests."
+    },
+    {
+      "id": "A30",
+      "title": "Paper trading and adaptive observation window",
+      "status": "MISSING",
+      "spec_sections": "§1, §4, §6, §12 phase 8",
+      "evidence": "No paper engine or lifecycle persistence",
+      "next_gate": "Implement paper fills, independent-trade counts, regime coverage, confidence and indefinitely pending eligibility."
+    },
+    {
+      "id": "A31",
+      "title": "Degradation auto-pause and manual live reactivation",
+      "status": "MISSING",
+      "spec_sections": "§1, §6, §14",
+      "evidence": "No strategy monitoring or state transitions",
+      "next_gate": "Implement drift/cost/risk monitors and owner-only reactivation with audit."
+    },
+    {
+      "id": "A32",
+      "title": "Account/strategy risk caps and conservative reference profile",
+      "status": "MOCKED",
+      "spec_sections": "§1, §7",
+      "evidence": "ReferenceProfile.enforced=False; apps/web/src/App.tsx",
+      "next_gate": "Displayed Decimal strings are examples only; implement configurable enforced profiles and strict firm headroom."
+    },
+    {
+      "id": "A33",
+      "title": "Decimal sizing, legal volume steps, FX conversion and margin",
+      "status": "MISSING",
+      "spec_sections": "§0 invariant 9, §7",
+      "evidence": "No sizing or monetary execution logic",
+      "next_gate": "Implement verified SymbolSpec and FX timestamps; property-test rounding down, minimum size, currency and stop distance."
+    },
+    {
+      "id": "A34",
+      "title": "Portfolio/correlation/concentration including pending exposure",
+      "status": "MISSING",
+      "spec_sections": "§1, §7",
+      "evidence": "No portfolio ledger or reservations",
+      "next_gate": "Implement transactional risk reservations and concurrency tests across accounts/strategies/pending orders."
+    },
+    {
+      "id": "A35",
+      "title": "Prop headroom, loss basis, timezone resets and exposure reductions",
+      "status": "MISSING",
+      "spec_sections": "§1–2, §7",
+      "evidence": "No policy/risk ledger",
+      "next_gate": "Implement exact account/program rules, floating P&L/balance/high-water bases and DST reset tests."
+    },
+    {
+      "id": "A36",
+      "title": "Independent near-broker freshness/spread/calendar/margin checks",
+      "status": "MISSING",
+      "spec_sections": "§0 invariants 3/6, §7",
+      "evidence": "packages/domain/safety.py only denies every order",
+      "next_gate": "Implement a deterministic fail-closed gateway; generic refusal is not a risk evaluation."
+    },
+    {
+      "id": "A37",
+      "title": "GPU/cloud outage independence, broker truth and protective stops",
+      "status": "MISSING",
+      "spec_sections": "§1, §7, §14",
+      "evidence": "No independent broker executor or reconciliation",
+      "next_gate": "Test demo protection and reconciliation through GPU/control-plane outages and rejected SL acknowledgements."
+    },
+    {
+      "id": "A38",
+      "title": "Authenticated stop-new-entries versus separate flatten operation",
+      "status": "MISSING",
+      "spec_sections": "§7, §10, §14",
+      "evidence": "No operational kill/flatten endpoints",
+      "next_gate": "Implement durable kill state, distinct authorized flatten, replay defense and mid-flow interruption tests."
+    },
+    {
+      "id": "A39",
+      "title": "Durable intent IDs, UNKNOWN state and retry idempotency",
+      "status": "MISSING",
+      "spec_sections": "§7–8, §14",
+      "evidence": "No orders/journal/outbox tables",
+      "next_gate": "Implement atomic intent/risk/audit state, uniqueness and reconciliation before retry; fault-test submit-before-ack crashes."
+    },
+    {
+      "id": "A40",
+      "title": "MT5 Windows bridge and actual demo integration",
+      "status": "MISSING",
+      "spec_sections": "§2, §8, §12 phase 3",
+      "evidence": "apps/api/catalog.py explicitly pending",
+      "next_gate": "Implement authenticated Windows service, terminal capability checks, symbol metadata and recorded demo integration evidence."
+    },
+    {
+      "id": "A41",
+      "title": "cTrader OAuth, refresh, rates and actual demo integration",
+      "status": "MISSING",
+      "spec_sections": "§2, §8, §12 phase 3",
+      "evidence": "apps/api/catalog.py explicitly pending",
+      "next_gate": "Implement Linux adapter with scoped OAuth, environment separation, rate limits and real demo tests after authorization."
+    },
+    {
+      "id": "A42",
+      "title": "Broker capability matrix, safe OCO and reconnect reconciliation",
+      "status": "MISSING",
+      "spec_sections": "§8, §14",
+      "evidence": "No shared broker contract or simulator",
+      "next_gate": "Implement deterministic fault-injectable simulator and adapter contract suite; do not certify capabilities from mocks."
+    },
+    {
+      "id": "A43",
+      "title": "Broker secrets isolated from research/GPU/control plane",
+      "status": "MISSING",
+      "spec_sections": "§0 invariants 2/4, §3, §15",
+      "evidence": "compose.yaml has no broker or research service; no known broker keys in local .env",
+      "next_gate": "Provision executor-only secret identities and network boundaries before adding credentials; absence of credentials is not an isolation test."
+    },
+    {
+      "id": "A44",
+      "title": "Execution disabled across all shipped entry points",
+      "status": "FULLY FUNCTIONAL",
+      "spec_sections": "§0 invariant 1, §16",
+      "evidence": "apps/api/config.py; apps/api/main.py; packages/domain/safety.py; workers/safety.py; tests/test_safety.py",
+      "next_gate": "Verified only for the current incapable Phase 0 application. No separate broker executor exists; preserve denial while implementing later capabilities."
+    },
+    {
+      "id": "A45",
+      "title": "Owner MFA, two acknowledgements, immutable signed scoped approvals",
+      "status": "MISSING",
+      "spec_sections": "§0 invariants 1/5, §4, §10",
+      "evidence": "POST /api/v1/live/activate always returns 403",
+      "next_gate": "Implement hash/account/broker/program/symbol/risk/expiry binding, revocation and tamper/replay tests; do not enable live."
+    },
+    {
+      "id": "A46",
+      "title": "LLM output validation and no critical monetary/order authority",
+      "status": "MISSING",
+      "spec_sections": "§0 invariants 2/9, §9",
+      "evidence": "No LLM gateway or agent runtime",
+      "next_gate": "Implement typed proposal-only interfaces and capability tests. Frontend response validation is not an LLM security boundary."
+    },
+    {
+      "id": "A47",
+      "title": "Hardened hostile-code sandbox with quotas and immutable inputs",
+      "status": "MISSING",
+      "spec_sections": "§0 invariant 4, §3, §15",
+      "evidence": "workers/safety.py refuses execution; docs/THREAT_MODEL.md",
+      "next_gate": "Implement VM/microVM isolation, denied egress/mounts/credentials and escape/exfiltration/quota tests before any generated code runs."
+    },
+    {
+      "id": "A48",
+      "title": "Mandatory independent deterministic risk gateway, no bypass",
+      "status": "MISSING",
+      "spec_sections": "§0 invariants 2/3/6, §7",
+      "evidence": "No signed trade-intent channel or executor",
+      "next_gate": "Make broker network/credentials reachable only by independently validating executor; adversarially test all entry paths."
+    },
+    {
+      "id": "A49",
+      "title": "Identity, RBAC, MFA, sessions, CSRF, rates and authenticated streams",
+      "status": "MISSING",
+      "spec_sections": "§3–4, §10, §12 phase 1",
+      "evidence": "apps/api/main.py explicitly unauthenticated/read-only",
+      "next_gate": "Implement owner identity and authorization before shared hosting; protect all future sensitive mutations and streams."
+    },
+    {
+      "id": "A50",
+      "title": "Append-only audit, ordered events and causal decision replay",
+      "status": "MISSING",
+      "spec_sections": "§3–4, §10, §15",
+      "evidence": "Request JSON logs only; one platform_metadata table",
+      "next_gate": "Implement durable append-only events, source sequences, correlation/idempotency/version IDs and tamper-detection/restore tests."
+    },
+    {
+      "id": "A51",
+      "title": "Typed modular monolith, OpenAPI, generated TS and full domain models",
+      "status": "PARTIALLY IMPLEMENTED",
+      "spec_sections": "§3–4, §11, §15",
+      "evidence": "apps/api; packages/domain; docs/openapi.json; apps/web/src/generated/api.ts",
+      "next_gate": "Foundation contracts/build work; almost all §4 business entities and transaction boundaries are absent."
+    },
+    {
+      "id": "A52",
+      "title": "PostgreSQL/Alembic, Redis, MinIO and runnable local containers",
+      "status": "PARTIALLY IMPLEMENTED",
+      "spec_sections": "§3, §12 phase 0",
+      "evidence": "compose.yaml; Dockerfiles; migrations; tests/test_infrastructure.py",
+      "next_gate": "Config validates and SQLite migration passes; Docker unavailable, actual services and image builds unverified."
+    },
+    {
+      "id": "A53",
+      "title": "Durable jobs, retries, orchestration, quotas and crash recovery",
+      "status": "MISSING",
+      "spec_sections": "§3, §9, §12",
+      "evidence": "arq pinned in pyproject.toml; no queue implementation",
+      "next_gate": "Implement persisted jobs, idempotent handlers, priorities, resource quotas and forced-crash recovery tests."
+    },
+    {
+      "id": "A54",
+      "title": "Private Ollama gateway, exact model digests and provider portability",
+      "status": "MISSING",
+      "spec_sections": "§2–3, §9, §13",
+      "evidence": "Planned Ollama status only",
+      "next_gate": "Implement authenticated private gateway, pinned models/prompts/runtime and schema/tool behavior evals."
+    },
+    {
+      "id": "A55",
+      "title": "GPU allocation, sequential model loading and enforceable cost budgets",
+      "status": "MISSING",
+      "spec_sections": "§1, §9, §13",
+      "evidence": "No GPU host, scheduler or cost telemetry",
+      "next_gate": "Measure VRAM/context limits and cost rates; enforce per-agent/monthly quotas before any paid continuous operation."
+    },
+    {
+      "id": "A56",
+      "title": "Complete Romanian dashboard, labs, execution/replay/settings and mobile UX",
+      "status": "PARTIALLY IMPLEMENTED",
+      "spec_sections": "§3, §10, §12 phase 9",
+      "evidence": "apps/web/src/App.tsx; locale.ts; styles.css; e2e/platform.spec.ts",
+      "next_gate": "Four foundation views only; build/unit checks pass, six browser cases not executed, secure financial workflows and English UI absent."
+    },
+    {
+      "id": "A57",
+      "title": "Telegram/email incidents and authenticated emergency commands",
+      "status": "MISSING",
+      "spec_sections": "§1, §10, §12 phase 9",
+      "evidence": "No notifications module",
+      "next_gate": "Implement owner-authorized delivery, redaction and actual-service receipt tests; commands require distinct signed/replay-protected authorization."
+    },
+    {
+      "id": "A58",
+      "title": "JSON logs, tracing, metrics, incidents and cost observability",
+      "status": "PARTIALLY IMPLEMENTED",
+      "spec_sections": "§3, §9–10, §13",
+      "evidence": "apps/api/main.py; apps/api/health.py",
+      "next_gate": "Sanitized request logs and dependency checks exist; no OpenTelemetry, Prometheus, durable incidents, cost data or alert delivery."
+    },
+    {
+      "id": "A59",
+      "title": "Cloud/local deployment, private channels, backups and restore",
+      "status": "MISSING",
+      "spec_sections": "§9, §12 phase 10, §13",
+      "evidence": "Only deploy/minio exists; docs/RUNBOOKS.md describes future work",
+      "next_gate": "Implement cloud/local/Windows runbooks and scripts, private TLS identities, encrypted off-host backups and measured restore/migration rehearsal."
+    },
+    {
+      "id": "A60",
+      "title": "Release gates, property/fault/integration/E2E/security tests and documentation",
+      "status": "PARTIALLY IMPLEMENTED",
+      "spec_sections": "§12 release gates, §15–16",
+      "evidence": "tests; apps/web/e2e; .github/workflows/ci.yml; audit documents",
+      "next_gate": "Local quality checks pass; infrastructure fails, browser blocked, remote CI/container scan/fault/load/real broker suites absent or unrun."
+    }
+  ]
+}

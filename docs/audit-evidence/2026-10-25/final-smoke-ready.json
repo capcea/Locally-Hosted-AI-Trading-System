@@ -1,0 +1,14 @@
+{
+  "id": "final-smoke-ready",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "scripts.smoke_demo",
+    "--require-ready"
+  ],
+  "started_utc": "2026-10-25T17:04:13.127396+00:00",
+  "duration_seconds": 0.133,
+  "exit_code": 1,
+  "log": "docs/audit-evidence/2026-10-25/final-smoke-ready.txt",
+  "sha256": "1136bf565363f837cf62994f036e75e0573dfaf230decd31ce262a64d046ac6e"
+}

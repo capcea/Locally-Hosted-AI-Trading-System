@@ -1,0 +1,14 @@
+{
+  "id": "compose-version",
+  "command": [
+    "docker",
+    "compose",
+    "version",
+    "--short"
+  ],
+  "started_utc": "2026-10-26T12:54:05.621946+00:00",
+  "duration_seconds": 0.124,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-integration/compose-version.txt",
+  "sha256": "8a5d49cf16ce9c09fbd6111bf4b27e27282f36fd97d7af86f85cda85c8acb799"
+}

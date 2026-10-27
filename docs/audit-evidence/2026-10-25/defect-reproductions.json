@@ -1,0 +1,15 @@
+{
+  "id": "defect-reproductions",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_audit_regressions.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-25T16:56:46.802828+00:00",
+  "duration_seconds": 0.657,
+  "exit_code": 1,
+  "log": "docs/audit-evidence/2026-10-25/defect-reproductions.txt",
+  "sha256": "7e33ab0e7168db61c88a045be11b1ad5fb56d9ae5e24229a5e4ca6daa49de3b5"
+}

@@ -1,0 +1,8 @@
+{
+  "file": "docs/phase2-evidence/2026-10-26/native-cached.txt",
+  "redacted_fields": 4,
+  "old_log_sha256": "3ad323194d0b157cbc5edecede23bc441e7b44b746d7bd8e33cd3ef91d3a66a3",
+  "new_log_sha256": "a64c143cd71919307a5244b865bdba90c82dbd8df34f9b60ae098fbdfcbafac2",
+  "field": "disposable MinIO accessKey identity",
+  "reason": "Fresh Gitleaks generic-api-key findings in SDK traceback locals. Temporary resources already cleaned. No test result changed; no scan exclusions added."
+}

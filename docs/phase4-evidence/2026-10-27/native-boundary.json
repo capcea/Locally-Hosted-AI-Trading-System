@@ -1,0 +1,14 @@
+{
+  "id": "native-boundary",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T03:31:47.615290+00:00",
+  "duration_seconds": 101.87,
+  "exit_code": 2,
+  "log": "docs/phase4-evidence/2026-10-27/native-boundary.txt",
+  "sha256": "34d38be357167e28dd7ea2b281fed5acd6c6981b8babcda7da28af0d09f2cf56"
+}

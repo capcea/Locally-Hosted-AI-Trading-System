@@ -1,0 +1,12 @@
+{
+  "id": "session-preservation-comparison",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase4/session_preservation.py"
+  ],
+  "started_utc": "2026-10-27T03:50:54.470191+00:00",
+  "duration_seconds": 0.332,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/session-preservation-comparison.txt",
+  "sha256": "480bbfd626d8d380514a2e1c281202896dc2c0bd2166564728a117eefce05223"
+}

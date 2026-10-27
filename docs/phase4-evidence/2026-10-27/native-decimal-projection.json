@@ -1,0 +1,14 @@
+{
+  "id": "native-decimal-projection",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T02:41:34.998454+00:00",
+  "duration_seconds": 112.078,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/native-decimal-projection.txt",
+  "sha256": "b937f3d8d4184946e0c5d808b81a0a4f3eef09d23fe3b53ba1aa78396dbeef5c"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "native-research-pending-funding",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase5/focused_services.py"
+  ],
+  "started_utc": "2026-10-27T11:30:55.333990+00:00",
+  "duration_seconds": 87.216,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/native-research-pending-funding.txt",
+  "sha256": "9313b20d793a70b4acba3e98f8d5484a5c2ab34950cc87c9fb442cc95681c8b3"
+}

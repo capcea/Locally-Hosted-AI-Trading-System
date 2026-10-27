@@ -1,0 +1,14 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (109 > 100)
+  --> apps/api/catalog.py:24:101
+   |
+22 |         title="Date & corectitudine temporală",
+23 |         status="CURRENT",
+24 |         acceptance="Importuri versionate, Parquet/MinIO și teste UTC/DST; acceptarea browser este necesară.",
+   |                                                                                                     ^^^^^^^^^
+25 |     ),
+26 |     Phase(
+   |
+
+Found 1 error.
+make: *** [lint] Error 1

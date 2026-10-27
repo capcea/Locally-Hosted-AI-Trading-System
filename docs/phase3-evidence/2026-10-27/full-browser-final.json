@@ -1,0 +1,18 @@
+{
+  "id": "full-browser-final",
+  "command": [
+    "env",
+    "-u",
+    "E2E_ONLY_PROJECT",
+    "-u",
+    "E2E_ONLY_SCENARIO",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-27T01:39:50.474091+00:00",
+  "duration_seconds": 227.638,
+  "exit_code": 2,
+  "log": "docs/phase3-evidence/2026-10-27/full-browser-final.txt",
+  "sha256": "2d57d3858078f96b8838c07efcb42ff40241ecc3c7fbbd6cf2215d1c40dbe9ad"
+}

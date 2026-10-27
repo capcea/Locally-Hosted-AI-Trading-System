@@ -1,0 +1,12 @@
+{
+  "id": "check-fixed",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T12:48:18.393539+00:00",
+  "duration_seconds": 5.534,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-integration/check-fixed.txt",
+  "sha256": "b7cf19fb3ec12a340bd602aa15ff24bf46e7572f8a7cd7bfe65f28b9590fe905"
+}

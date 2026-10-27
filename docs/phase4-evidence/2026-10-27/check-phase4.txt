@@ -1,0 +1,61 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (107 > 100)
+  --> apps/api/catalog.py:38:101
+   |
+36 |         title="Risc & politici prop",
+37 |         status="CURRENT",
+38 |         acceptance="Gateway SIMULATED, rezervări atomice și politici; acceptarea browser necesită dovezi.",
+   |                                                                                                     ^^^^^^^
+39 |     ),
+40 |     Phase(
+   |
+
+E501 Line too long (106 > 100)
+   --> migrations/versions/0005_risk_gateway.py:113:101
+    |
+111 |         sa.Column("verified_at", sa.DateTime(timezone=True), nullable=True),
+112 |         sa.CheckConstraint(
+113 |             "(kind='PERSONAL' AND firm_policy_id IS NULL) OR (kind='PROP' AND firm_policy_id IS NOT NULL)"
+    |                                                                                                     ^^^^^^
+114 |         ),
+115 |         sa.CheckConstraint("kind IN ('PERSONAL','PROP')"),
+    |
+
+SIM102 Use a single `if` statement instead of nested `if` statements
+  --> packages/risk/gateway.py:71:13
+   |
+69 |                   ):
+70 |                       reasons.append("OVERNIGHT_EXPOSURE_PROHIBITED")
+71 | /             if state.quote and position.stop_loss is not None:
+72 | |                 if (
+73 | |                     state.quote.bid <= position.stop_loss
+74 | |                     if position.side == "BUY"
+75 | |                     else state.quote.ask >= position.stop_loss
+76 | |                 ):
+   | |__________________^
+77 |                       reasons.append("PROTECTIVE_STOP_NOT_FULLY_EXECUTED")
+78 |       return sorted(set(reasons))
+   |
+help: Combine `if` statements using `and`
+   |
+70 |                     reasons.append("OVERNIGHT_EXPOSURE_PROHIBITED")
+   -             if state.quote and position.stop_loss is not None:
+   -                 if (
+   -                     state.quote.bid <= position.stop_loss
+   -                     if position.side == "BUY"
+   -                     else state.quote.ask >= position.stop_loss
+   -                 ):
+   -                     reasons.append("PROTECTIVE_STOP_NOT_FULLY_EXECUTED")
+71 +             if state.quote and position.stop_loss is not None and (
+72 +                 state.quote.bid <= position.stop_loss
+73 +                 if position.side == "BUY"
+74 +                 else state.quote.ask >= position.stop_loss
+75 +             ):
+76 +                 reasons.append("PROTECTIVE_STOP_NOT_FULLY_EXECUTED")
+77 |     return sorted(set(reasons))
+   |
+note: This is an unsafe fix and may change runtime behavior
+
+Found 3 errors.
+1 unsafe fix available with `--fix --unsafe-fixes`.
+make: *** [lint] Error 1

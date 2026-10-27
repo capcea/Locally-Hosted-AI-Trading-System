@@ -1,0 +1,12 @@
+
+> trading-research-web@0.1.0 test:e2e
+> playwright test --list
+
+Listing tests:
+  [desktop] › platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap
+  [desktop] › platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health
+  [desktop] › platform.spec.ts:43:1 › orders and activation remain refused through frontend proxy
+  [mobile] › platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap
+  [mobile] › platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health
+  [mobile] › platform.spec.ts:43:1 › orders and activation remain refused through frontend proxy
+Total: 6 tests in 1 file

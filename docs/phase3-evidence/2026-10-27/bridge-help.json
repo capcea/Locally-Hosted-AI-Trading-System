@@ -1,0 +1,26 @@
+{
+  "id": "bridge-help",
+  "command": [
+    "docker",
+    "run",
+    "--rm",
+    "--network",
+    "none",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges",
+    "--memory",
+    "768m",
+    "--pids-limit",
+    "64",
+    "ai-trading-readonly-bridge:phase3",
+    "--help"
+  ],
+  "started_utc": "2026-10-27T01:29:22.847971+00:00",
+  "duration_seconds": 1.653,
+  "exit_code": 1,
+  "log": "docs/phase3-evidence/2026-10-27/bridge-help.txt",
+  "sha256": "0e66e5e60e92fc15e20e61b1c011932a52d7d7ba89f29ca1a464a5bc7d8deb9c"
+}

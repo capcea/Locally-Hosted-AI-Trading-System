@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/scripts/smoke_demo.py", line 78, in <module>
+    smoke(args.base_url, args.require_ready)
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/scripts/smoke_demo.py", line 69, in smoke
+    raise RuntimeError("Infrastructure readiness failed (HTTP 503)")
+RuntimeError: Infrastructure readiness failed (HTTP 503)

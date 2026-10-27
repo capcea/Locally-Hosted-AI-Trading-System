@@ -1,0 +1,12 @@
+{
+  "id": "final-runtime",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase2/final_runtime_check.py"
+  ],
+  "started_utc": "2026-10-26T20:32:36.334897+00:00",
+  "duration_seconds": 1.101,
+  "exit_code": 1,
+  "log": "docs/phase2-evidence/2026-10-26/final-runtime.txt",
+  "sha256": "74e8b04c6338629db7398c4bf6b528370288fcb263d9ee0219838fc0feac0cc3"
+}

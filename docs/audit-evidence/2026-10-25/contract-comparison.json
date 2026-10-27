@@ -1,0 +1,23 @@
+{
+  "before": [
+    {
+      "path": "docs/openapi.json",
+      "sha256": "db15851dc82f4c56f91adf597e02eb0187358a34bc031f08085d65a5c7833e9a"
+    },
+    {
+      "path": "apps/web/src/generated/api.ts",
+      "sha256": "69753721369e2921eeca3dca14e1268200196aaa7c64d020362ced14418361b9"
+    }
+  ],
+  "after": [
+    {
+      "path": "docs/openapi.json",
+      "sha256": "db15851dc82f4c56f91adf597e02eb0187358a34bc031f08085d65a5c7833e9a"
+    },
+    {
+      "path": "apps/web/src/generated/api.ts",
+      "sha256": "69753721369e2921eeca3dca14e1268200196aaa7c64d020362ced14418361b9"
+    }
+  ],
+  "unchanged": true
+}

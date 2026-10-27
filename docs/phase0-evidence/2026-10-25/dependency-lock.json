@@ -1,0 +1,12 @@
+{
+  "id": "dependency-lock",
+  "command": [
+    ".tools/bin/uv",
+    "lock"
+  ],
+  "started_utc": "2026-10-25T17:57:00.327984+00:00",
+  "duration_seconds": 1.761,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-25/dependency-lock.txt",
+  "sha256": "b4ac799d78e03e86f84e044278e5855bbc24cdc0a64d6fe2160b89dd05f6b06a"
+}

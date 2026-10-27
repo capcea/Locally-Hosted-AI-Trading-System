@@ -1,0 +1,2 @@
+.venv/bin/python -m scripts.seed_demo_data
+Seeded data/fixtures/reference-account.json (SYNTHETIC_TEST_FIXTURE; no market data).

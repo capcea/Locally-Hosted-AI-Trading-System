@@ -1,0 +1,15 @@
+{
+  "id": "engine-first",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_execution_engine.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T22:03:42.426956+00:00",
+  "duration_seconds": 1.733,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/engine-first.txt",
+  "sha256": "6f0fdb302387494059fe391e31e17f13d159d78cade8438e68bf5d3364b94f48"
+}

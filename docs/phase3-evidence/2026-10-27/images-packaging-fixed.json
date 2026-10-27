@@ -1,0 +1,19 @@
+{
+  "id": "images-packaging-fixed",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-27T01:31:12.356945+00:00",
+  "duration_seconds": 3.64,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/images-packaging-fixed.txt",
+  "sha256": "e29b29214f46e21f4b03d5918cef4e7587c449debe27ad7ecca1462a67337de3"
+}

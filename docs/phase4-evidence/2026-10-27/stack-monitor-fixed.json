@@ -1,0 +1,24 @@
+{
+  "id": "stack-monitor-fixed",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web",
+    "market-worker",
+    "risk-monitor"
+  ],
+  "started_utc": "2026-10-27T03:50:27.690361+00:00",
+  "duration_seconds": 26.041,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/stack-monitor-fixed.txt",
+  "sha256": "5332b6e90f3d13fff04d1886f1399c7eefa2997886fb21eceed2753fd070f2a6"
+}

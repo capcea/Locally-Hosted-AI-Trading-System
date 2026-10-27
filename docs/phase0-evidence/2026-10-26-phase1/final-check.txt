@@ -1,0 +1,36 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (106 > 100)
+  --> apps/api/catalog.py:10:101
+   |
+ 8 |         title="Fundație & securitate",
+ 9 |         status="CURRENT",
+10 |         acceptance="Fundație implementată; acceptarea completă rămâne condiționată de dovezi CI/browser.",
+   |                                                                                                     ^^^^^^
+11 |     ),
+12 |     Phase(
+   |
+
+E501 Line too long (115 > 100)
+  --> apps/api/catalog.py:16:101
+   |
+14 |         title="Identitate & audit",
+15 |         status="CURRENT",
+16 |         acceptance="Identitate, MFA, date persistente și audit implementate; verificarea browser rămâne necesară.",
+   |                                                                                                     ^^^^^^^^^^^^^^^
+17 |     ),
+18 |     Phase(
+   |
+
+E501 Line too long (115 > 100)
+  --> packages/domain/contracts.py:41:101
+   |
+39 |     read_only: Literal[True] = Field(
+40 |         default=True,
+41 |         description="Legacy trading capability flag. Authenticated metadata management can write; trading cannot.",
+   |                                                                                                     ^^^^^^^^^^^^^^^
+42 |     )
+43 |     reasons: tuple[str, ...] = (
+   |
+
+Found 3 errors.
+make: *** [lint] Error 1

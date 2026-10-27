@@ -1,0 +1,7 @@
+usage: app.py [-h] --config CONFIG
+
+Private mTLS + bearer demo-read bridge; no orders
+
+options:
+  -h, --help       show this help message and exit
+  --config CONFIG

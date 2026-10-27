@@ -1,0 +1,12 @@
+{
+  "id": "contracts-check",
+  "command": [
+    "make",
+    "contracts-check"
+  ],
+  "started_utc": "2026-10-26T14:13:38.879135+00:00",
+  "duration_seconds": 2.507,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/contracts-check.txt",
+  "sha256": "84e3006d39717920f02a537d041ccbf9b09a6c97869ba8706634bba67e91e023"
+}

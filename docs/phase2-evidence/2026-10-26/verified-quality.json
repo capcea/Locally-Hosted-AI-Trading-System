@@ -1,0 +1,12 @@
+{
+  "id": "verified-quality",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T19:50:45.861019+00:00",
+  "duration_seconds": 26.899,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/verified-quality.txt",
+  "sha256": "ac3fa565e7c6e35341bc038383e342058d726b0fe551d160dc18e618433da3d3"
+}

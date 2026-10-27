@@ -1,0 +1,9 @@
+{
+  "required_reports_present": true,
+  "local_report_links_valid": true,
+  "all_command_transcript_hashes_valid": true,
+  "master_spec_unchanged": true,
+  "audit_criteria_count": 60,
+  "phase0_accepted": false,
+  "owned_preview_processes_stopped": true
+}

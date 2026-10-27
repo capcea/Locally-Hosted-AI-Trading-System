@@ -1,0 +1,14 @@
+{
+  "id": "expanded-native",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T19:35:27.481163+00:00",
+  "duration_seconds": 60.421,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/expanded-native.txt",
+  "sha256": "6d029383a894af86f1dc318b616ecd116dc0ee43b44e1a03cb21344b62aa2976"
+}

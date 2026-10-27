@@ -1,0 +1,12 @@
+{
+  "id": "reproduce-internal-network-buildx-local",
+  "command": [
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T12:46:22.393711+00:00",
+  "duration_seconds": 19.137,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-26-integration/reproduce-internal-network-buildx-local.txt",
+  "sha256": "8717a46f6dfddf8099c7e179a5b734a6557eafa660765d5928368e3c2973f119"
+}

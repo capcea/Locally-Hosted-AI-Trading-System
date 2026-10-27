@@ -1,0 +1,13 @@
+{
+  "id": "preservation",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json,subprocess,httpx\nfrom pathlib import Path\nbefore=json.loads(Path(\".cache/phase2/data-services-before.json\").read_text())\nfor entry in before:\n    name=\"ai-trading-research-\"+entry[\"service\"]+\"-1\"\n    actual=json.loads(subprocess.check_output([\"docker\",\"inspect\",\"--format\",'{ \"id\":{{json .Id}}, \"started\":{{json .State.StartedAt}}, \"mounts\":{{json .Mounts}} }',name],text=True))\n    assert actual[\"id\"]==entry[\"state\"][\"id\"] and actual[\"mounts\"]==entry[\"state\"][\"mounts\"]\nprint(\"PASSED: existing data container IDs and volume mounts preserved; stopped services were resumed.\")\nbefore_records=json.loads(Path(\".cache/phase2/phase1-records-before.json\").read_text())\nfor table,expected in before_records.items():\n    query=f\"SELECT count(*), md5(COALESCE(string_agg(row_to_json(t)::text, ',' ORDER BY row_to_json(t)::text),'')) FROM {table} t\"\n    actual=subprocess.check_output([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"psql\",\"-U\",\"research\",\"-d\",\"research\",\"-Atqc\",query],text=True).strip()\n    assert actual==expected,table\nprint(\"PASSED: existing Phase 1 users/accounts/risk/policies/audit counts and digests unchanged.\")\nfor route in (\"/health/ready\",\"/api/v1/auth/status\",\"/api/v1/safety\"):\n    r=httpx.get(\"http://127.0.0.1:18000\"+route);r.raise_for_status()\n    print(route,r.status_code,r.text)\n"
+  ],
+  "started_utc": "2026-10-26T19:44:30.448667+00:00",
+  "duration_seconds": 3.033,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/preservation.txt",
+  "sha256": "9ab7b3bf4e8457e9ce3183d94ffef23d4b5cbd57eb8c9ab9c4f7262528a49d7d"
+}

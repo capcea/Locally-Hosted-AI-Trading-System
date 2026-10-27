@@ -1,0 +1,13 @@
+{
+  "id": "resource-cleanup",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import re,subprocess; from pathlib import Path; owned=set(); [owned.update(re.findall(r\"phase0-test-[a-f0-9]{32}\",p.read_text())) for p in Path(\"docs/phase3-evidence/2026-10-27\").glob(\"*.txt\")]; outputs=[subprocess.check_output(args,text=True) for args in ([\"docker\",\"ps\",\"-a\",\"--format\",\"{{.Labels}}\"],[\"docker\",\"volume\",\"ls\",\"--format\",\"{{.Labels}}\"],[\"docker\",\"network\",\"ls\",\"--format\",\"{{.Labels}}\"] )]; left=set().union(*(set(re.findall(r\"phase0-test-[a-f0-9]{32}\",s)) for s in outputs)) & owned; assert not left,sorted(left); print(\"PASSED: no containers, volumes or networks remain for\",len(owned),\"finished Phase3 UUID test projects; no development resources removed.\")"
+  ],
+  "started_utc": "2026-10-27T01:42:00.414110+00:00",
+  "duration_seconds": 0.204,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/resource-cleanup.txt",
+  "sha256": "1439745fea605a5d8acfda4394f050015b76f81f7598b6969a993862e7d2a6b7"
+}

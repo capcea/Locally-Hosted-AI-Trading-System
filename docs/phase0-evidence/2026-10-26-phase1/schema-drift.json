@@ -1,0 +1,13 @@
+{
+  "id": "schema-drift",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "from alembic.autogenerate import compare_metadata\nfrom alembic.migration import MigrationContext\nfrom sqlalchemy import create_engine\nfrom apps.api.config import Settings\nfrom packages.persistence.models import Base\nconfig=Settings()\nassert config.database_url\nengine=create_engine(config.database_url.get_secret_value(),hide_parameters=True)\ntry:\n    with engine.connect() as connection:\n        context=MigrationContext.configure(connection,opts={\"include_object\": lambda obj,name,kind,reflected,compare_to: not(kind==\"table\" and name==\"platform_metadata\")})\n        diff=compare_metadata(context,Base.metadata)\n        assert not diff, \"ORM/migration schema drift detected\"\n        print(\"PASSED: PostgreSQL columns/types/indexes/foreign keys match Phase 1 ORM metadata; no schema mutations.\")\nfinally:\n    engine.dispose()\n"
+  ],
+  "started_utc": "2026-10-26T14:52:39.566469+00:00",
+  "duration_seconds": 0.876,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/schema-drift.txt",
+  "sha256": "2280cbd58ac6e8a21a6fe64b9fbccca5cba70647ce392f16df5d388d7b2cd1b6"
+}

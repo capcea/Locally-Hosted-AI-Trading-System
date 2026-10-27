@@ -1,0 +1,12 @@
+{
+  "id": "contracts-packaging-fixed",
+  "command": [
+    "make",
+    "contracts-check"
+  ],
+  "started_utc": "2026-10-27T01:31:13.517360+00:00",
+  "duration_seconds": 3.233,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/contracts-packaging-fixed.txt",
+  "sha256": "3c9cbd0505ccb45dfa1037abe10e1f6eed7634994ea78a5126d6ead2f0e936b2"
+}

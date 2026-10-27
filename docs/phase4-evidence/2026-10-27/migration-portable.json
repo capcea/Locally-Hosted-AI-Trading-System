@@ -1,0 +1,15 @@
+{
+  "id": "migration-portable",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_migrations.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T02:20:03.143206+00:00",
+  "duration_seconds": 2.086,
+  "exit_code": 0,
+  "log": "docs/phase4-evidence/2026-10-27/migration-portable.txt",
+  "sha256": "6eaf8719d314215f6ef3a755ea87c6fdc2fa29189c0c9b67e3db9290bc7459b8"
+}

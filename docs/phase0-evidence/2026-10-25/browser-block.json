@@ -1,0 +1,9 @@
+{
+  "status": "BLOCKED",
+  "executed": false,
+  "command": "npm --prefix apps/web run test:e2e",
+  "reason": "Previously recorded managed browser access denial for http://127.0.0.1:5173/ remains unresolved. No changed permission was provided; restriction preserved without another browser or Playwright route.",
+  "prior_evidence": "docs/audit-evidence/2026-10-25/browser-execution.json",
+  "collected_cases": 6,
+  "passed_cases": null
+}

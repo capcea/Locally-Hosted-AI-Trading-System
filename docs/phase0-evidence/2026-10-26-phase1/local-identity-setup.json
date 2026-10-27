@@ -1,0 +1,12 @@
+{
+  "id": "local-identity-setup",
+  "command": [
+    "make",
+    "identity-setup"
+  ],
+  "started_utc": "2026-10-26T14:00:40.886636+00:00",
+  "duration_seconds": 0.171,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/local-identity-setup.txt",
+  "sha256": "b6987c4fcd8542c497be4f6b1831aa2133d04a195fc9beef6ad1c30dec24170a"
+}

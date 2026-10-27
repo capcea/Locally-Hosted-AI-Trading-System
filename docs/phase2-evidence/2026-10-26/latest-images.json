@@ -1,0 +1,18 @@
+{
+  "id": "latest-images",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T19:42:44.084642+00:00",
+  "duration_seconds": 2.874,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/latest-images.txt",
+  "sha256": "2edd38f88c182f686ef81da07784cb54dfac192c0cb6a7fe46f656b81d43df4f"
+}

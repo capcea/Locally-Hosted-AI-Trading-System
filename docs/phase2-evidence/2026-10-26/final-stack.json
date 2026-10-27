@@ -1,0 +1,23 @@
+{
+  "id": "final-stack",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T20:04:53.409954+00:00",
+  "duration_seconds": 25.686,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-stack.txt",
+  "sha256": "e70ad97ad1ac59492a48e1466067c0ebb9762fbf1c2f141924f3e814af5e918d"
+}

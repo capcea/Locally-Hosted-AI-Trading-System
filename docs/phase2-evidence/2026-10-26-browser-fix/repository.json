@@ -1,0 +1,12 @@
+{
+  "id": "repository",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-26T21:42:34.583484+00:00",
+  "duration_seconds": 0.077,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/repository.txt",
+  "sha256": "547e0259d6135164a93f6ffc8cdfc7dca60470400eea00335b604e495506f1e9"
+}

@@ -1,0 +1,62 @@
+# Disposable service tests only. Run through make integration-services.
+# Project, ports, credentials and volumes are generated separately from the development stack.
+services:
+  postgres:
+    image: postgres:17.6-alpine3.22@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94
+    environment:
+      POSTGRES_USER: phase0_test
+      POSTGRES_DB: ${P0_DATABASE_NAME:?Use the integration harness}
+      POSTGRES_PASSWORD: ${P0_DATABASE_PASSWORD:?Use the integration harness}
+    ports:
+      - target: 5432
+        host_ip: 127.0.0.1
+        protocol: tcp
+    volumes: [test_postgres:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U phase0_test -d $$POSTGRES_DB"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+  redis:
+    image: redis:7.4.11-alpine3.21@sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541
+    command: [redis-server, --appendonly, "yes", --appendfsync, always]
+    ports:
+      - target: 6379
+        host_ip: 127.0.0.1
+        protocol: tcp
+    volumes: [test_redis:/data]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+  minio:
+    build: {context: deploy/minio}
+    environment:
+      MINIO_ROOT_USER: phase0-test
+      MINIO_ROOT_PASSWORD: ${P0_STORAGE_PASSWORD:?Use the integration harness}
+    command: [server, /data]
+    ports:
+      - target: 9000
+        host_ip: 127.0.0.1
+        protocol: tcp
+    volumes: [test_storage:/data]
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://localhost:9000/minio/health/ready]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+networks:
+  # Host-side pytest needs published ports. Internal-only networks do not provide
+  # usable host port mappings on the supported Docker Desktop engine.
+  # The bridge stays project-scoped; omitted published ports are assigned by Docker.
+  default:
+    driver: bridge
+    internal: false
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
+volumes:
+  test_postgres:
+  test_redis:
+  test_storage:
+

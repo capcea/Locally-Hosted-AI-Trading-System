@@ -1,0 +1,12 @@
+{
+  "id": "docker-start",
+  "command": [
+    "make",
+    "dev"
+  ],
+  "started_utc": "2026-10-25T16:59:53.303752+00:00",
+  "duration_seconds": 0.356,
+  "exit_code": 2,
+  "log": "docs/audit-evidence/2026-10-25/docker-start.txt",
+  "sha256": "c7ad77b57de39818487120ff73717d9a7537c028bfe6a15290437c32bb72830d"
+}

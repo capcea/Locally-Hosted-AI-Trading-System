@@ -1,0 +1,14 @@
+{
+  "id": "native-research-symbol",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase5/focused_services.py"
+  ],
+  "started_utc": "2026-10-27T09:28:57.590785+00:00",
+  "duration_seconds": 43.534,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/native-research-symbol.txt",
+  "sha256": "7a01b0cbc3caf6539255f38fcdf9470a26109f70709e1b713dc9e35a9a63dce4"
+}

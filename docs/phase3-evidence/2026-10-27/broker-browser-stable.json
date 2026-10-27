@@ -1,0 +1,16 @@
+{
+  "id": "broker-browser-stable",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "E2E_ONLY_PROJECT=desktop",
+    "E2E_ONLY_SCENARIO=broker",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T22:39:39.611150+00:00",
+  "duration_seconds": 107.55,
+  "exit_code": 2,
+  "log": "docs/phase3-evidence/2026-10-27/broker-browser-stable.txt",
+  "sha256": "84449984ec09451729f2b4f6ea7e03fb61248baa97a3e207e24198c6fb12e440"
+}

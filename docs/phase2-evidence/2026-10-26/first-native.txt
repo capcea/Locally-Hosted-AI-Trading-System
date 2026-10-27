@@ -1,0 +1,12 @@
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-b046c140570045fd942b5a7de130d94c --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k4by6em0/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+ Image redis:7.4.11-alpine3.21@sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541 Pulling 
+ Image postgres:17.6-alpine3.22@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94 Pulling 
+error getting credentials - err: exit status 1, out: `Keychain Error. (-67674)`
++ /usr/local/bin/docker compose --project-name phase0-test-b046c140570045fd942b5a7de130d94c --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-k4by6em0/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+FAILED: Command exited 1; no service acceptance claimed
+make: *** [integration-services] Error 1

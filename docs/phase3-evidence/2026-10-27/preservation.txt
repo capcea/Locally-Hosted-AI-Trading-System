@@ -1,0 +1,6 @@
+PASSED: existing PostgreSQL, Redis and MinIO container IDs and all volume mounts unchanged.
+Traceback (most recent call last):
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase3/preservation.py", line 30, in <module>
+    assert query(sql)==expected, table
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: audit_events

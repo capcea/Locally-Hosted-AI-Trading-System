@@ -1,0 +1,23 @@
+{
+  "id": "acceptance-stack",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T20:31:42.643678+00:00",
+  "duration_seconds": 25.331,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/acceptance-stack.txt",
+  "sha256": "4fd5cd14614e69c799c1d616173c6a9ca8dc2015cc217331d8811ef710b70972"
+}

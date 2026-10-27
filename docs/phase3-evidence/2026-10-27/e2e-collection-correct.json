@@ -1,0 +1,20 @@
+{
+  "id": "e2e-collection-correct",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "exec",
+    "--",
+    "playwright",
+    "test",
+    "--config",
+    "apps/web/playwright.config.ts",
+    "--list"
+  ],
+  "started_utc": "2026-10-27T01:30:30.861894+00:00",
+  "duration_seconds": 1.794,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/e2e-collection-correct.txt",
+  "sha256": "c19bc55efcc43b90b1b1c58e0c13a69d367c52c3c915c6737654cac8a7a79a78"
+}

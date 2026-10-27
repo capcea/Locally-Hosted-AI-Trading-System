@@ -1,0 +1,12 @@
+{
+  "id": "release-repository",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-26T20:35:10.294551+00:00",
+  "duration_seconds": 0.075,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/release-repository.txt",
+  "sha256": "c011776e2f5ebc95a752afb3e041f770a4c9959ef59f6e8a95b067de8c042d6d"
+}

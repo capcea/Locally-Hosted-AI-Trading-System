@@ -1,0 +1,13 @@
+{
+  "id": "shell-syntax",
+  "command": [
+    "bash",
+    "-n",
+    "scripts/setup.sh"
+  ],
+  "started_utc": "2026-10-25T17:00:17.391737+00:00",
+  "duration_seconds": 0.003,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/shell-syntax.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

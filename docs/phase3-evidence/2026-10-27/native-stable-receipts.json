@@ -1,0 +1,14 @@
+{
+  "id": "native-stable-receipts",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T22:36:26.005571+00:00",
+  "duration_seconds": 98.23,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/native-stable-receipts.txt",
+  "sha256": "f399a792c33fd8a9fccc9cb5484056b3e87dfa46c2f5fb8bed0e3749f758074e"
+}

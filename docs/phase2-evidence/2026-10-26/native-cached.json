@@ -1,0 +1,15 @@
+{
+  "id": "native-cached",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T19:27:54.294785+00:00",
+  "duration_seconds": 27.813,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26/native-cached.txt",
+  "sha256": "a64c143cd71919307a5244b865bdba90c82dbd8df34f9b60ae098fbdfcbafac2",
+  "sanitization": "Temporary disposable MinIO accessKey identity redacted from four SDK traceback locals after fresh scan. Exception/test outcomes preserved."
+}

@@ -1,0 +1,15 @@
+{
+  "id": "final-npm-audit",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "audit",
+    "--audit-level=high"
+  ],
+  "started_utc": "2026-10-25T17:03:34.621881+00:00",
+  "duration_seconds": 0.883,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/final-npm-audit.txt",
+  "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+}

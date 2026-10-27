@@ -1,0 +1,14 @@
+{
+  "id": "second-native",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-26T22:19:14.611228+00:00",
+  "duration_seconds": 95.219,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/second-native.txt",
+  "sha256": "77494f1fabb851003a5c761cb8ddb38983ffb240a5a726546c3cccc9d51f3d12"
+}

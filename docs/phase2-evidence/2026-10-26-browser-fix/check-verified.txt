@@ -1,0 +1,13 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+107 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+[warn] e2e/phase2.spec.ts
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.
+make: *** [lint] Error 1

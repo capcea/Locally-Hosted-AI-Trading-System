@@ -1,0 +1,12 @@
+{
+  "id": "fixed-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-25T16:59:51.614067+00:00",
+  "duration_seconds": 3.474,
+  "exit_code": 2,
+  "log": "docs/audit-evidence/2026-10-25/fixed-check.txt",
+  "sha256": "a5e7dbc7647ede1543e98b3e2a6b38ef5c86224098f5af806cbbd99976ffdbc7"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "desktop-after",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "E2E_ONLY_PROJECT=desktop",
+    "E2E_ONLY_SCENARIO=market",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T21:36:54.031477+00:00",
+  "duration_seconds": 84.675,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/desktop-after.txt",
+  "sha256": "ead634b184d940d6b0a9bffce936f9b1697bcb8ec5731c66cbf20eb5ced894ba"
+}

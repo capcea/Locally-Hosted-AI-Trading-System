@@ -1,0 +1,19 @@
+{
+  "id": "bridge-image",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "build",
+    "-f",
+    "services/broker_bridge/Dockerfile",
+    "-t",
+    "ai-trading-readonly-bridge:phase3",
+    "."
+  ],
+  "started_utc": "2026-10-27T01:28:10.115666+00:00",
+  "duration_seconds": 16.871,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/bridge-image.txt",
+  "sha256": "cbca2a44232661255be8a7f980cadebc94822894fdcc637f752f2c02fa49f91b"
+}

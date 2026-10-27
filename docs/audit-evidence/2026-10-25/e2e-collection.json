@@ -1,0 +1,17 @@
+{
+  "id": "e2e-collection",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-25T17:00:17.423810+00:00",
+  "duration_seconds": 0.5,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/e2e-collection.txt",
+  "sha256": "5fb57a665487cd53e44bc656551423d6db98b05d0c000ff4d021e6bf0e07c54d"
+}

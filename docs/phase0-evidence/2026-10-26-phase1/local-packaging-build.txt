@@ -1,0 +1,93 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.52kB done
+#1 DONE 0.0s
+
+#2 [api internal] load build definition from Dockerfile
+#2 transferring dockerfile: 793B done
+#2 DONE 0.0s
+
+#3 [migrate internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#3 DONE 0.7s
+
+#4 [migrate internal] load .dockerignore
+#4 transferring context: 293B done
+#4 DONE 0.0s
+
+#5 [migrate internal] load build context
+#5 DONE 0.0s
+
+#6 [api  1/13] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#6 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#6 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.5s done
+#6 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.5s done
+#6 DONE 0.5s
+
+#5 [api internal] load build context
+#5 transferring context: 25.56kB done
+#5 DONE 0.0s
+
+#7 [api  3/13] RUN pip install --no-cache-dir uv==0.13.5
+#7 CACHED
+
+#8 [api  4/13] COPY pyproject.toml uv.lock ./
+#8 CACHED
+
+#9 [api  2/13] WORKDIR /app
+#9 CACHED
+
+#10 [api  5/13] RUN uv sync --frozen --no-dev --no-cache
+#10 CACHED
+
+#11 [migrate  6/13] COPY apps/api apps/api
+#11 DONE 0.0s
+
+#12 [api  7/13] COPY apps/__init__.py apps/__init__.py
+#12 DONE 0.0s
+
+#13 [api  8/13] COPY packages packages
+#13 DONE 0.0s
+
+#14 [migrate  9/13] COPY workers workers
+#14 DONE 0.0s
+
+#15 [migrate 10/13] COPY migrations migrations
+#15 DONE 0.0s
+
+#16 [api 11/13] COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/
+#16 DONE 0.0s
+
+#17 [api 12/13] COPY alembic.ini ./
+#17 DONE 0.0s
+
+#18 [migrate 13/13] RUN useradd --uid 10001 --create-home app
+#18 DONE 0.1s
+
+#19 [migrate] exporting to image
+#19 exporting layers 0.1s done
+#19 exporting manifest sha256:39e4f833e49470377658cc72f428276fd35b790020374a1b42acd0e188869e84 done
+#19 exporting config sha256:4690e7c4793d2fa86fc4c3497b4079e005aa72dc15cd6778307be7432977e556 done
+#19 exporting attestation manifest sha256:25f669a08c421db47305338ed6e6256ff7d81d96a69b22bd479da15c8893428f done
+#19 exporting manifest list sha256:46e40789f52dbeb4e94041fe90704bc6597a1c86a5c2ca451ac3060c5ab83189 done
+#19 naming to docker.io/library/ai-trading-research-migrate:latest done
+#19 unpacking to docker.io/library/ai-trading-research-migrate:latest 0.0s done
+#19 DONE 0.1s
+
+#20 [api] exporting to image
+#20 exporting layers 0.1s done
+#20 exporting manifest sha256:583cef28e5109bee8ec595e82052a74fc87ab6ffdef3d66c96239b545e1cc24c done
+#20 exporting config sha256:38fa3325de66d9e78cf68b32e1094359285970ceba75384b7978deddebf3dd63 done
+#20 exporting attestation manifest sha256:463417954f23de664232605b588738b8068c698765560fc7daff8eb33f9be32a done
+#20 exporting manifest list sha256:f9c528298d9e08c0849f2d280cccf98cb42a7d4d2ee95b2f570d3b48cf3cd528 done
+#20 naming to docker.io/library/ai-trading-research-api:latest done
+#20 unpacking to docker.io/library/ai-trading-research-api:latest 0.0s done
+#20 DONE 0.1s
+
+#21 [migrate] resolving provenance for metadata file
+#21 DONE 0.0s
+
+#22 [api] resolving provenance for metadata file
+#22 DONE 0.0s
+ Image ai-trading-research-api Building 
+ Image ai-trading-research-migrate Building 
+ Image ai-trading-research-migrate Built 
+ Image ai-trading-research-api Built 

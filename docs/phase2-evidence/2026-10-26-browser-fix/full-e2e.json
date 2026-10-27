@@ -1,0 +1,18 @@
+{
+  "id": "full-e2e",
+  "command": [
+    "env",
+    "-u",
+    "E2E_ONLY_PROJECT",
+    "-u",
+    "E2E_ONLY_SCENARIO",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-26T21:38:22.903854+00:00",
+  "duration_seconds": 85.932,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/full-e2e.txt",
+  "sha256": "50ef6bbfb2ede9b1f92b2066300839d37982bdaa34f267551f3c84f9abcb620a"
+}

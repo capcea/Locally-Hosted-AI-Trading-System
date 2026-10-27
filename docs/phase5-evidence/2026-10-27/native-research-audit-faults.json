@@ -1,0 +1,14 @@
+{
+  "id": "native-research-audit-faults",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase5/focused_services.py"
+  ],
+  "started_utc": "2026-10-27T09:39:28.897129+00:00",
+  "duration_seconds": 56.38,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/native-research-audit-faults.txt",
+  "sha256": "91350e6191cad6ea7cf9ef22e839377fe73a724894b7ffb4efdfc9a7fec3fa23"
+}

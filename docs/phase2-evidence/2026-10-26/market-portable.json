@@ -1,0 +1,15 @@
+{
+  "id": "market-portable",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_market_time_quality.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T19:27:16.377604+00:00",
+  "duration_seconds": 1.784,
+  "exit_code": 1,
+  "log": "docs/phase2-evidence/2026-10-26/market-portable.txt",
+  "sha256": "07c8f365b50cab4016539e3e1d06e97af06d5f1a09de6dd94d65f3920cdc9952"
+}

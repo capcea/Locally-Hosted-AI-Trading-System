@@ -1,0 +1,12 @@
+{
+  "id": "contract-generation",
+  "command": [
+    "make",
+    "contracts"
+  ],
+  "started_utc": "2026-10-25T17:04:46.721738+00:00",
+  "duration_seconds": 0.762,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/contract-generation.txt",
+  "sha256": "ac41cb712fff6061a9712ea5a7259074f72369b67083d7a10ed088f7907d462b"
+}

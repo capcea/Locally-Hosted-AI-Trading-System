@@ -1,0 +1,127 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_______________________ test_untrusted_host_is_rejected ________________________
+
+client = <starlette.testclient.TestClient object at 0x110a9f440>
+
+    def test_untrusted_host_is_rejected(client: TestClient) -> None:
+>       assert client.get("/api/v1/overview", headers={"host": "attacker.invalid"}).status_code == 400
+E       AssertionError: assert 200 == 400
+E        +  where 200 = <Response [200 OK]>.status_code
+E        +    where <Response [200 OK]> = get('/api/v1/overview', headers={'host': 'attacker.invalid'})
+E        +      where get = <starlette.testclient.TestClient object at 0x110a9f440>.get
+
+tests/test_audit_regressions.py:26: AssertionError
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-25T16:56:47.272054+00:00", "request_id": "080b2a24-03e7-4fa7-b976-e7530527ac42", "method": "GET", "status": 200, "duration_ms": 1}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:58 {"event": "http_request", "timestamp": "2026-10-25T16:56:47.272054+00:00", "request_id": "080b2a24-03e7-4fa7-b976-e7530527ac42", "method": "GET", "status": 200, "duration_ms": 1}
+___________________ test_smoke_never_targets_external_hosts ____________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x110bd5dc0>
+
+    def test_smoke_never_targets_external_hosts(monkeypatch: pytest.MonkeyPatch) -> None:
+        requests: list[httpx.Request] = []
+    
+        def handler(request: httpx.Request) -> httpx.Response:
+            requests.append(request)
+            return httpx.Response(500)
+    
+        install_http_mock(monkeypatch, handler)
+        with pytest.raises(ValueError, match="loopback"):
+>           smoke("https://broker.example.invalid", False)
+
+tests/test_audit_regressions.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/smoke_demo.py:11: in smoke
+    live.raise_for_status()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <Response [500 Internal Server Error]>
+
+    def raise_for_status(self) -> Response:
+        """
+        Raise the `HTTPStatusError` if one occurred.
+        """
+        request = self._request
+        if request is None:
+            raise RuntimeError(
+                "Cannot call `raise_for_status` as the request "
+                "instance has not been set on this response."
+            )
+    
+        if self.is_success:
+            return self
+    
+        if self.has_redirect_location:
+            message = (
+                "{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\n"
+                "Redirect location: '{0.headers[location]}'\n"
+                "For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{0.status_code}"
+            )
+        else:
+            message = (
+                "{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\n"
+                "For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{0.status_code}"
+            )
+    
+        status_class = self.status_code // 100
+        error_types = {
+            1: "Informational response",
+            3: "Redirect response",
+            4: "Client error",
+            5: "Server error",
+        }
+        error_type = error_types.get(status_class, "Invalid status code")
+        message = message.format(self, error_type=error_type)
+>       raise HTTPStatusError(message, request=request, response=self)
+E       httpx.HTTPStatusError: Server error '500 Internal Server Error' for url 'https://broker.example.invalid/health/live'
+E       For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500
+
+.venv/lib/python3.12/site-packages/httpx/_models.py:829: HTTPStatusError
+__________________ test_smoke_fails_on_server_error_readiness __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x110bd6cf0>
+client = <starlette.testclient.TestClient object at 0x110bd6de0>
+
+    def test_smoke_fails_on_server_error_readiness(
+        monkeypatch: pytest.MonkeyPatch, client: TestClient
+    ) -> None:
+        overview = client.get("/api/v1/overview").json()
+    
+        def handler(request: httpx.Request) -> httpx.Response:
+            match request.url.path:
+                case "/health/live":
+                    return httpx.Response(200, json={"mode": "SIMULATED", "version": "0.1.0", "status": "ok"})
+                case "/api/v1/safety":
+                    return httpx.Response(200, json=SafetyState().model_dump(mode="json"))
+                case "/api/v1/overview":
+                    return httpx.Response(200, json=overview)
+                case "/health/ready":
+                    return httpx.Response(500, json={"detail": "unhandled error"})
+                case _:
+                    return httpx.Response(403, json={"detail": "disabled"})
+    
+        install_http_mock(monkeypatch, handler)
+>       with pytest.raises((RuntimeError, httpx.HTTPStatusError), match="readiness|500"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (RuntimeError, HTTPStatusError)
+
+tests/test_audit_regressions.py:61: Failed
+----------------------------- Captured stdout call -----------------------------
+API + execution-denial smoke: PASS. Infrastructure readiness: 500.
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-25T16:56:47.306468+00:00", "request_id": "f9e8fbef-b9db-4316-8ae3-73e8b5b4c42b", "method": "GET", "status": 200, "duration_ms": 0}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:58 {"event": "http_request", "timestamp": "2026-10-25T16:56:47.306468+00:00", "request_id": "f9e8fbef-b9db-4316-8ae3-73e8b5b4c42b", "method": "GET", "status": 200, "duration_ms": 0}
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_audit_regressions.py::test_untrusted_host_is_rejected - Ass...
+FAILED tests/test_audit_regressions.py::test_smoke_never_targets_external_hosts
+FAILED tests/test_audit_regressions.py::test_smoke_fails_on_server_error_readiness
+3 failed, 1 warning in 0.13s

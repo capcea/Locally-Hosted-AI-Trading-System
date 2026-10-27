@@ -1,0 +1,32 @@
+Owner-local saved Playwright artifact, inspected before rerun.
+Test: e2e/phase2.spec.ts:13; failing assertion at line 99.
+Error: expect(locator).toContainText(expected) failed
+
+Locator: locator('.market-json').last()
+Timeout: 5000ms
+- Expected substring  - 1
++ Received string     + 8
+
+- schema_version
++ {
++   "formats": [
++     "CSV",
++     "PARQUET"
++   ],
++   "network": false,
++   "resumable": false
++ }
+
+Call log:
+  - Expect "toContainText" locator('.market-json').last() with timeout 5000ms
+  - waiting for locator('.market-json').last()
+    14 × locator resolved to <pre class="market-json">{↵  "formats": [↵    "CSV",↵    "PARQUET"↵  ],↵  …</pre>
+       - unexpected value "{
+  "formats": [
+    "CSV",
+    "PARQUET"
+  ],
+  "network": false,
+  "resumable": false
+}"
+

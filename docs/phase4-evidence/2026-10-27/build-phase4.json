@@ -1,0 +1,18 @@
+{
+  "id": "build-phase4",
+  "command": [
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "web",
+    "market-worker",
+    "risk-monitor"
+  ],
+  "started_utc": "2026-10-27T03:48:06.552493+00:00",
+  "duration_seconds": 0.578,
+  "exit_code": 1,
+  "log": "docs/phase4-evidence/2026-10-27/build-phase4.txt",
+  "sha256": "5d4ae24390419c20c3be077c85e95cce0d210f21678d38ec9fd2aaff7fd72c70"
+}

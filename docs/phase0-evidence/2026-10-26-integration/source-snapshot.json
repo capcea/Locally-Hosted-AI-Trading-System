@@ -1,0 +1,30 @@
+[
+  {
+    "path": "compose.test.yaml",
+    "sha256": "dac8f2f494be4677fe25620bc5a5040fe07d6054fed5c5261cee9d79b628b6b5"
+  },
+  {
+    "path": "scripts/integration_services.py",
+    "sha256": "f0ca00e6548c8d723ba03c5be3a0c3a2633f57c5656a29ea5df503983f411373"
+  },
+  {
+    "path": "tests/test_integration_guards.py",
+    "sha256": "7d3030cb099d5957641b6c2d18a03a254791657d871d6da9f47300ef0841878a"
+  },
+  {
+    "path": "tests/test_service_roundtrips.py",
+    "sha256": "261812dbef8187376300ee9cedc4a74bb6c74876fc004139606b1486b9ff8043"
+  },
+  {
+    "path": "tests/test_infrastructure.py",
+    "sha256": "2f5384a79b2351b80a12d0839f1e331caff90e97f683f941434d49e0e00c788f"
+  },
+  {
+    "path": "Makefile",
+    "sha256": "bd70984dc714138804eb0f4e6da499198cf5999dfb95c1cacd0d3248acbdd3fb"
+  },
+  {
+    "path": "compose.yaml",
+    "sha256": "e6d318d963aceb9ee52abe77fce553ccb449b26d0c042c5740900e66d4a4eaab"
+  }
+]

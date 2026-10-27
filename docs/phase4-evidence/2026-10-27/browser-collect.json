@@ -1,0 +1,17 @@
+{
+  "id": "browser-collect",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-27T03:48:57.202126+00:00",
+  "duration_seconds": 0.411,
+  "exit_code": 1,
+  "log": "docs/phase4-evidence/2026-10-27/browser-collect.txt",
+  "sha256": "09ad99f0b6d919a854d48dd63db7b45227fc412c60b6f35a11c85d5f23739517"
+}

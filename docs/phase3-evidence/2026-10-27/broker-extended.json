@@ -1,0 +1,16 @@
+{
+  "id": "broker-extended",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_broker_contracts.py",
+    "tests/test_bridge_tls.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T22:52:13.606506+00:00",
+  "duration_seconds": 2.307,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/broker-extended.txt",
+  "sha256": "c0c6df0702da434814205a104f31dc6ebf20614d883da0b453a29c14e7e1fb8c"
+}

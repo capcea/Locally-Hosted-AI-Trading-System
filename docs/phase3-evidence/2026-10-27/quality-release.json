@@ -1,0 +1,12 @@
+{
+  "id": "quality-release",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T01:40:13.556719+00:00",
+  "duration_seconds": 37.463,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/quality-release.txt",
+  "sha256": "5b409946f5b1665a4b36e5c0b127f63db116ed91b3d3a253386fed836a71938b"
+}

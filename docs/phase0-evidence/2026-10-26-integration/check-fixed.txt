@@ -1,0 +1,70 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+56 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+.venv/bin/python -m mypy
+Success: no issues found in 30 source files
+npm --prefix apps/web run typecheck
+
+> trading-research-web@0.1.0 typecheck
+> tsc -b --pretty false
+
+.venv/bin/python -m pytest -m 'not infrastructure and not isolated_services'
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0
+rootdir: /Users/andy/Documents/ChatGPT/Sistem Trade Ai
+configfile: pyproject.toml
+testpaths: tests
+plugins: hypothesis-6.170.9, anyio-4.15.1, platformdirs-4.13.5
+collected 79 items / 4 deselected / 75 selected
+
+tests/test_audit_regressions.py .......                                  [  9%]
+tests/test_bootstrap.py ....                                             [ 14%]
+tests/test_health.py .......                                             [ 24%]
+tests/test_integration_guards.py ............................            [ 61%]
+tests/test_migrations.py ..                                              [ 64%]
+tests/test_safety.py ...........................                         [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 75 passed, 4 deselected, 1 warning in 0.42s ==================
+npm --prefix apps/web test
+
+> trading-research-web@0.1.0 test
+> vitest run
+
+
+ RUN  v5.0.5 /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  14:48:22
+   Duration  122ms (import 78%, tests 12%, transform 6%, worker 3%)
+
+npm --prefix apps/web run build
+
+> trading-research-web@0.1.0 build
+> tsc -b && vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2031 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.70 kB │ gzip:   0.42 kB
+dist/assets/index-BsgUswIu.css   28.81 kB │ gzip:   6.74 kB
+dist/assets/index-DXF2YNOP.js   336.50 kB │ gzip: 103.23 kB
+
+✓ built in 197ms

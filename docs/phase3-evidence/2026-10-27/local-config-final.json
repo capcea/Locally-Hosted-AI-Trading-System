@@ -1,0 +1,13 @@
+{
+  "id": "local-config-final",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import subprocess; subprocess.run([\"docker\",\"compose\",\"config\",\"--quiet\"],check=True); subprocess.run([\".tools/bin/actionlint\"],check=True); print(\"PASSED: Compose and Actions syntax, including independent connector image check. Remote CI NOT RUN.\")"
+  ],
+  "started_utc": "2026-10-27T01:37:27.549409+00:00",
+  "duration_seconds": 0.143,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/local-config-final.txt",
+  "sha256": "c1c2277f3aef16fa2fbe0db61a3b8cf8a6bf89da2c713adefea5f8929134a1d2"
+}

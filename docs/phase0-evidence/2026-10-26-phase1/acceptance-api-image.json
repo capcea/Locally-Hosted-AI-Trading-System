@@ -1,0 +1,17 @@
+{
+  "id": "acceptance-api-image",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate"
+  ],
+  "started_utc": "2026-10-26T14:47:41.264122+00:00",
+  "duration_seconds": 3.616,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/acceptance-api-image.txt",
+  "sha256": "594c3fbfbaef0622e33015c6e3132c9295043686f55ab181400e5354a4748071"
+}

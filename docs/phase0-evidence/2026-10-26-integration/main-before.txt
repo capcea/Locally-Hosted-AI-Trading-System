@@ -1,0 +1,9 @@
+template parsing error: template: :1:125: executing "" at <.State.Health>: map has no entry for key "Health"
+Traceback (most recent call last):
+  File "<string>", line 7, in <module>
+  File "/Users/andy/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/andy/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'inspect', '--format', '{"id":{{json .Id}},"name":{{json .Name}},"started":{{json .State.StartedAt}},"mounts":{{json .Mounts}},"health":{{json .State.Health}}}', 'bdb61212969e56a43899c2bd8cabb47fee6d890363e1ce58a04ec42ca8938c93']' returned non-zero exit status 1.

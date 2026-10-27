@@ -1,0 +1,12 @@
+{
+  "id": "expanded-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T14:11:39.018998+00:00",
+  "duration_seconds": 1.966,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/expanded-check.txt",
+  "sha256": "21e17c832025d831f9b6e448c2aadeacec5b5dbf4665a92c5ab9b95fef763f15"
+}

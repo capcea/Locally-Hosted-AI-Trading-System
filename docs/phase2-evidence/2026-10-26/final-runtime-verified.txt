@@ -1,0 +1,16 @@
+PASSED: existing data container IDs and persistent volume mounts preserved; services resumed.
+PASSED: existing Phase 1 user/account/risk/policy/audit counts and digests unchanged (baseline empty).
+PASSED: postgres healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: redis healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: minio healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: api healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: web healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: market-worker healthy; published bindings are loopback/non-privileged and TCP reachable.
+PASSED: API/worker read-only roots, bounded tmpfs/memory/PIDs, no Docker socket, no root-storage/admin-DB/broker credential variables; worker has no bootstrap token/host port.
+PASSED: runtime DB restricted; schema 0003, ORM/Alembic no drift; audit rewrite/dataset delete+truncate denied; API writable temporary upload spool verified with 2 MiB.
+/health/ready 200 [{"id": "postgres", "name": "PostgreSQL", "status": "HEALTHY", "detail": "Verificare direct\u0103 reu\u0219it\u0103.", "latency_ms": 24}, {"id": "redis", "name": "Redis", "status": "HEALTHY", "detail": "Verificare direct\u0103 reu\u0219it\u0103.", "latency_ms": 25}, {"id": "storage", "name": "Stocare obiecte", "status": "HEALTHY", "detail": "Verificare direct\u0103 reu\u0219it\u0103.", "latency_ms": 25}]
+/api/v1/safety 200 {"mode": "SIMULATED", "live_trading_enabled": false, "order_submission_enabled": false, "executor_capability": "DENY_ALL", "generated_code_execution": false, "read_only": true, "reasons": ["LIVE_EXECUTION_NOT_IMPLEMENTED", "LIVE_APPROVAL_NOT_IMPLEMENTED", "BROKER_ADAPTERS_NOT_CONNECTED", "POLICY_PACKS_UNVERIFIED"]}
+/api/v1/overview 200 Phase 2
+/api/v1/auth/status 200 {"initialized": false, "setup_available": true}
+PASSED: Web HTTP 200 and CSP header present; browser enforcement/rendering NOT VERIFIED.
+Runtime verification completed; no owner setup, data imports, broker calls or persistent-volume deletion performed.

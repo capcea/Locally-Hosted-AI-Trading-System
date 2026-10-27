@@ -1,0 +1,6 @@
+PASSED: all 3 data container IDs and volume mounts unchanged.
+Traceback (most recent call last):
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase4/preserve.py", line 29, in <module>
+    assert not changes, 'Legacy table fingerprints changed: '+repr(changes)
+           ^^^^^^^^^^^
+AssertionError: Legacy table fingerprints changed: ['login_sessions']

@@ -1,0 +1,17 @@
+{
+  "id": "playwright-collection",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-26T14:13:02.673105+00:00",
+  "duration_seconds": 0.62,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/playwright-collection.txt",
+  "sha256": "60bcdf50e9ce26bd5dc14b1cba8a5be8d6e05b5e90cdd8ba955305b0af7d1eaf"
+}

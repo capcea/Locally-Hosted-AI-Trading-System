@@ -1,0 +1,36 @@
+.venv/bin/python -m ruff check .
+S104 Possible binding to all interfaces
+  --> tests/test_integration_guards.py:54:34
+   |
+52 |         {"5432/tcp": []},
+53 |         {"5432/tcp": [{"HostIp": "127.0.0.1", "HostPort": "0"}]},
+54 |         {"5432/tcp": [{"HostIp": "0.0.0.0", "HostPort": "35432"}]},
+   |                                  ^^^^^^^^^
+55 |         {
+56 |             "5432/tcp": [
+   |
+
+S104 Possible binding to all interfaces
+  --> tests/test_integration_guards.py:63:37
+   |
+61 |         {
+62 |             "5432/tcp": [{"HostIp": "127.0.0.1", "HostPort": "35432"}],
+63 |             "9001/tcp": [{"HostIp": "0.0.0.0", "HostPort": "39001"}],
+   |                                     ^^^^^^^^^
+64 |         },
+65 |     ],
+   |
+
+S104 Possible binding to all interfaces
+   --> tests/test_integration_guards.py:123:23
+    |
+121 |                 target for container, target in services.values() if container == command[-1]
+122 |             )
+123 |             address = "0.0.0.0" if failure == "binding" else "127.0.0.1"
+    |                       ^^^^^^^^^
+124 |             port = host_port(target) + (1 if failure == "verify_binding" and restarted else 0)
+125 |             output = json.dumps({f"{target}/tcp": [{"HostIp": address, "HostPort": str(port)}]})
+    |
+
+Found 3 errors.
+make: *** [lint] Error 1

@@ -1,0 +1,14 @@
+{
+  "id": "compose-config",
+  "command": [
+    "docker",
+    "compose",
+    "config",
+    "--quiet"
+  ],
+  "started_utc": "2026-10-26T19:45:36.934433+00:00",
+  "duration_seconds": 0.12,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/compose-config.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

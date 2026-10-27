@@ -1,0 +1,13 @@
+{
+  "id": "main-readiness-and-preservation",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json,subprocess,httpx\nfrom pathlib import Path\nrows=[]\nfor service in (\"postgres\",\"redis\",\"minio\"):\n    container=subprocess.check_output([\"docker\",\"compose\",\"ps\",\"-q\",service],text=True).strip()\n    raw=subprocess.check_output([\"docker\",\"inspect\",\"--format\",'{ \"id\":{{json .Id}},\"started\":{{json .State.StartedAt}},\"mounts\":{{json .Mounts}} }',container],text=True)\n    rows.append({\"service\":service,\"state\":json.loads(raw)})\nassert rows==json.loads(Path(\".cache/phase1/data-services-before.json\").read_text())\nprint(\"PASSED: PostgreSQL, Redis and MinIO container IDs, start times and mounts unchanged.\")\nfor route in (\"/health/ready\",\"/api/v1/auth/status\",\"/api/v1/safety\"):\n    r=httpx.get(\"http://127.0.0.1:18000\"+route);r.raise_for_status();print(route,r.status_code,r.text)\n"
+  ],
+  "started_utc": "2026-10-26T14:11:21.530347+00:00",
+  "duration_seconds": 0.545,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/main-readiness-and-preservation.txt",
+  "sha256": "03379d181ff89f7b76d1f00195d08d6efa378072168fe211f231e43c308448e0"
+}

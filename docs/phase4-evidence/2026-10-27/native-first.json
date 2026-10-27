@@ -1,0 +1,16 @@
+{
+  "id": "native-first",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T02:30:15.659694+00:00",
+  "duration_seconds": 55.404,
+  "exit_code": 2,
+  "log": "docs/phase4-evidence/2026-10-27/native-first.txt",
+  "sha256": "b3e19c40651a877d143a00e9f282e0b7d5634fe745f87b4335abeb53e964b3e2",
+  "original_log_sha256": "51da6a259341578772932ea8ae2edd2b8355e99c0f9cedc3297786574a5ac3b6",
+  "redaction": "Seven synthetic owner-clear command identifiers in pytest tracebacks, not credentials; original retained privately."
+}

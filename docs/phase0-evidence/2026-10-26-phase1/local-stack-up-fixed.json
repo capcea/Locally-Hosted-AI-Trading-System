@@ -1,0 +1,19 @@
+{
+  "id": "local-stack-up-fixed",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180",
+    "api",
+    "web"
+  ],
+  "started_utc": "2026-10-26T14:09:59.525003+00:00",
+  "duration_seconds": 23.639,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/local-stack-up-fixed.txt",
+  "sha256": "12544d4245c8294e26333418abbc346872e447adf5cc4f28974098ff072529be"
+}

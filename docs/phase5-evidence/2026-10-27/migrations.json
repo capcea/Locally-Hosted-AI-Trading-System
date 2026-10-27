@@ -1,0 +1,15 @@
+{
+  "id": "migrations",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_migrations.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T09:20:05.925967+00:00",
+  "duration_seconds": 1.268,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/migrations.txt",
+  "sha256": "d5f60becc5883b79166632ee14484ea7bbe789669ca6d929bdb8a13436f01e9a"
+}

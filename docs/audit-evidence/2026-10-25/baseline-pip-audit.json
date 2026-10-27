@@ -1,0 +1,21 @@
+{
+  "id": "baseline-pip-audit",
+  "command": [
+    ".tools/bin/uv",
+    "run",
+    "--with",
+    "pip-audit==2.10.1",
+    "python",
+    "-m",
+    "pip_audit",
+    "--progress-spinner",
+    "off",
+    "--cache-dir",
+    ".cache/pip-audit"
+  ],
+  "started_utc": "2026-10-25T16:55:14.003242+00:00",
+  "duration_seconds": 11.663,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/baseline-pip-audit.txt",
+  "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+}

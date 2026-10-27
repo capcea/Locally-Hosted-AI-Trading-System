@@ -1,0 +1,14 @@
+{
+  "id": "integration",
+  "command": [
+    "env",
+    "P0_CACHED_IMAGES=1",
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-26T21:39:55.185830+00:00",
+  "duration_seconds": 79.086,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/integration.txt",
+  "sha256": "2b649d7ce988bf0185849d1b9677e33ae37bc3a8bdc5feb05ed8a181fc0296b5"
+}

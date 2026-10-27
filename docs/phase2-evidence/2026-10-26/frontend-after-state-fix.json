@@ -1,0 +1,12 @@
+{
+  "id": "frontend-after-state-fix",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T20:11:15.154210+00:00",
+  "duration_seconds": 24.334,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/frontend-after-state-fix.txt",
+  "sha256": "3d66cd708522f0550d9b009e05a0ab897ce38000bb58abff79a0be3ac04fd22e"
+}

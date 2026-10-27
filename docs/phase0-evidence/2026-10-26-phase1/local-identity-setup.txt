@@ -1,0 +1,5 @@
+.venv/bin/python -m scripts.bootstrap
+Kept existing .env unchanged.
+.venv/bin/python -m scripts.identity_setup
+Added private Phase 1 keys and separate runtime DB identity.
+The owner setup token is in private .env; no credentials were printed.

@@ -1,0 +1,18 @@
+{
+  "id": "local-image-build",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "web",
+    "migrate"
+  ],
+  "started_utc": "2026-10-26T14:02:13.160440+00:00",
+  "duration_seconds": 5.187,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/local-image-build.txt",
+  "sha256": "0d3a9dac43d8621241103abca72d9ebe8cf69d0b129a1463fa18a7f2df91a09a"
+}

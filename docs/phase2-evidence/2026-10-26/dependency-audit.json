@@ -1,0 +1,21 @@
+{
+  "id": "dependency-audit",
+  "command": [
+    ".tools/bin/uv",
+    "run",
+    "--with",
+    "pip-audit==2.10.1",
+    "python",
+    "-m",
+    "pip_audit",
+    "--cache-dir",
+    ".cache/pip-audit",
+    "--progress-spinner",
+    "off"
+  ],
+  "started_utc": "2026-10-26T19:45:34.852602+00:00",
+  "duration_seconds": 9.737,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/dependency-audit.txt",
+  "sha256": "23a8f385400497161c422b6d678531b527663efeb83ed71397a99e09b51d39d1"
+}

@@ -1,0 +1,11 @@
+PASSED: data service IDs/start times/mounts unchanged from before migration.
+PASSED: postgres published ports are loopback-only, non-privileged and reachable.
+PASSED: redis published ports are loopback-only, non-privileged and reachable.
+PASSED: minio published ports are loopback-only, non-privileged and reachable.
+PASSED: api published ports are loopback-only, non-privileged and reachable.
+PASSED: web published ports are loopback-only, non-privileged and reachable.
+/health/ready 200 [{"id":"postgres","name":"PostgreSQL","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":29},{"id":"redis","name":"Redis","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":30},{"id":"storage","name":"Stocare obiecte","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":30}]
+/api/v1/auth/status 200 {"initialized":false,"setup_available":true}
+/api/v1/safety 200 {"mode":"SIMULATED","live_trading_enabled":false,"order_submission_enabled":false,"executor_capability":"DENY_ALL","generated_code_execution":false,"read_only":true,"reasons":["LIVE_EXECUTION_NOT_IMPLEMENTED","LIVE_APPROVAL_NOT_IMPLEMENTED","BROKER_ADAPTERS_NOT_CONNECTED","POLICY_PACKS_UNVERIFIED"]}
+PASSED: Nginx serves HTTP 200 and restrictive CSP header (browser enforcement unverified).
+PASSED: schema 0002; API role has no admin or audit rewrite privilege.

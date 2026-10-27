@@ -1,0 +1,8 @@
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+
+failed to connect to the docker API at unix:///Users/andy/.docker/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /Users/andy/.docker/run/docker.sock: connect: no such file or directory
+BLOCKED: Command exited 1; no service acceptance claimed
+make: *** [integration-services] Error 1

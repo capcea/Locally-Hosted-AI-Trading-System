@@ -1,0 +1,367 @@
+[
+  {
+    "path": ".github/workflows/ci.yml",
+    "change": "MODIFIED",
+    "sha256": "fb85733bfc32c350a445f838046f19b1da6c5aeecfb1b29bc2a1be780b4dcc29"
+  },
+  {
+    "path": "ARCHITECTURE.md",
+    "change": "MODIFIED",
+    "sha256": "fbb0879f008630e8909d2cec669d3792cf5f28c32ad4a6c5ab897f2b1c48ad67"
+  },
+  {
+    "path": "DEPLOYMENT_CHECKLIST.md",
+    "change": "MODIFIED",
+    "sha256": "22a491c310d4c6ae40883f58248680b029bbf944320a589b79fdafe7251e6ee4"
+  },
+  {
+    "path": "EXPERIMENT_PROTOCOL.md",
+    "change": "ADDED",
+    "sha256": "2d6cc85c6a7d87bd5a0154bd634f1411ff10a715930fd6e6b12525806746af29"
+  },
+  {
+    "path": "IMPLEMENTATION_STATUS.md",
+    "change": "MODIFIED",
+    "sha256": "deda1e2878d5a3a90d3882e8a69908bc7c5b430e037ffe87fce6003625c8862c"
+  },
+  {
+    "path": "NEXT_STEPS.md",
+    "change": "MODIFIED",
+    "sha256": "ba5bf8719132f765a36c7d5580295d40b0ad3ff4fd06c8e90f003df6bb3ab820"
+  },
+  {
+    "path": "README.md",
+    "change": "MODIFIED",
+    "sha256": "64421695d177b9ce71abe945e7a3506cd398789a1caa8e5c8be90df314cce6ed"
+  },
+  {
+    "path": "RISK_POLICY.md",
+    "change": "ADDED",
+    "sha256": "382ef06297cc71de660264732eedff058458627bcb93534cdba582a30fbc490a"
+  },
+  {
+    "path": "ROADMAP.md",
+    "change": "MODIFIED",
+    "sha256": "8d52862033bdf8c19700873320e4c2df6b0b93df7af6df2f9cdcc6da2a16475e"
+  },
+  {
+    "path": "THREAT_MODEL.md",
+    "change": "ADDED",
+    "sha256": "7e05035c0ca13ce0e71b70dc9b63641c1e13cbe6c883d1e3eb867f2867a937ad"
+  },
+  {
+    "path": "apps/api/catalog.py",
+    "change": "MODIFIED",
+    "sha256": "0f63fa7ae4bcf57bc3468cfdb95a2d1db8581e8443cf28fa5a06fae945f2b678"
+  },
+  {
+    "path": "apps/api/execution/__init__.py",
+    "change": "ADDED",
+    "sha256": "e2f67e31edb949bea124d2247f4cae16f5a6dcbf467ac3f032b22b6828d1bd04"
+  },
+  {
+    "path": "apps/api/execution/limits.py",
+    "change": "ADDED",
+    "sha256": "ea3010f1e446a5733e165e52060147cd920d2fb0c237a8635261515302727f08"
+  },
+  {
+    "path": "apps/api/execution/routes.py",
+    "change": "ADDED",
+    "sha256": "8cb18f7b13402565c6a9a24222b0ae8902535c3366950f24d9bec58a67157130"
+  },
+  {
+    "path": "apps/api/execution/schemas.py",
+    "change": "ADDED",
+    "sha256": "4849309b588a034a1b9e3e4eeee34e5475902a78d4eecf394794224c1dc200d0"
+  },
+  {
+    "path": "apps/api/health.py",
+    "change": "MODIFIED",
+    "sha256": "7bcd1da4c4407799e8c1cd89965311c139b84ff727e0db9620a9200e2d3c20af"
+  },
+  {
+    "path": "apps/api/identity/schemas.py",
+    "change": "MODIFIED",
+    "sha256": "98919904fdfac16ce65a1c4c2b7cf18875a4de12124a4a4a50c1434cfc2a41cd"
+  },
+  {
+    "path": "apps/api/main.py",
+    "change": "MODIFIED",
+    "sha256": "45aa2f8b2c2b2ffd5f2273e09d386a0d248b86ae6479ead41365c5ec03f4db5c"
+  },
+  {
+    "path": "apps/web/e2e/phase3.spec.ts",
+    "change": "ADDED",
+    "sha256": "8b859ebf2cbf8b1fddb807dde072c21af05588c3738ce866d15ebf1a42f0cdbb"
+  },
+  {
+    "path": "apps/web/src/App.tsx",
+    "change": "MODIFIED",
+    "sha256": "6000a61de8b5a7757a7b58a1db0a62250c87020987d03404245d011a3fd7c618"
+  },
+  {
+    "path": "apps/web/src/BrokerCenter.tsx",
+    "change": "ADDED",
+    "sha256": "2b5766504ad16c80a877570360819258b9d9c681cf033abd0c0150812e861505"
+  },
+  {
+    "path": "apps/web/src/Management.tsx",
+    "change": "MODIFIED",
+    "sha256": "d6001e1c49d8586ad63c1cdf6b85ad19ebf32c84ee1a8d997f9fbb66af05709b"
+  },
+  {
+    "path": "apps/web/src/generated/api.ts",
+    "change": "MODIFIED",
+    "sha256": "3794f00f5e5b60e6505850e68fdd1468695a1fd7cf89228a5a66b331dcd95de8"
+  },
+  {
+    "path": "apps/web/src/locale.ts",
+    "change": "MODIFIED",
+    "sha256": "cc5986b019283ee8240590997f050588a675f8b2e75a0eeec6d6f7bf8fb190d4"
+  },
+  {
+    "path": "apps/web/src/management-locale.ts",
+    "change": "MODIFIED",
+    "sha256": "bd51d64ee702bc0e529ed426e6de3b3645571c1bb69e65c45b8cc7caef193ab5"
+  },
+  {
+    "path": "apps/web/src/schema.ts",
+    "change": "MODIFIED",
+    "sha256": "ed56495a9fe10f10b3b5966688c28991a3e6e8cc017fc7e45b1a67fe630d2560"
+  },
+  {
+    "path": "apps/web/src/styles.css",
+    "change": "MODIFIED",
+    "sha256": "fa0f362433e9f99273cfb1c64deb5b882b9e2c261b0c975a7c84517f69f8a4be"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "change": "MODIFIED",
+    "sha256": "453fd5609febcf30c073d70630751c2a85c12a15ba47692eef16a3c883c19c13"
+  },
+  {
+    "path": "docs/BROKER_ADAPTERS.md",
+    "change": "ADDED",
+    "sha256": "4e0f14757cd6bf031a72abe05bc29b0ff4364405d6e8906dcaf11cc016c84b81"
+  },
+  {
+    "path": "docs/BROKER_CAPABILITIES.json",
+    "change": "ADDED",
+    "sha256": "59d0f65c012a0fe1f8856146b879264dca8baa1af1fcf1911c0a54b06ed360aa"
+  },
+  {
+    "path": "docs/BROKER_RUNBOOK.md",
+    "change": "ADDED",
+    "sha256": "76374542d7236345557d8197781fd6294d8ea16e1ed3184e82c56339e2e84317"
+  },
+  {
+    "path": "docs/EXECUTION_SIMULATOR.md",
+    "change": "ADDED",
+    "sha256": "5cf428a471e32da4ad6131954a89eb72b5a52456ce755a1b7b753df83c3f746b"
+  },
+  {
+    "path": "docs/IMPLEMENTATION_STATUS.md",
+    "change": "MODIFIED",
+    "sha256": "de5d35ff5519dd3df301e841362f9fcafc33dd1c8b2a965ae4aada63f00fdbd0"
+  },
+  {
+    "path": "docs/ORDER_STATE_MACHINE.md",
+    "change": "ADDED",
+    "sha256": "9d1dc2e05c0bdab5c4b4974c9cdfd2ebe0c7f73fb8ad548ae5229e399730621d"
+  },
+  {
+    "path": "docs/RISK_POLICY.md",
+    "change": "MODIFIED",
+    "sha256": "53b39718cb464c8cd560d12a09c281f7536e66ade0555886d83f26d10b0aa0b5"
+  },
+  {
+    "path": "docs/ROADMAP.md",
+    "change": "MODIFIED",
+    "sha256": "b50aee65dfa5112ce90b9887451a4e25599f96812db9f427d4dba5427e4a95bd"
+  },
+  {
+    "path": "docs/THREAT_MODEL.md",
+    "change": "MODIFIED",
+    "sha256": "de846a6cb4c2627a7e8da78a82f6464e01eb20eb81da332ab702f349fa9af609"
+  },
+  {
+    "path": "docs/external-sources.md",
+    "change": "MODIFIED",
+    "sha256": "516654bcf1b296242790ecaa882e66615cba7eb619c5bc351b0785335097ad14"
+  },
+  {
+    "path": "docs/openapi.json",
+    "change": "MODIFIED",
+    "sha256": "3950766bb7e8fdb56a3af335b643182ba324ca1235f36962c4796f51cff6af0b"
+  },
+  {
+    "path": "migrations/versions/0004_execution_journal.py",
+    "change": "ADDED",
+    "sha256": "136cb1f1a46f4396225631212a44cb0cfa213db0f97840b087561e3b28e77a1d"
+  },
+  {
+    "path": "packages/brokers/__init__.py",
+    "change": "ADDED",
+    "sha256": "50bf87117bf977c83b57323942592aa532922f6fa45f8c3d219462f28f22b9d6"
+  },
+  {
+    "path": "packages/brokers/contracts.py",
+    "change": "ADDED",
+    "sha256": "0a439131ecbf210646553f7097c25ced52d7f48c86b18728fa6e447dfb396b7c"
+  },
+  {
+    "path": "packages/domain/contracts.py",
+    "change": "MODIFIED",
+    "sha256": "f19d8379e97cea3af90a53df40680dda0209914f546221b1e3de1e941527523f"
+  },
+  {
+    "path": "packages/domain/serialization.py",
+    "change": "ADDED",
+    "sha256": "36744f1b5885ad169eaa639806d9036a88cda2fbc07ef5b51b2346ec0d64909e"
+  },
+  {
+    "path": "packages/domain/validation.py",
+    "change": "ADDED",
+    "sha256": "5c34cbe8b273ff21ea13f7ff12eef6fbfc25bbc0547f7b3dc9cd981b48411901"
+  },
+  {
+    "path": "packages/execution/__init__.py",
+    "change": "ADDED",
+    "sha256": "169399016a3b49ce1c3268e399538fb7f0bc74e6512406311b5db6b6eb92e394"
+  },
+  {
+    "path": "packages/execution/adapter.py",
+    "change": "ADDED",
+    "sha256": "718e0825fa75fd7d75d10d506e96d2503685180a1593b726a3bb40c41cc45e7e"
+  },
+  {
+    "path": "packages/execution/contracts.py",
+    "change": "ADDED",
+    "sha256": "b7d434880339f292c082603b4ddb9721d9fe5eaad837043d709582e14700e241"
+  },
+  {
+    "path": "packages/execution/engine.py",
+    "change": "ADDED",
+    "sha256": "a65ceec05aeb210dd6036bda609c37036939e5ad82609be4ef7c114b1857da1e"
+  },
+  {
+    "path": "packages/execution/journal.py",
+    "change": "ADDED",
+    "sha256": "678bf56e79adfca9252956ec7338f177445aad6f5ab8c63dcb94d13d2d9a2798"
+  },
+  {
+    "path": "packages/execution/models.py",
+    "change": "ADDED",
+    "sha256": "fb827cf2d5593597c7d6a5db14b294eb6d224c5a537d0718f4dbf547f8a47531"
+  },
+  {
+    "path": "packages/market/contracts.py",
+    "change": "MODIFIED",
+    "sha256": "93c3e4697e95d4a7a47e05b20b3bcf42bb59e67056a3b93312543be2078f21e5"
+  },
+  {
+    "path": "pyproject.toml",
+    "change": "MODIFIED",
+    "sha256": "3ccbdb74996b5cb29fd035ae839b1da5e4da32e26773de5813a838e941e04275"
+  },
+  {
+    "path": "scripts/browser_acceptance.py",
+    "change": "MODIFIED",
+    "sha256": "f8a6710cfed69fce26e4505546bae9e643f8472dbba48a441763e0f058fb0964"
+  },
+  {
+    "path": "scripts/integration_services.py",
+    "change": "MODIFIED",
+    "sha256": "316bfd30fcb4b5441d5f86e4364740df62e6989333250f1b6dabc2cbd8a494d3"
+  },
+  {
+    "path": "scripts/provision_runtime.py",
+    "change": "MODIFIED",
+    "sha256": "950693632f789ac7ef7f13b5bd5e0c5b50310ef05959f29faef10dae1d3ba2b7"
+  },
+  {
+    "path": "scripts/smoke_demo.py",
+    "change": "MODIFIED",
+    "sha256": "7127321cd876ec493da9536d00a8e9dc512f981aa8b0d9f47fac3126d06a8e87"
+  },
+  {
+    "path": "services/__init__.py",
+    "change": "ADDED",
+    "sha256": "52b0ee3e40bb9b8d9feced9ae2887cbbbd792945dca1926dcbc5cbac266d2112"
+  },
+  {
+    "path": "services/broker_bridge/Dockerfile",
+    "change": "ADDED",
+    "sha256": "216025ee9c47a4afcbeaeea993d9b74ce2e486ea2d9827256ac3054a85a6c6b1"
+  },
+  {
+    "path": "services/broker_bridge/__init__.py",
+    "change": "ADDED",
+    "sha256": "d2ef2204be76ee45e4d35eb06137b1b512a53ec1ffd476e5b012569fa6ca1fde"
+  },
+  {
+    "path": "services/broker_bridge/app.py",
+    "change": "ADDED",
+    "sha256": "9c22033d88d4da1c780712d9f6e5a4270fe1f856174d09b98f23d31b86c4faa6"
+  },
+  {
+    "path": "services/broker_bridge/ctrader.py",
+    "change": "ADDED",
+    "sha256": "ea9868cf6c67575cf7310d47d479914605b956480dfc680a113eac3b1a6fb195"
+  },
+  {
+    "path": "services/broker_bridge/limits.py",
+    "change": "ADDED",
+    "sha256": "adda3020dc20a4233c2020791582e7c13465b243b2a20eec1bc2d0b17518ca26"
+  },
+  {
+    "path": "services/broker_bridge/mt5.py",
+    "change": "ADDED",
+    "sha256": "ee930f9a6a495632deccb4ea80adc1424bed886586a39a4d96d09f54bcc1809f"
+  },
+  {
+    "path": "services/broker_bridge/security.py",
+    "change": "ADDED",
+    "sha256": "d877c1144596f181c1cff1eb5e52026bb3a5c85a2766fec4cb84cf2d04d12256"
+  },
+  {
+    "path": "services/windows/__init__.py",
+    "change": "ADDED",
+    "sha256": "4a8ffec808c319e19bda873cbed0a59f98761a44108613e1d7411b26745aea25"
+  },
+  {
+    "path": "services/windows/service.py",
+    "change": "ADDED",
+    "sha256": "897a7f5670d0a7e5d1dc705f4f64b2a21d1021233b83c76136146a5c1eb135eb"
+  },
+  {
+    "path": "services/windows/verify-private-acl.ps1",
+    "change": "ADDED",
+    "sha256": "66d90cde7b6a2b621f6e858d2addb53345288e81f6fb4217f1288bbe20e902ee"
+  },
+  {
+    "path": "tests/test_bridge_tls.py",
+    "change": "ADDED",
+    "sha256": "8a5b8196db596ea149b60806dc043161eebd985d57a24c7445ccdffd0fe426fe"
+  },
+  {
+    "path": "tests/test_broker_contracts.py",
+    "change": "ADDED",
+    "sha256": "aa5e311afdf6953bac8cbf747c499267c714d2c6cd4477c1ada73ab971c8fa17"
+  },
+  {
+    "path": "tests/test_execution_engine.py",
+    "change": "ADDED",
+    "sha256": "ccc48458fbdfac5321cf87653533c7c63c4dfbd494899f4f7a72d1e25e49e008"
+  },
+  {
+    "path": "tests/test_execution_integration.py",
+    "change": "ADDED",
+    "sha256": "c497f94a34aa51fe5409de36564c2e565a22211607ff3f63754d47d8d4086074"
+  },
+  {
+    "path": "uv.lock",
+    "change": "MODIFIED",
+    "sha256": "25b97e10a1d374d06dd1ab764d7b220730f917dab31174cf829d3072afda4acc"
+  }
+]

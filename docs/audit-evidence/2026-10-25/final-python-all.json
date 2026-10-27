@@ -1,0 +1,13 @@
+{
+  "id": "final-python-all",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest"
+  ],
+  "started_utc": "2026-10-25T17:03:34.621839+00:00",
+  "duration_seconds": 1.047,
+  "exit_code": 1,
+  "log": "docs/audit-evidence/2026-10-25/final-python-all.txt",
+  "sha256": "d98c9ce540435fbcb875f67489300277eb814c195b21c26666bd90f13c701b8c"
+}

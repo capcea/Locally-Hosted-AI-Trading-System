@@ -1,0 +1,19 @@
+{
+  "id": "release-images",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "web",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T19:52:12.071194+00:00",
+  "duration_seconds": 27.697,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/release-images.txt",
+  "sha256": "f193127d40f58e2eb41bc9c93dd7cfb61474df0e7fa6f323e8ec52f5a2dac3c4"
+}

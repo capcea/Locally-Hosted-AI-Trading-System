@@ -1,0 +1,12 @@
+{
+  "id": "isolated-services",
+  "command": [
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-25T22:26:05.886874+00:00",
+  "duration_seconds": 0.838,
+  "exit_code": 2,
+  "log": "docs/phase0-evidence/2026-10-25/isolated-services.txt",
+  "sha256": "975b15ac831711864e765c4edbeed2b25153f27700e94bf21504bb4270ef0f4c"
+}

@@ -1,0 +1,203 @@
+name: ai-trading-research
+
+x-control: &control
+  build: .
+  environment: &control-env
+    APP_ENVIRONMENT: development
+    BROKER_ENVIRONMENT: SIMULATED
+    LIVE_TRADING_ENABLED: "false"
+    WORKER_EXECUTION_ENABLED: "false"
+    EXECUTOR_CAPABILITY: DENY_ALL
+    DATABASE_URL: postgresql+psycopg://research:${POSTGRES_PASSWORD:?Run make bootstrap}@postgres:5432/research
+    REDIS_URL: redis://redis:6379/0
+    OBJECT_STORE_URL: http://minio:9000
+  read_only: true
+
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  networks: [control]
+
+services:
+  postgres:
+    image: postgres:17.6-alpine3.22@sha256:ef257d85f76e48da1c64832459b59fcaba1a4dac97bf5d7450c77753542eee94
+    environment:
+      POSTGRES_USER: research
+      POSTGRES_DB: research
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run make bootstrap}
+    ports: ["127.0.0.1:15432:5432"]
+    volumes: [postgres_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U research -d research"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [control, local_services]
+  redis:
+    image: redis:7.4.11-alpine3.21@sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541
+    command: [redis-server, --appendonly, "yes"]
+    ports: ["127.0.0.1:16379:6379"]
+    volumes: [redis_data:/data]
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [control, local_services]
+  minio:
+    build: { context: deploy/minio }
+    command: [server, /data, --console-address, ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Run make bootstrap}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run make bootstrap}
+    ports: ["127.0.0.1:19000:9000", "127.0.0.1:19001:9001"]
+    volumes: [object_data:/data]
+    healthcheck:
+      test: [CMD, wget, -q, --spider, http://localhost:9000/minio/health/ready]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [control, local_services]
+  migrate:
+    <<: *control
+    command: [/app/.venv/bin/python, -m, scripts.migrate_runtime]
+    environment:
+      <<: *control-env
+      AUTH_DATABASE_PASSWORD: ${AUTH_DATABASE_PASSWORD:?Run make identity-setup}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Run make bootstrap}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Run make bootstrap}
+      MARKET_STORAGE_USER: ${MARKET_STORAGE_USER:?Run make market-setup}
+      MARKET_STORAGE_PASSWORD: ${MARKET_STORAGE_PASSWORD:?Run make market-setup}
+    depends_on:
+      postgres: { condition: service_healthy }
+      minio: { condition: service_healthy }
+  api:
+    <<: *control
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
+    mem_limit: 768m
+    cpus: 1
+    pids_limit: 128
+    environment:
+      <<: *control-env
+      DATABASE_URL: postgresql+psycopg://research_app:${AUTH_DATABASE_PASSWORD:?Run make identity-setup}@postgres:5432/research
+      AUTH_ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY:?Run make identity-setup}
+      AUTH_BOOTSTRAP_TOKEN: ${AUTH_BOOTSTRAP_TOKEN:?Run make identity-setup}
+      AUTH_COOKIE_SECURE: "false"
+      MARKET_STORAGE_USER: ${MARKET_STORAGE_USER:?Run make market-setup}
+      MARKET_STORAGE_PASSWORD: ${MARKET_STORAGE_PASSWORD:?Run make market-setup}
+    ports: ["127.0.0.1:18000:8000"]
+    networks: [control, frontend]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+      minio: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          CMD,
+          /app/.venv/bin/python,
+          -c,
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=10)",
+        ]
+      interval: 10s
+      timeout: 12s
+      retries: 10
+  web:
+    build: { context: apps/web }
+    ports: ["127.0.0.1:5173:8080"]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=32m"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    depends_on:
+      api: { condition: service_healthy }
+    healthcheck:
+      test: [CMD, wget, -q, -O, /dev/null, http://127.0.0.1:8080/]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks: [frontend]
+  market-worker:
+    <<: *control
+    command: [/app/.venv/bin/python, -m, scripts.market_worker]
+    environment:
+      <<: *control-env
+      DATABASE_URL: postgresql+psycopg://research_app:${AUTH_DATABASE_PASSWORD:?Run make identity-setup}@postgres:5432/research
+      AUTH_ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY:?Run make identity-setup}
+      MARKET_STORAGE_USER: ${MARKET_STORAGE_USER:?Run make market-setup}
+      MARKET_STORAGE_PASSWORD: ${MARKET_STORAGE_PASSWORD:?Run make market-setup}
+    networks: [control, data_egress]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=128m"]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 128
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      minio: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test: [CMD, /app/.venv/bin/python, -c, "import pathlib,time; p=pathlib.Path('/tmp/market-worker.ready'); assert p.exists() and time.time()-p.stat().st_mtime<120"]
+      interval: 20s
+      timeout: 3s
+      retries: 6
+
+  research-worker:
+    <<: *control
+    command: [/app/.venv/bin/python, -m, scripts.research_worker]
+    environment:
+      <<: *control-env
+      DATABASE_URL: postgresql+psycopg://research_app:${AUTH_DATABASE_PASSWORD:?Run make identity-setup}@postgres:5432/research
+      AUTH_ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY:?Run make identity-setup}
+      MARKET_STORAGE_USER: ${MARKET_STORAGE_USER:?Run make market-setup}
+      MARKET_STORAGE_PASSWORD: ${MARKET_STORAGE_PASSWORD:?Run make market-setup}
+    networks: [control]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=256m"]
+    mem_limit: 1024m
+    cpus: 1
+    pids_limit: 128
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      minio: { condition: service_healthy }
+    healthcheck:
+      test: [CMD, /app/.venv/bin/python, -c, "import pathlib,time; p=pathlib.Path('/tmp/research-worker.ready'); assert p.exists() and time.time()-p.stat().st_mtime<360"]
+      interval: 20s
+      timeout: 3s
+      retries: 6
+
+  risk-monitor:
+    <<: *control
+    command: [/app/.venv/bin/python, -m, scripts.risk_monitor]
+    environment:
+      APP_ENVIRONMENT: development
+      BROKER_ENVIRONMENT: SIMULATED
+      LIVE_TRADING_ENABLED: "false"
+      WORKER_EXECUTION_ENABLED: "false"
+      EXECUTOR_CAPABILITY: DENY_ALL
+      DATABASE_URL: postgresql+psycopg://research_app:${AUTH_DATABASE_PASSWORD:?Run make identity-setup}@postgres:5432/research
+      AUTH_ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY:?Run make identity-setup}
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=32m"]
+    mem_limit: 512m
+    cpus: 0.5
+    pids_limit: 128
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      postgres: { condition: service_healthy }
+    healthcheck:
+      test: [CMD, /app/.venv/bin/python, -c, "import pathlib,time; p=pathlib.Path('/tmp/risk-monitor.ready'); assert p.exists() and time.time()-p.stat().st_mtime<30"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+
+# Local development networking:
+# - control: private traffic among API, migration, and data services.
+# - frontend: host-facing API/web bridge; published ports stay on 127.0.0.1.
+# - local_services: separate bridge for local DB/Redis/MinIO integration tests.
+#   Do not use this setup unchanged for an internet-exposed deployment.
+networks:
+  control: { driver: bridge, internal: true }
+  frontend: { driver: bridge }
+  local_services: { driver: bridge }
+  data_egress: { driver: bridge }
+volumes:
+  postgres_data:
+  redis_data:
+  object_data:

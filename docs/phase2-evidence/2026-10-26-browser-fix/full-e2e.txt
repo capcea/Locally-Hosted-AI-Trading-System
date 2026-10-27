@@ -1,0 +1,319 @@
+.venv/bin/python -m scripts.integration_services --browser
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build --pull never -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#3 DONE 0.8s
+
+#4 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#4 DONE 0.9s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.4s done
+#7 DONE 0.4s
+
+#8 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.5s done
+#8 DONE 0.5s
+
+#9 [build 2/5] WORKDIR /src
+#9 CACHED
+
+#10 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#10 CACHED
+
+#11 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#11 CACHED
+
+#12 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#12 CACHED
+
+#13 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#13 CACHED
+
+#14 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#14 CACHED
+
+#15 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:079d611ecc02dcc392c982704998a11d0d3945d3f0654d09a99dcf90840da344 done
+#17 exporting config sha256:3edeb9cf02816b0163b8f52d512ce891bb709e1bb5ffdcb8189a49a8ae31e1f8 done
+#17 exporting attestation manifest sha256:b2e7644b4f3aba3b6601b5c03180b517ca7d37d14a08637eebed58bb3b01a635 done
+#17 exporting manifest list sha256:07d01b0da555a339616f9f01a180af3df003743b91b6353651e4efd8056df977 done
+#17 naming to docker.io/library/phase0-test-057ba2c4427b46c5b068d745329fb969-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-057ba2c4427b46c5b068d745329fb969-minio:latest done
+#17 DONE 0.0s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-057ba2c4427b46c5b068d745329fb969-minio Building 
+ Image phase0-test-057ba2c4427b46c5b068d745329fb969-minio Built 
+ Network phase0-test-057ba2c4427b46c5b068d745329fb969_default Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_storage Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_redis Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_postgres Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_postgres Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_redis Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_storage Creating 
+ Network phase0-test-057ba2c4427b46c5b068d745329fb969_default Creating 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_postgres Created 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_postgres Created 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_redis Created 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_redis Created 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_storage Created 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_storage Created 
+ Network phase0-test-057ba2c4427b46c5b068d745329fb969_default Created 
+ Network phase0-test-057ba2c4427b46c5b068d745329fb969_default Created 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Creating 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Creating 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Creating 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Created 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Created 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Created 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Starting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Starting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Starting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Started 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Started 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Started 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Waiting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Waiting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Waiting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Healthy 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Healthy 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-057ba2c4427b46c5b068d745329fb969_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+bdb73187781584e00148c56792b743f2969a36073ebc88ded748ce15ab090d89
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:57342
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' bdb73187781584e00148c56792b743f2969a36073ebc88ded748ce15ab090d89
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"57342"}]}
+PASSED: postgres 127.0.0.1:57342 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+0f29177b37ececcb38834bd0ed7b5b5c4e9f1105bfd590065db5b01eccb95c90
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:57341
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 0f29177b37ececcb38834bd0ed7b5b5c4e9f1105bfd590065db5b01eccb95c90
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"57341"}]}
+PASSED: redis 127.0.0.1:57341 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+30a48b9efa7d6d2d9acc10d5baacfcf1c386c87c4d94ba23a2fd544b9a3e339a
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:57340
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 30a48b9efa7d6d2d9acc10d5baacfcf1c386c87c4d94ba23a2fd544b9a3e339a
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"57340"}]}
+PASSED: minio 127.0.0.1:57340 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py tests/test_market_integration.py -m isolated_services -q
+...........................                                              [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+27 passed, 1 warning in 32.58s
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' stop postgres redis minio
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Stopping 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Stopping 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Stopping 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Stopped 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Stopped 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Stopped 
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up -d --wait --wait-timeout 180
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Starting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Starting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Starting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Started 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Started 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Started 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Waiting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Waiting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Waiting 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Healthy 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Healthy 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Healthy 
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+bdb73187781584e00148c56792b743f2969a36073ebc88ded748ce15ab090d89
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:57594
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' bdb73187781584e00148c56792b743f2969a36073ebc88ded748ce15ab090d89
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"57594"}]}
+PASSED: postgres 127.0.0.1:57594 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+0f29177b37ececcb38834bd0ed7b5b5c4e9f1105bfd590065db5b01eccb95c90
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:57596
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 0f29177b37ececcb38834bd0ed7b5b5c4e9f1105bfd590065db5b01eccb95c90
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"57596"}]}
+PASSED: redis 127.0.0.1:57596 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+30a48b9efa7d6d2d9acc10d5baacfcf1c386c87c4d94ba23a2fd544b9a3e339a
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:57595
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 30a48b9efa7d6d2d9acc10d5baacfcf1c386c87c4d94ba23a2fd544b9a3e339a
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"57595"}]}
+PASSED: minio 127.0.0.1:57595 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py tests/test_market_integration.py -m isolated_services -q
+...........................                                              [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+27 passed, 1 warning in 31.21s
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m scripts.browser_acceptance
++ /opt/homebrew/bin/npm run test:e2e -- e2e/platform.spec.ts e2e/phase1.spec.ts --project=desktop --workers=1
+
+> trading-research-web@0.1.0 test:e2e
+> playwright test e2e/platform.spec.ts e2e/phase1.spec.ts --project=desktop --workers=1
+
+
+Running 4 tests using 1 worker
+
+  ✘  1 [desktop] › e2e/phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login (1ms)
+  ✘  2 [desktop] › e2e/platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap (59ms)
+  ✘  3 [desktop] › e2e/platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health (52ms)
+  ✓  4 [desktop] › e2e/platform.spec.ts:43:1 › orders and activation remain refused through frontend proxy (59ms)
+
+
+  1) [desktop] › e2e/phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-ulxr8C --remote-debugging-pipe --no-startup-window
+    <launched> pid=43948
+    [pid=43948][err] [1026/233944.163069:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+    [pid=43948][err] [1026/233944.179931:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+    [pid=43948][err] [1026/233944.189765:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.43948: Permission denied (1100)
+    Call log:
+      - <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-ulxr8C --remote-debugging-pipe --no-startup-window
+      - <launched> pid=43948
+      - [pid=43948][err] [1026/233944.163069:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+      - [pid=43948][err] [1026/233944.179931:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+      - [pid=43948][err] [1026/233944.189765:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.43948: Permission denied (1100)
+      - [pid=43948] <gracefully close start>
+      - [pid=43948] <kill>
+      - [pid=43948] <will force kill>
+      - [pid=43948] exception while trying to kill process: Error: kill EPERM
+      - [pid=43948] <process did exit: exitCode=null, signal=SIGTRAP>
+      - [pid=43948] starting temporary directories cleanup
+      - [pid=43948] finished temporary directories cleanup
+      - [pid=43948] <gracefully close end>
+
+
+    Error Context: test-results/phase1-owner-setup-MFA-per-b5bb6-nt-settings-audit-and-login-desktop/error-context.md
+
+  2) [desktop] › e2e/platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-yAyK99 --remote-debugging-pipe --no-startup-window
+    <launched> pid=43963
+    [pid=43963][err] [1026/233945.182236:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+    [pid=43963][err] [1026/233945.183509:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+    [pid=43963][err] [1026/233945.183999:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.43963: Permission denied (1100)
+    Call log:
+      - <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-yAyK99 --remote-debugging-pipe --no-startup-window
+      - <launched> pid=43963
+      - [pid=43963][err] [1026/233945.182236:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+      - [pid=43963][err] [1026/233945.183509:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+      - [pid=43963][err] [1026/233945.183999:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.43963: Permission denied (1100)
+      - [pid=43963] <gracefully close start>
+      - [pid=43963] <kill>
+      - [pid=43963] <will force kill>
+      - [pid=43963] exception while trying to kill process: Error: kill EPERM
+      - [pid=43963] <process did exit: exitCode=null, signal=SIGTRAP>
+      - [pid=43963] starting temporary directories cleanup
+      - [pid=43963] finished temporary directories cleanup
+      - [pid=43963] <gracefully close end>
+
+
+    Error Context: test-results/platform-browse-real-statu-17228-pect-governance-and-roadmap-desktop/error-context.md
+
+  3) [desktop] › e2e/platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-YJNDkf --remote-debugging-pipe --no-startup-window
+    <launched> pid=43967
+    [pid=43967][err] [1026/233946.128756:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+    [pid=43967][err] [1026/233946.130010:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+    [pid=43967][err] [1026/233946.130571:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.43967: Permission denied (1100)
+    Call log:
+      - <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-YJNDkf --remote-debugging-pipe --no-startup-window
+      - <launched> pid=43967
+      - [pid=43967][err] [1026/233946.128756:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+      - [pid=43967][err] [1026/233946.130010:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+      - [pid=43967][err] [1026/233946.130571:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.43967: Permission denied (1100)
+      - [pid=43967] <gracefully close start>
+      - [pid=43967] <kill>
+      - [pid=43967] <will force kill>
+      - [pid=43967] exception while trying to kill process: Error: kill EPERM
+      - [pid=43967] <process did exit: exitCode=null, signal=SIGTRAP>
+      - [pid=43967] starting temporary directories cleanup
+      - [pid=43967] finished temporary directories cleanup
+      - [pid=43967] <gracefully close end>
+
+
+    Error Context: test-results/platform-API-outage-is-exp-24a17-nfidence-in-previous-health-desktop/error-context.md
+
+  3 failed
+    [desktop] › e2e/phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login 
+    [desktop] › e2e/platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap 
+    [desktop] › e2e/platform.spec.ts:34:1 › API outage is explicit and clears confidence in previous health 
+  1 passed (3.6s)
+
++ /usr/local/bin/docker compose --project-name phase0-test-057ba2c4427b46c5b068d745329fb969 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-2kvyrdon/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Stopping 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Stopping 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Stopping 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Stopped 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Removing 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Stopped 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Removing 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-minio-1 Removed 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-postgres-1 Removed 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Stopped 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Removing 
+ Container phase0-test-057ba2c4427b46c5b068d745329fb969-redis-1 Removed 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_postgres Removing 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_redis Removing 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_storage Removing 
+ Network phase0-test-057ba2c4427b46c5b068d745329fb969_default Removing 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_postgres Removed 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_storage Removed 
+ Volume phase0-test-057ba2c4427b46c5b068d745329fb969_test_redis Removed 
+ Network phase0-test-057ba2c4427b46c5b068d745329fb969_default Removed 
+FAILED: Command exited 1; no service acceptance claimed
+make: *** [browser-integration] Error 1

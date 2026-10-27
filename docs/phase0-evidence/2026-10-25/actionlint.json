@@ -1,0 +1,13 @@
+{
+  "id": "actionlint",
+  "command": [
+    ".tools/bin/actionlint",
+    "-color",
+    ".github/workflows/ci.yml"
+  ],
+  "started_utc": "2026-10-25T22:26:05.888916+00:00",
+  "duration_seconds": 1.471,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-25/actionlint.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

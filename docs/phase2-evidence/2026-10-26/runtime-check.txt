@@ -1,0 +1,95 @@
+"""Read-only Phase 2 runtime verification; never print environment values."""
+import json
+import socket
+import subprocess
+from pathlib import Path
+
+import httpx
+
+
+def run(*args: str) -> str:
+    return subprocess.check_output(list(args), text=True).strip()
+
+
+before = json.loads(Path('.cache/phase2/data-services-before.json').read_text())
+for entry in before:
+    actual = json.loads(run('docker', 'inspect', '--format',
+        '{"id":{{json .Id}},"mounts":{{json .Mounts}}}',
+        'ai-trading-research-' + entry['service'] + '-1'))
+    assert actual['id'] == entry['state']['id']
+    assert actual['mounts'] == entry['state']['mounts']
+print('PASSED: existing data container IDs and persistent volume mounts preserved; services resumed.')
+for table, expected in json.loads(Path('.cache/phase2/phase1-records-before.json').read_text()).items():
+    assert table in {'users', 'trading_accounts', 'risk_profiles', 'firm_policies', 'audit_events'}
+    query = f"SELECT count(*), md5(COALESCE(string_agg(row_to_json(t)::text, ',' ORDER BY row_to_json(t)::text),'')) FROM {table} t"
+    assert run('docker', 'compose', 'exec', '-T', 'postgres', 'psql', '-U', 'research', '-d', 'research', '-Atqc', query) == expected
+print('PASSED: existing Phase 1 user/account/risk/policy/audit counts and digests unchanged (baseline empty).')
+
+for service in ('postgres', 'redis', 'minio', 'api', 'web', 'market-worker'):
+    info = json.loads(run('docker', 'inspect', '--format',
+        '{"health":{{json .State.Health.Status}},"ports":{{json .NetworkSettings.Ports}},"root_readonly":{{json .HostConfig.ReadonlyRootfs}},"tmpfs":{{json .HostConfig.Tmpfs}},"memory":{{json .HostConfig.Memory}},"pids":{{json .HostConfig.PidsLimit}},"mounts":{{json .Mounts}}}',
+        'ai-trading-research-' + service + '-1'))
+    assert info['health'] == 'healthy', service
+    for bindings in (info['ports'] or {}).values():
+        for binding in bindings or []:
+            assert binding['HostIp'] == '127.0.0.1'
+            port = int(binding['HostPort'])
+            assert 1024 <= port <= 65535
+            with socket.create_connection(('127.0.0.1', port), timeout=5):
+                pass
+    if service in ('api', 'market-worker'):
+        assert info['root_readonly'] and '/tmp' in info['tmpfs']
+        assert 0 < info['memory'] <= 768 * 1024 * 1024 and info['pids'] == 128
+        assert all('docker.sock' not in mount['Source'] for mount in info['mounts'])
+        env_names = json.loads(run('docker', 'inspect', '--format', '{{json .Config.Env}}',
+            'ai-trading-research-' + service + '-1'))
+        env_names = {item.split('=', 1)[0] for item in env_names}
+        assert not env_names.intersection({'MINIO_ROOT_USER', 'MINIO_ROOT_PASSWORD', 'POSTGRES_PASSWORD', 'MIGRATION_DATABASE_URL'})
+        assert not any(any(token in name for token in ('ALPACA', 'BINANCE', 'MT5_PASSWORD', 'BROKER_PASSWORD', 'BROKER_TOKEN', 'BROKER_API_KEY')) for name in env_names)
+        if service == 'market-worker':
+            assert not any(info['ports'].values()) and 'AUTH_BOOTSTRAP_TOKEN' not in env_names
+    print(f'PASSED: {service} healthy; published bindings are loopback/non-privileged and TCP reachable.')
+print('PASSED: API/worker read-only roots, bounded tmpfs/memory/PIDs, no Docker socket, no root-storage/admin-DB/broker credential variables; worker has no bootstrap token/host port.')
+
+container_code = '''
+import tempfile
+from sqlalchemy import create_engine, text
+from alembic.autogenerate import compare_metadata
+from alembic.migration import MigrationContext
+from apps.api.config import Settings
+from packages.persistence.models import Base
+import packages.market.models
+settings = Settings()
+engine = create_engine(settings.database_url.get_secret_value())
+with engine.connect() as c:
+    assert c.execute(text("SELECT version_num FROM alembic_version")).scalar_one() == '0003_market_data'
+    assert c.execute(text("SELECT rolsuper OR rolcreatedb OR rolcreaterole FROM pg_roles WHERE rolname=current_user")).scalar_one() is False
+    for table, permission in [('audit_events', 'UPDATE'), ('audit_events', 'DELETE'), ('audit_events', 'TRUNCATE'), ('market_datasets', 'DELETE'), ('market_datasets', 'TRUNCATE')]:
+        assert c.execute(text("SELECT has_table_privilege(current_user,:table,:permission)"), {'table': table, 'permission': permission}).scalar_one() is False
+    context = MigrationContext.configure(c, opts={'include_object': lambda obj, name, typ, reflected, compare_to: name != 'platform_metadata'})
+    differences = compare_metadata(context, Base.metadata)
+    assert not differences, [(d[0], str(d[1])[:80]) for d in differences]
+with tempfile.TemporaryFile() as f:
+    f.write(b'x' * (2 * 1024 * 1024))
+    f.seek(0)
+    assert len(f.read()) == 2 * 1024 * 1024
+print('PASSED: runtime DB restricted; schema 0003, ORM/Alembic no drift; audit rewrite/dataset delete+truncate denied; API writable temporary upload spool verified with 2 MiB.')
+'''
+print(run('docker', 'compose', 'exec', '-T', 'api', '/app/.venv/bin/python', '-c', container_code))
+with httpx.Client(timeout=15, trust_env=False) as client:
+    for route in ('/health/ready', '/api/v1/safety', '/api/v1/overview', '/api/v1/auth/status'):
+        response = client.get('http://127.0.0.1:18000' + route)
+        assert response.status_code == 200
+        data = response.json()
+        if route.endswith('/safety'):
+            assert data['live_trading_enabled'] is False and data['order_submission_enabled'] is False and data['generated_code_execution'] is False
+        if route.endswith('/overview'):
+            assert data['phase'] == 2
+        if route.endswith('/auth/status'):
+            assert data == {'initialized': False, 'setup_available': True}
+        print(route, response.status_code, json.dumps(data) if route != '/api/v1/overview' else 'Phase 2')
+    page = client.get('http://127.0.0.1:5173/')
+    assert page.status_code == 200
+    assert "default-src 'self'" in page.headers['content-security-policy']
+    print('PASSED: Web HTTP 200 and CSP header present; browser enforcement/rendering NOT VERIFIED.')
+print('Runtime verification completed; no owner setup, data imports, broker calls or persistent-volume deletion performed.')

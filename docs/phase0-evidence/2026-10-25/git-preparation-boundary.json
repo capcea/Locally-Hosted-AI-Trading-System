@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED_FOR_STAGING_AND_COMMIT",
+  "reason": "Current managed filesystem policy marks this workspace .git as read-only. No alternate Git directory or worktree used to bypass restriction.",
+  "existing_commits": 0,
+  "remotes": [],
+  "remote_target_name": "ai-trading-research-platform",
+  "requested_visibility": "private",
+  "remote_creation_approved": false,
+  "push_approved": false
+}

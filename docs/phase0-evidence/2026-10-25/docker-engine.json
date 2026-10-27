@@ -1,0 +1,14 @@
+{
+  "id": "docker-engine",
+  "command": [
+    "docker",
+    "info",
+    "--format",
+    "{{json .ServerVersion}}"
+  ],
+  "started_utc": "2026-10-25T22:26:05.886847+00:00",
+  "duration_seconds": 0.817,
+  "exit_code": 1,
+  "log": "docs/phase0-evidence/2026-10-25/docker-engine.txt",
+  "sha256": "6fb0f55535fb5a9aa25210774e38f1119eae5d2f218838cc1572338dd415e8e5"
+}

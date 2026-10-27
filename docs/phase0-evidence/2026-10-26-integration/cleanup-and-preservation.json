@@ -1,0 +1,13 @@
+{
+  "id": "cleanup-and-preservation",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json,re,subprocess\nfrom pathlib import Path\nfolder=Path(\"docs/phase0-evidence/2026-10-26-integration\")\ndecoder=json.JSONDecoder()\nbefore=decoder.raw_decode((folder/\"main-before-fixed.txt\").read_text())[0]\nafter=decoder.raw_decode((folder/\"main-after.txt\").read_text())[0]\nassert before == after, \"Development configuration, containers or mounts changed\"\nprint(\"PASSED: development Compose hash, container IDs/start times/health and persistent mounts unchanged.\")\nprojects=set()\nfor name in (\"reproduce-internal-network.txt\",\"reproduce-internal-network-buildx-local.txt\",\"integration.txt\"):\n    projects.update(re.findall(r\"phase0-test-[0-9a-f]{32}\",(folder/name).read_text()))\nassert len(projects)==3\nfor project in sorted(projects):\n    for args in ([\"ps\",\"-a\",\"-q\"],[\"network\",\"ls\",\"-q\"],[\"volume\",\"ls\",\"-q\"]):\n        cmd=[\"docker\",*args,\"--filter\",f\"label=com.docker.compose.project={project}\"]\n        result=subprocess.run(cmd,capture_output=True,text=True,check=True)\n        assert not result.stdout.strip(), (project,args,result.stdout)\n    print(f\"PASSED: {project}: no containers, networks or volumes remain.\")\n"
+  ],
+  "started_utc": "2026-10-26T12:49:07.764845+00:00",
+  "duration_seconds": 0.141,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-integration/cleanup-and-preservation.txt",
+  "sha256": "f2fb87bae42bdcef86db321aea870a66b66adfb09d8e6a5d6e1cda80eb00ba59"
+}

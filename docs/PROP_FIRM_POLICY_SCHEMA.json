@@ -1,0 +1,246 @@
+{
+  "$defs": {
+    "PolicyTerms": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "pattern": "^[A-Z]{3,8}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "timezone": {
+          "title": "Timezone",
+          "type": "string"
+        },
+        "reset_minute": {
+          "default": 0,
+          "maximum": 1439,
+          "minimum": 0,
+          "title": "Reset Minute",
+          "type": "integer"
+        },
+        "reset_fold": {
+          "enum": [
+            "EARLIER",
+            "LATER"
+          ],
+          "title": "Reset Fold",
+          "type": "string"
+        },
+        "daily_loss_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Daily Loss Pct"
+        },
+        "total_loss_pct": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "gt": 0,
+          "title": "Total Loss Pct"
+        },
+        "daily_reference": {
+          "enum": [
+            "BALANCE",
+            "EQUITY",
+            "MAX_BALANCE_EQUITY",
+            "INITIAL"
+          ],
+          "title": "Daily Reference",
+          "type": "string"
+        },
+        "daily_amount_basis": {
+          "enum": [
+            "INITIAL",
+            "DAILY_REFERENCE"
+          ],
+          "title": "Daily Amount Basis",
+          "type": "string"
+        },
+        "total_mode": {
+          "enum": [
+            "STATIC",
+            "TRAILING_BALANCE",
+            "TRAILING_EQUITY"
+          ],
+          "title": "Total Mode",
+          "type": "string"
+        },
+        "trailing_amount_basis": {
+          "enum": [
+            "INITIAL",
+            "HIGH_WATER"
+          ],
+          "title": "Trailing Amount Basis",
+          "type": "string"
+        },
+        "include_floating": {
+          "title": "Include Floating",
+          "type": "boolean"
+        },
+        "include_fees": {
+          "const": true,
+          "default": true,
+          "title": "Include Fees",
+          "type": "boolean"
+        },
+        "allow_overnight": {
+          "title": "Allow Overnight",
+          "type": "boolean"
+        },
+        "allow_weekend": {
+          "title": "Allow Weekend",
+          "type": "boolean"
+        },
+        "automation_permitted": {
+          "title": "Automation Permitted",
+          "type": "boolean"
+        },
+        "max_position_seconds": {
+          "maximum": 604800,
+          "minimum": 1,
+          "title": "Max Position Seconds",
+          "type": "integer"
+        },
+        "permitted_instruments": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Permitted Instruments",
+          "type": "array"
+        },
+        "prohibited_styles": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 50,
+          "title": "Prohibited Styles",
+          "type": "array"
+        },
+        "news_required": {
+          "title": "News Required",
+          "type": "boolean"
+        },
+        "news_scope": {
+          "enum": [
+            "NEW_ENTRIES",
+            "EXPOSURE"
+          ],
+          "title": "News Scope",
+          "type": "string"
+        },
+        "news_before_seconds": {
+          "default": 300,
+          "maximum": 86400,
+          "minimum": 0,
+          "title": "News Before Seconds",
+          "type": "integer"
+        },
+        "news_after_seconds": {
+          "default": 300,
+          "maximum": 86400,
+          "minimum": 0,
+          "title": "News After Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "timezone",
+        "reset_fold",
+        "daily_loss_pct",
+        "total_loss_pct",
+        "daily_reference",
+        "daily_amount_basis",
+        "total_mode",
+        "trailing_amount_basis",
+        "include_floating",
+        "allow_overnight",
+        "allow_weekend",
+        "automation_permitted",
+        "max_position_seconds",
+        "permitted_instruments",
+        "prohibited_styles",
+        "news_required",
+        "news_scope"
+      ],
+      "title": "PolicyTerms",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "enum": [
+        "PERSONAL",
+        "PROP"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "firm_policy_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Firm Policy Id"
+    },
+    "terms": {
+      "$ref": "#/$defs/PolicyTerms"
+    },
+    "effective_at": {
+      "format": "date-time",
+      "title": "Effective At",
+      "type": "string"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "document_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Document Digest",
+      "type": "string"
+    },
+    "source_references": {
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 20,
+      "minItems": 1,
+      "title": "Source References",
+      "type": "array"
+    }
+  },
+  "required": [
+    "kind",
+    "terms",
+    "effective_at",
+    "expires_at",
+    "document_digest",
+    "source_references"
+  ],
+  "title": "PolicyInput",
+  "type": "object"
+}

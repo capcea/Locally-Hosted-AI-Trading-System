@@ -1,0 +1,12 @@
+{
+  "id": "check-phase4",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T03:45:34.059788+00:00",
+  "duration_seconds": 0.137,
+  "exit_code": 2,
+  "log": "docs/phase4-evidence/2026-10-27/check-phase4.txt",
+  "sha256": "e33ce03de6ebce6bb3d66ef8a6ab3f0e9acf944cc2c4821878b770a0c38a2167"
+}

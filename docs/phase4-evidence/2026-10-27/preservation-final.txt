@@ -1,0 +1,4 @@
+PASSED: private backup comparison finds only monotonic idle_expires_at renewal in login_sessions; same sessions, user/token/MFA/expiry/revocation fields unchanged. No session values disclosed.
+PASSED: all 3 data container IDs and volume mounts unchanged.
+PASSED: 29 legacy fingerprints unchanged; any session renewal verified field-by-field against the private backup. Owner/MFA enrollment retained.
+PASSED: development schema is 0005_risk_gateway.

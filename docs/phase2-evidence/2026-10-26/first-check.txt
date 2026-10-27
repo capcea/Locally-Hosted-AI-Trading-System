@@ -1,0 +1,36 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (138 > 100)
+   --> tests/test_market_integration.py:379:101
+    |
+377 | …
+378 | …
+379 | …=1)).isoformat()},{(t + timedelta(minutes=1)).isoformat()},1.1,1.2,1.0,1.15,{number}"
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+380 | …
+381 | …
+    |
+
+E501 Line too long (216 > 100)
+   --> tests/test_market_integration.py:392:101
+    |
+390 | …
+391 | …
+392 | …packages.market.jobs import Worker;w=Worker(Settings.model_validate_json(Path(sys.argv[1]).read_text()));w.once();w.close()"
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+393 | …
+394 | …
+    |
+
+S603 `subprocess` call: check for execution of untrusted input
+   --> tests/test_market_integration.py:393:15
+    |
+391 |     config_path.write_text(json.dumps(config))
+392 |     script = "from pathlib import Path;import sys;from apps.api.config import Settings;from packages.market.jobs import Worker;w=Work…
+393 |     process = subprocess.Popen(
+    |               ^^^^^^^^^^^^^^^^
+394 |         [sys.executable, "-c", script, str(config_path)],
+395 |         stdout=subprocess.DEVNULL,
+    |
+
+Found 3 errors.
+make: *** [lint] Error 1

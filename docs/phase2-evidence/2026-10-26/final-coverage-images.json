@@ -1,0 +1,18 @@
+{
+  "id": "final-coverage-images",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "api",
+    "migrate",
+    "market-worker"
+  ],
+  "started_utc": "2026-10-26T20:26:39.446867+00:00",
+  "duration_seconds": 3.113,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/final-coverage-images.txt",
+  "sha256": "a9b2be72a41c7ec1209f11b29ae91c96c086e6291d194b91b2c132d1060d79d3"
+}

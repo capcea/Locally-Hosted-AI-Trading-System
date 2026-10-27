@@ -1,0 +1,124 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 671B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#2 DONE 0.4s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 293B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [1/8] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#5 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#5 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.4s done
+#5 DONE 0.4s
+
+#6 [2/8] WORKDIR /app
+#6 CACHED
+
+#4 [internal] load build context
+#4 transferring context: 49.31kB 0.0s done
+#4 DONE 0.0s
+
+#7 [3/8] RUN pip install --no-cache-dir uv==0.13.5
+#7 2.039 Collecting uv==0.13.5
+#7 2.195   Downloading uv-0.13.5-py3-none-manylinux_2_28_aarch64.whl.metadata (11 kB)
+#7 2.235 Downloading uv-0.13.5-py3-none-manylinux_2_28_aarch64.whl (16.7 MB)
+#7 2.659    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.7/16.7 MB 49.9 MB/s eta 0:00:00
+#7 2.684 Installing collected packages: uv
+#7 2.900 Successfully installed uv-0.13.5
+#7 2.900 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+#7 3.105 
+#7 3.105 [notice] A new release of pip is available: 25.0.1 -> 26.2.2
+#7 3.105 [notice] To update, run: pip install --upgrade pip
+#7 DONE 3.3s
+
+#8 [4/8] COPY pyproject.toml uv.lock ./
+#8 DONE 0.0s
+
+#9 [5/8] RUN uv sync --frozen --no-dev --no-cache
+#9 0.272 Using CPython 3.12.14 interpreter at: /usr/local/bin/python3
+#9 0.272 Creating virtual environment at: .venv
+#9 0.489 Downloading cryptography (4.5MiB)
+#9 0.492 Downloading psycopg-binary (6.5MiB)
+#9 0.493 Downloading pyarrow (48.5MiB)
+#9 0.495 Downloading sqlalchemy (4.5MiB)
+#9 0.496 Downloading pydantic-core (2.0MiB)
+#9 0.496 Downloading pycryptodome (2.2MiB)
+#9 0.765  Downloaded pydantic-core
+#9 0.790  Downloaded pycryptodome
+#9 0.894  Downloaded cryptography
+#9 0.900  Downloaded sqlalchemy
+#9 0.936  Downloaded psycopg-binary
+#9 2.033  Downloaded pyarrow
+#9 2.034 Prepared 41 packages in 1.75s
+#9 2.091 Installed 41 packages in 56ms
+#9 2.091  + alembic==1.20.1
+#9 2.091  + annotated-doc==0.0.5
+#9 2.091  + annotated-types==0.8.0
+#9 2.091  + anyio==4.15.1
+#9 2.091  + argon2-cffi==25.1.0
+#9 2.091  + argon2-cffi-bindings==26.1.0
+#9 2.091  + arq==0.28.0
+#9 2.091  + certifi==2026.10.23
+#9 2.091  + cffi==2.1.1
+#9 2.091  + click==8.5.0
+#9 2.091  + cryptography==50.0.2
+#9 2.091  + fastapi==0.162.0
+#9 2.091  + h11==0.16.0
+#9 2.091  + hiredis==3.5.0
+#9 2.091  + httpcore==1.0.9
+#9 2.091  + httpx==0.28.1
+#9 2.091  + idna==3.20
+#9 2.091  + mako==1.4.3
+#9 2.091  + markupsafe==3.0.4
+#9 2.091  + minio==7.2.20
+#9 2.091  + opentelemetry-api==1.45.1
+#9 2.091  + psycopg==3.3.6
+#9 2.091  + psycopg-binary==3.3.6
+#9 2.091  + pyarrow==26.0.0
+#9 2.091  + pycparser==3.12
+#9 2.091  + pycryptodome==4.2.0
+#9 2.091  + pydantic==2.14.1
+#9 2.091  + pydantic-core==2.50.1
+#9 2.091  + pydantic-settings==2.16.1
+#9 2.091  + pyjwt==2.15.1
+#9 2.091  + pyotp==2.10.0
+#9 2.091  + python-dotenv==1.2.4
+#9 2.091  + python-multipart==0.0.32
+#9 2.091  + redis==5.3.1
+#9 2.091  + sqlalchemy==2.1.6
+#9 2.091  + starlette==1.10.0
+#9 2.091  + typing-extensions==4.16.0
+#9 2.091  + typing-inspection==0.4.4
+#9 2.091  + urllib3==2.8.0
+#9 2.091  + uvicorn==0.54.0
+#9 2.091  + websockets==17.3
+#9 DONE 2.4s
+
+#10 [6/8] COPY packages packages
+#10 DONE 0.1s
+
+#11 [7/8] COPY services services
+#11 DONE 0.0s
+
+#12 [8/8] RUN useradd --uid 10002 --create-home bridge
+#12 DONE 0.1s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 8.0s done
+#13 exporting manifest sha256:b2d1015f37c154c5e5e6ce4a4693184dcbdca972bce6e407e74bb02c03aa518e 0.0s done
+#13 exporting config sha256:614071fd5a8bdc320db565735bfa0c567bc9b4b30533520a5b5e307068ead46d 0.0s done
+#13 exporting attestation manifest sha256:f59aedc39ba1d17b884c34dc233efc2d993990a5fb24724ad3faf81e22b0ba88 done
+#13 exporting manifest list sha256:81f225de1a4e9c882971e00eec3776c639af85d7f212ec05f38ce13a5ed52ae7 done
+#13 naming to docker.io/library/ai-trading-readonly-bridge:phase3 done
+#13 unpacking to docker.io/library/ai-trading-readonly-bridge:phase3
+#13 unpacking to docker.io/library/ai-trading-readonly-bridge:phase3 1.6s done
+#13 DONE 9.7s

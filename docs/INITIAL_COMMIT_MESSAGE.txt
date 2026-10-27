@@ -1,0 +1,7 @@
+Initialize simulation-only research platform with identity and governance
+
+Add owner/MFA sessions, scoped governance records, transactional audit,
+Romanian management screens and a restricted PostgreSQL runtime role.
+Preserve the Phase 0 stack, typed status API and unconditional execution denial.
+Record passing native tests and the OS-blocked browser acceptance honestly.
+Include no broker integration, live capability or experimental runner.

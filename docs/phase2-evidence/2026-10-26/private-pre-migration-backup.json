@@ -1,0 +1,13 @@
+{
+  "id": "private-pre-migration-backup",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import hashlib,json,os,subprocess\nfrom pathlib import Path\nrows=[]\nfor service in (\"postgres\",\"redis\",\"minio\"):\n    name=\"ai-trading-research-\"+service+\"-1\"\n    data=json.loads(subprocess.check_output([\"docker\",\"inspect\",\"--format\",'{ \"id\":{{json .Id}}, \"started\":{{json .State.StartedAt}}, \"mounts\":{{json .Mounts}} }',name],text=True))\n    rows.append({\"service\":service,\"state\":data})\nPath(\".cache/phase2/data-services-before.json\").write_text(json.dumps(rows,indent=2))\npath=Path(\".cache/phase2/pre-migration.dump\")\nwith path.open(\"xb\") as output:\n    os.chmod(path,0o600)\n    result=subprocess.run([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"pg_dump\",\"-U\",\"research\",\"-d\",\"research\",\"--format=custom\"],stdout=output,stderr=subprocess.PIPE)\nif result.returncode: raise RuntimeError(\"Private database backup failed; migration not authorized to proceed without backup\")\nprint(\"Private backup bytes:\",path.stat().st_size,\"SHA256:\",hashlib.sha256(path.read_bytes()).hexdigest())\nprint(\"Data service IDs/start times/mounts captured without secrets.\")\n"
+  ],
+  "started_utc": "2026-10-26T19:39:24.428396+00:00",
+  "duration_seconds": 0.263,
+  "exit_code": 1,
+  "log": "docs/phase2-evidence/2026-10-26/private-pre-migration-backup.txt",
+  "sha256": "52035bf5c1af9d1e58b3f1483ed08387d828a1ecd4bf25998a06b2e35d2242d8"
+}

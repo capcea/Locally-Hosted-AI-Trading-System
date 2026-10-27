@@ -1,0 +1,14 @@
+{
+  "id": "current-strict-readiness",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "scripts.smoke_demo",
+    "--require-ready"
+  ],
+  "started_utc": "2026-10-26T14:38:24.181171+00:00",
+  "duration_seconds": 0.264,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/current-strict-readiness.txt",
+  "sha256": "bbb41db921966c93c1a04c7d919e5d6016ce2111d18baf76c3ddd82a2cb398a3"
+}

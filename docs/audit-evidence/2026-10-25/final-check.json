@@ -1,0 +1,12 @@
+{
+  "id": "final-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-25T17:00:27.442544+00:00",
+  "duration_seconds": 5.125,
+  "exit_code": 0,
+  "log": "docs/audit-evidence/2026-10-25/final-check.txt",
+  "sha256": "3c4956da56d5e4ed6edc78ff8d60affdb8def0328eafeba96f3a0b4d132ff7f0"
+}

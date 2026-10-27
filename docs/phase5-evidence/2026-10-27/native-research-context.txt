@@ -1,0 +1,651 @@
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#3 DONE 0.7s
+
+#4 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#4 DONE 0.7s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.4s done
+#7 DONE 0.4s
+
+#8 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.4s done
+#8 DONE 0.4s
+
+#9 [build 2/5] WORKDIR /src
+#9 CACHED
+
+#10 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#10 CACHED
+
+#11 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#11 CACHED
+
+#12 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#12 CACHED
+
+#13 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#13 CACHED
+
+#14 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#14 CACHED
+
+#15 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:a39d4b79964f971b326742e4b1cc2b7d6b1f2376c04fc8907a8036b71b7845fb done
+#17 exporting config sha256:fede07f848926a4979691d40fd24e4560d0e22585cb565b007c9bdfc2133e2f2 done
+#17 exporting attestation manifest sha256:c0d15d00a29e3ab9c40f9cf8c36355992d7efaf5193e1b92b1c39c45edbc7c30 done
+#17 exporting manifest list sha256:af0bd58edae65560e397c57b8a1521120610220a46b355ba18e244c531d5fc29 done
+#17 naming to docker.io/library/phase0-test-3232baafc7de43a0a59e8c230840413f-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-3232baafc7de43a0a59e8c230840413f-minio:latest done
+#17 DONE 0.0s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-3232baafc7de43a0a59e8c230840413f-minio Building 
+ Image phase0-test-3232baafc7de43a0a59e8c230840413f-minio Built 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_redis Creating 
+ Network phase0-test-3232baafc7de43a0a59e8c230840413f_default Creating 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_postgres Creating 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_redis Creating 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_postgres Creating 
+ Network phase0-test-3232baafc7de43a0a59e8c230840413f_default Creating 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_storage Creating 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_storage Creating 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_storage Created 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_storage Created 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_redis Created 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_redis Created 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_postgres Created 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_postgres Created 
+ Network phase0-test-3232baafc7de43a0a59e8c230840413f_default Created 
+ Network phase0-test-3232baafc7de43a0a59e8c230840413f_default Created 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Creating 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Creating 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Creating 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Created 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Created 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Created 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Starting 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Starting 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Starting 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Started 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Started 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Started 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Waiting 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Waiting 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Waiting 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Healthy 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Healthy 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-3232baafc7de43a0a59e8c230840413f_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+2c4667eac9b66dbed5672bae77d55c177c5b597b570a3b00302c1ba6137dfa3c
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:56550
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 2c4667eac9b66dbed5672bae77d55c177c5b597b570a3b00302c1ba6137dfa3c
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"56550"}]}
+PASSED: postgres 127.0.0.1:56550 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+cd32b9c29fea3c084c2fe004256ff263467e9cabba8f97288a231bb84b1e1da1
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:56549
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' cd32b9c29fea3c084c2fe004256ff263467e9cabba8f97288a231bb84b1e1da1
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"56549"}]}
+PASSED: redis 127.0.0.1:56549 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+6ce132316f2d67db58be92b46d6c90038c37b35ec24e12d008520aef14846be9
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:56548
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 6ce132316f2d67db58be92b46d6c90038c37b35ec24e12d008520aef14846be9
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"56548"}]}
+PASSED: minio 127.0.0.1:56548 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_research_integration.py -m isolated_services -q
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_actual_event_research_persists_risk_fills_and_reproduces_without_source_cash_change _
+
+market = <test_phase1_integration.System object at 0x109fdef00>
+
+    def test_actual_event_research_persists_risk_fills_and_reproduces_without_source_cash_change(
+        market: System,
+    ) -> None:
+        plan = prepared(market)
+>       run = submitted(market, plan)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_research_integration.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+system = <test_phase1_integration.System object at 0x109fdef00>
+plan = {'key': 'research-5d46406dd5d641e79008893548708714', 'name': 'Explicit synthetic research fixture', 'source_account_id': '78c90454-fdaa-4c9f-ade7-80207f7ffb94', 'strategy': 'EMA_TREND', ...}
+
+    def submitted(system: System, plan: dict[str, Any]) -> dict[str, Any]:
+        response = system.post("/api/v1/research/experiments", plan)
+>       assert response.status_code == 202, response.text
+E       AssertionError: {"detail":"REPLAY_SYMBOL_OR_CALENDAR_UNVERIFIED"}
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_research_integration.py:92: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.224037+00:00", "request_id": "e3130559-9894-4e59-b603-761718502de0", "method": "POST", "status": 201, "duration_ms": 147}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.230357+00:00", "request_id": "63d5f0cc-4d1e-4a05-80d1-7fbb3e13556f", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.245070+00:00", "request_id": "db06fa85-104d-4eba-a7d6-a004efe312d4", "method": "POST", "status": 200, "duration_ms": 13}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.250222+00:00", "request_id": "1e5da601-760d-4a67-bdcd-5bf9c0bc3aea", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.274592+00:00", "request_id": "69d151a3-7dcc-475d-8560-585f6d79359d", "method": "POST", "status": 200, "duration_ms": 23}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.224037+00:00", "request_id": "e3130559-9894-4e59-b603-761718502de0", "method": "POST", "status": 201, "duration_ms": 147}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.230357+00:00", "request_id": "63d5f0cc-4d1e-4a05-80d1-7fbb3e13556f", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.245070+00:00", "request_id": "db06fa85-104d-4eba-a7d6-a004efe312d4", "method": "POST", "status": 200, "duration_ms": 13}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.250222+00:00", "request_id": "1e5da601-760d-4a67-bdcd-5bf9c0bc3aea", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.274592+00:00", "request_id": "69d151a3-7dcc-475d-8560-585f6d79359d", "method": "POST", "status": 200, "duration_ms": 23}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.281124+00:00", "request_id": "6242c081-17e3-4f51-9fde-490e9ae5347d", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.298129+00:00", "request_id": "7ace3338-de40-492a-9f13-82ddb7b73cae", "method": "POST", "status": 201, "duration_ms": 14}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.307013+00:00", "request_id": "7a21717d-b07b-4d27-a5fd-7de5216122a9", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.315751+00:00", "request_id": "e766d06c-3f1a-4680-9682-15edb166086c", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.327668+00:00", "request_id": "f73e2a67-47e9-4077-b347-82282a795b84", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.340989+00:00", "request_id": "2848a5f4-b3d3-4b2c-9d78-9c9e0d2e10a2", "method": "POST", "status": 201, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.346813+00:00", "request_id": "1bcb95ec-bc4d-4afe-b420-4969c5e96cfb", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.362606+00:00", "request_id": "ac028152-c237-4e4c-b0d0-21d960d3c7c5", "method": "POST", "status": 201, "duration_ms": 13}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.369501+00:00", "request_id": "e87816ac-e6c0-4fa6-b690-807226d570ba", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.465670+00:00", "request_id": "1329307d-8455-4997-917e-9300995fe239", "method": "POST", "status": 202, "duration_ms": 93}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.565605+00:00", "request_id": "ad5ae7da-f622-44aa-8091-fd48feb2dd3e", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.571344+00:00", "request_id": "b36676f1-013f-47ad-a508-b29ae6897f32", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.580305+00:00", "request_id": "b0b35a93-2484-41a5-b6d5-ae40142d9c9f", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.584695+00:00", "request_id": "19154ba8-dd77-4c98-bd91-99a2eb57ac21", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.598760+00:00", "request_id": "dd3717ea-3030-42ba-a205-0c55f49fac47", "method": "POST", "status": 201, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.604247+00:00", "request_id": "0d7777de-5201-4ec2-92a3-b0c5bf1ec467", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.609507+00:00", "request_id": "d0e010cf-32e4-4a78-b740-1ef839c41d14", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.630249+00:00", "request_id": "5cb1a22d-babd-473c-b2c3-1c720c17e50d", "method": "POST", "status": 201, "duration_ms": 19}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.641766+00:00", "request_id": "e3ca3682-d962-40b0-9533-20a11f6153ba", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.646240+00:00", "request_id": "52c5fbc6-66da-444d-bd13-ecd3916ca9e9", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.660468+00:00", "request_id": "65210f27-9fcc-405b-a955-7716edec17bb", "method": "POST", "status": 201, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.667257+00:00", "request_id": "62cf99f2-2b94-45c2-afdb-a4f6fecdaf5f", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.671779+00:00", "request_id": "157fed15-aa6a-4b37-9813-8a18d0ce0627", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.682255+00:00", "request_id": "a66ebbd0-0238-403b-b45e-23d7c69da8a3", "method": "POST", "status": 201, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.686812+00:00", "request_id": "95977b62-35ae-4eba-a5fc-e77d7a90fc11", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.697697+00:00", "request_id": "75858078-e1ff-4ee4-83f0-59b016f7474f", "method": "POST", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.702430+00:00", "request_id": "8f48b3c2-77cc-4d09-a1b9-1bd1ca7954f6", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.715144+00:00", "request_id": "424c249d-1b8e-4978-89ad-0b1928751847", "method": "POST", "status": 201, "duration_ms": 11}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.719336+00:00", "request_id": "f6172372-7b98-4231-9138-b38f572c018b", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.737284+00:00", "request_id": "ca635cae-3b0d-4f1d-bdd7-c62ab5da2708", "method": "POST", "status": 200, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.741794+00:00", "request_id": "7e24184d-b9ed-4cd7-bb83-328d3165ad62", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.758561+00:00", "request_id": "bd37dd50-9aa2-41d6-9a06-fc55ba7b367b", "method": "POST", "status": 200, "duration_ms": 15}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.767331+00:00", "request_id": "02df6bdc-1261-430f-8533-860e5667af3d", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.778556+00:00", "request_id": "c1e3b658-85d2-43b1-8dcc-2e0ca083af52", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.783841+00:00", "request_id": "c7834687-fce9-44fe-9ee5-1ba210af7dc2", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:25.797384+00:00", "request_id": "f851dc76-935c-4dba-a7f9-cf561ee7f201", "method": "POST", "status": 409, "duration_ms": 11}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.281124+00:00", "request_id": "6242c081-17e3-4f51-9fde-490e9ae5347d", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.298129+00:00", "request_id": "7ace3338-de40-492a-9f13-82ddb7b73cae", "method": "POST", "status": 201, "duration_ms": 14}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.307013+00:00", "request_id": "7a21717d-b07b-4d27-a5fd-7de5216122a9", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.315751+00:00", "request_id": "e766d06c-3f1a-4680-9682-15edb166086c", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.327668+00:00", "request_id": "f73e2a67-47e9-4077-b347-82282a795b84", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.340989+00:00", "request_id": "2848a5f4-b3d3-4b2c-9d78-9c9e0d2e10a2", "method": "POST", "status": 201, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.346813+00:00", "request_id": "1bcb95ec-bc4d-4afe-b420-4969c5e96cfb", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.362606+00:00", "request_id": "ac028152-c237-4e4c-b0d0-21d960d3c7c5", "method": "POST", "status": 201, "duration_ms": 13}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.369501+00:00", "request_id": "e87816ac-e6c0-4fa6-b690-807226d570ba", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.465670+00:00", "request_id": "1329307d-8455-4997-917e-9300995fe239", "method": "POST", "status": 202, "duration_ms": 93}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.565605+00:00", "request_id": "ad5ae7da-f622-44aa-8091-fd48feb2dd3e", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.571344+00:00", "request_id": "b36676f1-013f-47ad-a508-b29ae6897f32", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.580305+00:00", "request_id": "b0b35a93-2484-41a5-b6d5-ae40142d9c9f", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.584695+00:00", "request_id": "19154ba8-dd77-4c98-bd91-99a2eb57ac21", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.598760+00:00", "request_id": "dd3717ea-3030-42ba-a205-0c55f49fac47", "method": "POST", "status": 201, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.604247+00:00", "request_id": "0d7777de-5201-4ec2-92a3-b0c5bf1ec467", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.609507+00:00", "request_id": "d0e010cf-32e4-4a78-b740-1ef839c41d14", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.630249+00:00", "request_id": "5cb1a22d-babd-473c-b2c3-1c720c17e50d", "method": "POST", "status": 201, "duration_ms": 19}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.641766+00:00", "request_id": "e3ca3682-d962-40b0-9533-20a11f6153ba", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.646240+00:00", "request_id": "52c5fbc6-66da-444d-bd13-ecd3916ca9e9", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.660468+00:00", "request_id": "65210f27-9fcc-405b-a955-7716edec17bb", "method": "POST", "status": 201, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.667257+00:00", "request_id": "62cf99f2-2b94-45c2-afdb-a4f6fecdaf5f", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.671779+00:00", "request_id": "157fed15-aa6a-4b37-9813-8a18d0ce0627", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.682255+00:00", "request_id": "a66ebbd0-0238-403b-b45e-23d7c69da8a3", "method": "POST", "status": 201, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.686812+00:00", "request_id": "95977b62-35ae-4eba-a5fc-e77d7a90fc11", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.697697+00:00", "request_id": "75858078-e1ff-4ee4-83f0-59b016f7474f", "method": "POST", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.702430+00:00", "request_id": "8f48b3c2-77cc-4d09-a1b9-1bd1ca7954f6", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.715144+00:00", "request_id": "424c249d-1b8e-4978-89ad-0b1928751847", "method": "POST", "status": 201, "duration_ms": 11}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.719336+00:00", "request_id": "f6172372-7b98-4231-9138-b38f572c018b", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.737284+00:00", "request_id": "ca635cae-3b0d-4f1d-bdd7-c62ab5da2708", "method": "POST", "status": 200, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.741794+00:00", "request_id": "7e24184d-b9ed-4cd7-bb83-328d3165ad62", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.758561+00:00", "request_id": "bd37dd50-9aa2-41d6-9a06-fc55ba7b367b", "method": "POST", "status": 200, "duration_ms": 15}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.767331+00:00", "request_id": "02df6bdc-1261-430f-8533-860e5667af3d", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.778556+00:00", "request_id": "c1e3b658-85d2-43b1-8dcc-2e0ca083af52", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.783841+00:00", "request_id": "c7834687-fce9-44fe-9ee5-1ba210af7dc2", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:25.797384+00:00", "request_id": "f851dc76-935c-4dba-a7f9-cf561ee7f201", "method": "POST", "status": 409, "duration_ms": 11}
+_ test_exploratory_screen_random_control_and_cancel_never_publish_execution_authority _
+
+market = <test_phase1_integration.System object at 0x10a7c87a0>
+
+    def test_exploratory_screen_random_control_and_cancel_never_publish_execution_authority(
+        market: System,
+    ) -> None:
+        plan = prepared(market)
+        plan["engine"] = "SCREEN"
+        plan["parameters"][0]["random_keep_pct"] = 0
+>       run = submitted(market, plan)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_research_integration.py:145: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+system = <test_phase1_integration.System object at 0x10a7c87a0>
+plan = {'key': 'research-e2c8c4e47381414fa336c2fb47886a9e', 'name': 'Explicit synthetic research fixture', 'source_account_id': '667458ba-f082-4ba4-aeb7-43584ae4039f', 'strategy': 'EMA_TREND', ...}
+
+    def submitted(system: System, plan: dict[str, Any]) -> dict[str, Any]:
+        response = system.post("/api/v1/research/experiments", plan)
+>       assert response.status_code == 202, response.text
+E       AssertionError: {"detail":"REPLAY_SYMBOL_OR_CALENDAR_UNVERIFIED"}
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_research_integration.py:92: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.264890+00:00", "request_id": "9bb0eaed-6771-4167-ad24-0c35ef34969a", "method": "POST", "status": 201, "duration_ms": 145}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.270056+00:00", "request_id": "43886c29-e669-4c8c-9c98-8c8d34591608", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.279830+00:00", "request_id": "e7f60414-ab64-42b6-a432-5e22e883aaa6", "method": "POST", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.285304+00:00", "request_id": "d0bc6e4f-40c7-409e-9334-eb7c9562b921", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.307833+00:00", "request_id": "eabe5b85-6782-48ef-8a66-453aad630893", "method": "POST", "status": 200, "duration_ms": 21}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.264890+00:00", "request_id": "9bb0eaed-6771-4167-ad24-0c35ef34969a", "method": "POST", "status": 201, "duration_ms": 145}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.270056+00:00", "request_id": "43886c29-e669-4c8c-9c98-8c8d34591608", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.279830+00:00", "request_id": "e7f60414-ab64-42b6-a432-5e22e883aaa6", "method": "POST", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.285304+00:00", "request_id": "d0bc6e4f-40c7-409e-9334-eb7c9562b921", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.307833+00:00", "request_id": "eabe5b85-6782-48ef-8a66-453aad630893", "method": "POST", "status": 200, "duration_ms": 21}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.312999+00:00", "request_id": "53d4632d-6db2-4890-a75f-36cbd90f3ace", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.324375+00:00", "request_id": "baa64a25-b654-40e9-9683-749c8de5505d", "method": "POST", "status": 201, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.329136+00:00", "request_id": "aba2cc26-cd83-4b80-bc32-397509202148", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.337161+00:00", "request_id": "65767576-957f-48c6-871d-c02197a2b1b8", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.342328+00:00", "request_id": "2b62886b-d06b-4672-8f27-dc9f2d3ef063", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.350445+00:00", "request_id": "8df1f463-7cb5-43eb-9389-06f81696aee4", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.354632+00:00", "request_id": "a4947ec1-1998-49d5-9613-9bf9d7b69772", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.369357+00:00", "request_id": "9e410f81-a439-475e-b05b-68f19d072846", "method": "POST", "status": 201, "duration_ms": 13}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.375300+00:00", "request_id": "3bfaa69a-eacd-4d98-af78-7ac09127548f", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.407639+00:00", "request_id": "91cd25b3-18e6-4b5d-8b8e-25d9ace1e5ab", "method": "POST", "status": 202, "duration_ms": 30}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.475522+00:00", "request_id": "d73b873a-3cd4-497d-bf21-c499e9d19357", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.480704+00:00", "request_id": "c7ab1214-d7d0-427d-bed2-e22033bc631e", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.488728+00:00", "request_id": "d4eded00-b327-4c0c-96fa-9000bcf967c9", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.493177+00:00", "request_id": "884207cb-45cd-4fb2-8999-21a2e7730c11", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.505917+00:00", "request_id": "768f59d4-796c-4244-9192-70a04285e992", "method": "POST", "status": 201, "duration_ms": 11}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.511224+00:00", "request_id": "c4984752-5cfd-45f1-b8d2-52662032b605", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.515591+00:00", "request_id": "e115c42a-2418-4872-a309-3bd1a75f02e3", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.533768+00:00", "request_id": "e109246b-b1b7-4d75-9ab5-6e76d71acf13", "method": "POST", "status": 201, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.545277+00:00", "request_id": "d8935955-5994-4d0f-becb-963d016872aa", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.549727+00:00", "request_id": "2bb872ee-7e3e-4d82-9b98-ac6a68c625ad", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.562259+00:00", "request_id": "b3826d25-c67e-4f77-a6b5-83d8a7e715a1", "method": "POST", "status": 201, "duration_ms": 11}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.568539+00:00", "request_id": "47cdc77d-4271-4e27-b7aa-c56af251f6d0", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.573260+00:00", "request_id": "c18c59fd-b263-4e13-b40b-8e52574c0192", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.583445+00:00", "request_id": "06d0e55d-f6f0-4934-8a7d-628783553ffa", "method": "POST", "status": 201, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.588743+00:00", "request_id": "a1271797-9b10-4c58-862b-c3e91e4d0c3c", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.603602+00:00", "request_id": "f687b767-a729-4f58-93cd-49e201816c11", "method": "POST", "status": 200, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.609254+00:00", "request_id": "c0bff773-5ed1-4d15-a53c-775edcf27d9e", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.622355+00:00", "request_id": "901db00f-9443-474c-98f0-76ed44efcef0", "method": "POST", "status": 201, "duration_ms": 11}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.627022+00:00", "request_id": "17761729-c811-45d3-b6da-f54794ec43e4", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.644993+00:00", "request_id": "16ff586b-632e-40d0-a75c-83e34513adb1", "method": "POST", "status": 200, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.650085+00:00", "request_id": "a414fd1f-01d0-4093-a2ff-cf64593e6394", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.665661+00:00", "request_id": "d2d60977-c519-4d96-b004-be59c23d0a05", "method": "POST", "status": 200, "duration_ms": 14}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.674241+00:00", "request_id": "a2d59b77-6f78-412f-9d15-5bd94065d5a3", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.685400+00:00", "request_id": "321d0db4-1713-4487-8a5e-5d4d06cc5bf3", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.690287+00:00", "request_id": "087ca533-afe5-47c5-b0d6-28ba8fc413b8", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:26.702895+00:00", "request_id": "d8f243db-7afa-4b64-b042-1de6890494ad", "method": "POST", "status": 409, "duration_ms": 11}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.312999+00:00", "request_id": "53d4632d-6db2-4890-a75f-36cbd90f3ace", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.324375+00:00", "request_id": "baa64a25-b654-40e9-9683-749c8de5505d", "method": "POST", "status": 201, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.329136+00:00", "request_id": "aba2cc26-cd83-4b80-bc32-397509202148", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.337161+00:00", "request_id": "65767576-957f-48c6-871d-c02197a2b1b8", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.342328+00:00", "request_id": "2b62886b-d06b-4672-8f27-dc9f2d3ef063", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.350445+00:00", "request_id": "8df1f463-7cb5-43eb-9389-06f81696aee4", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.354632+00:00", "request_id": "a4947ec1-1998-49d5-9613-9bf9d7b69772", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.369357+00:00", "request_id": "9e410f81-a439-475e-b05b-68f19d072846", "method": "POST", "status": 201, "duration_ms": 13}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.375300+00:00", "request_id": "3bfaa69a-eacd-4d98-af78-7ac09127548f", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.407639+00:00", "request_id": "91cd25b3-18e6-4b5d-8b8e-25d9ace1e5ab", "method": "POST", "status": 202, "duration_ms": 30}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.475522+00:00", "request_id": "d73b873a-3cd4-497d-bf21-c499e9d19357", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.480704+00:00", "request_id": "c7ab1214-d7d0-427d-bed2-e22033bc631e", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.488728+00:00", "request_id": "d4eded00-b327-4c0c-96fa-9000bcf967c9", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.493177+00:00", "request_id": "884207cb-45cd-4fb2-8999-21a2e7730c11", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.505917+00:00", "request_id": "768f59d4-796c-4244-9192-70a04285e992", "method": "POST", "status": 201, "duration_ms": 11}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.511224+00:00", "request_id": "c4984752-5cfd-45f1-b8d2-52662032b605", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.515591+00:00", "request_id": "e115c42a-2418-4872-a309-3bd1a75f02e3", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.533768+00:00", "request_id": "e109246b-b1b7-4d75-9ab5-6e76d71acf13", "method": "POST", "status": 201, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.545277+00:00", "request_id": "d8935955-5994-4d0f-becb-963d016872aa", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.549727+00:00", "request_id": "2bb872ee-7e3e-4d82-9b98-ac6a68c625ad", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.562259+00:00", "request_id": "b3826d25-c67e-4f77-a6b5-83d8a7e715a1", "method": "POST", "status": 201, "duration_ms": 11}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.568539+00:00", "request_id": "47cdc77d-4271-4e27-b7aa-c56af251f6d0", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.573260+00:00", "request_id": "c18c59fd-b263-4e13-b40b-8e52574c0192", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.583445+00:00", "request_id": "06d0e55d-f6f0-4934-8a7d-628783553ffa", "method": "POST", "status": 201, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.588743+00:00", "request_id": "a1271797-9b10-4c58-862b-c3e91e4d0c3c", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.603602+00:00", "request_id": "f687b767-a729-4f58-93cd-49e201816c11", "method": "POST", "status": 200, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.609254+00:00", "request_id": "c0bff773-5ed1-4d15-a53c-775edcf27d9e", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.622355+00:00", "request_id": "901db00f-9443-474c-98f0-76ed44efcef0", "method": "POST", "status": 201, "duration_ms": 11}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.627022+00:00", "request_id": "17761729-c811-45d3-b6da-f54794ec43e4", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.644993+00:00", "request_id": "16ff586b-632e-40d0-a75c-83e34513adb1", "method": "POST", "status": 200, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.650085+00:00", "request_id": "a414fd1f-01d0-4093-a2ff-cf64593e6394", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.665661+00:00", "request_id": "d2d60977-c519-4d96-b004-be59c23d0a05", "method": "POST", "status": 200, "duration_ms": 14}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.674241+00:00", "request_id": "a2d59b77-6f78-412f-9d15-5bd94065d5a3", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.685400+00:00", "request_id": "321d0db4-1713-4487-8a5e-5d4d06cc5bf3", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.690287+00:00", "request_id": "087ca533-afe5-47c5-b0d6-28ba8fc413b8", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:26.702895+00:00", "request_id": "d8f243db-7afa-4b64-b042-1de6890494ad", "method": "POST", "status": 409, "duration_ms": 11}
+_ test_sealed_holdout_blocks_ordinary_reads_and_allows_one_frozen_audited_release _
+
+market = <test_phase1_integration.System object at 0x10ab07200>
+
+    def test_sealed_holdout_blocks_ordinary_reads_and_allows_one_frozen_audited_release(
+        market: System,
+    ) -> None:
+        plan = prepared(market)
+        dataset = plan["datasets"][0]["dataset_id"]
+        seal = market.post(
+            "/api/v1/research/holdouts",
+            {
+                "dataset_id": dataset,
+                "reason": "Separate synthetic final evaluation boundary",
+                "acknowledged_prior_exposure_unknown": True,
+            },
+        )
+        assert seal.status_code == 201, seal.text
+        assert market.client.get(f"/api/v1/market/datasets/{dataset}/provenance").status_code == 403
+        assert market.post("/api/v1/research/experiments", plan).status_code == 409
+        final = {**plan, "phase": "FINAL_HOLDOUT", "key": "final-" + uuid4().hex}
+        released = market.post(
+            f"/api/v1/research/holdouts/{seal.json()['id']}/release",
+            {
+                "experiment": final,
+                "acknowledged_single_final_evaluation": True,
+                "acknowledged_not_certified_untouched": True,
+            },
+        )
+        assert released.status_code == 201, released.text
+        final["holdout_release_id"] = released.json()["id"]
+>       run = submitted(market, final)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_research_integration.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+system = <test_phase1_integration.System object at 0x10ab07200>
+plan = {'key': 'final-cfb5674ec0ac4b39a513f14ec04d5492', 'name': 'Explicit synthetic research fixture', 'source_account_id': 'f15361ea-f7d7-4f4e-a766-e6535e08acc0', 'strategy': 'EMA_TREND', ...}
+
+    def submitted(system: System, plan: dict[str, Any]) -> dict[str, Any]:
+        response = system.post("/api/v1/research/experiments", plan)
+>       assert response.status_code == 202, response.text
+E       AssertionError: {"detail":"REPLAY_SYMBOL_OR_CALENDAR_UNVERIFIED"}
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_research_integration.py:92: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.094588+00:00", "request_id": "c4de57f0-a754-4800-8978-a54748ce37a3", "method": "POST", "status": 201, "duration_ms": 135}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.100227+00:00", "request_id": "113d9648-4bbc-49fa-b9c2-f34a5831269a", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.107298+00:00", "request_id": "d30565d1-2870-4adb-a9af-14133cb39f43", "method": "POST", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.112181+00:00", "request_id": "0e1f8110-e654-41de-b355-2e1b1f80b85f", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.134142+00:00", "request_id": "afc96112-41e5-4691-9b29-fcee204d7059", "method": "POST", "status": 200, "duration_ms": 20}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.094588+00:00", "request_id": "c4de57f0-a754-4800-8978-a54748ce37a3", "method": "POST", "status": 201, "duration_ms": 135}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.100227+00:00", "request_id": "113d9648-4bbc-49fa-b9c2-f34a5831269a", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.107298+00:00", "request_id": "d30565d1-2870-4adb-a9af-14133cb39f43", "method": "POST", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.112181+00:00", "request_id": "0e1f8110-e654-41de-b355-2e1b1f80b85f", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.134142+00:00", "request_id": "afc96112-41e5-4691-9b29-fcee204d7059", "method": "POST", "status": 200, "duration_ms": 20}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.139848+00:00", "request_id": "27f393ed-f758-4421-b093-96799a0a9f6b", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.190253+00:00", "request_id": "6ac9f59a-8863-4765-bfe6-475468d973b5", "method": "POST", "status": 201, "duration_ms": 48}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.195025+00:00", "request_id": "1959dbf1-b76e-4b7b-a5da-3ca1b29cc488", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.202514+00:00", "request_id": "73f8561a-797b-4612-9e80-c63f7534a4f3", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.207435+00:00", "request_id": "1fe45ea5-1d9f-4487-a8ac-63874acc4a2c", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.215887+00:00", "request_id": "3a187897-0775-49b2-87ea-fca077339efe", "method": "POST", "status": 201, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.220263+00:00", "request_id": "e74ec7a9-8642-4638-ba4b-901915aa1ccd", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.232279+00:00", "request_id": "379ce663-0ee5-426f-a052-374df8d2a9af", "method": "POST", "status": 201, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.236829+00:00", "request_id": "4870e2e5-a35a-4ded-9bf3-16a26fd36867", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.259397+00:00", "request_id": "601a6a4c-d0be-4f31-be89-3d7089fec17c", "method": "POST", "status": 202, "duration_ms": 21}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.329004+00:00", "request_id": "0217895d-ebe0-4240-9807-e912198d2eaa", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.333721+00:00", "request_id": "2c454c06-a4bb-4fbd-8276-b949d66b2390", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.341582+00:00", "request_id": "12eb9cb2-8532-4c4f-9e82-3211c509c08b", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.345927+00:00", "request_id": "4a55853d-4d25-4476-b3a5-fb4385b6cabe", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.358194+00:00", "request_id": "4dbeccef-546d-41bb-a407-b4475270e9ee", "method": "POST", "status": 201, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.363978+00:00", "request_id": "796b969f-a75d-4115-a7b1-d17c92ce54b3", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.368456+00:00", "request_id": "85a4626c-5976-4888-80a3-582ea290de15", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.388014+00:00", "request_id": "ca94cc64-da55-4144-a80f-5cdd66d419e1", "method": "POST", "status": 201, "duration_ms": 18}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.399060+00:00", "request_id": "8986f38b-26bb-4a72-b59e-2263a9642651", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.404205+00:00", "request_id": "fc848f4f-96c4-42eb-84d4-fb4267655d5f", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.418359+00:00", "request_id": "c04fbb71-00dc-4314-a51e-198e2deb8c0c", "method": "POST", "status": 201, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.425306+00:00", "request_id": "6d894be1-8065-482c-8a4b-e94f8e6bfffe", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.430207+00:00", "request_id": "ae87d0f7-669b-4b50-8af3-faea193f2b06", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.439791+00:00", "request_id": "1b567643-0110-4d77-8ce6-20d3511ebd7a", "method": "POST", "status": 201, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.444219+00:00", "request_id": "5d2c16f2-3cc2-464d-b005-a260cbd7ca8b", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.454239+00:00", "request_id": "6fa0154f-7f2a-4e5c-8ce9-758f3431796c", "method": "POST", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.459492+00:00", "request_id": "7f3890d0-e66c-4f26-b899-f02fe826f96b", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.471848+00:00", "request_id": "858be3f8-1de1-440e-9bf9-206b61929b67", "method": "POST", "status": 201, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.476810+00:00", "request_id": "801fac05-7053-438d-bf99-1a9e982329a3", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.494281+00:00", "request_id": "e37b2e50-4f3e-42ab-be51-729201ac7176", "method": "POST", "status": 200, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.499111+00:00", "request_id": "24256989-f6fe-493e-bcd3-734de4d19c71", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.514540+00:00", "request_id": "9aab2922-0fd9-4e80-a26c-0c6816c39820", "method": "POST", "status": 200, "duration_ms": 14}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.522557+00:00", "request_id": "e5981073-37f3-4b1e-9b9f-d928e2856a13", "method": "GET", "status": 200, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.533412+00:00", "request_id": "1ac23d44-98f7-4467-b6ee-8bd3c24db5e0", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.538457+00:00", "request_id": "0896f12c-7dfc-4420-bb56-882c9e60aeed", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.546286+00:00", "request_id": "5782f7af-80cf-4523-a4b5-8bfa228dfb86", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.552951+00:00", "request_id": "51bc0254-75b2-46e3-b349-93ebc524cae5", "method": "GET", "status": 403, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.556857+00:00", "request_id": "e774e79a-1edb-470f-a4ab-497273e88333", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.569457+00:00", "request_id": "47c92b3b-b08e-4cd6-a6c0-f44b9564a516", "method": "POST", "status": 409, "duration_ms": 11}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.573901+00:00", "request_id": "55fd1d8a-2f37-45c1-95d8-5849c3d7dc00", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.583552+00:00", "request_id": "3e0337f2-7b40-4c07-a00f-c55337456d1e", "method": "POST", "status": 201, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.588758+00:00", "request_id": "e25f21d2-bfea-442a-9bfb-68332613063d", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.600453+00:00", "request_id": "28164961-3e7d-40e0-a02a-6de1969a6cf6", "method": "POST", "status": 409, "duration_ms": 10}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.139848+00:00", "request_id": "27f393ed-f758-4421-b093-96799a0a9f6b", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.190253+00:00", "request_id": "6ac9f59a-8863-4765-bfe6-475468d973b5", "method": "POST", "status": 201, "duration_ms": 48}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.195025+00:00", "request_id": "1959dbf1-b76e-4b7b-a5da-3ca1b29cc488", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.202514+00:00", "request_id": "73f8561a-797b-4612-9e80-c63f7534a4f3", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.207435+00:00", "request_id": "1fe45ea5-1d9f-4487-a8ac-63874acc4a2c", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.215887+00:00", "request_id": "3a187897-0775-49b2-87ea-fca077339efe", "method": "POST", "status": 201, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.220263+00:00", "request_id": "e74ec7a9-8642-4638-ba4b-901915aa1ccd", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.232279+00:00", "request_id": "379ce663-0ee5-426f-a052-374df8d2a9af", "method": "POST", "status": 201, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.236829+00:00", "request_id": "4870e2e5-a35a-4ded-9bf3-16a26fd36867", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.259397+00:00", "request_id": "601a6a4c-d0be-4f31-be89-3d7089fec17c", "method": "POST", "status": 202, "duration_ms": 21}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.329004+00:00", "request_id": "0217895d-ebe0-4240-9807-e912198d2eaa", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.333721+00:00", "request_id": "2c454c06-a4bb-4fbd-8276-b949d66b2390", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.341582+00:00", "request_id": "12eb9cb2-8532-4c4f-9e82-3211c509c08b", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.345927+00:00", "request_id": "4a55853d-4d25-4476-b3a5-fb4385b6cabe", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.358194+00:00", "request_id": "4dbeccef-546d-41bb-a407-b4475270e9ee", "method": "POST", "status": 201, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.363978+00:00", "request_id": "796b969f-a75d-4115-a7b1-d17c92ce54b3", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.368456+00:00", "request_id": "85a4626c-5976-4888-80a3-582ea290de15", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.388014+00:00", "request_id": "ca94cc64-da55-4144-a80f-5cdd66d419e1", "method": "POST", "status": 201, "duration_ms": 18}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.399060+00:00", "request_id": "8986f38b-26bb-4a72-b59e-2263a9642651", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.404205+00:00", "request_id": "fc848f4f-96c4-42eb-84d4-fb4267655d5f", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.418359+00:00", "request_id": "c04fbb71-00dc-4314-a51e-198e2deb8c0c", "method": "POST", "status": 201, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.425306+00:00", "request_id": "6d894be1-8065-482c-8a4b-e94f8e6bfffe", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.430207+00:00", "request_id": "ae87d0f7-669b-4b50-8af3-faea193f2b06", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.439791+00:00", "request_id": "1b567643-0110-4d77-8ce6-20d3511ebd7a", "method": "POST", "status": 201, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.444219+00:00", "request_id": "5d2c16f2-3cc2-464d-b005-a260cbd7ca8b", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.454239+00:00", "request_id": "6fa0154f-7f2a-4e5c-8ce9-758f3431796c", "method": "POST", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.459492+00:00", "request_id": "7f3890d0-e66c-4f26-b899-f02fe826f96b", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.471848+00:00", "request_id": "858be3f8-1de1-440e-9bf9-206b61929b67", "method": "POST", "status": 201, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.476810+00:00", "request_id": "801fac05-7053-438d-bf99-1a9e982329a3", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.494281+00:00", "request_id": "e37b2e50-4f3e-42ab-be51-729201ac7176", "method": "POST", "status": 200, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.499111+00:00", "request_id": "24256989-f6fe-493e-bcd3-734de4d19c71", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.514540+00:00", "request_id": "9aab2922-0fd9-4e80-a26c-0c6816c39820", "method": "POST", "status": 200, "duration_ms": 14}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.522557+00:00", "request_id": "e5981073-37f3-4b1e-9b9f-d928e2856a13", "method": "GET", "status": 200, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.533412+00:00", "request_id": "1ac23d44-98f7-4467-b6ee-8bd3c24db5e0", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.538457+00:00", "request_id": "0896f12c-7dfc-4420-bb56-882c9e60aeed", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.546286+00:00", "request_id": "5782f7af-80cf-4523-a4b5-8bfa228dfb86", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.552951+00:00", "request_id": "51bc0254-75b2-46e3-b349-93ebc524cae5", "method": "GET", "status": 403, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.556857+00:00", "request_id": "e774e79a-1edb-470f-a4ab-497273e88333", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.569457+00:00", "request_id": "47c92b3b-b08e-4cd6-a6c0-f44b9564a516", "method": "POST", "status": 409, "duration_ms": 11}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.573901+00:00", "request_id": "55fd1d8a-2f37-45c1-95d8-5849c3d7dc00", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.583552+00:00", "request_id": "3e0337f2-7b40-4c07-a00f-c55337456d1e", "method": "POST", "status": 201, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.588758+00:00", "request_id": "e25f21d2-bfea-442a-9bfb-68332613063d", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.600453+00:00", "request_id": "28164961-3e7d-40e0-a02a-6de1969a6cf6", "method": "POST", "status": 409, "duration_ms": 10}
+__ test_walk_forward_selects_on_train_only_and_uses_independent_oos_accounts ___
+
+market = <test_phase1_integration.System object at 0x10a302390>
+
+    def test_walk_forward_selects_on_train_only_and_uses_independent_oos_accounts(
+        market: System,
+    ) -> None:
+        plan = prepared(market)
+        plan.update(phase="VALIDATION", validation_mode="WALK_FORWARD")
+>       run = submitted(market, plan)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_research_integration.py:221: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+system = <test_phase1_integration.System object at 0x10a302390>
+plan = {'key': 'research-3f833ea80e8b460eb52e440a240c3fbd', 'name': 'Explicit synthetic research fixture', 'source_account_id': '21cf210a-2b9f-46b3-b994-baad64a10754', 'strategy': 'EMA_TREND', ...}
+
+    def submitted(system: System, plan: dict[str, Any]) -> dict[str, Any]:
+        response = system.post("/api/v1/research/experiments", plan)
+>       assert response.status_code == 202, response.text
+E       AssertionError: {"detail":"REPLAY_SYMBOL_OR_CALENDAR_UNVERIFIED"}
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_research_integration.py:92: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.982809+00:00", "request_id": "ae3b71d0-6645-412e-a30b-7b8b93556290", "method": "POST", "status": 201, "duration_ms": 152}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.988085+00:00", "request_id": "51ead3f9-2d46-4124-a1a1-37f7f3128fbf", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:27.995246+00:00", "request_id": "22d7ad25-3c88-4d0c-9ee8-55f77b42e240", "method": "POST", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.000075+00:00", "request_id": "2a193ffe-2481-44e5-a227-5841ea20674b", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.023969+00:00", "request_id": "afcfe835-cea3-4c4d-a9ae-ca33f5171c21", "method": "POST", "status": 200, "duration_ms": 22}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.982809+00:00", "request_id": "ae3b71d0-6645-412e-a30b-7b8b93556290", "method": "POST", "status": 201, "duration_ms": 152}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.988085+00:00", "request_id": "51ead3f9-2d46-4124-a1a1-37f7f3128fbf", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:27.995246+00:00", "request_id": "22d7ad25-3c88-4d0c-9ee8-55f77b42e240", "method": "POST", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.000075+00:00", "request_id": "2a193ffe-2481-44e5-a227-5841ea20674b", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.023969+00:00", "request_id": "afcfe835-cea3-4c4d-a9ae-ca33f5171c21", "method": "POST", "status": 200, "duration_ms": 22}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.029029+00:00", "request_id": "d75101bd-6fea-4579-875e-75e08dafc3fe", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.040551+00:00", "request_id": "95331227-7f22-4621-b8dc-66f5c4175391", "method": "POST", "status": 201, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.045041+00:00", "request_id": "978f080a-1df8-49af-8c19-dbb6bb015208", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.052163+00:00", "request_id": "e3cb4bd0-e611-4786-be78-5fbaf70c505e", "method": "POST", "status": 201, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.057124+00:00", "request_id": "02ce4e63-205f-4bd5-9971-6c2156b0a058", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.066164+00:00", "request_id": "57e3fda5-b6a9-403a-88d3-0af2c7571208", "method": "POST", "status": 201, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.070487+00:00", "request_id": "eee103ec-601d-4d84-a2d4-dd630aa3a499", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.082237+00:00", "request_id": "874de320-295f-432d-a7dd-ab6e98bcb7ce", "method": "POST", "status": 201, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.087263+00:00", "request_id": "c19958f9-c13b-43de-bfd8-3aa7af533403", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.109936+00:00", "request_id": "2545f9b1-b9bc-4ba2-bee0-b6d38ac28206", "method": "POST", "status": 202, "duration_ms": 21}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.185045+00:00", "request_id": "71063dba-fd3d-4a4d-9492-592a6bc12578", "method": "GET", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.189802+00:00", "request_id": "0abe1044-e468-440b-a4ea-f4867d44e6c5", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.197883+00:00", "request_id": "eccc347c-50b5-4d3f-8899-9ecfc506d552", "method": "POST", "status": 201, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.204446+00:00", "request_id": "e93b7fc0-f184-44ea-a712-c37aa1c463c9", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.228876+00:00", "request_id": "4556497a-eb7e-4209-a86e-9c6f58a74ce4", "method": "POST", "status": 201, "duration_ms": 18}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.234606+00:00", "request_id": "25f62a1f-8478-4dd4-9e1d-d953eaacbb90", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.239033+00:00", "request_id": "764e7e62-9060-43b6-bcf0-ff4a5df5cf30", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.258730+00:00", "request_id": "0c7167e2-c351-4dcf-a0f6-8a0318d62a59", "method": "POST", "status": 201, "duration_ms": 18}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.270018+00:00", "request_id": "8ef54a7a-bd18-4238-aac1-619f5601dd54", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.274637+00:00", "request_id": "e8395bdd-4177-415e-b3a3-cc3c5d0db465", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.288063+00:00", "request_id": "e8548d3b-a9b3-49c0-a57b-2febf585bc00", "method": "POST", "status": 201, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.294350+00:00", "request_id": "df73db99-17a0-4be4-ab5e-2c168eefc20a", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.298840+00:00", "request_id": "b52045fc-93b8-4a63-a9bc-88981365dafe", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.308149+00:00", "request_id": "5d42e831-88b0-4420-b48c-d3608a337359", "method": "POST", "status": 201, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.312447+00:00", "request_id": "b582e8b4-1680-484b-b5f9-563e98dd7911", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.322331+00:00", "request_id": "d53ee544-7c40-4184-8ba8-d79b8d491b5f", "method": "POST", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.327065+00:00", "request_id": "4b027053-0acd-4d04-9485-06109a78cda9", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.339357+00:00", "request_id": "c56f903b-750b-445b-910d-1fa4f8627f93", "method": "POST", "status": 201, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.344161+00:00", "request_id": "bf217785-3c1d-47f0-913a-963b63839690", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.361711+00:00", "request_id": "39754e45-0539-4567-b3fe-7cbc69ea9237", "method": "POST", "status": 200, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.366422+00:00", "request_id": "57d514a1-eab9-4d96-9ca7-3c485217afc6", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.381366+00:00", "request_id": "4ecac7fa-e818-4cc9-af5c-fa9f4aaebf2b", "method": "POST", "status": 200, "duration_ms": 13}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.390158+00:00", "request_id": "ce3fac08-09d4-48a1-85dd-3dc91eee38e7", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.402230+00:00", "request_id": "a571fa42-71ba-4882-82b3-3c9c0edf782d", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.407674+00:00", "request_id": "f190a6da-0a44-415b-b75a-106e695ddf42", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-27T09:26:28.420181+00:00", "request_id": "03855fa8-afc0-4ca6-ada2-d4063e8407c8", "method": "POST", "status": 409, "duration_ms": 11}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.029029+00:00", "request_id": "d75101bd-6fea-4579-875e-75e08dafc3fe", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.040551+00:00", "request_id": "95331227-7f22-4621-b8dc-66f5c4175391", "method": "POST", "status": 201, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.045041+00:00", "request_id": "978f080a-1df8-49af-8c19-dbb6bb015208", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.052163+00:00", "request_id": "e3cb4bd0-e611-4786-be78-5fbaf70c505e", "method": "POST", "status": 201, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.057124+00:00", "request_id": "02ce4e63-205f-4bd5-9971-6c2156b0a058", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.066164+00:00", "request_id": "57e3fda5-b6a9-403a-88d3-0af2c7571208", "method": "POST", "status": 201, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.070487+00:00", "request_id": "eee103ec-601d-4d84-a2d4-dd630aa3a499", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.082237+00:00", "request_id": "874de320-295f-432d-a7dd-ab6e98bcb7ce", "method": "POST", "status": 201, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.087263+00:00", "request_id": "c19958f9-c13b-43de-bfd8-3aa7af533403", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.109936+00:00", "request_id": "2545f9b1-b9bc-4ba2-bee0-b6d38ac28206", "method": "POST", "status": 202, "duration_ms": 21}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.185045+00:00", "request_id": "71063dba-fd3d-4a4d-9492-592a6bc12578", "method": "GET", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.189802+00:00", "request_id": "0abe1044-e468-440b-a4ea-f4867d44e6c5", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.197883+00:00", "request_id": "eccc347c-50b5-4d3f-8899-9ecfc506d552", "method": "POST", "status": 201, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.204446+00:00", "request_id": "e93b7fc0-f184-44ea-a712-c37aa1c463c9", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.228876+00:00", "request_id": "4556497a-eb7e-4209-a86e-9c6f58a74ce4", "method": "POST", "status": 201, "duration_ms": 18}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.234606+00:00", "request_id": "25f62a1f-8478-4dd4-9e1d-d953eaacbb90", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.239033+00:00", "request_id": "764e7e62-9060-43b6-bcf0-ff4a5df5cf30", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.258730+00:00", "request_id": "0c7167e2-c351-4dcf-a0f6-8a0318d62a59", "method": "POST", "status": 201, "duration_ms": 18}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.270018+00:00", "request_id": "8ef54a7a-bd18-4238-aac1-619f5601dd54", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.274637+00:00", "request_id": "e8395bdd-4177-415e-b3a3-cc3c5d0db465", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.288063+00:00", "request_id": "e8548d3b-a9b3-49c0-a57b-2febf585bc00", "method": "POST", "status": 201, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.294350+00:00", "request_id": "df73db99-17a0-4be4-ab5e-2c168eefc20a", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.298840+00:00", "request_id": "b52045fc-93b8-4a63-a9bc-88981365dafe", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.308149+00:00", "request_id": "5d42e831-88b0-4420-b48c-d3608a337359", "method": "POST", "status": 201, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.312447+00:00", "request_id": "b582e8b4-1680-484b-b5f9-563e98dd7911", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.322331+00:00", "request_id": "d53ee544-7c40-4184-8ba8-d79b8d491b5f", "method": "POST", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.327065+00:00", "request_id": "4b027053-0acd-4d04-9485-06109a78cda9", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.339357+00:00", "request_id": "c56f903b-750b-445b-910d-1fa4f8627f93", "method": "POST", "status": 201, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.344161+00:00", "request_id": "bf217785-3c1d-47f0-913a-963b63839690", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.361711+00:00", "request_id": "39754e45-0539-4567-b3fe-7cbc69ea9237", "method": "POST", "status": 200, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.366422+00:00", "request_id": "57d514a1-eab9-4d96-9ca7-3c485217afc6", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.381366+00:00", "request_id": "4ecac7fa-e818-4cc9-af5c-fa9f4aaebf2b", "method": "POST", "status": 200, "duration_ms": 13}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.390158+00:00", "request_id": "ce3fac08-09d4-48a1-85dd-3dc91eee38e7", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.402230+00:00", "request_id": "a571fa42-71ba-4882-82b3-3c9c0edf782d", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.407674+00:00", "request_id": "f190a6da-0a44-415b-b75a-106e695ddf42", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T09:26:28.420181+00:00", "request_id": "03855fa8-afc0-4ca6-ada2-d4063e8407c8", "method": "POST", "status": 409, "duration_ms": 11}
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_research_integration.py::test_actual_event_research_persists_risk_fills_and_reproduces_without_source_cash_change
+FAILED tests/test_research_integration.py::test_exploratory_screen_random_control_and_cancel_never_publish_execution_authority
+FAILED tests/test_research_integration.py::test_sealed_holdout_blocks_ordinary_reads_and_allows_one_frozen_audited_release
+FAILED tests/test_research_integration.py::test_walk_forward_selects_on_train_only_and_uses_independent_oos_accounts
+4 failed, 1 warning in 3.95s
++ /usr/local/bin/docker compose --project-name phase0-test-3232baafc7de43a0a59e8c230840413f --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-p9_gdamm/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Stopping 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Stopping 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Stopping 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Stopped 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Removing 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-minio-1 Removed 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Stopped 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Removing 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Stopped 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Removing 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-postgres-1 Removed 
+ Container phase0-test-3232baafc7de43a0a59e8c230840413f-redis-1 Removed 
+ Network phase0-test-3232baafc7de43a0a59e8c230840413f_default Removing 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_redis Removing 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_storage Removing 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_postgres Removing 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_storage Removed 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_postgres Removed 
+ Volume phase0-test-3232baafc7de43a0a59e8c230840413f_test_redis Removed 
+ Network phase0-test-3232baafc7de43a0a59e8c230840413f_default Removed 
+FAILED: Command exited 1; no service acceptance claimed

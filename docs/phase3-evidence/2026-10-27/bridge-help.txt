@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/app/services/broker_bridge/app.py", line 20, in <module>
+    from packages.brokers.contracts import BrokerSnapshot, SignedObservation, SnapshotRequest
+  File "/app/packages/brokers/contracts.py", line 8, in <module>
+    from packages.execution.contracts import AccountMode, Contract, Number, Positive, Quote, TradeIntent
+  File "/app/packages/execution/contracts.py", line 17, in <module>
+    from packages.market.contracts import SessionCalendar
+  File "/app/packages/market/contracts.py", line 12, in <module>
+    from apps.api.identity.schemas import Input
+ModuleNotFoundError: No module named 'apps'

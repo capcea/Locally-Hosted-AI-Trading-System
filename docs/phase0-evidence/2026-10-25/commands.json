@@ -1,0 +1,312 @@
+[
+  {
+    "id": "dependency-lock",
+    "command": [
+      ".tools/bin/uv",
+      "lock"
+    ],
+    "started_utc": "2026-10-25T17:57:00.327984+00:00",
+    "duration_seconds": 1.761,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/dependency-lock.txt",
+    "sha256": "b4ac799d78e03e86f84e044278e5855bbc24cdc0a64d6fe2160b89dd05f6b06a"
+  },
+  {
+    "id": "dependency-sync",
+    "command": [
+      ".tools/bin/uv",
+      "sync",
+      "--frozen"
+    ],
+    "started_utc": "2026-10-25T18:00:10.118916+00:00",
+    "duration_seconds": 2.569,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/dependency-sync.txt",
+    "sha256": "2ce64cf918a79bc714e26e78a0bb7c83100fe56631e0a0a24b6d4b15cf14558c"
+  },
+  {
+    "id": "initial-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "started_utc": "2026-10-25T18:00:49.320382+00:00",
+    "duration_seconds": 0.085,
+    "exit_code": 2,
+    "log": "docs/phase0-evidence/2026-10-25/initial-check.txt",
+    "sha256": "3405620c1a28e1342653248737a10eba26d3b89256c6430419c48b1e28558e2b"
+  },
+  {
+    "id": "initial-types",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "mypy"
+    ],
+    "started_utc": "2026-10-25T18:00:49.320386+00:00",
+    "duration_seconds": 0.732,
+    "exit_code": 1,
+    "log": "docs/phase0-evidence/2026-10-25/initial-types.txt",
+    "sha256": "8c602303409494b209477559a2af57a0416d27264c99ba34f909f6a0b224abab"
+  },
+  {
+    "id": "final-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "started_utc": "2026-10-25T18:01:21.654055+00:00",
+    "duration_seconds": 11.775,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/final-check.txt",
+    "sha256": "f353c8f7eeb42fe4e6f84ab68020d15d013d4ee6d3658af7de93e38edea23939"
+  },
+  {
+    "id": "docker-engine",
+    "command": [
+      "docker",
+      "info",
+      "--format",
+      "{{json .ServerVersion}}"
+    ],
+    "started_utc": "2026-10-25T22:26:05.886847+00:00",
+    "duration_seconds": 0.817,
+    "exit_code": 1,
+    "log": "docs/phase0-evidence/2026-10-25/docker-engine.txt",
+    "sha256": "6fb0f55535fb5a9aa25210774e38f1119eae5d2f218838cc1572338dd415e8e5"
+  },
+  {
+    "id": "contracts-check",
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "started_utc": "2026-10-25T22:26:05.886849+00:00",
+    "duration_seconds": 1.333,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/contracts-check.txt",
+    "sha256": "ca38dbfda1e72c635c246922fbc350870a6199043d15fefc1e08f799c6246841"
+  },
+  {
+    "id": "integration",
+    "command": [
+      "make",
+      "integration"
+    ],
+    "started_utc": "2026-10-25T22:26:05.886871+00:00",
+    "duration_seconds": 1.426,
+    "exit_code": 2,
+    "log": "docs/phase0-evidence/2026-10-25/integration.txt",
+    "sha256": "ca0a2537f4267d93302c3a1d6e8640e464f639777734e4508cf1fa101959dc04"
+  },
+  {
+    "id": "isolated-services",
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "started_utc": "2026-10-25T22:26:05.886874+00:00",
+    "duration_seconds": 0.838,
+    "exit_code": 2,
+    "log": "docs/phase0-evidence/2026-10-25/isolated-services.txt",
+    "sha256": "975b15ac831711864e765c4edbeed2b25153f27700e94bf21504bb4270ef0f4c"
+  },
+  {
+    "id": "npm-audit",
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "audit",
+      "--audit-level=high"
+    ],
+    "started_utc": "2026-10-25T22:26:05.888629+00:00",
+    "duration_seconds": 1.467,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/npm-audit.txt",
+    "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+  },
+  {
+    "id": "pip-audit",
+    "command": [
+      ".tools/bin/uv",
+      "run",
+      "--with",
+      "pip-audit==2.10.1",
+      "python",
+      "-m",
+      "pip_audit",
+      "--progress-spinner",
+      "off",
+      "--cache-dir",
+      ".cache/pip-audit"
+    ],
+    "started_utc": "2026-10-25T22:26:05.888867+00:00",
+    "duration_seconds": 8.652,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/pip-audit.txt",
+    "sha256": "15950a68a7ed99c59779717acefdceb3f69cfd31bde67d2c954f2a3cea4d7955"
+  },
+  {
+    "id": "actionlint",
+    "command": [
+      ".tools/bin/actionlint",
+      "-color",
+      ".github/workflows/ci.yml"
+    ],
+    "started_utc": "2026-10-25T22:26:05.888916+00:00",
+    "duration_seconds": 1.471,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/actionlint.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "id": "e2e-list",
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "started_utc": "2026-10-25T22:26:34.585198+00:00",
+    "duration_seconds": 0.477,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/e2e-list.txt",
+    "sha256": "5fb57a665487cd53e44bc656551423d6db98b05d0c000ff4d021e6bf0e07c54d"
+  },
+  {
+    "id": "smoke",
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "started_utc": "2026-10-25T22:27:01.487207+00:00",
+    "duration_seconds": 0.442,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/smoke.txt",
+    "sha256": "0b0627cc2d13ad24a117c02ff3755f034e5967e5cfcf1a2797acf1ed3330bd23"
+  },
+  {
+    "id": "strict-readiness",
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.smoke_demo",
+      "--require-ready"
+    ],
+    "started_utc": "2026-10-25T22:27:01.487443+00:00",
+    "duration_seconds": 0.443,
+    "exit_code": 1,
+    "log": "docs/phase0-evidence/2026-10-25/strict-readiness.txt",
+    "sha256": "1136bf565363f837cf62994f036e75e0573dfaf230decd31ce262a64d046ac6e"
+  },
+  {
+    "id": "repository-check",
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "started_utc": "2026-10-25T22:27:01.493176+00:00",
+    "duration_seconds": 0.141,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/repository-check.txt",
+    "sha256": "99a9210977530a69bb6e0970ba6290ad64868c59de5e5b606c65ac61fd366b75"
+  },
+  {
+    "id": "compose-config",
+    "command": [
+      "docker",
+      "compose",
+      "config",
+      "--quiet"
+    ],
+    "started_utc": "2026-10-25T22:27:01.496494+00:00",
+    "duration_seconds": 0.495,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/compose-config.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "id": "test-compose-config",
+    "command": [
+      "env",
+      "P0_DATABASE_NAME=phase0_syntax_validation",
+      "P0_DATABASE_PASSWORD=SYNTAX_ONLY",
+      "P0_STORAGE_PASSWORD=SYNTAX_ONLY",
+      "docker",
+      "compose",
+      "-f",
+      "compose.test.yaml",
+      "config",
+      "--quiet"
+    ],
+    "started_utc": "2026-10-25T22:27:01.500265+00:00",
+    "duration_seconds": 0.491,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/test-compose-config.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "id": "doctor",
+    "command": [
+      "make",
+      "doctor"
+    ],
+    "started_utc": "2026-10-25T22:27:01.502617+00:00",
+    "duration_seconds": 0.702,
+    "exit_code": 2,
+    "log": "docs/phase0-evidence/2026-10-25/doctor.txt",
+    "sha256": "b6c7fe4c5e5972b639a56d356213ad2d0291b60d85f2312a6d63ab2d9d0f718e"
+  },
+  {
+    "id": "dev-start",
+    "command": [
+      "make",
+      "dev"
+    ],
+    "started_utc": "2026-10-25T22:27:02.255497+00:00",
+    "duration_seconds": 0.27,
+    "exit_code": 2,
+    "log": "docs/phase0-evidence/2026-10-25/dev-start.txt",
+    "sha256": "c7ad77b57de39818487120ff73717d9a7537c028bfe6a15290437c32bb72830d"
+  },
+  {
+    "id": "release-check",
+    "command": [
+      "make",
+      "check"
+    ],
+    "started_utc": "2026-10-25T22:28:29.645570+00:00",
+    "duration_seconds": 5.418,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/release-check.txt",
+    "sha256": "ab66506723ddf566e22b3e9a9f54aa654862b5ee14652d666d4202fe9365423d"
+  },
+  {
+    "id": "secret-scan",
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "started_utc": "2026-10-25T22:29:20.285672+00:00",
+    "duration_seconds": 0.388,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/secret-scan.txt",
+    "sha256": "8305ef699f62114080cff08fe01245f870aebfa7a22109a263e2bb263cececa5"
+  },
+  {
+    "id": "final-secret-scan",
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "started_utc": "2026-10-25T22:34:11.247922+00:00",
+    "duration_seconds": 0.426,
+    "exit_code": 0,
+    "log": "docs/phase0-evidence/2026-10-25/final-secret-scan.txt",
+    "sha256": "5db701a23371154480368a3d818fda4d65d628400d7fd2234f926a2afb4ed83c"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "id": "check-verified",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T21:37:16.289841+00:00",
+  "duration_seconds": 2.596,
+  "exit_code": 2,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/check-verified.txt",
+  "sha256": "8d6ca13d196b4701d13aaacbe72f1f82b940caa45261f74f7ff4d5d2a93a8184"
+}

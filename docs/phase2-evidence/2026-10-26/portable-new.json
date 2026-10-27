@@ -1,0 +1,15 @@
+{
+  "id": "portable-new",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_market_time_quality.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-26T19:31:21.073119+00:00",
+  "duration_seconds": 4.019,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26/portable-new.txt",
+  "sha256": "4a85f0233bc87a616394c3e7880f76ddc911a325cf392c6f6ced0207ee7dbe92"
+}

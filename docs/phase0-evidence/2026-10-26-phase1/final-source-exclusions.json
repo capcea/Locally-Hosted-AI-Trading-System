@@ -1,0 +1,12 @@
+{
+  "id": "final-source-exclusions",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-26T14:55:46.049526+00:00",
+  "duration_seconds": 0.084,
+  "exit_code": 0,
+  "log": "docs/phase0-evidence/2026-10-26-phase1/final-source-exclusions.txt",
+  "sha256": "a73902659e6d25e590574199c943bf1a94877c7efb646b636882ec4651798a8d"
+}

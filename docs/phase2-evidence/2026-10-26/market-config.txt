@@ -1,0 +1,7 @@
+.venv/bin/python -m scripts.bootstrap
+Kept existing .env unchanged.
+.venv/bin/python -m scripts.identity_setup
+Kept existing identity keys unchanged.
+The owner setup token is in private .env; no credentials were printed.
+.venv/bin/python -m scripts.market_setup
+Added private data-service credentials.

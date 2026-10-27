@@ -1,0 +1,12 @@
+{
+  "id": "check-final",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-26T21:37:49.989284+00:00",
+  "duration_seconds": 12.994,
+  "exit_code": 0,
+  "log": "docs/phase2-evidence/2026-10-26-browser-fix/check-final.txt",
+  "sha256": "61484bbed35d9edec6d420e083e6ce0c379ebf3513e422848292712ac6d6f23f"
+}

@@ -1,0 +1,12 @@
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-3cb4a0a22c83459192676370e0c8b8c1 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-qekrolqi/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+ Image phase0-test-3cb4a0a22c83459192676370e0c8b8c1-minio Building 
+failed to update builder last activity time: open /Users/andy/.docker/buildx/activity/.tmp-default2222672290: operation not permitted
+
++ /usr/local/bin/docker compose --project-name phase0-test-3cb4a0a22c83459192676370e0c8b8c1 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-qekrolqi/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+FAILED: Command exited 1; no service acceptance claimed
+make: *** [integration-services] Error 1

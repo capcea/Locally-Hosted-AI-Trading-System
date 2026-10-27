@@ -1,0 +1,29 @@
+import datetime, hashlib, json, os, subprocess, sys, time
+from pathlib import Path
+from dotenv import dotenv_values
+label, *command = sys.argv[1:]
+folder = Path('docs/phase0-evidence/2026-10-26-phase1')
+folder.mkdir(parents=True, exist_ok=True)
+started = datetime.datetime.now(datetime.UTC).isoformat()
+begin = time.monotonic()
+env = os.environ.copy()
+env['UV_CACHE_DIR'] = str(Path('.cache/uv').resolve())
+env['PIP_CACHE_DIR'] = str(Path('.cache/pip').resolve())
+env['npm_config_cache'] = str(Path('.cache/npm').resolve())
+env['PLAYWRIGHT_BROWSERS_PATH'] = str(Path('.cache/ms-playwright').resolve())
+try:
+    result = subprocess.run(command, capture_output=True, text=True, env=env, timeout=1200)
+    output = result.stdout + result.stderr
+    code = result.returncode
+except subprocess.TimeoutExpired as error:
+    output = 'TIMEOUT after 1200 seconds\n' + str(error.stdout or '') + str(error.stderr or '')
+    code = 124
+for key, value in dotenv_values('.env').items():
+    if value and len(value)>12 and any(part in key for part in ('PASSWORD','DATABASE_URL','ROOT_USER','TOKEN','SECRET','ENCRYPTION_KEY')):
+        output = output.replace(value, '[REDACTED]')
+log = folder / f'{label}.txt'
+log.write_text(output)
+record={'id':label,'command':command,'started_utc':started,'duration_seconds':round(time.monotonic()-begin,3),'exit_code':code,'log':str(log),'sha256':hashlib.sha256(output.encode()).hexdigest()}
+(folder / f'{label}.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record))
+print(output[-1800:])

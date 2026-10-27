@@ -1,0 +1,12 @@
+{
+  "id": "baseline-doctor",
+  "command": [
+    "make",
+    "doctor"
+  ],
+  "started_utc": "2026-10-25T16:55:05.138937+00:00",
+  "duration_seconds": 0.795,
+  "exit_code": 2,
+  "log": "docs/audit-evidence/2026-10-25/baseline-doctor.txt",
+  "sha256": "b6c7fe4c5e5972b639a56d356213ad2d0291b60d85f2312a6d63ab2d9d0f718e"
+}

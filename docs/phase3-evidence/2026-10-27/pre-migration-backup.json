@@ -1,0 +1,13 @@
+{
+  "id": "pre-migration-backup",
+  "command": [
+    ".venv/bin/python",
+    "-c",
+    "import json,subprocess,hashlib,re;from pathlib import Path\nfolder=Path(\".cache/phase3\");state={}\nfor service in (\"postgres\",\"redis\",\"minio\"):\n state[service]=json.loads(subprocess.check_output([\"docker\",\"inspect\",\"--format\",\"{\\\"id\\\":{{json .Id}},\\\"mounts\\\":{{json .Mounts}}}\",\"ai-trading-research-\"+service+\"-1\"],text=True))\ntables=subprocess.check_output([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"psql\",\"-U\",\"research\",\"-d\",\"research\",\"-Atqc\",\"SELECT tablename FROM pg_tables WHERE schemaname=\\x27public\\x27 ORDER BY tablename\"],text=True).splitlines()\nrecords={}\nfor table in tables:\n if table==\"alembic_version\":continue\n assert re.fullmatch(\"[a-z_0-9]+\",table)\n query=\"SELECT count(*),md5(COALESCE(string_agg(row_to_json(t)::text,\\x27,\\x27 ORDER BY row_to_json(t)::text),\\x27\\x27)) FROM \"+table+\" t\"\n records[table]=subprocess.check_output([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"psql\",\"-U\",\"research\",\"-d\",\"research\",\"-Atqc\",query],text=True).strip()\n(folder/\"development-before.json\").write_text(json.dumps({\"containers\":state,\"records\":records},indent=2))\np=folder/\"pre-migration.dump\";p.touch(mode=0o600)\nwith p.open(\"wb\") as out:subprocess.run([\"docker\",\"compose\",\"exec\",\"-T\",\"postgres\",\"pg_dump\",\"-U\",\"research\",\"-d\",\"research\",\"-Fc\"],stdout=out,check=True)\np.chmod(0o600)\nprint(\"PASSED: private pre-migration backup\",p.stat().st_size,\"bytes; SHA256\",hashlib.sha256(p.read_bytes()).hexdigest(),\"; legacy table fingerprints\",len(records),\"; data-container IDs/mounts recorded. No data changed.\")"
+  ],
+  "started_utc": "2026-10-26T22:54:15.037329+00:00",
+  "duration_seconds": 3.591,
+  "exit_code": 0,
+  "log": "docs/phase3-evidence/2026-10-27/pre-migration-backup.txt",
+  "sha256": "2f2fbd100b4b4707ca2219c69df725bc038de0e17f05e94e7af000e8afa0ad0b"
+}

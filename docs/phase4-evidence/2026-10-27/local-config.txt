@@ -1,0 +1,1 @@
+PASSED: Compose and pinned Actions syntax. Remote CI NOT RUN.
