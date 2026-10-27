@@ -1,0 +1,17 @@
+{
+  "id": "browser-collection",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "run",
+    "test:e2e",
+    "--",
+    "--list"
+  ],
+  "started_utc": "2026-10-27T12:30:38.251990+00:00",
+  "duration_seconds": 0.76,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/browser-collection.txt",
+  "sha256": "7ea23e94bd80ca11982801f619a9309eb83c18cb52879d2754eccd3f2d02f992"
+}

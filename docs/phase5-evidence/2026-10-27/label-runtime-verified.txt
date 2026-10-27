@@ -1,0 +1,1 @@
+PASSED: healthy Web runs the latest locally built image; served JS contains all four corrected exact labels. API ready200/schema0006/phase5 and external safety flags false. Static asset verification only, not browser acceptance.

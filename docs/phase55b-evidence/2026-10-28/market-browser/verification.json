@@ -1,0 +1,322 @@
+{
+  "date": "2026-10-28",
+  "phase": "5.5B",
+  "acceptance": "BLOCKED / NOT COMPLETE",
+  "owner_evidence": {
+    "file": "apps/web/test-results/phase2-market-data-imports-345a4-nly-available-stored-prices-desktop/error-context.md",
+    "sha256": "a6ba7cae7bc0c9f1e1a176e4f73f7a35aced6f09bb70a1c13d33b44e48efb1f0",
+    "error": "Test timeout of 120000ms exceeded",
+    "locator_available": false,
+    "dom_snapshot_available": false,
+    "original_active_await_known": false,
+    "owner_reported_foundation_passes": 4,
+    "owner_reported_market_failure": 1,
+    "backend_failures_owner_reported": [],
+    "privacy": "No raw auth fields, request bodies, cookies or tokens retained"
+  },
+  "diagnosis": {
+    "original_active_await_known": false,
+    "confirmed_source_defects": [
+      "Hard navigation before asynchronous instrument persistence completes",
+      "Catalog navigation races accepted import job redirect"
+    ],
+    "app_or_backend_defect_proven": false
+  },
+  "commands": [
+    {
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase55b-market-browser/focused_services.py",
+        "tests/test_market_integration.py::test_import_parquet_manifest_immutability_idempotency_and_limits",
+        "tests/test_market_integration.py::test_quality_rejection_and_version_provenance",
+        "tests/test_market_integration.py::test_queue_retries_crash_recovery_cancellation_and_access"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 15.553,
+      "output": ".cache/phase55b-market-browser/market-native.txt",
+      "label": "market-native",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 4.89,
+      "output": ".cache/phase55b-market-browser/check.txt",
+      "label": "check",
+      "status": "FAILED"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 2.227,
+      "output": ".cache/phase55b-market-browser/check-fixed.txt",
+      "label": "check-fixed",
+      "status": "FAILED"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.226,
+      "output": ".cache/phase55b-market-browser/check-final.txt",
+      "label": "check-final",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 238.658,
+      "output": ".cache/phase55b-market-browser/integration.txt",
+      "label": "integration",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.535,
+      "output": ".cache/phase55b-market-browser/contracts.txt",
+      "label": "contracts",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.311,
+      "output": ".cache/phase55b-market-browser/smoke.txt",
+      "label": "smoke",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.718,
+      "output": ".cache/phase55b-market-browser/collection.txt",
+      "label": "collection",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.958,
+      "output": ".cache/phase55b-market-browser/secrets.txt",
+      "label": "secrets",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.059,
+      "output": ".cache/phase55b-market-browser/repository.txt",
+      "label": "repository",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.035,
+      "output": ".cache/phase55b-market-browser/whitespace.txt",
+      "label": "whitespace",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.646,
+      "output": ".cache/phase55b-market-browser/secrets-final.txt",
+      "label": "secrets-final",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.051,
+      "output": ".cache/phase55b-market-browser/repository-final.txt",
+      "label": "repository-final",
+      "status": "PASSED"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.031,
+      "output": ".cache/phase55b-market-browser/whitespace-final.txt",
+      "label": "whitespace-final",
+      "status": "PASSED"
+    }
+  ],
+  "focused_actual_pytest": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_market_integration.py::test_import_parquet_manifest_immutability_idempotency_and_limits",
+      "tests/test_market_integration.py::test_quality_rejection_and_version_provenance",
+      "tests/test_market_integration.py::test_queue_retries_crash_recovery_cancellation_and_access",
+      "-m",
+      "isolated_services",
+      "-q",
+      "-s",
+      "--tb=short"
+    ],
+    "runs": 2,
+    "passed_each_run": 3,
+    "scope": "Unchanged disposable harness; only pytest node selection differs"
+  },
+  "final_results": {
+    "python_portable_passed": 212,
+    "python_portable_deselected": 79,
+    "frontend_passed": 98,
+    "infrastructure_readiness_passed": 1,
+    "isolated_passed_before_restart": 78,
+    "isolated_passed_after_restart": 78,
+    "browser_collected": 20,
+    "browser_executed_here": 0,
+    "strict_readiness_http_status": 200
+  },
+  "assertion_preservation": {
+    "method": "TypeScript AST expression comparison, ignoring formatting only",
+    "original_assertion_statements": 16,
+    "current_assertion_statements": 26,
+    "missing_original_assertions": 0,
+    "global_timeout_unchanged": true
+  },
+  "preservation": {
+    "development_services": 8,
+    "same_service_set": true,
+    "identities_mounts_images_unchanged": true,
+    "health_after": {
+      "api": "healthy",
+      "market-worker": "healthy",
+      "minio": "healthy",
+      "postgres": "healthy",
+      "redis": "healthy",
+      "research-worker": "healthy",
+      "risk-monitor": "healthy",
+      "web": "healthy"
+    },
+    "operational_row_equality_measured": false,
+    "approved_reference_hashes": {
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png": "181f7df4fa1f7e315b0ab793694915f14129fae5dc1ebcbe22a76801a875deb9",
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a"
+    },
+    "approved_references_unchanged": true
+  },
+  "test_cleanup": [
+    {
+      "test_scope": "market-native",
+      "project": "phase0-test-544cb2e8a47145b1a347f3b5388bc6a0",
+      "remaining_resources": {
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0
+      }
+    },
+    {
+      "test_scope": "integration",
+      "project": "phase0-test-5b8c135e173d40d5a9fa8de522c03c49",
+      "remaining_resources": {
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0
+      }
+    }
+  ],
+  "source_scope": {
+    "snapshotted_existing_files": 1067,
+    "changed_existing_files": [
+      "PHASE55B_COMPLETION_REPORT.md",
+      "IMPLEMENTATION_STATUS.md",
+      "apps/web/e2e/phase2.spec.ts"
+    ],
+    "new_public_evidence_directory": "docs/phase55b-evidence/2026-10-28/market-browser"
+  },
+  "browser_gates": [
+    {
+      "command": "env -u E2E_UPDATE_SNAPSHOTS E2E_ONLY_PROJECT=desktop E2E_ONLY_SCENARIO=market make browser-integration",
+      "status": "BLOCKED / NOT EXECUTED",
+      "exit_code": null,
+      "reason": "Existing managed localhost-origin restriction; no browser workaround attempted"
+    },
+    {
+      "command": "env -u E2E_ONLY_PROJECT -u E2E_ONLY_SCENARIO -u E2E_UPDATE_SNAPSHOTS make browser-integration",
+      "status": "BLOCKED / NOT EXECUTED",
+      "exit_code": null,
+      "reason": "Existing managed localhost-origin restriction; no browser workaround attempted"
+    }
+  ],
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation; tests passed"
+  ],
+  "auxiliary_diagnostics": [
+    {
+      "command": [
+        "python3",
+        "process-inspection diagnostic invoking ps -eo pid,etime,comm"
+      ],
+      "exit_code": 1,
+      "result": "Blocked by managed process-inspection permission; no workaround; not an acceptance check",
+      "underlying_ps_exit_code": null
+    },
+    {
+      "check": "Initial whitespace-only assertion comparison",
+      "exit_code": 1,
+      "result": "Two formatting differences; replaced with TypeScript AST comparison, which verifies zero missing original assertions"
+    }
+  ],
+  "safety": {
+    "mode": "SIMULATED",
+    "external_execution": "DENY_ALL",
+    "application_rules_changed": false,
+    "auth_rules_changed": false,
+    "risk_rules_changed": false,
+    "financial_calculations_changed": false,
+    "generated_code_execution_added": false,
+    "development_volumes_deleted": false,
+    "snapshots_rewritten": false,
+    "phase6_started": false
+  }
+}

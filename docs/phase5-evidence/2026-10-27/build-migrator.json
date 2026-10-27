@@ -1,0 +1,16 @@
+{
+  "id": "build-migrator",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "migrate"
+  ],
+  "started_utc": "2026-10-27T12:24:06.706194+00:00",
+  "duration_seconds": 1.809,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/build-migrator.txt",
+  "sha256": "f3a7048869e32e4e1900b7219e895ee4cfd1b58947868d18b25a2caf5c20205c"
+}

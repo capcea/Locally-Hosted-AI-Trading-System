@@ -1,0 +1,12 @@
+{
+  "id": "label-runtime",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/verify_label_bundle.py"
+  ],
+  "started_utc": "2026-10-27T14:40:51.110660+00:00",
+  "duration_seconds": 0.198,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/label-runtime.txt",
+  "sha256": "e090baca8c7b9ba288d93dea50e895ad837301232574ef3ee448477aea5c5a18"
+}

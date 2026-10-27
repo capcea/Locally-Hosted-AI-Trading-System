@@ -159,6 +159,7 @@ class JobView(Input):
     state: str
     attempts: int
     progress_rows: int
+    cancel_requested: bool
     error_code: str | None
     next_attempt_at: datetime
     created_at: datetime

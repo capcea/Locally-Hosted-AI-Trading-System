@@ -1,0 +1,20 @@
+{
+  "id": "start-local-migrated",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180"
+  ],
+  "started_utc": "2026-10-27T12:26:59.602171+00:00",
+  "duration_seconds": 25.168,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/start-local-migrated.txt",
+  "sha256": "3f4c6e9fa300f146bbd4892a4178d6d340b07dc6fe23e14e3b2e9505b1c9d942"
+}

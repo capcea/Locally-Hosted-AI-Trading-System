@@ -1,0 +1,42 @@
+{
+  "status": "OWNER_APPROVED_AND_APPLIED",
+  "scope": "Only home-dark-desktop-darwin.png",
+  "owner_response": "Approve dark desktop reference",
+  "applied_at_utc": "2026-10-27T21:25:59.675301+00:00",
+  "target": "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png",
+  "candidate": "docs/phase55b-evidence/2026-10-27/visual-reference-review/home-dark-desktop-darwin.candidate.png",
+  "old_sha256": "a92222f6683c78800603bb230b1b2b26f98719ca1d6dcab12b204e46d9919e63",
+  "approved_sha256": "181f7df4fa1f7e315b0ab793694915f14129fae5dc1ebcbe22a76801a875deb9",
+  "light_reference_unchanged_sha256": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+  "method": "Exact copy of inspected genuine owner-run PNG; no snapshot rewrite command",
+  "offline_comparison": "Byte-identical to captured actual; zero differing pixels. Not a fresh browser test pass.",
+  "source_tolerances_and_security_unchanged": true,
+  "browser_rerun": "NOT EXECUTED; existing managed-origin restriction",
+  "remaining_gate": "Focused UX followed by all 20 desktop/mobile scenarios without rewriting. Mobile references not approved or generated.",
+  "checks": [
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "scope_verification": {
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png"
+    ],
+    "all_other_starting_files_preserved": true
+  }
+}

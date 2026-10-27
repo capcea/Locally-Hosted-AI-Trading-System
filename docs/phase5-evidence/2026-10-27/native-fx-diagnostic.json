@@ -1,0 +1,12 @@
+{
+  "id": "native-fx-diagnostic",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/focused_fx.py"
+  ],
+  "started_utc": "2026-10-27T12:30:20.853543+00:00",
+  "duration_seconds": 8.38,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/native-fx-diagnostic.txt",
+  "sha256": "90a86011d699857ebfa5758239ee86914f011eea034e208b2fa808935b67bfdc"
+}

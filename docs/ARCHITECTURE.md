@@ -1,4 +1,4 @@
-# Architecture — Phase 3
+# Architecture — Phase 5
 
 The local application remains SIMULATED with DENY_ALL. It now has authenticated, persistent
 management APIs. There is no trading executor, generated-code runner or AI service. Phase 2 imports/ECB reads remain available.
@@ -8,7 +8,7 @@ management APIs. There is no trading executor, generated-code runner or AI servi
 `apps/api/main.py` composes public health/safety/overview routes, `apps/api/identity` and
 `apps/api/governance`. Public status is retained for Phase 0 compatibility; management reads and
 writes require an active PostgreSQL session and completed MFA. The API version stays 0.1.0;
-overview.phase is now 3. The legacy safety.read_only flag describes trading capability, not metadata
+overview.phase is now 5. The legacy safety.read_only flag describes trading capability, not metadata
 writes. Both execution POSTs always return 403 independently of identity and configuration.
 
 Identity uses Argon2id passwords, encrypted TOTP seeds, one-use hashed recovery codes, persistent
@@ -87,11 +87,11 @@ The test harness removes only its own project. Browser tests use separate databa
 
 ## Future boundaries — not implemented
 
-Phase 2 data and Phase 3 simulation/read-only contracts are described below. Independent Decimal risk,
-signed scoped approvals, research VM/microVM isolation, AI scheduling, paper execution and operational
-replay remain later modules. Research must never receive broker/deployment credentials, Docker
-sockets, host mounts or write access to auth/governance/risk/executor code. Ordinary Compose service
-isolation is not proof of a safe hostile-code sandbox. See ../PHASE3_COMPLETION_REPORT.md for acceptance.
+Phases2–5 data, simulated execution/risk and trusted quantitative research are implemented below.
+Broker-capable independent signing/execution, research VM/microVM isolation, AI scheduling, paper
+execution and external operational replay remain future modules. Research must never receive broker/
+deployment credentials, Docker sockets, hostile host mounts or authority to rewrite auth/governance/
+risk/executor code. Ordinary Compose isolation is not proof of a safe hostile-code sandbox.
 
 ## Phase 2 implemented data subsystem
 
@@ -237,3 +237,38 @@ identities, broker-side capability verification, real margin/tradability, host-a
 production restore/load acceptance and generated-code isolation remain separate unimplemented gates.
 RiskCenter/RiskBanner are real Romanian APIs/UI; managed browser acceptance is separately reported.
 See RISK_CALCULATIONS.md, RISK_AUTHORIZATION_PROTOCOL.md and PHASE4_COMPLETION_REPORT.md.
+
+## Phase 5 — trusted quantitative research
+
+The reviewed strategy registry proposes typed signals from available observations. PyArrow screening
+is exploratory; the event engine delegates every simulated submit/fill to the existing journal and
+Phase 4 gateway. Each trial/fold/attempt has its own account/clock and frozen, explicitly approved source
+policy/profile assumptions. Source balances and ordinary journals remain separate. Intrabar ambiguity,
+missing financial evidence, stale quotes, incomplete liquidation and configuration revocation fail closed.
+
+Seven additive 0006 tables retain plans, jobs, hypotheses, results, seals, releases and internal account
+bindings. Durable workers use PostgreSQL leases, fencing and two advisory slots; MinIO stores immutable
+versioned/checksummed results. A cancelled/fenced/crashed attempt cannot publish an accepted partial
+result. Semantic digests compare financial outputs independently of operational UUIDs. Each accepted
+manifest pins the fixed software/runtime, strategy, data, costs, risk and chronology.
+
+The fixed research worker has no public port, broker/admin/bootstrap credentials, Docker socket or
+untrusted code input. It shares the trusted control-plane signing domain; it is not a hostile-code
+sandbox or independent external executor. CPU/memory/PID/time/row/trial/artifact quotas are explicit.
+Owner-MFA APIs protect mutations and one-use frozen holdout release. Ordinary data APIs exclude sealed
+owner intervals and aliases; prior exposure/independent custodian secrecy remain unknown/unimplemented.
+
+See STRATEGY_FRAMEWORK.md, BACKTEST_ENGINE_SPEC.md, STATISTICAL_VALIDATION.md,
+BIAS_AND_LEAKAGE_PREVENTION.md and EXPERIMENT_REPRODUCIBILITY.md. Current exact acceptance:
+[../PHASE5_COMPLETION_REPORT.md](../PHASE5_COMPLETION_REPORT.md). No Phase 6 or paper/live promotion.
+
+## Phase 5.5B — frontend architecture migration
+
+App mounts shared AuthProvider, native typed task routing and scoped safety independently of public
+overview. Five primary destinations replace module peers. Guided research/data reuse existing APIs;
+readable stored results retain exact metrics/provenance and disclose sampled charts. Descriptive and
+enforced risk remain separate. Native consequence dialogs preserve actual owner-MFA/backend checks.
+New owner-scoped import-job lookup and persisted cancel-request read flags are additive only; no new
+financial engine, schema migration or external execution capability. See [frontend details](FRONTEND_UX.md),
+[coverage](ux-migration-coverage.md) and [acceptance report](../PHASE55B_COMPLETION_REPORT.md).
+Current browser and manual accessibility acceptance is BLOCKED, not certified from source inspection.

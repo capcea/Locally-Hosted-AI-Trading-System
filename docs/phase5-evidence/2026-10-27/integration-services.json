@@ -1,0 +1,12 @@
+{
+  "id": "integration-services",
+  "command": [
+    "make",
+    "integration-services"
+  ],
+  "started_utc": "2026-10-27T12:24:07.850653+00:00",
+  "duration_seconds": 322.184,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/integration-services.txt",
+  "sha256": "08c0c4c0f37953c0c4992a512542973670387ef6ee4eaa24496b3d935de7775f"
+}

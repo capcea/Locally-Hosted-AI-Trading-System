@@ -1,0 +1,274 @@
+{
+  "phase": "5.5B",
+  "correction": "Returning-owner MFA verification/navigation synchronization",
+  "date": "2026-10-27",
+  "acceptance": "BLOCKED / NOT COMPLETE",
+  "owner_failure": {
+    "source": "apps/web/test-results/phase1-owner-setup-MFA-per-b5bb6-nt-settings-audit-and-login-desktop/error-context.md",
+    "sha256": "9e74847d079cde7a6e98f14cd455621c043a749a170b05059ea42b7ce858d902",
+    "assertion": "phase1.spec.ts:156, exact persistent account heading missing after relogin",
+    "dom_findings": {
+      "password_login_form_present": true,
+      "full_only_logout_button_present": false,
+      "account_heading_present": false
+    },
+    "original_mfa_response_and_network_abort_not_available": true,
+    "privacy": "Only allowlisted booleans retained; no DOM, passwords, OTPs, seeds, cookies or tokens copied"
+  },
+  "diagnosis": {
+    "observed": "Failed page renders password login, no FULL-only logout or persistent-account heading",
+    "source_defect": "Hard navigation immediately after asynchronous MFA click without awaiting verification response or full session",
+    "supported_mechanism": "Server revokes the challenge cookie when rotating to FULL; a client retaining the old cookie gets 401 while the account still persists",
+    "original_request_outcome": "Unavailable; cannot prove whether the original MFA response was aborted or rejected",
+    "new_boundary": [
+      "POST MFA verification HTTP 200",
+      "Complete response delivery",
+      "Expected FULL owner public fields",
+      "FULL-only UI control",
+      "GET auth/me HTTP 200 and FULL same owner",
+      "Original account heading and reload assertions"
+    ]
+  },
+  "commands": [
+    {
+      "label": "auth-lifecycle",
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase55b-auth-navigation/focused_services.py",
+        "tests/test_phase1_integration.py::test_returning_owner_must_receive_rotated_mfa_cookie_before_reading_persisted_account",
+        "tests/test_phase1_integration.py::test_mfa_replay_login_logout_and_session_rotation"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 15.364,
+      "output": ".cache/phase55b-auth-navigation/auth-lifecycle.txt"
+    },
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.966,
+      "output": ".cache/phase55b-auth-navigation/check.txt"
+    },
+    {
+      "label": "collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.812,
+      "output": ".cache/phase55b-auth-navigation/collection.txt"
+    },
+    {
+      "label": "contracts",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.755,
+      "output": ".cache/phase55b-auth-navigation/contracts.txt"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 237.852,
+      "output": ".cache/phase55b-auth-navigation/integration.txt"
+    },
+    {
+      "label": "repository",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.059,
+      "output": ".cache/phase55b-auth-navigation/repository.txt"
+    },
+    {
+      "label": "secret",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.991,
+      "output": ".cache/phase55b-auth-navigation/secret.txt"
+    },
+    {
+      "label": "smoke",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.208,
+      "output": ".cache/phase55b-auth-navigation/smoke.txt"
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.04,
+      "output": ".cache/phase55b-auth-navigation/whitespace.txt"
+    },
+    {
+      "label": "final-scan",
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.949,
+      "output": ".cache/phase55b-auth-navigation/final-scan.txt"
+    },
+    {
+      "label": "final-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.049,
+      "output": ".cache/phase55b-auth-navigation/final-whitespace.txt"
+    }
+  ],
+  "counts": {
+    "focused_native_before_restart_passed": 2,
+    "focused_native_after_restart_passed": 2,
+    "portable_python_passed": 212,
+    "frontend_unit_passed": 98,
+    "portable_deselected_not_passed": 79,
+    "full_integration_readiness_passed": 1,
+    "full_native_before_restart_passed": 78,
+    "full_native_after_restart_passed": 78,
+    "browser_collected_not_executed": 20
+  },
+  "source_scope": {
+    "baseline_files": 1064,
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/web/e2e/phase1.spec.ts",
+      "tests/test_phase1_integration.py"
+    ],
+    "all_other_starting_files_preserved": true,
+    "approved_visual_reference_hashes_unchanged": {
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png": "181f7df4fa1f7e315b0ab793694915f14129fae5dc1ebcbe22a76801a875deb9"
+    },
+    "application_backend_financial_and_auth_rules_unchanged": true
+  },
+  "development_preservation": {
+    "services": {
+      "api": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "market-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "minio": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "postgres": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "redis": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "research-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "risk-monitor": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "web": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      }
+    },
+    "no_development_resource_recreation": true,
+    "limits": "IDs/mounts verified. Operational row equality was not measured."
+  },
+  "focused_browser": {
+    "command": [
+      "env",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "E2E_ONLY_PROJECT=desktop",
+      "E2E_ONLY_SCENARIO=foundation",
+      "make",
+      "browser-integration"
+    ],
+    "executed": false,
+    "exit_code": null,
+    "status": "BLOCKED by existing managed-origin restriction"
+  },
+  "full_browser": {
+    "command": [
+      "env",
+      "-u",
+      "E2E_ONLY_PROJECT",
+      "-u",
+      "E2E_ONLY_SCENARIO",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "make",
+      "browser-integration"
+    ],
+    "executed": false,
+    "exit_code": null,
+    "required_cases": 20,
+    "status": "NOT RUN / BLOCKED"
+  },
+  "privacy": {
+    "raw_dom_copied": false,
+    "auth_payloads_logged": false,
+    "secrets_logged": false,
+    "screenshots_or_traces_enabled": false
+  },
+  "safety": {
+    "mode": "SIMULATED",
+    "executor": "DENY_ALL",
+    "authentication_rules_changed": false,
+    "financial_logic_changed": false,
+    "risk_gateway_changed": false,
+    "source_provenance_changed": false,
+    "approved_reference_files_changed": false,
+    "development_volumes_deleted": false,
+    "phase_6_started": false
+  }
+}

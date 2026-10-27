@@ -1,0 +1,421 @@
+{
+  "phase": "5.5B",
+  "correction": "Risk-policy HTTP 503",
+  "date": "2026-10-27",
+  "acceptance": "BLOCKED / NOT COMPLETE",
+  "cause": "Owner/account row lock inversion between authenticated requests and the independent monitor. Monitor incident/ledger owner FK lock completes a cycle; PostgreSQL deadlock SQLSTATE40P01 is mapped by the existing SQLAlchemyError handler to HTTP503.",
+  "endpoint": "POST /api/v1/risk/accounts/{account_id}/policies",
+  "owner_artifact": {
+    "source": "apps/web/test-results/ux-workflows-independent-s-ef53e-review-and-viewer-isolation-desktop/error-context.md",
+    "sha256": "f510b58b3d60cb6731a77861e3b5e9740af9bbae2bde578b2add34db7d45eeb5",
+    "scenario": "independent safety, reviewed setup, guarded routes, keyboard review and viewer isolation",
+    "assertion_source": "e2e/risk-workflow.ts:77",
+    "expected_http_status": 201,
+    "received_http_status": 503,
+    "owner_response_body_available": false,
+    "owner_request_id_available": false,
+    "owner_server_log_available": false,
+    "retained_evidence": "Only assertion metadata retained; no DOM, cookies, credentials or raw server log"
+  },
+  "before_fix_native": [
+    {
+      "endpoint": "POST /api/v1/risk/accounts/{account_id}/policies",
+      "status": 503,
+      "request_id": "02366e5f-e29c-4173-9a45-2c20af3f26e4",
+      "monitor": "COMMITTED",
+      "sqlstates": [
+        "40P01"
+      ],
+      "detail": "Persistent service unavailable; no change accepted"
+    }
+  ],
+  "after_fix_native": [
+    {
+      "endpoint": "POST /api/v1/risk/accounts/{account_id}/policies",
+      "status": 201,
+      "request_id": "22136577-9a7d-425e-ada4-76ad5083d893",
+      "monitor": "COMMITTED",
+      "sqlstates": []
+    },
+    {
+      "endpoint": "POST /api/v1/risk/accounts/{account_id}/policies",
+      "status": 201,
+      "request_id": "2bc722db-a3db-463e-bda3-1e02d89c1337",
+      "monitor": "COMMITTED",
+      "sqlstates": []
+    }
+  ],
+  "historical_correlation_limit": "Native reproduction establishes the defect, but the owner original response body/request ID/server log were unavailable. Native request IDs are not attributed to the owner run.",
+  "final_runs": {
+    "risk_units": "risk-unit",
+    "focused_native": "focused-after",
+    "check": "check-fixed",
+    "integration": "integration",
+    "contracts": "contracts",
+    "smoke": "smoke",
+    "secret_scan": "secret-final",
+    "repository_check": "repository-final",
+    "whitespace": "whitespace",
+    "collection_only": "browser-collection",
+    "local_build": "local-build",
+    "local_refresh": "local-refresh",
+    "runtime": "runtime-api",
+    "post_artifact_secret_and_repository_scan": "final-artifact-scan"
+  },
+  "commands": [
+    {
+      "label": "browser-collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.655,
+      "output": ".cache/phase55b-policy503/browser-collection.txt"
+    },
+    {
+      "label": "check-fixed",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.635,
+      "output": ".cache/phase55b-policy503/check-fixed.txt"
+    },
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 2.764,
+      "output": ".cache/phase55b-policy503/check.txt"
+    },
+    {
+      "label": "contracts",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.583,
+      "output": ".cache/phase55b-policy503/contracts.txt"
+    },
+    {
+      "label": "focused-after",
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase55b-policy503/focused_services.py",
+        "tests/test_risk_integration.py::test_policy_creation_concurrent_with_independent_monitor_preserves_both_transactions",
+        "tests/test_risk_integration.py::test_exact_prop_program_policy_and_stricter_verified_caps"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.754,
+      "output": ".cache/phase55b-policy503/focused-after.txt"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 235.294,
+      "output": ".cache/phase55b-policy503/integration.txt"
+    },
+    {
+      "label": "local-build",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "api",
+        "risk-monitor"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.413,
+      "output": ".cache/phase55b-policy503/local-build.txt"
+    },
+    {
+      "label": "local-refresh",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "api",
+        "risk-monitor"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 12.478,
+      "output": ".cache/phase55b-policy503/local-refresh.txt"
+    },
+    {
+      "label": "repository-final",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.076,
+      "output": ".cache/phase55b-policy503/repository-final.txt"
+    },
+    {
+      "label": "repository",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.103,
+      "output": ".cache/phase55b-policy503/repository.txt"
+    },
+    {
+      "label": "reproduce-before",
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase55b-policy503/focused_services.py",
+        "tests/test_risk_integration.py::test_policy_creation_concurrent_with_independent_monitor_preserves_both_transactions"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 9.652,
+      "output": ".cache/phase55b-policy503/reproduce-before.txt"
+    },
+    {
+      "label": "risk-unit",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_risk_math.py",
+        "tests/test_health.py",
+        "tests/test_integration_guards.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.777,
+      "output": ".cache/phase55b-policy503/risk-unit.txt"
+    },
+    {
+      "label": "runtime-api",
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase55b/verify_runtime.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.487,
+      "output": ".cache/phase55b-policy503/runtime-api.txt"
+    },
+    {
+      "label": "secret-final",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.911,
+      "output": ".cache/phase55b-policy503/secret-final.txt"
+    },
+    {
+      "label": "secret",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.967,
+      "output": ".cache/phase55b-policy503/secret.txt"
+    },
+    {
+      "label": "smoke",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.493,
+      "output": ".cache/phase55b-policy503/smoke.txt"
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.065,
+      "output": ".cache/phase55b-policy503/whitespace.txt"
+    },
+    {
+      "label": "final-artifact-scan",
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.891,
+      "output": ".cache/phase55b-policy503/final-artifact-scan.txt"
+    }
+  ],
+  "other_command_results": [
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "e2e/risk-workflow.ts"
+      ],
+      "exit_code": 2,
+      "reason": "Wrong relative source path; no matching file."
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "exec",
+        "--",
+        "prettier",
+        "--write",
+        "apps/web/e2e/risk-workflow.ts"
+      ],
+      "exit_code": 0,
+      "reason": "Corrected repository-relative path; unchanged formatting."
+    }
+  ],
+  "test_counts": {
+    "risk_portable_passed": 72,
+    "focused_native_before_restart": 4,
+    "focused_native_after_restart": 4,
+    "full_portable_python_passed": 212,
+    "frontend_unit_passed": 94,
+    "portable_deselected_not_passed": 78,
+    "full_integration_readiness_passed": 1,
+    "full_native_before_restart_passed": 77,
+    "full_native_after_restart_passed": 77,
+    "browser_collection_only": 20
+  },
+  "source_scope": {
+    "baseline_files": 1043,
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/api/main.py",
+      "apps/web/e2e/risk-workflow.ts",
+      "scripts/browser_acceptance.py",
+      "scripts/risk_monitor.py",
+      "tests/test_health.py",
+      "tests/test_integration_guards.py",
+      "tests/test_risk_integration.py"
+    ],
+    "unexpected_changes": [],
+    "new_files": [
+      "docs/phase55b-evidence/2026-10-27/policy-503/README.md",
+      "docs/phase55b-evidence/2026-10-27/policy-503/owner-failure-summary.json",
+      "docs/phase55b-evidence/2026-10-27/policy-503/verification.json"
+    ],
+    "unrelated_existing_files_unchanged": 1034,
+    "risk_routes_schemas_ui_math_migrations_compose_unchanged": true
+  },
+  "local_service_preservation": {
+    "protected_services": {
+      "postgres": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "redis": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "minio": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "market-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "research-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "web": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      }
+    },
+    "intentional_refresh": [
+      "api",
+      "risk-monitor"
+    ],
+    "api_health": "healthy",
+    "risk_monitor_health": "healthy",
+    "limits": "IDs/mounts verified; operational rows can evolve and byte-for-byte row equality was not measured. No migration or development volume removal."
+  },
+  "runtime": {
+    "readiness": 200,
+    "served_openapi_matches_source": true,
+    "unauthenticated_job_read": 401,
+    "mode": "SIMULATED",
+    "executor": "DENY_ALL",
+    "live_orders_generated_code": false
+  },
+  "focused_browser": {
+    "command": [
+      "env",
+      "E2E_ONLY_PROJECT=desktop",
+      "E2E_ONLY_SCENARIO=ux",
+      "make",
+      "browser-integration"
+    ],
+    "status": "BLOCKED / NOT EXECUTED",
+    "executed": false,
+    "exit_code": null,
+    "reason": "Existing managed-browser origin restriction; no CLI or alternate browser workaround."
+  },
+  "full_browser": {
+    "command": [
+      "env",
+      "-u",
+      "E2E_ONLY_PROJECT",
+      "-u",
+      "E2E_ONLY_SCENARIO",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "make",
+      "browser-integration"
+    ],
+    "status": "NOT RUN / BLOCKED",
+    "executed": false,
+    "exit_code": null,
+    "required_cases": 20
+  },
+  "visual_baselines": "Not modified or generated; owner actual failure PNGs are not accepted baselines or agent visual inspection.",
+  "safety": "SIMULATED / DENY_ALL. Owner MFA, CSRF, RBAC, ownership and policy provenance preserved. No financial calculations, DB schema, development volumes, external order capabilities or Phase 6 changes."
+}

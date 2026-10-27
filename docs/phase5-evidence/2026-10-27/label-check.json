@@ -1,0 +1,12 @@
+{
+  "id": "label-check",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T14:36:51.190435+00:00",
+  "duration_seconds": 10.517,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/label-check.txt",
+  "sha256": "e476fb257aa3e78382531c0c7c99ba877c6de9e8e15510658790f1911a6fbfa8"
+}

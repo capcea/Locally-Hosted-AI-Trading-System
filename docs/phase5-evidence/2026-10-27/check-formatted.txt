@@ -1,0 +1,24 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+195 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+.venv/bin/python -m mypy
+Success: no issues found in 131 source files
+npm --prefix apps/web run typecheck
+
+> trading-research-web@0.1.0 typecheck
+> tsc -b --pretty false
+
+src/StrategyLab.tsx(250,9): error TS2322: Type '{ fast: number; slow: number; lookback: number; threshold: string | number; stop_ticks: number; reward_multiple: string | number; volume: string | number; cross_asset_confirmation: boolean; ... 12 more ...; random_keep_pct: number; }[] | { ...; }[]' is not assignable to type '{ fast: number; slow: number; lookback: number; threshold: string | number; stop_ticks: number; reward_multiple: string | number; volume: string | number; cross_asset_confirmation: boolean; ... 12 more ...; random_keep_pct: number; }[]'.
+  Type '{ fast: number; slow: number; lookback: number; volume: string; stop_ticks: number; reward_multiple: string; direction: "LONG_ONLY" | "SHORT_ONLY" | "LONG_SHORT"; entry_order_type: "MARKET" | "LIMIT" | "STOP"; ... 12 more ...; random_keep_pct: number; }[]' is not assignable to type '{ fast: number; slow: number; lookback: number; threshold: string | number; stop_ticks: number; reward_multiple: string | number; volume: string | number; cross_asset_confirmation: boolean; ... 12 more ...; random_keep_pct: number; }[]'.
+    Type '{ fast: number; slow: number; lookback: number; volume: string; stop_ticks: number; reward_multiple: string; direction: Plan["parameters"][number]["direction"]; entry_order_type: Plan["parameters"][number]["entry_order_type"]; ... 12 more ...; random_keep_pct: number; }' is not assignable to type '{ fast: number; slow: number; lookback: number; threshold: string | number; stop_ticks: number; reward_multiple: string | number; volume: string | number; cross_asset_confirmation: boolean; ... 12 more ...; random_keep_pct: number; }'.
+      Types of property 'confirmation_direction' are incompatible.
+        Type 'string' is not assignable to type '"INVERSE" | "SAME"'.
+make: *** [typecheck] Error 1

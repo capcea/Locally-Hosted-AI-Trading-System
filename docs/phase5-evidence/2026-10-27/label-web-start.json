@@ -1,0 +1,20 @@
+{
+  "id": "label-web-start",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--no-deps",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "60",
+    "web"
+  ],
+  "started_utc": "2026-10-27T14:40:23.727602+00:00",
+  "duration_seconds": 11.123,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/label-web-start.txt",
+  "sha256": "544a20d9b209692a1f37f50dcb440e60cd747fea0448f706d8b075f83f16fbf4"
+}

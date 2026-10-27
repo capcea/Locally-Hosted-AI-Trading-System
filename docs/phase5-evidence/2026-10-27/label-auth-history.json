@@ -1,0 +1,22 @@
+{
+  "id": "label-auth-history",
+  "command": [
+    "docker",
+    "compose",
+    "exec",
+    "-T",
+    "postgres",
+    "psql",
+    "-U",
+    "research",
+    "-d",
+    "research",
+    "-Atqc",
+    "SELECT event_type,timestamp FROM audit_events WHERE sequence > 5 ORDER BY sequence"
+  ],
+  "started_utc": "2026-10-27T14:44:06.961441+00:00",
+  "duration_seconds": 0.164,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/label-auth-history.txt",
+  "sha256": "6612ced9cbecffd6fb8be44f6a51660f2793f876b07f5cb97b7d982ba1aeddff"
+}

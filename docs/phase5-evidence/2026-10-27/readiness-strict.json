@@ -1,0 +1,14 @@
+{
+  "id": "readiness-strict",
+  "command": [
+    "curl",
+    "--fail",
+    "--silent",
+    "http://127.0.0.1:18000/health/ready"
+  ],
+  "started_utc": "2026-10-27T12:39:44.271698+00:00",
+  "duration_seconds": 0.054,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/readiness-strict.txt",
+  "sha256": "195fc4a14f71acbdc141abf706918868a703da314046c383eda9015fffea6333"
+}

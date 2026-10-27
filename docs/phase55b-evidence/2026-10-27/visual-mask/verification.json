@@ -1,0 +1,347 @@
+{
+  "phase": "5.5B",
+  "correction": "Public clock visual-mask geometry",
+  "date": "2026-10-27",
+  "acceptance": "NOT COMPLETE; browser BLOCKED and reference review REQUIRED",
+  "owner_report": {
+    "functional_ux": "Appears passed, owner-reported",
+    "visual": "Failed, 84 pixels",
+    "backend_failures": "Owner reported empty array",
+    "browser_launched": true,
+    "agent_executed": false
+  },
+  "directly_inspected_artifacts": [
+    "owner-home-light-expected.png",
+    "owner-home-light-actual.png",
+    "owner-home-light-diff.png"
+  ],
+  "pixel_analysis": {
+    "dimensions": {
+      "expected": [
+        1280,
+        1047
+      ],
+      "actual": [
+        1280,
+        1047
+      ]
+    },
+    "different_rgba_pixels": 84,
+    "difference_bounds_inclusive": {
+      "x_min": 1189,
+      "y_min": 962,
+      "x_max": 1192,
+      "y_max": 982
+    },
+    "changed_colors": {
+      "245,247,250,255 -> 255,0,255,255": 84
+    },
+    "masks": {
+      "expected": {
+        "pixels": 1155,
+        "bounds_inclusive": {
+          "x_min": 1193,
+          "y_min": 962,
+          "x_max": 1247,
+          "y_max": 982
+        }
+      },
+      "actual": {
+        "pixels": 1239,
+        "bounds_inclusive": {
+          "x_min": 1189,
+          "y_min": 962,
+          "x_max": 1247,
+          "y_max": 982
+        }
+      }
+    },
+    "baseline_matches_expected": true,
+    "sha256": {
+      "expected": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4",
+      "actual": "d0c4a17d774eeb630c1191c8906a978eba36d761b02178b8b3b7f4b9671a4022",
+      "diff": "c68a873ca526177b3f025336ba38bd59a101e87b809678adccc1c39b49f6bc2a",
+      "baseline": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4"
+    }
+  },
+  "cause": "Intrinsic proportional timestamp width varies; Playwright paints the time element bounding box, so the mask changes width between runs. All other supplied image pixels are byte-identical.",
+  "fix": "Actual semantic observation time formatted as padded Romanian HH:MM:SS/h23 in fixed 8ch tabular slot. No fake clock or API data. Added real-refresh dimension assertion; unchanged mask scope and visual tolerance.",
+  "commands": [
+    {
+      "label": "build-web",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.263,
+      "output": ".cache/phase55b-visual/build-web.txt"
+    },
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.34,
+      "output": ".cache/phase55b-visual/check.txt"
+    },
+    {
+      "label": "collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.63,
+      "output": ".cache/phase55b-visual/collection.txt"
+    },
+    {
+      "label": "contracts",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.044,
+      "output": ".cache/phase55b-visual/contracts.txt"
+    },
+    {
+      "label": "refresh-web",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.001,
+      "output": ".cache/phase55b-visual/refresh-web.txt"
+    },
+    {
+      "label": "repository",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.143,
+      "output": ".cache/phase55b-visual/repository.txt"
+    },
+    {
+      "label": "secret",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.954,
+      "output": ".cache/phase55b-visual/secret.txt"
+    },
+    {
+      "label": "smoke",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.315,
+      "output": ".cache/phase55b-visual/smoke.txt"
+    },
+    {
+      "label": "unit-clock",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "test",
+        "--",
+        "src/ui/PublicReadTime.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.461,
+      "output": ".cache/phase55b-visual/unit-clock.txt"
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.091,
+      "output": ".cache/phase55b-visual/whitespace.txt"
+    },
+    {
+      "label": "final-scan",
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.648,
+      "output": ".cache/phase55b-visual/final-scan.txt"
+    },
+    {
+      "label": "final-scan-fixed",
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.924,
+      "output": ".cache/phase55b-visual/final-scan-fixed.txt"
+    }
+  ],
+  "test_counts": {
+    "clock_unit_passed": 4,
+    "portable_python_passed": 212,
+    "frontend_unit_passed": 98,
+    "portable_service_deselected_not_passed": 78,
+    "browser_collected_not_executed": 20
+  },
+  "focused_browser": {
+    "command": [
+      "env",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "E2E_ONLY_PROJECT=desktop",
+      "E2E_ONLY_SCENARIO=ux",
+      "make",
+      "browser-integration"
+    ],
+    "executed": false,
+    "exit_code": null,
+    "status": "BLOCKED by existing managed-origin restriction; no workaround"
+  },
+  "full_browser": {
+    "command": [
+      "env",
+      "-u",
+      "E2E_ONLY_PROJECT",
+      "-u",
+      "E2E_ONLY_SCENARIO",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "make",
+      "browser-integration"
+    ],
+    "executed": false,
+    "exit_code": null,
+    "status": "NOT RUN / BLOCKED",
+    "required_cases": 20
+  },
+  "source_scope": {
+    "baseline_files": 1046,
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/web/e2e/ux-visual.spec.ts",
+      "apps/web/src/App.tsx",
+      "apps/web/src/ui/product.css",
+      "docs/FRONTEND_UX.md"
+    ],
+    "unrelated_files_preserved": 1040,
+    "backend_risk_financial_auth_migrations_compose_unchanged": true
+  },
+  "reference_approval": {
+    "status": "REQUIRED after genuine post-fix image inspection",
+    "baseline_files_modified": false,
+    "owner_artifacts_unchanged": true,
+    "post_fix_rendering_inspected": false,
+    "snapshots_generated": false,
+    "available_baselines_at_start": [
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png",
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png"
+    ],
+    "baseline_and_owner_artifact_sha256": {
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4",
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png": "a92222f6683c78800603bb230b1b2b26f98719ca1d6dcab12b204e46d9919e63",
+      "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-diff.png": "c68a873ca526177b3f025336ba38bd59a101e87b809678adccc1c39b49f6bc2a",
+      "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-expected.png": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4",
+      "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-actual.png": "d0c4a17d774eeb630c1191c8906a978eba36d761b02178b8b3b7f4b9671a4022",
+      "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/error-context.md": "a61a71053f51efe5a7dedf26ffb1d27e89389f15beb7dfa15dff734c007ece54"
+    }
+  },
+  "development_services": {
+    "protected": {
+      "postgres": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "redis": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "minio": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "api": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "market-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "research-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "risk-monitor": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      }
+    },
+    "web_intentionally_refreshed_and_healthy": true,
+    "limits": "Container IDs/mounts checked; operational DB row equality was not measured. No migrations or persistent-volume deletion."
+  },
+  "safety": {
+    "mode": "SIMULATED",
+    "executor": "DENY_ALL",
+    "external_order_path_added": false,
+    "phase_6_started": false,
+    "owner_mfa_preserved": true,
+    "csrf_rbac_preserved": true,
+    "risk_gateway_preserved": true,
+    "data_provenance_preserved": true,
+    "backend_unchanged": true
+  },
+  "scan_correction": {
+    "finding": "generic-api-key false positive in newly generated safety prose; public permission labels were parsed as a token",
+    "resolution": "Represented safety state as typed boolean fields; no scanner allowlist, exclusion or threshold change",
+    "diagnostic_scan_exit_code": 1,
+    "diagnostic_rule": "generic-api-key",
+    "diagnostic_file": "verification.json",
+    "diagnostic_line": 304,
+    "pending_rescan": false,
+    "final_exit_code": 0
+  }
+}

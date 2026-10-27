@@ -1,0 +1,15 @@
+{
+  "id": "label-focused-desktop",
+  "command": [
+    "env",
+    "E2E_ONLY_PROJECT=desktop",
+    "E2E_ONLY_SCENARIO=research",
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-27T14:36:28.446772+00:00",
+  "duration_seconds": 273.99,
+  "exit_code": 2,
+  "log": "docs/phase5-evidence/2026-10-27/label-focused-desktop.txt",
+  "sha256": "0bd6ed49106ae299d7e4b26dd2ecfa6d161227f8b1dd2720e3db7c27bd51d368"
+}

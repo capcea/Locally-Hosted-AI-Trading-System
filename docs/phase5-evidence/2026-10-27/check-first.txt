@@ -1,0 +1,17 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+195 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+[warn] e2e/phase5.spec.ts
+[warn] e2e/risk-workflow.ts
+[warn] src/management-api.ts
+[warn] src/schema.ts
+[warn] src/StrategyLab.tsx
+[warn] Code style issues found in 5 files. Run Prettier with --write to fix.
+make: *** [lint] Error 1

@@ -1,0 +1,43 @@
+:root {
+  color-scheme: dark;
+  --bg: #10151d;
+  --panel: #17202c;
+  --panel-raised: #202b3a;
+  --text: #f1f5f9;
+  --muted: #aab8c8;
+  --line: #344155;
+  --border: #8191a5;
+  --accent: #67d3e0;
+  --on-accent: #0b2025;
+  --danger: #ffb4a9;
+  --success: #8dd6aa;
+  --attention: #f4c06a;
+  --radius: 12px;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f5f7fa;
+  --panel: #ffffff;
+  --panel-raised: #eef2f6;
+  --text: #17212f;
+  --muted: #526174;
+  --line: #d9e0e8;
+  --border: #718096;
+  --accent: #155e75;
+  --on-accent: #ffffff;
+  --danger: #b42318;
+  --success: #166534;
+  --attention: #854d0e;
+}
+
+/* Compatibility aliases for retained diagnostic and advanced component selectors. */
+:root,
+:root[data-theme='light'],
+:root[data-theme='dark'] {
+  --surface: var(--panel);
+  --surface-soft: var(--panel-raised);
+  --sidebar: var(--panel);
+  --accent-text: var(--on-accent);
+  --accent-faint: var(--panel-raised);
+  --amber: var(--attention);
+}

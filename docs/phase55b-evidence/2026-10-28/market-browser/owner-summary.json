@@ -1,0 +1,12 @@
+{
+  "file": "apps/web/test-results/phase2-market-data-imports-345a4-nly-available-stored-prices-desktop/error-context.md",
+  "sha256": "a6ba7cae7bc0c9f1e1a176e4f73f7a35aced6f09bb70a1c13d33b44e48efb1f0",
+  "error": "Test timeout of 120000ms exceeded",
+  "locator_available": false,
+  "dom_snapshot_available": false,
+  "original_active_await_known": false,
+  "owner_reported_foundation_passes": 4,
+  "owner_reported_market_failure": 1,
+  "backend_failures_owner_reported": [],
+  "privacy": "No raw auth fields, request bodies, cookies or tokens retained"
+}

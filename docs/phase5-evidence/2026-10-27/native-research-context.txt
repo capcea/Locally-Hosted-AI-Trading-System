@@ -393,7 +393,7 @@ tests/test_research_integration.py:196:
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 
 system = <test_phase1_integration.System object at 0x10ab07200>
-plan = {'key': 'final-cfb5674ec0ac4b39a513f14ec04d5492', 'name': 'Explicit synthetic research fixture', 'source_account_id': 'f15361ea-f7d7-4f4e-a766-e6535e08acc0', 'strategy': 'EMA_TREND', ...}
+plan = {'key': '[REDACTED_SYNTHETIC_IDEMPOTENCY_KEY]', 'name': 'Explicit synthetic research fixture', 'source_account_id': 'f15361ea-f7d7-4f4e-a766-e6535e08acc0', 'strategy': 'EMA_TREND', ...}
 
     def submitted(system: System, plan: dict[str, Any]) -> dict[str, Any]:
         response = system.post("/api/v1/research/experiments", plan)

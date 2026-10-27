@@ -7,7 +7,7 @@ test('Strategy Lab persists real admitted-data experiments, risk-approved trades
 }, info) => {
   test.setTimeout(240000);
   const { account, run } = await seedRiskFixture(page, info.project.name === 'mobile');
-  await configureRisk(page, 'Cont risc E2E', 'Scenariu risc E2E',true);
+  await configureRisk(page, 'Cont risc E2E', 'Scenariu risc E2E', true);
   const provider = await realPost(page, '/market/providers', {
     name: 'Fixture cercetare browser',
     adapter: 'LOCAL',
@@ -59,10 +59,23 @@ test('Strategy Lab persists real admitted-data experiments, risk-approved trades
     )
     .toBe('VALID');
   await navigateManagement(page, 'Laborator de strategii');
-  const lab = page.getByRole('region', { name: 'Laborator de strategii', exact: true });
-  await lab.getByLabel('Cont sursă verificat', { exact: true }).selectOption(account.id);
+  const lab = page.getByRole('region', { name: 'Testează strategii', exact: true });
+  await expect(lab).toBeVisible();
+  const sourceAccount = lab.getByLabel('Contul testului', { exact: true });
+  await expect(sourceAccount).toBeVisible();
+  await expect(sourceAccount.locator(`option[value="${account.id}"]`)).toHaveText('Cont risc E2E');
+  await sourceAccount.selectOption(account.id);
   await lab.getByLabel('Set de date principal', { exact: true }).selectOption(upload.dataset_id);
-  const form = lab.getByRole('form', { name: 'Configurează backtest', exact: true });
+  const form = lab.getByRole('form', { name: 'Configurează testul istoric', exact: true });
+  await form.getByRole('button', { name: 'Continuă', exact: true }).click();
+  await form.getByRole('button', { name: 'Continuă', exact: true }).click();
+  await form.getByLabel('Sfârșit descoperire', { exact: true }).fill(at(30));
+  await form.getByLabel('Sfârșit calibrare', { exact: true }).fill(at(50));
+  await form.getByLabel('Sfârșit validare', { exact: true }).fill(at(75));
+  await form.getByRole('button', { name: 'Continuă', exact: true }).click();
+  await form
+    .getByText('Setări avansate: parametri, costuri, portofolii și cote', { exact: true })
+    .click();
   await form.getByLabel('Șablon simulator și risc', { exact: true }).selectOption(run.id);
   await form
     .getByLabel('Denumire experiment', { exact: true })
@@ -75,11 +88,9 @@ test('Strategy Lab persists real admitted-data experiments, risk-approved trades
     ['Purge (secunde)', '5'],
     ['Embargo (secunde)', '1'],
     ['Limită observații', '200'],
-    ['Sfârșit descoperire', at(30)],
-    ['Sfârșit calibrare', at(50)],
-    ['Sfârșit validare', at(75)],
   ])
     await form.getByLabel(label, { exact: true }).fill(text);
+  await form.getByRole('button', { name: 'Continuă', exact: true }).click();
   await form.getByRole('checkbox', { name: /Autorizez copierea politicii/ }).check();
   await form.getByRole('checkbox', { name: /Accept costurile/ }).check();
   const createdPromise = page.waitForResponse(
@@ -87,14 +98,16 @@ test('Strategy Lab persists real admitted-data experiments, risk-approved trades
       response.url().endsWith('/api/v1/research/experiments') &&
       response.request().method() === 'POST',
   );
-  await form.getByRole('button', { name: 'Înregistrează experimentul', exact: true }).click();
+  await form.getByRole('button', { name: 'Pornește testul în simulare', exact: true }).click();
   const createdResponse = await createdPromise;
   expect(createdResponse.status()).toBe(202);
   const created = await createdResponse.json();
   await expect(
     lab.getByRole('heading', { name: 'Experiment cantitativ browser · SUCCEEDED', exact: true }),
   ).toBeVisible({ timeout: 120000 });
-  await lab.getByRole('button', { name: `Rezultate ${created.id}`, exact: true }).click();
+  await lab
+    .getByRole('link', { name: 'Vezi rezultatul Experiment cantitativ browser', exact: true })
+    .click();
   const results = lab.getByRole('region', { name: 'Rezultate experiment', exact: true });
   await expect(
     results.getByRole('img', { name: 'Curba capitalului simulat stocat' }),
@@ -114,6 +127,12 @@ test('Strategy Lab persists real admitted-data experiments, risk-approved trades
     await page.request.get(`/api/v1/research/experiments/${created.id}/provenance`)
   ).json();
   await expect(results).toContainText(provenance.plan.datasets[0].manifest_sha256);
+  await results.getByRole('link', { name: 'Analizează o variantă nouă', exact: true }).click();
+  for (let step = 1; step <= 3; step++)
+    await form.getByRole('button', { name: 'Continuă', exact: true }).click();
+  await form
+    .getByText('Setări avansate: parametri, costuri, portofolii și cote', { exact: true })
+    .click();
   await form.getByLabel('Denumire experiment', { exact: true }).fill('Experiment anulat browser');
   await form
     .getByText('Date pentru confirmare multi-timeframe și sweep-uri', { exact: true })
@@ -127,11 +146,16 @@ test('Strategy Lab persists real admitted-data experiments, risk-approved trades
       response.url().endsWith('/api/v1/research/experiments') &&
       response.request().method() === 'POST',
   );
-  await form.getByRole('button', { name: 'Înregistrează experimentul', exact: true }).click();
+  await form.getByRole('button', { name: 'Continuă', exact: true }).click();
+  await form.getByRole('checkbox', { name: /Autorizez copierea politicii/ }).check();
+  await form.getByRole('checkbox', { name: /Accept costurile/ }).check();
+  await form.getByRole('button', { name: 'Pornește testul în simulare', exact: true }).click();
   const queuedResponse = await cancelledPromise;
   expect(queuedResponse.status()).toBe(202);
   const queued = await queuedResponse.json();
-  await lab.getByRole('button', { name: `Anulează ${queued.id}`, exact: true }).click();
+  await lab
+    .getByRole('button', { name: 'Solicită anularea Experiment anulat browser', exact: true })
+    .click();
   await expect(
     lab.getByRole('heading', { name: 'Experiment anulat browser · CANCELLED', exact: true }),
   ).toBeVisible({ timeout: 60000 });

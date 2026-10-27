@@ -1,0 +1,12 @@
+{
+  "id": "check-formatted",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T12:21:31.966117+00:00",
+  "duration_seconds": 5.347,
+  "exit_code": 2,
+  "log": "docs/phase5-evidence/2026-10-27/check-formatted.txt",
+  "sha256": "a33d91ed8a0a7a4c91fa76a40810c86695c5f70c09ccf9b3eb45bc4e78f82067"
+}

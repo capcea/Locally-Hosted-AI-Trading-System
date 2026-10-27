@@ -252,6 +252,10 @@ def test_queue_retries_crash_recovery_cancellation_and_access(
     monkeypatch.setattr(worker.objects, "get", fail)
     assert worker.once()
     status = market.client.get("/api/v1/market/jobs").json()[0]
+    direct = market.client.get(f"/api/v1/market/jobs/{status['id']}")
+    assert direct.status_code == 200 and direct.json()["id"] == status["id"]
+    assert direct.json()["cancel_requested"] is False
+    assert market.client.get(f"/api/v1/market/jobs/{uuid4()}").status_code == 404
     assert (
         status["state"] == "RETRY"
         and status["attempts"] == 1
@@ -276,8 +280,13 @@ def test_queue_retries_crash_recovery_cancellation_and_access(
         market.post(f"/api/v1/market/jobs/{next_job['id']}/cancel", {}).json()["state"]
         == "CANCELLED"
     )
+    assert (
+        market.client.get(f"/api/v1/market/jobs/{next_job['id']}").json()["cancel_requested"]
+        is True
+    )
     peer, _ = market.peer("market-viewer", "VIEWER")
     try:
+        assert peer.get(f"/api/v1/market/jobs/{job['id']}").status_code == 404
         assert peer.get(f"/api/v1/market/datasets/{job['dataset_id']}").status_code == 404
         assert peer.get("/api/v1/market/datasets").json()["total"] == 0
         response = peer.post(

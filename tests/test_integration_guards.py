@@ -34,6 +34,38 @@ def test_browser_selection_rejects_invalid_values_before_resources(
         browser_acceptance.main()
 
 
+def test_browser_failure_diagnostics_are_bounded_and_allowlisted(tmp_path: Path) -> None:
+    request_id = "11111111-1111-4111-8111-111111111111"
+    record = {
+        "event": "persistence_failure",
+        "category": "PERSISTENCE_TRANSACTION_FAILED",
+        "request_id": request_id,
+        "sqlstate": "40P01",
+        "parameters": "private-parameter-fixture",
+        "cookie": "private-cookie-fixture",
+    }
+    path = tmp_path / "server.txt"
+    path.write_text(
+        "private-raw-exception-fixture\n"
+        + json.dumps({"event": "other", "secret": "private-other-fixture"})
+        + "\n"
+        + (json.dumps(record) + "\n") * 55
+        + json.dumps({**record, "request_id": "invalid-private-request-fixture"})
+        + "\n"
+        + json.dumps({**record, "sqlstate": "private-code-fixture"})
+        + "\n"
+    )
+    failures = browser_acceptance.safe_server_failures(path)
+    assert len(failures) == 50
+    assert failures[0] == {
+        "request_id": request_id,
+        "category": "PERSISTENCE_TRANSACTION_FAILED",
+        "sqlstate": "40P01",
+    }
+    assert failures[-1]["sqlstate"] is None
+    assert "private-" not in json.dumps(failures)
+
+
 @pytest.mark.parametrize("endpoint", ["tcp://remote:2375", "ssh://remote", "http://localhost"])
 def test_remote_engine_is_refused(endpoint: str) -> None:
     with pytest.raises(RuntimeError, match="local Docker"):

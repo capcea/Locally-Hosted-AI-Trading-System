@@ -1,9 +1,12 @@
 import asyncio
 import json
+from typing import cast
 from unittest.mock import AsyncMock
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from sqlalchemy.exc import OperationalError
 
 from apps.api.health import check_service
 from packages.domain.contracts import ServiceHealth, ServiceStatus
@@ -63,6 +66,42 @@ def test_structured_logs_exclude_query_values(
     assert event["request_id"] == response.headers["x-request-id"]
     assert event["event"] == "http_request"
     assert "secret-not-for-logs" not in messages[0]
+
+
+@pytest.mark.parametrize("sqlstate", ["40P01", "57014", "not-a-safe-driver-code"])
+def test_database_failures_are_correlated_without_logging_exception_data(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch, sqlstate: str
+) -> None:
+    messages: list[str] = []
+    monkeypatch.setattr("apps.api.main.logger.error", messages.append)
+
+    class DriverFailure(Exception):
+        sqlstate: str
+
+    driver = DriverFailure("sensitive-driver-fixture")
+    driver.sqlstate = sqlstate
+
+    @cast(FastAPI, client.app).get("/test-storage-error")
+    def fail() -> None:
+        raise OperationalError("sensitive-statement-fixture", {"private": "fixture"}, driver)
+
+    response = client.get("/test-storage-error?token=private-query-fixture")
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Persistent service unavailable; no change accepted"}
+    assert response.headers["x-error-category"] == "PERSISTENCE_TRANSACTION_FAILED"
+    assert len(messages) == 1
+    assert json.loads(messages[0]) == {
+        "event": "persistence_failure",
+        "category": "PERSISTENCE_TRANSACTION_FAILED",
+        "request_id": response.headers["x-request-id"],
+        "sqlstate": sqlstate if sqlstate in {"40P01", "57014"} else None,
+    }
+    for private in (
+        "sensitive-driver-fixture",
+        "sensitive-statement-fixture",
+        "private-query-fixture",
+    ):
+        assert private not in response.text + messages[0]
 
 
 def test_overview_labels_reference_values_and_unimplemented_features(client: TestClient) -> None:

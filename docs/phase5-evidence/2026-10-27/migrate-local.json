@@ -1,0 +1,16 @@
+{
+  "id": "migrate-local",
+  "command": [
+    "docker",
+    "compose",
+    "run",
+    "--rm",
+    "--no-deps",
+    "migrate"
+  ],
+  "started_utc": "2026-10-27T12:24:22.646845+00:00",
+  "duration_seconds": 1.866,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/migrate-local.txt",
+  "sha256": "170fa3c6a40b5662692a650de4d2244293c057c25c96e7aa672f7c47b1bd4b50"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "check-final",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T12:32:00.271555+00:00",
+  "duration_seconds": 11.114,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/check-final.txt",
+  "sha256": "66db67a1ec069c2ffd7d84c5b123e01d9857ba8a244cfd95cc1da95b748a5b5c"
+}

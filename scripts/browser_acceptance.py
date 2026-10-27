@@ -8,6 +8,7 @@ import hashlib
 import itertools
 import json
 import os
+import re
 import secrets
 import shlex
 import shutil
@@ -33,6 +34,38 @@ from scripts.provision_market import provision_storage
 from scripts.provision_runtime import provision_runtime
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def safe_server_failures(path: Path) -> list[dict[str, str | None]]:
+    """Keep only bounded structured DB diagnostics, never raw server/exception output."""
+    with path.open("rb") as source:
+        source.seek(max(0, path.stat().st_size - 262144))
+        lines = source.read().decode(errors="replace").splitlines()
+    failures: list[dict[str, str | None]] = []
+    for line in lines:
+        try:
+            record = json.loads(line)
+        except ValueError:
+            continue
+        if (
+            not isinstance(record, dict)
+            or record.get("event") != "persistence_failure"
+            or record.get("category") != "PERSISTENCE_TRANSACTION_FAILED"
+        ):
+            continue
+        request_id, sqlstate = record.get("request_id"), record.get("sqlstate")
+        if not isinstance(request_id, str) or not re.fullmatch(r"[0-9a-f-]{36}", request_id):
+            continue
+        failures.append(
+            {
+                "category": "PERSISTENCE_TRANSACTION_FAILED",
+                "request_id": request_id,
+                "sqlstate": sqlstate
+                if isinstance(sqlstate, str) and re.fullmatch(r"[0-9A-Z]{5}", sqlstate)
+                else None,
+            }
+        )
+    return failures[-50:]
 
 
 def free_port() -> int:
@@ -74,8 +107,11 @@ def main() -> int:
         "broker",
         "risk",
         "research",
+        "ux",
     }:
-        raise RuntimeError("E2E_ONLY_SCENARIO must be foundation, market, broker, risk or research")
+        raise RuntimeError(
+            "E2E_ONLY_SCENARIO must be foundation, market, broker, risk, research or ux"
+        )
     isolated = IsolatedServices.model_validate_json(Path(config_file).read_bytes())
     npm = shutil.which("npm")
     if not npm:
@@ -89,7 +125,7 @@ def main() -> int:
         (only_project,) if only_project else ("desktop", "mobile"),
         (only_scenario,)
         if only_scenario
-        else ("foundation", "market", "broker", "risk", "research"),
+        else ("foundation", "market", "broker", "risk", "research", "ux"),
     ):
         database = f"p1_browser_{uuid4().hex}"
         with psycopg.connect(admin_dsn, autocommit=True) as connection:
@@ -253,6 +289,13 @@ def main() -> int:
                         else ["e2e/phase4.spec.ts"]
                         if scenario == "risk"
                         else ["e2e/phase5.spec.ts"]
+                        if scenario == "research"
+                        else ["e2e/ux-workflows.spec.ts", "e2e/ux-visual.spec.ts"]
+                    ),
+                    *(
+                        ["--update-snapshots"]
+                        if os.environ.get("E2E_UPDATE_SNAPSHOTS") == "1" and scenario == "ux"
+                        else []
                     ),
                     f"--project={project}",
                     "--workers=1",
@@ -288,6 +331,11 @@ def main() -> int:
                     output = output.replace(value, "[REDACTED]")
                 print(output, flush=True)
                 if runner.returncode:
+                    log.flush()
+                    print(
+                        json.dumps({"backend_failures": safe_server_failures(Path(log.name))}),
+                        flush=True,
+                    )
                     return runner.returncode
         finally:
             for process in reversed(processes):

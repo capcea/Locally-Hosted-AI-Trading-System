@@ -136,3 +136,17 @@ not actual OAuth, terminal, venue, service-deployment or order-execution accepta
 No current FTMO/FundedNext/The5ers numeric contract terms were fetched or embedded in Phase 4.
 Owner attestation binds document hashes and exact account/program dates; synthetic test policies are
 not official rules. No external broker, account, margin service or economic calendar was connected.
+
+## Phase 5 — quantitative research references (accessed 2026-10-27)
+
+- [Apache Arrow compute](https://arrow.apache.org/docs/python/compute.html): primary API reference for
+  array arithmetic and reductions used by the existing pinned PyArrow vectorized screening engine.
+  No vectorbt dependency or claim of matching its complete feature set. Actual installed-version
+  compatibility is established by tests and the locked runtime, not the online site's current version.
+- [Bailey and López de Prado, Deflated Sharpe Ratio, July 31 2014](https://www.davidhbailey.com/dhbpapers/deflated-sharpe.pdf):
+  primary definition for the non-normal/sample-size and multiple-selection adjustment. The implementation
+  requires declared independent trial count and trial-Sharpe variance; ordinary correlated sweep counts
+  cannot supply those assumptions automatically. Source verification is methodological, not proof that
+  the input samples satisfy independence or support profitable trading.
+
+No Phase 5 external market/broker/paid service was connected. Native data is explicitly synthetic.

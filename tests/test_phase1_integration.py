@@ -852,3 +852,55 @@ def test_public_source_metadata_rejects_secret_bearing_urls(owner: System) -> No
         )
         assert response.status_code == 422 and "private" not in response.text
     assert owner.client.get("/api/v1/records/firms").json()["total"] == 3
+
+
+def test_returning_owner_must_receive_rotated_mfa_cookie_before_reading_persisted_account(
+    owner: System,
+) -> None:
+    """A discarded verification response leaves a revoked cookie, not a missing account."""
+    created = owner.account("Cont sintetic E2E")
+    path = f"/api/v1/records/accounts/{created['id']}"
+    updated = owner.client.put(
+        path + f"?expected_revision={created['revision']}",
+        json={**created["data"], "name": "Cont persistent E2E"},
+        headers=owner.csrf(),
+    )
+    assert updated.status_code == 200
+    assert owner.post("/api/v1/auth/logout", {}).status_code == 204
+    login = owner.client.post(
+        "/api/v1/auth/login",
+        headers={"Origin": ORIGIN},
+        json={"username": "fixture-owner", "password": owner.password},
+    )
+    assert login.status_code == 200
+    challenge_state = login.json()["state"]
+    assert challenge_state == "MFA"
+    assert owner.client.get(path).status_code == 403
+    pending_cookie = owner.client.cookies.get(COOKIE)
+    code = pyotp.TOTP(owner.secret).at(datetime.now(UTC) + timedelta(seconds=30))
+    verified = owner.post("/api/v1/auth/mfa/verify", {"code": code})
+    assert verified.status_code == 200
+    verified_state = verified.json()["state"]
+    assert verified_state == "FULL"
+    full_cookie = owner.client.cookies.get(COOKIE)
+    rotated = full_cookie is not None and full_cookie != pending_cookie
+    assert rotated  # Assert only a boolean; never include raw cookies in failed diagnostics.
+    with TestClient(create_app(owner.config)) as discarded_response:
+        if pending_cookie is not None:
+            discarded_response.cookies.set(COOKIE, pending_cookie)
+        assert discarded_response.get("/api/v1/auth/me").status_code == 401
+        assert discarded_response.get(path).status_code == 401
+    # A new app/request context with the actually returned cookie models the persisted reload.
+    with TestClient(create_app(owner.config)) as returning:
+        if full_cookie is not None:
+            returning.cookies.set(COOKIE, full_cookie)
+        me = returning.get("/api/v1/auth/me")
+        assert me.status_code == 200
+        returning_state = me.json()["state"]
+        assert returning_state == "FULL"
+        record = returning.get(path)
+        assert record.status_code == 200
+        assert record.json()["id"] == created["id"]
+        assert record.json()["data"]["name"] == "Cont persistent E2E"
+        assert record.json()["data"]["initial_capital"] == "25000.12345678"
+    assert owner.client.get("/api/v1/audit/verify").json()["valid"]

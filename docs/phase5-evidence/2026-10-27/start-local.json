@@ -1,0 +1,20 @@
+{
+  "id": "start-local",
+  "command": [
+    "docker",
+    "compose",
+    "up",
+    "--pull",
+    "never",
+    "--no-build",
+    "-d",
+    "--wait",
+    "--wait-timeout",
+    "180"
+  ],
+  "started_utc": "2026-10-27T12:23:03.289589+00:00",
+  "duration_seconds": 86.928,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/start-local.txt",
+  "sha256": "591d2caba068f2e0bfa9beacae33127a4f6f488361d896233c29739a9b4b8f44"
+}

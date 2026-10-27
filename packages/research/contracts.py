@@ -61,7 +61,7 @@ class Parameters(Contract):
 class DatasetPin(Contract):
     dataset_id: UUID
     manifest_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
-    role: Literal["EXECUTION", "CONFIRMATION"] = "EXECUTION"
+    role: Literal["EXECUTION", "SIGNAL", "CONFIRMATION", "FX"] = "EXECUTION"
     symbol: SymbolSpec
     context: Context
 
@@ -101,6 +101,7 @@ class ExperimentInput(Contract):
     parameters: list[Parameters] = Field(min_length=1, max_length=16)
     chronology: Chronology
     phase: Literal["DISCOVERY", "CALIBRATION", "VALIDATION", "FINAL_HOLDOUT"]
+    signal_timeframe: Literal["NATIVE", "TICK", "M1", "M5", "M15", "H1", "H4", "D1"] = "NATIVE"
     validation_mode: Literal["DIRECT", "WALK_FORWARD"] = "DIRECT"
     engine: Literal["SCREEN", "EVENT"]
     assumptions: SimulationModel

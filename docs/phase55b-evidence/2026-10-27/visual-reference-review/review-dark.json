@@ -1,0 +1,86 @@
+{
+  "status": "PENDING OWNER APPROVAL",
+  "scope": "Only home-dark-desktop-darwin.png",
+  "target": "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png",
+  "candidate": "home-dark-desktop-darwin.candidate.png",
+  "analysis_command": [
+    "node",
+    ".cache/phase55b-dark-review/pixels.cjs"
+  ],
+  "analysis_exit_code": 0,
+  "pixel_analysis": {
+    "dimensions": {
+      "expected": [
+        1280,
+        1047
+      ],
+      "actual": [
+        1280,
+        1047
+      ]
+    },
+    "different_rgba_pixels": 336,
+    "difference_bounds_inclusive": {
+      "x_min": 1177,
+      "y_min": 962,
+      "x_max": 1192,
+      "y_max": 982
+    },
+    "changed_colors": {
+      "16,21,29,255 -> 255,0,255,255": 336
+    },
+    "masks": {
+      "expected": {
+        "pixels": 1155,
+        "bounds_inclusive": {
+          "x_min": 1193,
+          "y_min": 962,
+          "x_max": 1247,
+          "y_max": 982
+        }
+      },
+      "actual": {
+        "pixels": 1491,
+        "bounds_inclusive": {
+          "x_min": 1177,
+          "y_min": 962,
+          "x_max": 1247,
+          "y_max": 982
+        }
+      }
+    },
+    "baseline_matches_expected": true,
+    "sha256": {
+      "expected": "a92222f6683c78800603bb230b1b2b26f98719ca1d6dcab12b204e46d9919e63",
+      "actual": "181f7df4fa1f7e315b0ab793694915f14129fae5dc1ebcbe22a76801a875deb9",
+      "diff": "676cf6cb2137a7080f76deb6f57670b240bff1e9759cd69d897ca1fa14f9720b",
+      "baseline": "a92222f6683c78800603bb230b1b2b26f98719ca1d6dcab12b204e46d9919e63"
+    }
+  },
+  "classification": "Same intentional 55-to-71px clock-mask expansion; all other RGBA pixels identical",
+  "reference_modified": false,
+  "light_reference_sha256": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+  "light_reference_still_approved": true,
+  "source_changed": false,
+  "browser_agent_execution": false,
+  "remaining_gate": "New owner run reached dark after light comparison. Full desktop/mobile acceptance and post-screenshot refresh/reflow checks remain pending.",
+  "checks": [
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "scope_check": "Only reports and new public review artifacts changed. Both references and all existing application/test source preserved."
+}

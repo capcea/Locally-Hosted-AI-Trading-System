@@ -42,7 +42,7 @@ ROADMAP = [
     Phase(
         number=5,
         title="Motor de backtesting",
-        status="PLANNED",
+        status="CURRENT",
         acceptance="Replay determinist, costuri, OOS, walk-forward și incertitudine.",
     ),
     Phase(

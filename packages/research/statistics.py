@@ -3,6 +3,7 @@
 import math
 import random
 from datetime import date
+from decimal import Decimal, localcontext
 from statistics import NormalDist, mean, stdev
 from typing import Any
 
@@ -135,88 +136,100 @@ def robustness(values: list[float], seed: int, samples: int, block: int = 5) -> 
 def metrics(
     equity: list[dict[str, Any]],
     trades: list[dict[str, Any]],
-    initial: float,
+    initial: Decimal | int,
     seed: int,
     samples: int,
 ) -> dict[str, Any]:
-    if initial <= 0 or not equity:
-        raise ValueError("MISSING_EQUITY_OR_CAPITAL")
-    amounts = [float(p["equity"]) for p in equity]
-    times = [float(p["timestamp"]) for p in equity]
-    gains = [float(t["net"]) for t in trades]
-    wins = [x for x in gains if x > 0]
-    losses = [x for x in gains if x < 0]
-    peak = initial
-    max_dd = max_dd_pct = underwater = 0.0
-    last_peak = times[0]
-    consecutive = longest = 0
-    for value, at in zip(amounts, times, strict=True):
-        if value >= peak:
-            peak = value
-            last_peak = at
-        else:
-            underwater = max(underwater, at - last_peak)
-        max_dd = max(max_dd, peak - value)
-        max_dd_pct = max(max_dd_pct, (peak - value) / peak if peak > 0 else 0)
-    for value in gains:
-        consecutive = consecutive + 1 if value < 0 else 0
-        longest = max(longest, consecutive)
-    # One executable account mark per UTC day, including the initial capital reference.
-    daily: dict[str, float] = {}
-    for point in equity:
-        daily[str(point["at"])[:10]] = float(point["equity"])
-    previous = initial
-    returns: list[float] = []
-    for value in daily.values():
-        if previous <= 0:
-            returns = []
-            break
-        returns.append(value / previous - 1)
-        previous = value
-    sd = stdev(returns) if len(returns) > 1 else 0
-    downside = math.sqrt(sum(min(0, x) ** 2 for x in returns) / len(returns)) if returns else 0
-    dates = [date.fromisoformat(day) for day in daily]
-    regular = all((b - a).days == 1 for a, b in zip(dates, dates[1:], strict=False))
-    sufficient = len(returns) >= 30 and regular
-    duration = max(0, times[-1] - times[0])
-    annualized = None
-    if duration >= 365.25 * 86400 and amounts[-1] > 0:
-        annualized = (amounts[-1] / initial) ** (365.25 * 86400 / duration) - 1
-    return {
-        "net_profit": amounts[-1] - initial,
-        "net_return": amounts[-1] / initial - 1,
-        "max_drawdown": max_dd,
-        "max_drawdown_fraction": max_dd_pct,
-        "profit_factor": sum(wins) / -sum(losses) if losses else None,
-        "expectancy": mean(gains) if gains else None,
-        "win_rate": len(wins) / len(gains) if gains else None,
-        "average_winner": mean(wins) if wins else None,
-        "average_loser": mean(losses) if losses else None,
-        "risk_reward_distribution": [t.get("realized_r") for t in trades],
-        "sharpe": mean(returns) / sd * math.sqrt(365.25) if sufficient and sd else None,
-        "sortino": mean(returns) / downside * math.sqrt(365.25)
-        if sufficient and downside
-        else None,
-        "calmar": annualized / max_dd_pct
-        if sufficient and annualized is not None and max_dd_pct > 0
-        else None,
-        "annualized_volatility": sd * math.sqrt(365.25) if sufficient and sd else None,
-        "recovery_factor": (amounts[-1] - initial) / max_dd if max_dd else None,
-        "maximum_consecutive_losses": longest,
-        "time_underwater_seconds": underwater,
-        "trade_count": len(trades),
-        "holding_seconds": [t["holding_seconds"] for t in trades],
-        "daily_return_observations": len(returns),
-        "ratios_reason": None
-        if sufficient
-        else "FEWER_THAN_30_DAILY_OBSERVATIONS"
-        if len(returns) < 30
-        else "IRREGULAR_CALENDAR_DAILY_OBSERVATIONS",
-        "annualization_convention": (
-            "365.25 calendar days; ratios withheld for missing UTC days; no forward-filled prices"
-        ),
-        "daily_returns": returns,
-        "uncertainty": robustness(gains, seed, samples),
-        "source": "SIMULATED",
-        "paper_eligible": False,
-    }
+    with localcontext() as precision:
+        precision.prec = 80
+        capital = Decimal(initial)
+        if capital <= 0 or not equity:
+            raise ValueError("MISSING_EQUITY_OR_CAPITAL")
+        amounts = [Decimal(str(p["equity"])) for p in equity]
+        times = [float(p["timestamp"]) for p in equity]
+        gains = [Decimal(str(t["net"])) for t in trades]
+        wins = [x for x in gains if x > 0]
+        losses = [x for x in gains if x < 0]
+        peak = capital
+        max_dd = Decimal(0)
+        max_dd_pct = Decimal(0)
+        underwater = 0.0
+        last_peak = times[0]
+        consecutive = longest = 0
+        for value, at in zip(amounts, times, strict=True):
+            if value >= peak:
+                peak = value
+                last_peak = at
+            else:
+                underwater = max(underwater, at - last_peak)
+            max_dd = max(max_dd, peak - value)
+            max_dd_pct = max(max_dd_pct, (peak - value) / peak if peak > 0 else Decimal(0))
+        for value in gains:
+            consecutive = consecutive + 1 if value < 0 else 0
+            longest = max(longest, consecutive)
+        daily: dict[str, Decimal] = {}
+        for point in equity:
+            daily[str(point["at"])[:10]] = Decimal(str(point["equity"]))
+        previous = capital
+        returns: list[float] = []
+        for value in daily.values():
+            if previous <= 0:
+                returns = []
+                break
+            returns.append(float((value - previous) / previous))
+            previous = value
+        sd = stdev(returns) if len(returns) > 1 else 0
+        downside = math.sqrt(sum(min(0, x) ** 2 for x in returns) / len(returns)) if returns else 0
+        dates = [date.fromisoformat(day) for day in daily]
+        regular = all((b - a).days == 1 for a, b in zip(dates, dates[1:], strict=False))
+        sufficient = len(returns) >= 30 and regular
+        duration = max(0, times[-1] - times[0])
+        annualized = None
+        net = amounts[-1] - capital
+        if duration >= 365.25 * 86400 and amounts[-1] > 0:
+            annualized = math.expm1(float((amounts[-1] / capital).ln()) * 365.25 * 86400 / duration)
+
+        def average(items: list[Decimal]) -> str | None:
+            return str(sum(items, Decimal(0)) / len(items)) if items else None
+
+        return {
+            "net_profit": str(net),
+            "net_return": float(net / capital),
+            "max_drawdown": str(max_dd),
+            "max_drawdown_fraction": float(max_dd_pct),
+            "profit_factor": float(sum(wins, Decimal(0)) / -sum(losses, Decimal(0)))
+            if losses
+            else None,
+            "expectancy": average(gains),
+            "win_rate": len(wins) / len(gains) if gains else None,
+            "average_winner": average(wins),
+            "average_loser": average(losses),
+            "risk_reward_distribution": [t.get("realized_r") for t in trades],
+            "sharpe": mean(returns) / sd * math.sqrt(365.25) if sufficient and sd else None,
+            "sortino": mean(returns) / downside * math.sqrt(365.25)
+            if sufficient and downside
+            else None,
+            "calmar": annualized / float(max_dd_pct)
+            if sufficient and annualized is not None and max_dd_pct > 0
+            else None,
+            "annualized_volatility": sd * math.sqrt(365.25) if sufficient and sd else None,
+            "recovery_factor": float(net / max_dd) if max_dd else None,
+            "maximum_consecutive_losses": longest,
+            "time_underwater_seconds": underwater,
+            "trade_count": len(trades),
+            "holding_seconds": [t["holding_seconds"] for t in trades],
+            "daily_return_observations": len(returns),
+            "ratios_reason": None
+            if sufficient
+            else "FEWER_THAN_30_DAILY_OBSERVATIONS"
+            if len(returns) < 30
+            else "IRREGULAR_CALENDAR_DAILY_OBSERVATIONS",
+            "annualization_convention": (
+                "365.25 calendar days; ratios withheld for missing UTC days; no "
+                "forward-filled prices"
+            ),
+            "daily_returns": returns,
+            "uncertainty": robustness([float(x) for x in gains], seed, samples),
+            "source": "SIMULATED",
+            "paper_eligible": False,
+        }

@@ -2,10 +2,15 @@ import { expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
 export async function navigateManagement(page: Page, name: string) {
-  await page
-    .getByRole('navigation', { name: 'Administrare', exact: true })
-    .getByRole('button', { name, exact: true })
-    .click();
+  const paths: Record<string, string> = {
+    'Centru de risc': '/conturi/siguranta',
+    'Broker & simulator': '/conturi/avansat/simulator',
+    'Laborator de strategii': '/testeaza/nou',
+  };
+  const path = paths[name];
+  if (!path) throw new Error('Unmapped task');
+  await page.goto(path);
+  await expect(page).toHaveURL(new RegExp(path + '$'));
 }
 export async function emergencyAction(page: Page, account: string, action: string) {
   await navigateManagement(page, 'Centru de risc');
@@ -13,18 +18,34 @@ export async function emergencyAction(page: Page, account: string, action: strin
   await center
     .getByLabel('Cont pentru controlul riscului', { exact: true })
     .selectOption({ label: account });
-  const form = center.getByRole('form', { name: 'Urgență risc', exact: true });
-  await form.getByLabel('Acțiune de siguranță', { exact: true }).selectOption(action);
-  await form.getByRole('checkbox').check();
+  const titles: Record<string, string> = {
+    STOP_NEW_ENTRIES: 'Oprește intrările noi simulate',
+    CLEAR_STOP: 'Revizuiește și deblochează intrările',
+    FLATTEN: 'Închide pozițiile simulate',
+  };
+  await center.getByRole('button', { name: titles[action], exact: true }).click();
+  const dialog = page.getByRole('dialog', { name: titles[action], exact: true });
+  await expect(dialog).toContainText(account);
+  await dialog.getByRole('checkbox').check();
   const result = page.waitForResponse(
     (r) => new URL(r.url()).pathname.endsWith('/emergency') && r.request().method() === 'POST',
   );
-  await form.getByRole('button', { name: 'Aplică acțiunea de siguranță', exact: true }).click();
+  await dialog
+    .getByRole('button', {
+      name: `Confirmă ${titles[action].toLocaleLowerCase('ro-RO')}`,
+      exact: true,
+    })
+    .click();
   const response = await result;
   expect(response.status()).toBe(200);
   return response.json();
 }
-export async function configureRisk(page: Page, account: string, scenario: string, automated=false) {
+export async function configureRisk(
+  page: Page,
+  account: string,
+  scenario: string,
+  automated = false,
+) {
   await navigateManagement(page, 'Centru de risc');
   const center = page.getByRole('region', { name: 'Centru de risc', exact: true });
   await center
@@ -47,12 +68,28 @@ export async function configureRisk(page: Page, account: string, scenario: strin
       name: 'Confirm regulile și perioada declarate. Politica internă nu este o regulă oficială de firmă.',
     })
     .check();
-  if(automated) await policy.getByLabel('Automatizare permisă explicit de politică',{exact:true}).check();
+  if (automated)
+    await policy.getByLabel('Automatizare permisă explicit de politică', { exact: true }).check();
   const savedPolicy = page.waitForResponse(
-    (r) => new URL(r.url()).pathname.endsWith('/policies') && r.request().method() === 'POST',
+    (r) =>
+      /^\/api\/v1\/risk\/accounts\/[0-9a-f-]{36}\/policies$/.test(new URL(r.url()).pathname) &&
+      r.request().method() === 'POST',
   );
   await policy.getByRole('button', { name: 'Salvează politica neverificată', exact: true }).click();
-  expect((await savedPolicy).status()).toBe(201);
+  const policyResponse = await savedPolicy;
+  const headers = policyResponse.headers();
+  // Diagnostics are deliberately allowlisted: never attach payloads, cookies or arbitrary errors.
+  const requestId = headers['x-request-id'];
+  const diagnostics = {
+    endpoint: 'POST /api/v1/risk/accounts/{account_id}/policies',
+    status: policyResponse.status(),
+    requestId: /^[0-9a-f-]{36}$/.test(requestId ?? '') ? requestId : null,
+    category:
+      headers['x-error-category'] === 'PERSISTENCE_TRANSACTION_FAILED'
+        ? 'PERSISTENCE_TRANSACTION_FAILED'
+        : 'UNCLASSIFIED',
+  };
+  expect(policyResponse.status(), JSON.stringify(diagnostics)).toBe(201);
   await expect(
     center.getByRole('heading', { name: 'Politică v1 · UNVERIFIED', exact: true }),
   ).toBeVisible();

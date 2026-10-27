@@ -1,0 +1,288 @@
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#7 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#8 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.0s done
+#8 DONE 0.0s
+
+#9 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#9 CACHED
+
+#10 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#10 CACHED
+
+#11 [build 2/5] WORKDIR /src
+#11 CACHED
+
+#12 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#12 CACHED
+
+#13 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#13 CACHED
+
+#14 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#14 CACHED
+
+#15 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:92865c13fc422b527371c2c471804f1893c9d6ff729a029883317d1c3f064a07 0.0s done
+#17 exporting config sha256:99eca024f00652e1bd6b3f8300f059cd085c43272241c1cda2e20966255cf0d7 done
+#17 exporting attestation manifest sha256:bd3cbbd1c47bef3e9e7f376068c6f95c3b1499497629f45ddfff726670d4ac38 done
+#17 exporting manifest list sha256:0badc548dbea748e22b445ed7ed943f251512fb8d3960948a9a2e650679b9a00 0.0s done
+#17 naming to docker.io/library/phase0-test-c89b00b7353c41e894b928bf4ef22945-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-c89b00b7353c41e894b928bf4ef22945-minio:latest 0.0s done
+#17 DONE 0.1s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-c89b00b7353c41e894b928bf4ef22945-minio Building 
+ Image phase0-test-c89b00b7353c41e894b928bf4ef22945-minio Built 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_storage Creating 
+ Network phase0-test-c89b00b7353c41e894b928bf4ef22945_default Creating 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_postgres Creating 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_redis Creating 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_redis Creating 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_storage Creating 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_postgres Creating 
+ Network phase0-test-c89b00b7353c41e894b928bf4ef22945_default Creating 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_storage Created 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_storage Created 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_redis Created 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_redis Created 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_postgres Created 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_postgres Created 
+ Network phase0-test-c89b00b7353c41e894b928bf4ef22945_default Created 
+ Network phase0-test-c89b00b7353c41e894b928bf4ef22945_default Created 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Creating 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Creating 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Creating 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Created 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Created 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Created 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Starting 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Starting 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Starting 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Started 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Started 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Started 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Waiting 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Waiting 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Waiting 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Healthy 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Healthy 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-c89b00b7353c41e894b928bf4ef22945_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+b265068f751426a01c7889993a60174a9aa4ed0e9c50a3a8cfb7268196ae469c
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:64895
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' b265068f751426a01c7889993a60174a9aa4ed0e9c50a3a8cfb7268196ae469c
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"64895"}]}
+PASSED: postgres 127.0.0.1:64895 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+01ef0e4baae0ac1f679359609d7b2c12caeb65da087cfd751cb7fcdfa4a24112
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:64894
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 01ef0e4baae0ac1f679359609d7b2c12caeb65da087cfd751cb7fcdfa4a24112
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"64894"}]}
+PASSED: redis 127.0.0.1:64894 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+0c612ba00829c69963c4506343a81f021176aad1e50f3ac9fb417fc4605a33ae
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:64896
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 0c612ba00829c69963c4506343a81f021176aad1e50f3ac9fb417fc4605a33ae
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"64896"}]}
+PASSED: minio 127.0.0.1:64896 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_research_fx_integration.py -m isolated_services -q
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_research_cross_currency_uses_only_prior_actual_admitted_ticks ______
+
+market = <test_phase1_integration.System object at 0x11a458620>
+
+    def test_research_cross_currency_uses_only_prior_actual_admitted_ticks(market: System) -> None:
+        plan = prepared(market)
+        instrument = market.post(
+            "/api/v1/records/instruments",
+            {
+                "kind": "instruments",
+                "name": "Synthetic USDJPY",
+                "symbol": "USDJPY",
+                "asset_class": "FOREX",
+            },
+        )
+>       assert instrument.status_code == 201, instrument.text
+E       AssertionError: {"detail":[{"loc":["body","instruments","venue_id"],"type":"missing","msg":"Invalid request value"}]}
+E       assert 422 == 201
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests/test_research_fx_integration.py:28: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.515631+00:00", "request_id": "b4be6834-07c6-4b94-b5c6-52cc4b323511", "method": "POST", "status": 201, "duration_ms": 325}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.534813+00:00", "request_id": "8f34151b-5cd7-4f43-812a-15a3df08f1bf", "method": "GET", "status": 200, "duration_ms": 13}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.555206+00:00", "request_id": "8a7c25ef-9a90-4ba8-a7e0-bd8219db168f", "method": "POST", "status": 200, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.568934+00:00", "request_id": "443720c9-7f04-438a-b7d6-217be29f3737", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.621249+00:00", "request_id": "32532b75-b456-4663-86aa-f5bcd8850826", "method": "POST", "status": 200, "duration_ms": 48}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.515631+00:00", "request_id": "b4be6834-07c6-4b94-b5c6-52cc4b323511", "method": "POST", "status": 201, "duration_ms": 325}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.534813+00:00", "request_id": "8f34151b-5cd7-4f43-812a-15a3df08f1bf", "method": "GET", "status": 200, "duration_ms": 13}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.555206+00:00", "request_id": "8a7c25ef-9a90-4ba8-a7e0-bd8219db168f", "method": "POST", "status": 200, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.568934+00:00", "request_id": "443720c9-7f04-438a-b7d6-217be29f3737", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.621249+00:00", "request_id": "32532b75-b456-4663-86aa-f5bcd8850826", "method": "POST", "status": 200, "duration_ms": 48}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.634643+00:00", "request_id": "f3428494-00e1-4e58-85b3-fa01d23d0678", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.663980+00:00", "request_id": "5a2f32e2-565b-4154-917c-564762b00146", "method": "POST", "status": 201, "duration_ms": 24}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.675281+00:00", "request_id": "dc85b2ef-6243-49d7-b777-739af8d2b682", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.694917+00:00", "request_id": "79edae8d-4ba4-44a4-9d4d-c59bb5ae23e4", "method": "POST", "status": 201, "duration_ms": 14}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.707384+00:00", "request_id": "2d3e2b71-4973-4404-bdc4-decedc0d2c0d", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.730035+00:00", "request_id": "52d2f535-492c-43a2-9040-06fb8255c71d", "method": "POST", "status": 201, "duration_ms": 17}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.755747+00:00", "request_id": "896ac7d7-2884-4440-9134-64109e998d64", "method": "GET", "status": 200, "duration_ms": 22}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.786460+00:00", "request_id": "67c679a3-bc81-44e7-b22d-ba427721392a", "method": "POST", "status": 201, "duration_ms": 25}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.799223+00:00", "request_id": "77010137-aa0f-4105-b81b-5fcbaee781a7", "method": "GET", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:07.855693+00:00", "request_id": "f04aefcc-fbf5-4093-be1e-44ac8ea23523", "method": "POST", "status": 202, "duration_ms": 51}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.068858+00:00", "request_id": "6baea56f-41e9-4032-8554-48ac5f7d8727", "method": "GET", "status": 200, "duration_ms": 17}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.081012+00:00", "request_id": "4c6b64cf-cc68-4ec0-9e46-9abab6e30546", "method": "GET", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.101940+00:00", "request_id": "50726c85-a6c2-4655-b826-3ed1985b29d1", "method": "POST", "status": 201, "duration_ms": 16}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.113346+00:00", "request_id": "d50c695c-5f49-4bc8-8e9d-b307bfdc3c27", "method": "GET", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.142649+00:00", "request_id": "38e88d2d-ad24-4a4b-a0dc-002bf60bd500", "method": "POST", "status": 201, "duration_ms": 25}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.157168+00:00", "request_id": "45a9f3ff-f570-4c2d-bcef-0e9199462067", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.167411+00:00", "request_id": "6ae711a4-ab62-4eb0-a940-7c1f6978a8e1", "method": "GET", "status": 200, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.243782+00:00", "request_id": "af678191-c9ff-47af-8f3b-3dff15950354", "method": "POST", "status": 201, "duration_ms": 72}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.278447+00:00", "request_id": "4b996554-afab-4379-8776-bba33cfde7ac", "method": "GET", "status": 200, "duration_ms": 24}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.294470+00:00", "request_id": "28b3f0ac-786c-4af0-94aa-29a58bc3330b", "method": "GET", "status": 200, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.350683+00:00", "request_id": "4bc82c3e-336c-4984-8684-82697a1084ae", "method": "POST", "status": 201, "duration_ms": 48}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.376840+00:00", "request_id": "d330bce5-c4ea-44fc-91a8-6aa4ade7e6a8", "method": "GET", "status": 200, "duration_ms": 21}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.397189+00:00", "request_id": "0d357ab1-8f40-4619-9597-f824cd5dcc8d", "method": "GET", "status": 200, "duration_ms": 14}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.436842+00:00", "request_id": "b46676e7-446d-4197-987d-34da1578e3c0", "method": "POST", "status": 201, "duration_ms": 33}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.454808+00:00", "request_id": "b1f69e16-bc12-4226-9e28-b379d843e58e", "method": "GET", "status": 200, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.497183+00:00", "request_id": "08b41819-1cb7-4eec-b339-659e56c2ebb7", "method": "POST", "status": 200, "duration_ms": 33}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.520309+00:00", "request_id": "a1892d02-855b-4a23-9507-ab6b8963945c", "method": "GET", "status": 200, "duration_ms": 18}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.572896+00:00", "request_id": "0c4b9786-4486-4cbd-bece-ae9c05762531", "method": "POST", "status": 201, "duration_ms": 38}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.590515+00:00", "request_id": "0bdedd2f-19b8-49af-8d24-e2b90b1a6d2d", "method": "GET", "status": 200, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.668574+00:00", "request_id": "34e1df86-3e66-4817-987d-efadd7aa8878", "method": "POST", "status": 200, "duration_ms": 71}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.686207+00:00", "request_id": "f631e499-c03e-4452-94e8-338c9932174b", "method": "GET", "status": 200, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.766828+00:00", "request_id": "0f8c9549-8b69-4200-b45f-7467871f8a16", "method": "POST", "status": 200, "duration_ms": 72}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.790546+00:00", "request_id": "5f60afe2-86b0-45c4-be44-90c05eaa9015", "method": "GET", "status": 200, "duration_ms": 19}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.823477+00:00", "request_id": "0b8a3b02-ae6e-4e09-99d3-52a3d9804452", "method": "GET", "status": 200, "duration_ms": 24}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.836106+00:00", "request_id": "4022b802-0085-4e0d-a249-bc44717a5109", "method": "GET", "status": 200, "duration_ms": 8}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.864441+00:00", "request_id": "da0a8788-d0d6-466a-a2a1-836956f193fd", "method": "POST", "status": 201, "duration_ms": 24}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.881397+00:00", "request_id": "6053083e-8e29-47b6-8c06-fe419cd69b0d", "method": "GET", "status": 200, "duration_ms": 12}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.918210+00:00", "request_id": "c7135c6e-13a8-48e7-ab98-9ef499e7a7f1", "method": "POST", "status": 200, "duration_ms": 30}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.931953+00:00", "request_id": "1de3bb5f-2ba2-4f91-8f56-f5f116dd9260", "method": "GET", "status": 200, "duration_ms": 9}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:08.990624+00:00", "request_id": "0474c811-8b0d-413a-b8db-b17f8a591419", "method": "POST", "status": 200, "duration_ms": 52}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:09.003322+00:00", "request_id": "31a06465-929f-4606-ad11-290a2b9163c8", "method": "GET", "status": 200, "duration_ms": 7}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:09.063906+00:00", "request_id": "0ae8011a-1c40-41b2-ab82-95e7b5eae6f9", "method": "POST", "status": 200, "duration_ms": 56}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:09.099415+00:00", "request_id": "db597ed3-5675-4f50-b0ee-ee25153f454e", "method": "GET", "status": 200, "duration_ms": 31}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:09.117574+00:00", "request_id": "d998540a-a77b-464b-be14-4d63e7f0c2c4", "method": "GET", "status": 200, "duration_ms": 10}
+{"event": "http_request", "timestamp": "2026-10-27T12:29:09.135634+00:00", "request_id": "1d6e8ad4-89ba-4bf0-b2e8-5b039e786fd9", "method": "POST", "status": 422, "duration_ms": 12}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.634643+00:00", "request_id": "f3428494-00e1-4e58-85b3-fa01d23d0678", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.663980+00:00", "request_id": "5a2f32e2-565b-4154-917c-564762b00146", "method": "POST", "status": 201, "duration_ms": 24}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.675281+00:00", "request_id": "dc85b2ef-6243-49d7-b777-739af8d2b682", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.694917+00:00", "request_id": "79edae8d-4ba4-44a4-9d4d-c59bb5ae23e4", "method": "POST", "status": 201, "duration_ms": 14}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.707384+00:00", "request_id": "2d3e2b71-4973-4404-bdc4-decedc0d2c0d", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.730035+00:00", "request_id": "52d2f535-492c-43a2-9040-06fb8255c71d", "method": "POST", "status": 201, "duration_ms": 17}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.755747+00:00", "request_id": "896ac7d7-2884-4440-9134-64109e998d64", "method": "GET", "status": 200, "duration_ms": 22}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.786460+00:00", "request_id": "67c679a3-bc81-44e7-b22d-ba427721392a", "method": "POST", "status": 201, "duration_ms": 25}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.799223+00:00", "request_id": "77010137-aa0f-4105-b81b-5fcbaee781a7", "method": "GET", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:07.855693+00:00", "request_id": "f04aefcc-fbf5-4093-be1e-44ac8ea23523", "method": "POST", "status": 202, "duration_ms": 51}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.068858+00:00", "request_id": "6baea56f-41e9-4032-8554-48ac5f7d8727", "method": "GET", "status": 200, "duration_ms": 17}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.081012+00:00", "request_id": "4c6b64cf-cc68-4ec0-9e46-9abab6e30546", "method": "GET", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.101940+00:00", "request_id": "50726c85-a6c2-4655-b826-3ed1985b29d1", "method": "POST", "status": 201, "duration_ms": 16}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.113346+00:00", "request_id": "d50c695c-5f49-4bc8-8e9d-b307bfdc3c27", "method": "GET", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.142649+00:00", "request_id": "38e88d2d-ad24-4a4b-a0dc-002bf60bd500", "method": "POST", "status": 201, "duration_ms": 25}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.157168+00:00", "request_id": "45a9f3ff-f570-4c2d-bcef-0e9199462067", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.167411+00:00", "request_id": "6ae711a4-ab62-4eb0-a940-7c1f6978a8e1", "method": "GET", "status": 200, "duration_ms": 6}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.243782+00:00", "request_id": "af678191-c9ff-47af-8f3b-3dff15950354", "method": "POST", "status": 201, "duration_ms": 72}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.278447+00:00", "request_id": "4b996554-afab-4379-8776-bba33cfde7ac", "method": "GET", "status": 200, "duration_ms": 24}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.294470+00:00", "request_id": "28b3f0ac-786c-4af0-94aa-29a58bc3330b", "method": "GET", "status": 200, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.350683+00:00", "request_id": "4bc82c3e-336c-4984-8684-82697a1084ae", "method": "POST", "status": 201, "duration_ms": 48}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.376840+00:00", "request_id": "d330bce5-c4ea-44fc-91a8-6aa4ade7e6a8", "method": "GET", "status": 200, "duration_ms": 21}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.397189+00:00", "request_id": "0d357ab1-8f40-4619-9597-f824cd5dcc8d", "method": "GET", "status": 200, "duration_ms": 14}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.436842+00:00", "request_id": "b46676e7-446d-4197-987d-34da1578e3c0", "method": "POST", "status": 201, "duration_ms": 33}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.454808+00:00", "request_id": "b1f69e16-bc12-4226-9e28-b379d843e58e", "method": "GET", "status": 200, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.497183+00:00", "request_id": "08b41819-1cb7-4eec-b339-659e56c2ebb7", "method": "POST", "status": 200, "duration_ms": 33}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.520309+00:00", "request_id": "a1892d02-855b-4a23-9507-ab6b8963945c", "method": "GET", "status": 200, "duration_ms": 18}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.572896+00:00", "request_id": "0c4b9786-4486-4cbd-bece-ae9c05762531", "method": "POST", "status": 201, "duration_ms": 38}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.590515+00:00", "request_id": "0bdedd2f-19b8-49af-8d24-e2b90b1a6d2d", "method": "GET", "status": 200, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.668574+00:00", "request_id": "34e1df86-3e66-4817-987d-efadd7aa8878", "method": "POST", "status": 200, "duration_ms": 71}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.686207+00:00", "request_id": "f631e499-c03e-4452-94e8-338c9932174b", "method": "GET", "status": 200, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.766828+00:00", "request_id": "0f8c9549-8b69-4200-b45f-7467871f8a16", "method": "POST", "status": 200, "duration_ms": 72}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.790546+00:00", "request_id": "5f60afe2-86b0-45c4-be44-90c05eaa9015", "method": "GET", "status": 200, "duration_ms": 19}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.823477+00:00", "request_id": "0b8a3b02-ae6e-4e09-99d3-52a3d9804452", "method": "GET", "status": 200, "duration_ms": 24}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.836106+00:00", "request_id": "4022b802-0085-4e0d-a249-bc44717a5109", "method": "GET", "status": 200, "duration_ms": 8}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.864441+00:00", "request_id": "da0a8788-d0d6-466a-a2a1-836956f193fd", "method": "POST", "status": 201, "duration_ms": 24}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.881397+00:00", "request_id": "6053083e-8e29-47b6-8c06-fe419cd69b0d", "method": "GET", "status": 200, "duration_ms": 12}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.918210+00:00", "request_id": "c7135c6e-13a8-48e7-ab98-9ef499e7a7f1", "method": "POST", "status": 200, "duration_ms": 30}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.931953+00:00", "request_id": "1de3bb5f-2ba2-4f91-8f56-f5f116dd9260", "method": "GET", "status": 200, "duration_ms": 9}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:08.990624+00:00", "request_id": "0474c811-8b0d-413a-b8db-b17f8a591419", "method": "POST", "status": 200, "duration_ms": 52}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:09.003322+00:00", "request_id": "31a06465-929f-4606-ad11-290a2b9163c8", "method": "GET", "status": 200, "duration_ms": 7}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:09.063906+00:00", "request_id": "0ae8011a-1c40-41b2-ab82-95e7b5eae6f9", "method": "POST", "status": 200, "duration_ms": 56}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:09.099415+00:00", "request_id": "db597ed3-5675-4f50-b0ee-ee25153f454e", "method": "GET", "status": 200, "duration_ms": 31}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:09.117574+00:00", "request_id": "d998540a-a77b-464b-be14-4d63e7f0c2c4", "method": "GET", "status": 200, "duration_ms": 10}
+INFO     research.requests:main.py:104 {"event": "http_request", "timestamp": "2026-10-27T12:29:09.135634+00:00", "request_id": "1d6e8ad4-89ba-4bf0-b2e8-5b039e786fd9", "method": "POST", "status": 422, "duration_ms": 12}
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_research_fx_integration.py::test_research_cross_currency_uses_only_prior_actual_admitted_ticks
+1 failed, 1 warning in 4.17s
++ /usr/local/bin/docker compose --project-name phase0-test-c89b00b7353c41e894b928bf4ef22945 --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-udvlopj8/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Stopping 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Stopping 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Stopping 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Stopped 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Removing 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Stopped 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Removing 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-minio-1 Removed 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Stopped 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Removing 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-postgres-1 Removed 
+ Container phase0-test-c89b00b7353c41e894b928bf4ef22945-redis-1 Removed 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_postgres Removing 
+ Network phase0-test-c89b00b7353c41e894b928bf4ef22945_default Removing 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_redis Removing 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_storage Removing 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_storage Removed 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_redis Removed 
+ Volume phase0-test-c89b00b7353c41e894b928bf4ef22945_test_postgres Removed 
+ Network phase0-test-c89b00b7353c41e894b928bf4ef22945_default Removed 
+FAILED: Command exited 1; no service acceptance claimed

@@ -434,6 +434,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/market/jobs/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Job */
+        get: operations["get_job_api_v1_market_jobs__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/market/jobs/{job_id}/cancel": {
         parameters: {
             query?: never;
@@ -2016,7 +2033,7 @@ export interface components {
              * @default EXECUTION
              * @enum {string}
              */
-            role: "EXECUTION" | "CONFIRMATION";
+            role: "EXECUTION" | "SIGNAL" | "CONFIRMATION" | "FX";
             symbol: components["schemas"]["SymbolSpec-Input"];
             context: components["schemas"]["Context"];
         };
@@ -2572,6 +2589,8 @@ export interface components {
             attempts: number;
             /** Progress Rows */
             progress_rows: number;
+            /** Cancel Requested */
+            cancel_requested: boolean;
             /** Error Code */
             error_code: string | null;
             /**
@@ -2858,7 +2877,7 @@ export interface components {
             version: string;
             /**
              * Phase
-             * @default 4
+             * @default 5
              */
             phase: number;
             /**
@@ -2925,6 +2944,22 @@ export interface components {
              */
             volume: number | string;
             /**
+             * Cross Asset Confirmation
+             * @default false
+             */
+            cross_asset_confirmation: boolean;
+            /**
+             * Confirmation Direction
+             * @default SAME
+             * @enum {string}
+             */
+            confirmation_direction: "SAME" | "INVERSE";
+            /**
+             * Confirmation Max Age Seconds
+             * @default 86400
+             */
+            confirmation_max_age_seconds: number;
+            /**
              * Entry Order Type
              * @default MARKET
              * @enum {string}
@@ -2961,6 +2996,16 @@ export interface components {
              * @default 15
              */
             opening_minutes: number;
+            /**
+             * Session Exit Buffer Seconds
+             * @default 60
+             */
+            session_exit_buffer_seconds: number;
+            /**
+             * Flat Before Risk Reset
+             * @default true
+             */
+            flat_before_risk_reset: boolean;
             /**
              * Max Hold Seconds
              * @default 3600
@@ -4553,6 +4598,12 @@ export interface components {
              */
             phase: "DISCOVERY" | "CALIBRATION" | "VALIDATION" | "FINAL_HOLDOUT";
             /**
+             * Signal Timeframe
+             * @default NATIVE
+             * @enum {string}
+             */
+            signal_timeframe: "NATIVE" | "TICK" | "M1" | "M5" | "M15" | "H1" | "H4" | "D1";
+            /**
              * Validation Mode
              * @default DIRECT
              * @enum {string}
@@ -5502,6 +5553,37 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobView"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_job_api_v1_market_jobs__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -6827,6 +6909,7 @@ export interface operations {
                 trial?: number;
                 offset?: number;
                 limit?: number;
+                chart?: boolean;
             };
             header?: never;
             path: {

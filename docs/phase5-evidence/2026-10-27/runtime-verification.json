@@ -1,0 +1,12 @@
+{
+  "id": "runtime-verification",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/validate_runtime.py"
+  ],
+  "started_utc": "2026-10-27T12:27:40.827299+00:00",
+  "duration_seconds": 0.717,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/runtime-verification.txt",
+  "sha256": "c14ac9aa1b309c6a88ea886e2af32ce786e0b66fdf0b79b285b1a47e5945c3a8"
+}

@@ -1,0 +1,12 @@
+{
+  "source": "apps/web/test-results/ux-workflows-independent-s-ef53e-review-and-viewer-isolation-desktop/error-context.md",
+  "sha256": "f510b58b3d60cb6731a77861e3b5e9740af9bbae2bde578b2add34db7d45eeb5",
+  "scenario": "independent safety, reviewed setup, guarded routes, keyboard review and viewer isolation",
+  "assertion_source": "e2e/risk-workflow.ts:77",
+  "expected_http_status": 201,
+  "received_http_status": 503,
+  "owner_response_body_available": false,
+  "owner_request_id_available": false,
+  "owner_server_log_available": false,
+  "retained_evidence": "Only assertion metadata retained; no DOM, cookies, credentials or raw server log"
+}

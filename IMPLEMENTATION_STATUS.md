@@ -1,70 +1,185 @@
 # Implementation Status
 
-Updated: 2026-10-27 · API 0.1.0 · Phase 4 · SIMULATED · external DENY_ALL.
+## Current gate — mobile visual references (2026-10-28)
 
-**Phase 4 is implemented and native-tested; full acceptance is BLOCKED by managed Chromium launch.**
-Owner-reported Phase 3 local passes are OWNER_REPORTED_PASS, separate from current agent evidence.
-No external demo/live execution, generated code, real broker credentials, promotion, publish/push or
-Phase 5 started. See [PHASE4_COMPLETION_REPORT.md](PHASE4_COMPLETION_REPORT.md).
+MOBILE REFERENCES APPROVED; overall acceptance remains NOT COMPLETE. The latest owner run reports
+one mobile visual failure and one other passing case. The actual error-context identifies both
+home-light-mobile-darwin.png and home-dark-mobile-darwin.png as missing, not mismatched. Both
+genuine actual PNGs were inspected offline (390×1317). Generated reference files now exist and are
+byte-identical to their respective actual captures. The owner subsequently explicitly approved both
+mobile references; exact hashes and adoption scope are recorded in
+[approval.json](docs/phase55b-evidence/2026-10-28/mobile-reference-review/approval.json).
+No PNG copy or rewrite was needed. Approval is separate from a fresh passing browser comparison.
+Review copies and exact hashes are retained in the
+[mobile reference review](docs/phase55b-evidence/2026-10-28/mobile-reference-review/review.json).
+No app/test code, tolerance or desktop reference changed. make check passes 212 Python + 98
+frontend tests; smoke passes HTTP 200 (exit 0). No full service-suite rerun was needed for this
+evidence-only review. The prior real-service results below remain historical evidence. All four
+current reference hashes are verified unchanged. Current rendered
+interaction, all 20 scenarios and manual gates are still not verified here. SIMULATED/DENY_ALL.
+See the [current report](PHASE55B_COMPLETION_REPORT.md#mobile-visual-reference-review--2026-10-28).
+
+## Previous correction — market browser synchronization (2026-10-28)
+
+FIXED IN TEST SOURCE; full browser acceptance remains BLOCKED / NOT COMPLETE. The owner's next
+run reports four foundation passes, then a Phase 2 desktop 120-second global timeout. The actual
+error-context contains no active locator, call stack or DOM; the exact original timed-out await is
+unknown. Source inspection found two missing completion boundaries: navigating away before the
+instrument save completes and navigating to datasets before the accepted import redirects to its
+job. The test now requires actual response statuses, instrument persistence, the job redirect and
+real worker success. Ten fixed, non-secret workflow step names improve future failure diagnosis.
+All 16 original assertions and the global timeout remain unchanged. No application/backend,
+financial, authorization, provenance or screenshot-reference changes. Focused service tests pass
+three cases before and three after restart. Final make check passes 212 Python + 98 frontend tests;
+integration passes one readiness case and 78 isolated cases before and 78 after restart, with strict
+readiness/smoke. Contracts, smoke, secret/repository/whitespace checks pass (exit 0); 20 browser cases
+collect only. Eight development containers/mounts/images and approved PNG hashes remain unchanged.
+Actual verification, initial check failures and the
+remaining owner-local commands are in the
+[market browser correction report](PHASE55B_COMPLETION_REPORT.md#market-import-browser-synchronization-correction--2026-10-28).
+Native integration does not establish Chromium acceptance. All 20 desktop/mobile cases still require
+a successful local run. SIMULATED/DENY_ALL remains active. No Phase 6.
+
+## Previous correction — returning-owner MFA/navigation (2026-10-27)
+
+FIXED IN TEST SOURCE; browser acceptance remains BLOCKED / NOT COMPLETE. The owner failure at
+phase1.spec.ts:156 shows the login form after the test immediately hard-navigated following an
+async MFA click. The test now awaits the exact verification response/completion, FULL authenticated
+UI and auth/me owner state before navigation. Existing account/persistence/reload/security assertions
+remain intact. Native PostgreSQL tests confirm account persistence, actual rotated-cookie access
+and rejection of the revoked challenge cookie. Two focused tests pass before and two after restart;
+make check passes 212 Python + 98 frontend tests; full integration passes 78 cases before and 78
+after restart, plus readiness/strict smoke. Contracts, secret/repository/whitespace checks pass
+(exit 0). All development container identities/mounts and approved reference hashes are preserved.
+Complete current evidence is
+in the [MFA/navigation correction report](PHASE55B_COMPLETION_REPORT.md#returning-owner-mfanavigation-correction--2026-10-27).
+No app/backend rules, MFA window, RBAC, financial logic or approved visual references changed.
+All 20 desktop/mobile browser cases still require a successful owner-local run. No Phase 6.
+
+## Previous visual-reference review — Phase 5.5B (2026-10-27)
+
+Owner post-fix PNGs inspected: 336 pixels differ only in the intended fixed clock-mask expansion
+(16×21 at inclusive x=1177–1192/y=962–982); every other RGBA pixel is identical. Old reference 55px
+versus fixed-slot 71px. The owner explicitly approved the genuine light-desktop candidate; only that reference was replaced
+byte-for-byte and its previous version retained as evidence. The next owner run reached dark after light. Actual dark PNGs also show only the same 336 mask pixels;
+the owner explicitly approved it and only the dark-desktop reference was replaced byte-for-byte.
+Both approved desktop reference hashes are verified. Mobile captures and full 20 acceptance remain
+unverified; rerun focused UX and then the complete suite without snapshot rewriting. No source, tolerance or financial/security change
+in this review. See [the concrete review](PHASE55B_COMPLETION_REPORT.md#owner-post-fix-visual-reference-review--2026-10-27).
+
+## Previous source correction — Phase 5.5B visual timestamp mask (2026-10-27)
+
+FIXED IN SOURCE; references/browser/manual acceptance NOT COMPLETE. Inspected the owner's actual
+expected/received/diff PNGs: all 84 differing pixels form a 4×21 footer-clock mask strip at inclusive
+x=1189–1192/y=962–982; every other RGBA pixel is identical. Proportional timestamp text changed the
+intrinsic mask width from 55 to 59px. A fixed 8ch, tabular HH:MM:SS component now preserves the actual
+observation with semantic datetime; strict comparisons and timestamp-only masking remain unchanged.
+No tolerances or baselines were changed. Owner review is required for new stable-slot references.
+make check passes 212 Python + 98 frontend tests; focused clock tests, contracts and smoke pass.
+All 20 browser cases collect; actual reruns remain blocked for this agent by the saved managed-origin
+restriction. See the [visual correction report](PHASE55B_COMPLETION_REPORT.md#visual-timestamp-mask-correction--2026-10-27)
+for genuine image evidence, exact commands and owner review steps. No Phase 6 or external orders.
+
+## Previous correction — Phase 5.5B risk-policy HTTP 503 (2026-10-27)
+
+FIXED IN SOURCE; overall acceptance BLOCKED / NOT COMPLETE. A deterministic actual-PostgreSQL
+regression reproduced POST /api/v1/risk/accounts/{account_id}/policies returning 503 with SQLSTATE 40P01:
+owner→account locks in authenticated requests conflicted with account→owner-FK locks in the independent
+monitor. The monitor now locks owner before account; both transactions commit, the policy remains
+UNVERIFIED and stops/authorization/audit remain enforced. Safe correlated diagnostics were added.
+Focused native policy tests pass 4 cases before and 4 after restart. make check passes 212 Python + 94
+frontend tests; make integration passes 77 before and 77 after restart plus readiness/smoke. Contract,
+smoke, secret and repository checks pass (exit 0). Final evidence is tracked in the
+[correction report](PHASE55B_COMPLETION_REPORT.md#risk-policy-503-correction--2026-10-27). The owner's
+actual browser503 artifact was inspected; its body/request ID/server log were unavailable. Browser
+execution remains blocked for this agent by the saved managed-origin restriction;20 cases collect,
+not 20 passing executions. No snapshots changed, Phase 6 or external orders enabled.
+
+## Initial UI migration evidence — Phase 5.5B (2026-10-27)
+
+Implementation delivered; acceptance **BLOCKED / NOT COMPLETE**. Five destinations, independent
+auth/safety, separate reviewed emergency actions, guided data/research, understandable stored results,
+scoped account tools and Settings are implemented.208 Python +94 frontend checks pass; real service
+integration passes76 cases before and76 after restart.20 Playwright cases collect; current execution
+and manual/visual acceptance are blocked by the managed origin permission. No browser/WCAG success
+is inferred. See [PHASE55B_COMPLETION_REPORT.md](PHASE55B_COMPLETION_REPORT.md) and
+[coverage](docs/ux-migration-coverage.md). SIMULATED/DENY_ALL and all financial/security gates remain.
+No Phase6. Prior phase evidence and all60 criteria below are retained as historical implementation status.
+
+
+## Historical Phase 5 evidence — retained from before this migration
+
+The following records the agent verification at that revision. The owner subsequently reported
+Phases 0–5 locally validated; original local logs were not supplied. This historical record does not
+replace the current Phase 5.5B acceptance gate above.
+
+Updated: 2026-10-27 · API 0.1.0 · Phase 5 · SIMULATED · external DENY_ALL.
+
+**Phase5 remains NOT fully accepted.** The owner reproduced an actual UI exact-label timeout after
+Chromium launched. The Strategy Lab select labels are corrected; the agent's latest focused rerun
+separately fails at managed Chromium bootstrap1100 before UI assertions. Do not confuse the two.
+Exact cause, source files, owner artifact, commands/exits and remaining gates:
+[PHASE5_COMPLETION_REPORT.md](PHASE5_COMPLETION_REPORT.md#strategy-lab-exact-label-correction--current-revision-2026-10-27).
+No Phase6, generated code, broker credentials/orders or paper/live promotion. Prior Phase4 browser
+acceptance remains owner-reported, without supplied original commands/logs.
 
 ## Specification traceability
 
 The original master and docs/PRODUCT_SPEC.md retain SHA-256
 c125b5353c6a6653b5d783c90ec037adfa70f61e7ba9d04b594df9ac8814d085.
 A01–A60 below are derived audit criteria, not reconstructed original questionnaire numbering.
-4 fully functional, 37 partially implemented, 0 mocked-only and 19 missing. These are scope labels, not effort percentages or acceptance percentages.
-Earlier reports remain historical evidence; current Phase 4 status supersedes their missing-risk claims.
+4 fully functional, 43 partially implemented, 0 mocked-only and 13 missing. These classify the full
+master scope, not Phase 5 acceptance or effort. Earlier dated reports remain historical evidence.
 
-## Current acceptance
+## Current verification — exact-label correction
 
-- PASSED: `make check`: lint/format, Python/TypeScript types, 179 portable Python and 16 frontend
-  tests, production frontend build. 61 service/infrastructure cases are deselected and tested separately.
-- PASSED: `make integration-services`: 60 actual disposable PostgreSQL/Redis/MinIO security/data/
-  execution/risk cases per write and restart stage. Final `make integration` also passes one running-API readiness case and strict smoke200.
-- PASSED: actual multiprocess reservation competition, SIGKILL before/after commit, durable STOP,
-  UNKNOWN retention, partial releases, tamper/replay, cross-currency P&L, midnight gap and funding cases.
-- PASSED: additive 0005 with fresh private backup; all data container IDs/mounts unchanged, 29 legacy
-  hashes unchanged, session idle renewal verified field-by-field against backup. Owner/MFA retained.
-- PASSED: no ORM drift; immutable-table runtime grants; API/web/market-worker/risk-monitor healthy,
-  readiness200 and external flags false; isolated monitor packaging/key/network boundary verified.
-- PASSED: generated OpenAPI/TS, Compose/Actions syntax, npm/Python dependency audits. Final fresh
-  secret/repository scans and exact command outcomes are in the report/evidence ledger.
-- FAILED/BLOCKED: focused risk desktop command failed at Chromium Permission denied (1100), before
-  page creation. Full suite attempt: 3 desktop launch failures, 1 HTTP-only denial pass, 10 NOT RUN.
-  All 14 desktop/mobile cases collect. No assertions weakened, browser protections bypassed or skips added.
-- MOCKED/CONTRACT_FIXTURE: historical MT5 fake SDK and cTrader protocol/OAuth fixtures; actual external
-  broker/Windows/deployed-service acceptance remains BLOCKED/unverified.
-- NOT IMPLEMENTED: broker-capable independent executor/signing identity, live approvals, generated-code
-  sandbox, AI/research/statistical/backtest/paper/promotion/notification modules. No external authority.
-- NOT RUN: remote CI, Windows optional dependency/container vulnerability/SBOM, production scale and
-  complete off-host backup restore. .git remains read-only; no commit/remote/push created.
+- FIXED IN SOURCE: implicit label text included option text, preventing exact Playwright lookup.
+  StrategyLab now gives selects explicit matching Romanian labels; original exact locator retained.
+  E2E additionally asserts visibility and the fixture account option. MFA/RBAC/risk/data unchanged.
+- PASSED: make check,208 Python +16 frontend tests, lint/types/build; make contracts-check and smoke.
+- PASSED: make integration,1 readiness case +76 actual disposable cases in each write/restart stage,
+  then strict smoke200. No skipped tests or fake service acceptance.
+- PASSED: rebuilt/recreated Web matches latest image; served JS includes corrected labels. API
+  ready200/phase5/schema0006 and all external execution flags false. This is not browser acceptance.
+- FAILED/BLOCKED: current focused desktop command exit2,76/76 native stages pass then Chromium
+  bootstrap1100 before page creation. Original owner UI assertion failure is recorded separately.
+- NOT RUN FOR THIS FIX: full16-case execution, pending focused success. All16 still collect. Earlier
+  full command had3 launch failures,1 HTTP-only pass and12 NOT RUN; that is historical, not a new pass.
+- PRESERVATION:3 data container IDs/mounts unchanged. Old whole-DB equality guard fails on5 auth/audit
+  tables versus the earlier private snapshot;35 other legacy hashes match. Read-only comparison finds
+  only last_totp_step changed on existing users; passwords/MFA/identities unchanged, original audit/
+  sessions retained and authentication rows appended. The three new auth events predate this patch.
+  HMAC chain valid; no guard weakened, data rollback or dev-volume removal.
 
-## Phase 4 module inventory
+## Phase 5 module inventory
 
-- IMPLEMENTED/NATIVE TESTED: packages/risk contracts/clock/sizing/policy/ledger/authorization/gateway/
-  monitor, ten models and additive 0005 migration; exact Decimal linear payoffs, conservative FX,
-  reference/cost/exposure math, scoped policy/profile revisions and refusal on uncertainty.
-- IMPLEMENTED/NATIVE TESTED: mandatory packages/execution journal/fill integration; exact account locks,
-  grants/uses/reservations, rollback, duplicate receipts, actual process competition/kills and restart.
-- IMPLEMENTED/NATIVE TESTED: apps/api/risk schemas/routes, bounded authenticated/MFA configuration,
-  policy attestation, status/history/what-if/monitor and durable STOP/CLEAR/separate simulated FLATTEN.
-- IMPLEMENTED/RUNTIME VERIFIED: fixed-code scripts/risk_monitor and Compose service; no broker/admin/
-  root-storage/bootstrap keys, Docker socket, public port or generated-code capability. Current dev
-  has zero configured risk accounts; `--once` verifies packaging/startup, native fixtures test behavior.
-- IMPLEMENTED/BROWSER BLOCKED: RiskCenter/RiskBanner, BrokerCenter protection fields, generated types
-  and phase3/phase4 E2E real-API workflows. Their source/build is verified; rendered behavior is unverified.
-- PARTIAL/EXTERNAL NOT IMPLEMENTED: current SIM HMAC is trusted-host authority, not an independent
-  broker executor. Owner financial/calendar evidence is explicit synthetic input; actual market truth,
-  real margin/tradability/protection, current firm terms and broker orders are not certified.
+- IMPLEMENTED: eight fixed reviewed baselines, immutable source/version/parameter definitions,
+  causal features and explicit automation/session/holding/protection requests; no dynamic code loading.
+- IMPLEMENTED: bounded PyArrow vectorized exploratory screening and actual event-journal/risk-gateway
+  validation, isolated accounts/clocks, portfolio/MTF inputs, observed ticks and explicit OHLC uncertainty,
+  pending/partial orders, fees/funding/stress and terminal inventory refusal.
+- IMPLEMENTED: Decimal monetary metrics, descriptive ratios with sample/calendar guards, chronological
+  walk-forward training/OOS, purged intervals/embargo, seeded bootstrap/block/permutation robustness,
+  causal regimes, registered hypothesis counts and conditional owner-declared DSR assumptions.
+- IMPLEMENTED: seven additive PostgreSQL research tables, immutable MinIO artifacts and provenance,
+  semantic reproduction digest, fenced durable jobs, cancel/retry/SIGKILL recovery and quotas.
+- IMPLEMENTED: authenticated owner-MFA APIs and Romanian real-API Strategy Lab library/configuration/
+  jobs/results/curve/replay/walk-forward/comparison/provenance and one-use final evaluation release.
+- PARTIAL: ordinary API holdout custody is protected, including owner-wide overlapping aliases;
+  prior exposure remains UNKNOWN and never certified untouched. Independent custodian secrecy,
+  real historical coverage, production scale and external broker facts remain unverified.
+- NOT IMPLEMENTED: AI/ML/LLM judges, hostile-code sandbox, research-to-paper eligibility, paper engine,
+  external order executor, independent broker signing authority, live approvals and promotion.
+- MOCKED/CONTRACT_FIXTURE: prior fake MT5 SDK/cTrader protocol tests are still fixtures; actual service
+  connectivity is not established by backtests. Phase 5 service fixtures use real PG/Redis/MinIO and
+  explicitly synthetic market observations. No manufactured profitability or five-year history claim.
 
-## Prior modules retained
+## Previous phases
 
-Phase 1 identity/governance/MFA/CSRF/role/account partitions and append-only HMAC audit remain intact.
-Phase 2 bounded ingestion/quality/PIT/MinIO immutability, fixed worker/Redis outbox and actual ECB
-reference adapter remain implemented and native-tested. Phase 3 deterministic simulator/journal,
-immutable receipts, UNKNOWN/reconciliation, VALID dataset replay and read-only connector contracts
-remain implemented. Actual MT5/cTrader connectivity is unverified; OAuth/fake-SDK tests are fixtures.
-No source dataset, owner enrollment or persistent development volume was deleted.
+Identity, owner/MFA/CSRF/account partitions, Phase 2 immutable data/quality, Phase 3 deterministic
+simulator/journal and Phase 4 gateway/ledger/reservations/monitor are reused. No dev volumes are removed.
+The current local/runtime/preservation and test evidence is in the Phase 5 report and execution ledger.
+Remote CI and Git writes remain NOT RUN; managed .git is read-only. No workaround or push occurred.
 
 ## All 60 derived audit criteria
 
@@ -99,7 +214,7 @@ Actual external symbols/tradability remain unverified; the catalog is not tradin
 
 **PARTIALLY IMPLEMENTED.** Evidence: Typed execution-style, automation, duration, overnight/weekend and permitted-symbol policy checks now gate simulated entries and monitor holdings.
 
-Actual strategy families, calibrated scalping/intraday performance and external venue validation remain missing.
+Eight trusted intraday research baselines are implemented; calibrated performance, broader families and external venue validation remain unverified.
 
 ### A06 — Ticks and M1/M5/M15/H1/H4, optional D1
 
@@ -157,9 +272,9 @@ Implement artifact-specific write capabilities and a release manager outside age
 
 ### A15 — Strategy families and non-ML baselines
 
-**MISSING.** Source: §1, §6. Evidence: No strategy implementations.
+**PARTIALLY IMPLEMENTED.** Evidence: Eight reviewed causal non-ML strategies, immutable registry and typed sizing/exit/session contracts are implemented in packages/research/strategies.py.
 
-Implement versioned deterministic baselines, stop/exit declarations and compliance filtering.
+Broader autonomous/ML strategy families and real historical validation remain future work.
 
 ### A16 — XGBoost, LightGBM, HMM/clustering comparisons
 
@@ -169,21 +284,21 @@ Implement fold-local training, reproducible artifacts and baseline/OOS compariso
 
 ### A17 — Time-available features and fold-local preprocessing
 
-**MISSING.** Source: §5–6. Evidence: docs/EXPERIMENT_PROTOCOL.md only.
+**PARTIALLY IMPLEMENTED.** Evidence: Visible-only features, strict prior-availability MTF/as-of joins and fold-local train/OOS execution are implemented; future-window guards and native closed-bar/tick tests apply.
 
-Enforce availability timestamps and fit transforms only within training folds; add leakage traps.
+ML preprocessing/training remains NOT IMPLEMENTED; no fitted-transform claim.
 
 ### A18 — vectorbt screening
 
-**MISSING.** Source: §1, §3, §12 phase 5. Evidence: No vectorbt dependency or screening engine.
+**PARTIALLY IMPLEMENTED.** Evidence: packages/research/screening.py uses existing PyArrow compute as the vectorized equivalent, lagged exposure, explicit costs, batching and deterministic random controls.
 
-Implement cost-aware screening with versioned inputs; screening cannot authorize promotion alone.
+Bounded exploratory screening is not execution validation, paper eligibility or proven large-scale capacity; pending/cross-currency/MTF require EVENT.
 
 ### A19 — Event-driven backtest and executable signal parity
 
-**PARTIALLY IMPLEMENTED.** Evidence: Deterministic execution events and pinned VALID Phase 2 bid/ask tick replay are native-tested.
+**PARTIALLY IMPLEMENTED.** Evidence: packages/research/engine.py reuses the actual execution journal and Phase 4 gateway with isolated accounts, immutable inputs, costs and causal signals.
 
-Full strategy/backtest signal parity and independent research backtesting remain missing.
+Future paper/live parity and actual broker execution remain unverified/unimplemented.
 
 ### A20 — Bid/ask, spread, fees, slippage, latency, partial/rejected fills
 
@@ -193,21 +308,21 @@ These are documented synthetic assumptions; no measured real-world fill accuracy
 
 ### A21 — Chronological OOS and untouched final holdout
 
-**MISSING.** Source: §6. Evidence: docs/EXPERIMENT_PROTOCOL.md only.
+**PARTIALLY IMPLEMENTED.** Evidence: Chronological phases, owner-MFA seals, ordinary-read/alias exclusion and one frozen audited final release are implemented.
 
-Enforce separate discovery/calibration/validation/final evaluation with holdout-access audit.
+Prior exposure is UNKNOWN, never certified untouched; independent custodian/host-admin-resistant secrecy is not implemented.
 
 ### A22 — Walk-forward, purging/embargo and multiple-testing controls
 
-**MISSING.** Source: §1, §6. Evidence: No statistical evaluation module.
+**PARTIALLY IMPLEMENTED.** Evidence: Actual train-only parameter selection, independent OOS accounts, purge/embargo, interval CV and immutable attempted hypotheses are implemented.
 
-Implement overlap-aware folds, trial registry and documented selection-bias controls.
+DSR requires explicit owner-declared independent count/variance model; correlated sweeps do not prove independence or authorize promotion.
 
 ### A23 — Bootstrap/Monte Carlo, regimes, metrics and confidence
 
-**MISSING.** Source: §1, §6. Evidence: No metrics or backtest results.
+**PARTIALLY IMPLEMENTED.** Evidence: Stored-fill/equity Decimal metrics, sample-safe ratios, seeded bootstrap/block/permutation uncertainty and causal regimes are implemented.
 
-Implement deterministic numerical tests, block resampling, sample-size limits and uncertainty reporting.
+Synthetic tests establish arithmetic/behavior, not empirical profitability, stationarity or adequacy of real history.
 
 ### A24 — Adaptive statistical/compliance gates for paper eligibility
 
@@ -369,13 +484,13 @@ Browser acceptance remains blocked by Chromium OS permission denial. Authenticat
 
 **PARTIALLY IMPLEMENTED.** Source: §3–4, §10, §15. Evidence: Durable ordered audit uses runtime append-only permissions/triggers and HMAC chain/head verification with UTC/actor/correlation/before-after. Native tamper/rollback/concurrency/restart tests pass.
 
-No external anchor, full causal decision replay, retention service or verified backup restore. Host/DB admins holding the key remain trusted.
+Stored research signal/decision/journal/fill replay is implemented; external anchoring, full retention service and verified off-host restore remain missing. Host/DB admins holding the key remain trusted.
 
 ### A51 — Typed modular monolith, OpenAPI, generated TS and full domain models
 
 **PARTIALLY IMPLEMENTED.** Source: §3–4, §11, §15. Evidence: Typed Phase 1 identity and governance schemas, scoped repositories, PostgreSQL models/migration and generated OpenAPI/TypeScript are implemented.
 
-Dataset, trading, order/fill/reconciliation, risk ledger and later domain models remain absent.
+Dataset, execution/journal, risk/reservation and research/experiment models are implemented; AI/paper/live lifecycle models remain future scope.
 
 ### A52 — PostgreSQL/Alembic, Redis, MinIO and runnable local containers
 
@@ -387,7 +502,7 @@ This classification covers the runnable local stack. Fresh-machine rebuild, prod
 
 **PARTIALLY IMPLEMENTED.** Source: §3, §9, §12. Evidence: Fixed ingestion jobs use PostgreSQL durable outbox, Redis hints, idempotency, bounded slots, progress/cancel/backoff and tested process-kill/lease recovery.
 
-This is a data pipeline, not arbitrary research-job orchestration, GPU quotas or generated-code execution.
+Fixed trusted research jobs now add PG leases/fencing, two slots, bounded CPU/RAM/time/rows/results, cancellation and actual SIGKILL/retry. Autonomous scheduling, GPU quotas and generated-code execution remain absent.
 
 ### A54 — Private Ollama gateway, exact model digests and provider portability
 
@@ -405,7 +520,7 @@ Measure VRAM/context limits and cost rates; enforce per-agent/monthly quotas bef
 
 **PARTIALLY IMPLEMENTED.** Evidence: Romanian real-API Risk Center now includes scoped profiles, exact policy verification, financial/calendar context, what-if, headrooms/decisions/reservations/incidents and STOP/CLEAR/FLATTEN; global emergency banner added.
 
-Full 14-case desktop/mobile acceptance is BLOCKED at managed Chromium launch; other future labs remain absent.
+Strategy Lab now uses real stored experiments/results/replay/comparison APIs; current16-case desktop/mobile acceptance is BLOCKED by managed Chromium launch. Prior14-case local acceptance is owner-reported. AI/paper labs remain absent.
 
 ### A57 — Telegram/email incidents and authenticated emergency commands
 
@@ -427,6 +542,6 @@ Implement cloud/local/Windows runbooks and scripts, private TLS identities, encr
 
 ### A60 — Release gates, property/fault/integration/E2E/security tests and documentation
 
-**PARTIALLY IMPLEMENTED.** Evidence: Phase 4 quality/contracts and real-service property/adversarial/risk/execution regression tests pass; exact commands and failures remain in PHASE4_COMPLETION_REPORT.md and the execution ledger.
+**PARTIALLY IMPLEMENTED.** Evidence: Phase 5 portable/frontend/contracts and real-service research/risk/execution regressions pass; exact current commands and browser failures are in PHASE5_COMPLETION_REPORT.md and its execution ledger.
 
 Current managed browser launch remains blocked; remote CI, container vulnerability/SBOM, production-load and full restore acceptance remain NOT RUN.

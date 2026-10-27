@@ -1421,6 +1421,49 @@
         }
       }
     },
+    "/api/v1/market/jobs/{job_id}": {
+      "get": {
+        "tags": [
+          "Market data"
+        ],
+        "summary": "Get Job",
+        "operationId": "get_job_api_v1_market_jobs__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/market/jobs/{job_id}/cancel": {
       "post": {
         "tags": [
@@ -3546,6 +3589,16 @@
               "minimum": 1,
               "default": 100,
               "title": "Limit"
+            }
+          },
+          {
+            "name": "chart",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Chart"
             }
           }
         ],
@@ -6149,7 +6202,9 @@
             "type": "string",
             "enum": [
               "EXECUTION",
-              "CONFIRMATION"
+              "SIGNAL",
+              "CONFIRMATION",
+              "FX"
             ],
             "title": "Role",
             "default": "EXECUTION"
@@ -7416,6 +7471,10 @@
             "type": "integer",
             "title": "Progress Rows"
           },
+          "cancel_requested": {
+            "type": "boolean",
+            "title": "Cancel Requested"
+          },
           "error_code": {
             "anyOf": [
               {
@@ -7446,6 +7505,7 @@
           "state",
           "attempts",
           "progress_rows",
+          "cancel_requested",
           "error_code",
           "next_attempt_at",
           "created_at"
@@ -8174,7 +8234,7 @@
           "phase": {
             "type": "integer",
             "title": "Phase",
-            "default": 4
+            "default": 5
           },
           "timestamp": {
             "type": "string",
@@ -8304,6 +8364,27 @@
             "default": "0.01",
             "gt": 0
           },
+          "cross_asset_confirmation": {
+            "type": "boolean",
+            "title": "Cross Asset Confirmation",
+            "default": false
+          },
+          "confirmation_direction": {
+            "type": "string",
+            "enum": [
+              "SAME",
+              "INVERSE"
+            ],
+            "title": "Confirmation Direction",
+            "default": "SAME"
+          },
+          "confirmation_max_age_seconds": {
+            "type": "integer",
+            "maximum": 604800.0,
+            "minimum": 1.0,
+            "title": "Confirmation Max Age Seconds",
+            "default": 86400
+          },
           "entry_order_type": {
             "type": "string",
             "enum": [
@@ -8358,6 +8439,18 @@
             "minimum": 1.0,
             "title": "Opening Minutes",
             "default": 15
+          },
+          "session_exit_buffer_seconds": {
+            "type": "integer",
+            "maximum": 3600.0,
+            "minimum": 0.0,
+            "title": "Session Exit Buffer Seconds",
+            "default": 60
+          },
+          "flat_before_risk_reset": {
+            "type": "boolean",
+            "title": "Flat Before Risk Reset",
+            "default": true
           },
           "max_hold_seconds": {
             "type": "integer",
@@ -12128,6 +12221,21 @@
               "FINAL_HOLDOUT"
             ],
             "title": "Phase"
+          },
+          "signal_timeframe": {
+            "type": "string",
+            "enum": [
+              "NATIVE",
+              "TICK",
+              "M1",
+              "M5",
+              "M15",
+              "H1",
+              "H4",
+              "D1"
+            ],
+            "title": "Signal Timeframe",
+            "default": "NATIVE"
           },
           "validation_mode": {
             "type": "string",

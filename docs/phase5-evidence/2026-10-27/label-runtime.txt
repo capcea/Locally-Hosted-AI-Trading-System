@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase5/verify_label_bundle.py", line 13, in <module>
+    assert '"aria-label":'+json.dumps(label,ensure_ascii=False) in js.text,label
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Cont sursă verificat

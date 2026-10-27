@@ -1,0 +1,14 @@
+{
+  "id": "native-research-causality",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase5/focused_services.py"
+  ],
+  "started_utc": "2026-10-27T12:03:32.009000+00:00",
+  "duration_seconds": 85.065,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/native-research-causality.txt",
+  "sha256": "461451e49cb9ac3e0ece2c65709cc904437a88696e56605afd8250a625e0388c"
+}

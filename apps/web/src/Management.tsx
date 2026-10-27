@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
-import { api, ApiError, parseSession } from './management-api';
+import { api, ApiError, parseSession, safeError } from './management-api';
+import { Link } from './navigation/history';
+import { ConfirmDialog, Field as InputField, SelectField } from './ui/Controls';
+import { useAuth } from './auth/AuthProvider';
 import type {
   AuditEvent,
   RecordBody,
@@ -15,7 +18,7 @@ import BrokerCenter from './BrokerCenter';
 import RiskCenter from './RiskCenter';
 import StrategyLab from './StrategyLab';
 
-type Tab = keyof typeof t.tabs;
+export type Tab = keyof typeof t.tabs;
 type FieldName = keyof typeof t.fields;
 type Options = { value: string; label: string }[];
 
@@ -36,36 +39,43 @@ function Field({
   options?: Options;
   required?: boolean;
 }) {
-  return (
-    <label className="management-field">
-      <span>{label}</span>
-      {options ? (
-        <select
-          aria-label={label}
-          name={name}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          required={required}
-        >
-          <option value="">Alege…</option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <input
-          aria-label={label}
-          name={name}
-          type={type}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          required={required}
-          autoComplete={type === 'password' ? 'off' : undefined}
-        />
-      )}
-    </label>
+  return options ? (
+    <SelectField
+      label={label}
+      name={name}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      required={required}
+    >
+      <option value="">Alege…</option>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </SelectField>
+  ) : (
+    <InputField
+      name={name}
+      label={label}
+      type={type}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      required={required}
+      autoComplete={
+        name === 'bootstrap_token'
+          ? 'off'
+          : name === 'username'
+            ? 'username'
+            : name === 'code'
+              ? 'one-time-code'
+              : type === 'password'
+                ? name.includes('new')
+                  ? 'new-password'
+                  : 'current-password'
+                : undefined
+      }
+    />
   );
 }
 
@@ -77,10 +87,10 @@ function ErrorNotice({ error }: { error: string | null }) {
   ) : null;
 }
 function message(error: unknown) {
-  return error instanceof Error ? error.message : 'Operațiunea a eșuat.';
+  return safeError(error);
 }
 
-function Authentication({
+export function Authentication({
   session,
   setSession,
 }: {
@@ -235,6 +245,12 @@ function Authentication({
           >
             {initialized ? 'Continuă cu parola' : 'Creează proprietarul'}
           </button>
+          {initialized === false && !available && (
+            <p>
+              Configurarea proprietarului nu este disponibilă. Administratorul trebuie să
+              pregătească identitatea și codul privat pe server; nu le presupunem.
+            </p>
+          )}
         </form>
       ) : (
         <>
@@ -406,6 +422,15 @@ function Cards({
       {items.map((item) => (
         <article className="management-record" key={item.id}>
           <h3>{item.data.name}</h3>
+          {item.data.kind === 'accounts' && (
+            <>
+              <p>
+                Capital declarat pentru simulare, nu sold de broker. Siguranța și politica se
+                verifică separat.
+              </p>
+              <Link href={`/conturi/${item.id}/siguranta`}>Vezi siguranța {item.data.name}</Link>
+            </>
+          )}
           <p className="record-source">
             {item.data.source === 'SYNTHETIC_TEST_FIXTURE'
               ? 'Date sintetice de test'
@@ -445,12 +470,14 @@ function Cards({
   );
 }
 
-function Security({
+export function Security({
   session,
   setSession,
+  mode = 'personal',
 }: {
   session: Session;
   setSession: (value: Session | null) => void;
+  mode?: 'personal' | 'users';
 }) {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState('');
@@ -469,7 +496,16 @@ function Security({
   useEffect(() => {
     void load().catch((error) => setError(message(error)));
   }, [load]);
-  const act = async (operation: () => Promise<void>) => {
+  const [review, setReview] = useState<{
+    operation: () => Promise<void>;
+    consequence: string;
+  } | null>(null);
+  const [reviewBusy, setReviewBusy] = useState(false);
+  const act = async (operation: () => Promise<void>, consequence?: string) => {
+    if (consequence) {
+      setReview({ operation, consequence });
+      return;
+    }
     setError(null);
     setNotice('');
     try {
@@ -480,92 +516,102 @@ function Security({
   };
   return (
     <section className="panel management-panel">
-      <h2>Securitatea contului</h2>
+      <h2>{mode === 'users' ? 'Utilizatori și roluri' : 'Securitatea contului'}</h2>
       <ErrorNotice error={error} />
       {notice && <p role="status">{notice}</p>}
       <p>
         {session.user.username} · {session.user.role} · MFA verificat
       </p>
-      <form
-        className="management-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void act(async () => {
-            const result = await api('/auth/reauthenticate', {
-              method: 'POST',
-              csrf: session.csrf_token,
-              body: { password: fields.password, code: fields.code },
-            });
-            setFields({ ...fields, password: '', code: '' });
-            setSession(parseSession(result));
-            setNotice('MFA reconfirmat.');
-          });
-        }}
-      >
-        <h3>Reconfirmă MFA pentru acțiuni sensibile</h3>
-        <Field
-          name="password"
-          label="Parola curentă"
-          type="password"
-          value={fields.password}
-          onChange={(password) => setFields({ ...fields, password })}
-        />
-        <Field
-          name="code"
-          label={t.code}
-          value={fields.code}
-          onChange={(code) => setFields({ ...fields, code })}
-        />
-        <button className="secondary-button">Reconfirmă</button>
-      </form>
-      <form
-        className="management-form"
-        onSubmit={(event) => {
-          event.preventDefault();
-          void act(async () => {
-            await api('/auth/password', {
-              method: 'POST',
-              csrf: session.csrf_token,
-              body: { current_password: fields.password, new_password: fields.new_password },
-            });
-            setFields({ ...fields, password: '', new_password: '' });
-            setSession(null);
-          });
-        }}
-      >
-        <h3>Schimbă parola și închide toate sesiunile</h3>
-        <Field
-          name="current_password"
-          label="Parola curentă pentru schimbare"
-          type="password"
-          value={fields.password}
-          onChange={(password) => setFields({ ...fields, password })}
-        />
-        <Field
-          name="new_password"
-          label="Parolă nouă"
-          type="password"
-          value={fields.new_password}
-          onChange={(new_password) => setFields({ ...fields, new_password })}
-        />
-        <button className="secondary-button">Schimbă parola</button>
-      </form>
-      <button
-        className="secondary-button"
-        onClick={() =>
-          void act(async () => {
-            await api('/auth/sessions/revoke-all', {
-              method: 'POST',
-              body: {},
-              csrf: session.csrf_token,
-            });
-            setSession(null);
-          })
-        }
-      >
-        Închide toate sesiunile
-      </button>
-      {session.user.role === 'OWNER' && (
+      {mode === 'personal' && (
+        <>
+          <form
+            className="management-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void act(async () => {
+                const result = await api('/auth/reauthenticate', {
+                  method: 'POST',
+                  csrf: session.csrf_token,
+                  body: { password: fields.password, code: fields.code },
+                });
+                setFields({ ...fields, password: '', code: '' });
+                setSession(parseSession(result));
+                setNotice('MFA reconfirmat.');
+              });
+            }}
+          >
+            <h3>Reconfirmă MFA pentru acțiuni sensibile</h3>
+            <Field
+              name="password"
+              label="Parola curentă"
+              type="password"
+              value={fields.password}
+              onChange={(password) => setFields({ ...fields, password })}
+            />
+            <Field
+              name="code"
+              label={t.code}
+              value={fields.code}
+              onChange={(code) => setFields({ ...fields, code })}
+            />
+            <button className="secondary-button">Reconfirmă</button>
+          </form>
+          <form
+            className="management-form"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void act(async () => {
+                await api('/auth/password', {
+                  method: 'POST',
+                  csrf: session.csrf_token,
+                  body: { current_password: fields.password, new_password: fields.new_password },
+                });
+                setFields({ ...fields, password: '', new_password: '' });
+                setSession(null);
+              }, 'Schimbarea parolei închide toate sesiunile, inclusiv aceasta. Verifică identitatea și consecințele înainte de confirmare.');
+            }}
+          >
+            <h3>Schimbă parola și închide toate sesiunile</h3>
+            <Field
+              name="current_password"
+              label="Parola curentă pentru schimbare"
+              type="password"
+              value={fields.password}
+              onChange={(password) => setFields({ ...fields, password })}
+            />
+            <Field
+              name="new_password"
+              label="Parolă nouă"
+              type="password"
+              value={fields.new_password}
+              onChange={(new_password) => setFields({ ...fields, new_password })}
+            />
+            <button className="secondary-button">Schimbă parola</button>
+          </form>
+          <button
+            className="secondary-button"
+            onClick={() =>
+              void act(async () => {
+                await api('/auth/sessions/revoke-all', {
+                  method: 'POST',
+                  body: {},
+                  csrf: session.csrf_token,
+                });
+                setSession(null);
+              }, 'Vei fi deconectat din toate sesiunile, inclusiv aceasta. Aceasta nu oprește automat testele deja înregistrate.')
+            }
+          >
+            Închide toate sesiunile
+          </button>
+        </>
+      )}
+      {mode === 'users' && session.user.role !== 'OWNER' && (
+        <p>
+          Doar proprietarul poate administra identități și roluri. Drepturile nu se schimbă prin
+          navigare.
+        </p>
+      )}
+      {mode === 'users' && session.user.role === 'OWNER' && (
         <>
           <form
             className="management-form"
@@ -641,7 +687,7 @@ function Security({
                             body: { role: user.role, active: !user.active },
                           });
                           await load();
-                        })
+                        }, `Modifici accesul sau rolul pentru ${user.display_name} (${user.username}). Sesiunile și drepturile acestei persoane sunt afectate imediat, conform regulilor serverului.`)
                       }
                     >
                       {user.active ? 'Suspendă accesul' : 'Restabilește accesul'}
@@ -659,7 +705,7 @@ function Security({
                             },
                           });
                           await load();
-                        })
+                        }, `Modifici accesul sau rolul pentru ${user.display_name} (${user.username}). Sesiunile și drepturile acestei persoane sunt afectate imediat, conform regulilor serverului.`)
                       }
                     >
                       Schimbă rolul
@@ -671,20 +717,48 @@ function Security({
           </div>
         </>
       )}
+      {review && (
+        <ConfirmDialog
+          title="Verifică acțiunea sensibilă"
+          onClose={() => {
+            if (!reviewBusy) setReview(null);
+          }}
+        >
+          <p>{review.consequence}</p>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (reviewBusy) return;
+              setReviewBusy(true);
+              void act(review.operation).finally(() => {
+                setReviewBusy(false);
+                setReview(null);
+              });
+            }}
+          >
+            <label className="management-check">
+              <input type="checkbox" required />
+              Confirm identitatea, persoana și consecințele afișate. Serverul verifică rolul și MFA
+              recent.
+            </label>
+            <button disabled={reviewBusy}>Confirmă modificarea</button>
+          </form>
+        </ConfirmDialog>
+      )}
     </section>
   );
 }
 
-function Workspace({
+export function Workspace({
   session,
   setSession,
   initialSection,
 }: {
   session: Session;
   setSession: (value: Session | null) => void;
-  initialSection: 'accounts' | 'market' | 'broker' | 'riskCenter' | 'research';
+  initialSection: Tab;
 }) {
-  const [tab, setTab] = useState<Tab>(initialSection);
+  const tab = initialSection;
   const [records, setRecords] = useState<Record<string, RecordItem[]>>({});
   const [audit, setAudit] = useState<AuditEvent[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -764,40 +838,28 @@ function Workspace({
           ];
   return (
     <>
-      <div className="management-toolbar">
-        <span>
-          {session.user.display_name} · {session.user.role}
-        </span>
-        <button
-          className="text-button"
-          onClick={() => {
-            void api('/auth/logout', { method: 'POST', csrf: session.csrf_token, body: {} })
-              .then(() => setSession(null))
-              .catch((error) => setError(message(error)));
-          }}
-        >
-          Deconectare
-        </button>
-      </div>
-      <nav className="management-tabs" aria-label="Administrare">
-        {(Object.keys(t.tabs) as Tab[]).map((value) => (
-          <button
-            key={value}
-            aria-current={tab === value ? 'page' : undefined}
-            onClick={() => {
-              setTab(value);
-              setPage(0);
-              setQuery('');
-              setEditing(null);
-              setNotice('');
-            }}
-          >
-            {t.tabs[value]}
-          </button>
-        ))}
-      </nav>
       <ErrorNotice error={error} />
       {notice && <p role="status">{notice}</p>}
+      {tab === 'risks' && (
+        <div className="notice">
+          <strong>Înregistrări descriptive — nu aplică limite.</strong>
+          <p>
+            Aceste valori de catalog nu sunt profiluri active ale Risk Gateway. Limitele aplicate se
+            revizuiesc separat în Siguranța contului.
+          </p>
+        </div>
+      )}
+      {tab === 'policies' && (
+        <div className="notice">
+          Verificarea documentului sursă nu autorizează tranzacționarea. Politicile efective se
+          verifică separat, pentru contul și programul exact.
+        </div>
+      )}
+      {session.user.role === 'VIEWER' && (
+        <p>
+          Rolul Doar citire permite inspectarea înregistrărilor, nu salvarea sau schimbarea lor.
+        </p>
+      )}
       {tab === 'research' ? (
         <StrategyLab session={session} onExpired={() => setSession(null)} />
       ) : tab === 'riskCenter' ? (
@@ -959,36 +1021,24 @@ function Workspace({
   );
 }
 
-export default function Management({
-  initialSection = 'accounts',
-}: {
-  initialSection?: 'accounts' | 'market' | 'broker' | 'riskCenter' | 'research';
-}) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  useEffect(() => {
-    let live = true;
-    api('/auth/me')
-      .then((result) => {
-        if (live) setSession(parseSession(result));
-      })
-      .catch((error) => {
-        if (live && !(error instanceof ApiError && error.status === 401)) setError(message(error));
-      })
-      .finally(() => {
-        if (live) setLoading(false);
-      });
-    return () => {
-      live = false;
-    };
-  }, []);
+export default function Management({ initialSection = 'accounts' }: { initialSection?: Tab }) {
+  const { session, setSession, loading, unavailable, refresh } = useAuth();
   if (loading) return <p role="status">Verificăm sesiunea…</p>;
   return (
     <div className="management">
-      <ErrorNotice error={error} />
+      {unavailable && (
+        <p role="alert">
+          Nu putem verifica sesiunea.{' '}
+          <button onClick={() => void refresh()}>Reîncearcă verificarea</button>
+        </p>
+      )}
       {session?.state === 'FULL' ? (
-        <Workspace session={session} setSession={setSession} initialSection={initialSection} />
+        <Workspace
+          key={initialSection}
+          session={session}
+          setSession={setSession}
+          initialSection={initialSection}
+        />
       ) : (
         <Authentication session={session} setSession={setSession} />
       )}

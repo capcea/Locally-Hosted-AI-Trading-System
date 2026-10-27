@@ -1,0 +1,13 @@
+{
+  "id": "research-math-final",
+  "command": [
+    ".venv/bin/pytest",
+    "tests/test_research_math.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T12:20:20.935666+00:00",
+  "duration_seconds": 1.959,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/research-math-final.txt",
+  "sha256": "b52602c3a6aaf37e9c8ef7965b9fe97425aa7f05048c984af907cbde7f4c03d1"
+}

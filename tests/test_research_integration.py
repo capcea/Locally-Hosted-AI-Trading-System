@@ -197,6 +197,9 @@ def test_exploratory_screen_random_control_and_cancel_never_publish_execution_au
         market.client.get(f"/api/v1/research/experiments/{cancelled['id']}/results").status_code
         == 409
     )
+    cancel_status = market.client.get(f"/api/v1/research/experiments/{cancelled['id']}").json()
+    assert cancel_status["job"]["cancel_requested"] is True
+    assert cancel_status["job"]["state"] == "CANCELLED"
     changed = {**plan, "strategy_digest": "0" * 64, "key": "mutated-" + uuid4().hex}
     assert market.post("/api/v1/research/experiments", changed).status_code == 409
 
@@ -566,4 +569,88 @@ def test_pending_entries_and_partial_liquidity_reuse_actual_order_lifecycle(mark
             if isinstance(body, dict) and body.get("after") == "PARTIALLY_FILLED":
                 partial = True
         assert partial
+    engine.dispose()
+
+
+def test_closed_bar_signals_are_joined_strictly_before_tick_execution(market: System) -> None:
+    import copy
+    from datetime import datetime
+
+    from packages.market.models import MarketDataset
+
+    plan = prepared(market)
+    engine = create_engine(market.runtime_url)
+    with Session(engine) as db:
+        stored = db.get(MarketDataset, UUID(plan["datasets"][0]["dataset_id"]))
+        assert stored is not None
+        spec = dict(stored.spec)
+    engine.dispose()
+    spec.update(end=(START + timedelta(seconds=401)).isoformat())
+    lines = ["event_time,observed_at,available_at,bid,ask,sequence"]
+    for i in range(401):
+        at = (START + timedelta(seconds=i)).isoformat()
+        lines.append(f"{at},{at},{at},{1.1 + i / 10000:.4f},{1.1002 + i / 10000:.4f},{i}")
+    imported = submit(market, spec, ("\n".join(lines) + "\n").encode())
+    run_worker(market)
+    ticks = market.client.get(f"/api/v1/market/datasets/{imported['dataset_id']}").json()
+    assert ticks["status"] == "VALID", ticks
+    primary = plan["datasets"][0]
+    primary.update(dataset_id=ticks["id"], manifest_sha256=ticks["manifest_sha256"])
+    spec.update(data_type="BAR", timeframe="M1", end=(START + timedelta(minutes=7)).isoformat())
+    bars = ["event_time,observed_at,available_at,open,high,low,close,sequence"]
+    for i in range(7):
+        begin = (START + timedelta(minutes=i)).isoformat()
+        end = (START + timedelta(minutes=i + 1)).isoformat()
+        close = 1.1001 + i / 1000
+        bars.append(
+            f"{begin},{end},{end},{close:.4f},{close + 0.0001:.4f},"
+            f"{close - 0.0001:.4f},{close:.4f},{i}"
+        )
+    imported = submit(market, spec, ("\n".join(bars) + "\n").encode())
+    run_worker(market)
+    closed = market.client.get(f"/api/v1/market/datasets/{imported['dataset_id']}").json()
+    assert closed["status"] == "VALID", closed
+    signal_pin = copy.deepcopy(primary)
+    signal_pin.update(
+        dataset_id=closed["id"], manifest_sha256=closed["manifest_sha256"], role="SIGNAL"
+    )
+    plan["datasets"].append(signal_pin)
+    plan.update(signal_timeframe="M1", max_rows=1000)
+    plan["chronology"].update(
+        discovery_end=(START + timedelta(seconds=300)).isoformat(),
+        calibration_end=(START + timedelta(seconds=350)).isoformat(),
+        validation_end=(START + timedelta(seconds=375)).isoformat(),
+        end=(START + timedelta(seconds=401)).isoformat(),
+    )
+    run = submitted(market, plan)
+    work(market)
+    path = f"/api/v1/research/experiments/{run['id']}"
+    report = market.client.get(path).json()
+    assert report["job"]["state"] == "SUCCEEDED", report
+    result = market.client.get(path + "/results", params={"section": "signals"}).json()["items"]
+    assert result
+    assert all(datetime.fromisoformat(row["at"]) > START + timedelta(minutes=3) for row in result)
+    assert market.client.get(path + "/results").json()["trials"][0]["metrics"]["trade_count"] > 0
+
+
+def test_research_assumptions_cannot_be_mutated_through_risk_routes(market: System) -> None:
+    plan = prepared(market)
+    run = submitted(market, plan)
+    work(market)
+    engine = create_engine(market.runtime_url)
+    with Session(engine) as db:
+        binding = db.scalar(
+            select(ResearchAccount).where(ResearchAccount.run_id == UUID(run["id"]))
+        )
+        assert binding is not None
+        from packages.execution.models import SimulationRun
+
+        journal = db.scalar(
+            select(SimulationRun).where(SimulationRun.account_id == binding.account_id)
+        )
+        assert journal is not None
+        response = market.post(
+            f"/api/v1/risk/runs/{journal.id}/contexts", plan["datasets"][0]["context"]
+        )
+        assert response.status_code == 403, response.text
     engine.dispose()

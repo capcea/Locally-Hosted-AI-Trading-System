@@ -1,0 +1,14 @@
+{
+  "id": "runtime-verified",
+  "command": [
+    "env",
+    "PYTHONPATH=.",
+    ".venv/bin/python",
+    ".cache/phase5/validate_runtime.py"
+  ],
+  "started_utc": "2026-10-27T12:28:02.774821+00:00",
+  "duration_seconds": 11.059,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/runtime-verified.txt",
+  "sha256": "29e0d28412ec9e96b93ee0707afc2c55ebedb3d008cc90a36794c377c9ade051"
+}

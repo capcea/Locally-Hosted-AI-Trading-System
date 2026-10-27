@@ -77,6 +77,7 @@ def job_view(row: IngestionJob) -> JobView:
         state=row.state,
         attempts=row.attempts,
         progress_rows=row.progress_rows,
+        cancel_requested=row.cancel_requested,
         error_code=row.error_code,
         next_attempt_at=row.next_attempt_at,
         created_at=row.created_at,
@@ -328,6 +329,18 @@ def list_jobs(
             .limit(limit)
         )
     ]
+
+
+@router.get("/jobs/{job_id}", response_model=JobView)
+def get_job(job_id: UUID, identity: FullIdentity) -> JobView:
+    row = identity.db.scalar(
+        select(IngestionJob).where(
+            IngestionJob.id == job_id, IngestionJob.owner_id == identity.user.id
+        )
+    )
+    if row is None:
+        raise HTTPException(404, "Job not found")
+    return job_view(row)
 
 
 @router.post("/jobs/{job_id}/cancel", response_model=JobView)

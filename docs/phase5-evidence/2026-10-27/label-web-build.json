@@ -1,0 +1,16 @@
+{
+  "id": "label-web-build",
+  "command": [
+    "env",
+    "BUILDX_CONFIG=.cache/buildx",
+    "docker",
+    "compose",
+    "build",
+    "web"
+  ],
+  "started_utc": "2026-10-27T14:38:43.429749+00:00",
+  "duration_seconds": 5.556,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/label-web-build.txt",
+  "sha256": "36725d58ae158bcaf49ba410abb0e96832caa7229030842452999a6e89c14a4d"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "research-math-money",
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_research_math.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T12:03:30.618401+00:00",
+  "duration_seconds": 1.364,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/research-math-money.txt",
+  "sha256": "180f562c2148d3564eb5a8ac37c75f7d1cc529175847b0a2fe9950837831c83e"
+}

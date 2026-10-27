@@ -8,10 +8,11 @@ import time
 from datetime import timedelta
 from decimal import Decimal
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from uuid import UUID, uuid4
 
 import pytest
+from fastapi import FastAPI
 from risk_setup import clear_stop, post
 from sqlalchemy import create_engine, func, select, text
 from sqlalchemy.exc import DBAPIError
@@ -959,3 +960,124 @@ def test_funding_is_advanced_once_before_assessment_and_retry_is_idempotent(
     assert D(computed["evidence"]["account_exposure"]["funding"]) == D("-.000002314814")
     current = execution.client.get(f"/api/v1/execution/simulations/{run['id']}").json()
     assert current["state"]["swap"] == funded["state"]["swap"]
+
+
+def test_policy_creation_concurrent_with_independent_monitor_preserves_both_transactions(
+    execution: System, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A real monitor incident must not deadlock authenticated owner policy persistence."""
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+
+    from sqlalchemy import event
+    from sqlalchemy.exc import SQLAlchemyError
+
+    from packages.persistence.store import Store
+    from packages.risk.ledger import lock_account
+    from packages.risk.monitor import poll
+    from scripts import risk_monitor
+
+    run = make_run(execution)
+    account_id = run["account_id"]
+    path = f"/api/v1/risk/accounts/{account_id}/policies"
+    previous = execution.client.get(path).json()[0]
+    post(
+        execution,
+        f"/api/v1/risk/policies/{previous['id']}/attest",
+        {
+            "document_digest": previous["document_digest"],
+            "action": "REVOKE",
+            "acknowledged_exact_program_and_effective_dates": True,
+        },
+    )
+    body = {
+        field: previous[field]
+        for field in (
+            "kind",
+            "firm_policy_id",
+            "terms",
+            "effective_at",
+            "expires_at",
+            "document_digest",
+            "source_references",
+        )
+    }
+    headers = execution.csrf()
+    held, release = Event(), Event()
+    monitor_store = Store(execution.runtime_url)
+    sqlstates: list[str] = []
+
+    def database_error(context: Any) -> None:
+        code = getattr(context.original_exception, "sqlstate", None)
+        if isinstance(code, str):
+            sqlstates.append(code)
+
+    def paused_poll(db: Session, account: Any) -> list[str]:
+        lock_account(db, account.id)
+        held.set()
+        assert release.wait(8), "Test did not release monitor transaction"
+        return poll(db, account)
+
+    def monitor() -> str:
+        try:
+            risk_monitor.once(monitor_store, key(execution))
+            return "COMMITTED"
+        except SQLAlchemyError:
+            return "DATABASE_ERROR"
+
+    monkeypatch.setattr(risk_monitor, "poll", paused_poll)
+    event.listen(monitor_store.engine, "handle_error", database_error)
+    api_store = cast(FastAPI, execution.client.app).state.store
+    event.listen(api_store.engine, "handle_error", database_error)
+    admin = create_engine(execution.admin_url)
+    try:
+        with ThreadPoolExecutor(max_workers=2) as workers:
+            monitor_future = workers.submit(monitor)
+            assert held.wait(5), "Independent monitor did not reach account serialization"
+            request = workers.submit(execution.client.post, path, json=body, headers=headers)
+            try:
+                # Release only after PostgreSQL reports real lock contention, not a timed sleep.
+                deadline = time.monotonic() + 5
+                with admin.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
+                    while time.monotonic() < deadline:
+                        blocked = connection.scalar(
+                            text(
+                                "SELECT count(*) FROM pg_stat_activity "
+                                "WHERE datname = current_database() AND wait_event_type = 'Lock' "
+                                "AND cardinality(pg_blocking_pids(pid)) > 0"
+                            )
+                        )
+                        if blocked:
+                            break
+                    else:
+                        pytest.fail("No real database lock contention was observed")
+            finally:
+                release.set()
+            response = request.result(timeout=15)
+            monitor_outcome = monitor_future.result(timeout=15)
+        diagnostics = {
+            "endpoint": "POST /api/v1/risk/accounts/{account_id}/policies",
+            "status": response.status_code,
+            "request_id": response.headers.get("x-request-id"),
+            "monitor": monitor_outcome,
+            "sqlstates": sqlstates,
+        }
+        if response.status_code == 503:
+            diagnostics["detail"] = response.json().get("detail")
+        print(json.dumps(diagnostics))
+        assert response.status_code == 201, diagnostics
+        assert monitor_outcome == "COMMITTED", diagnostics
+        assert sqlstates == [], diagnostics
+        assert response.json()["status"] == "UNVERIFIED"
+        assert response.json()["version"] == previous["version"] + 1
+        assert response.json()["document_digest"] == previous["document_digest"]
+        assert execution.client.get(path).json()[0]["id"] == response.json()["id"]
+        report = execution.client.get(f"/api/v1/risk/accounts/{account_id}/status").json()
+        assert report["manual_stop"] and report["automatic_stop"]
+        assert not report["external_execution_authorized"]
+        assert execution.client.get("/api/v1/audit/verify").json()["valid"]
+    finally:
+        release.set()
+        event.remove(api_store.engine, "handle_error", database_error)
+        monitor_store.engine.dispose()
+        admin.dispose()

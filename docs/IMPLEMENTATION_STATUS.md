@@ -1,14 +1,13 @@
 # Implementation status — canonical pointer
 
 Updated 2026-10-27. Read [../IMPLEMENTATION_STATUS.md](../IMPLEMENTATION_STATUS.md) for all 60 derived
-criteria and [../PHASE4_COMPLETION_REPORT.md](../PHASE4_COMPLETION_REPORT.md) for exact evidence.
+criteria and [../PHASE5_COMPLETION_REPORT.md](../PHASE5_COMPLETION_REPORT.md) for exact Phase 5 evidence.
 
-Phase 4 simulated risk gateway, Decimal sizing, exact versioned policies, account drawdown ledger,
-atomic reservations, consumed signed scopes, independent monitor and owner-MFA emergency APIs are
-implemented and native-tested. `make check` passes 179 Python and 16 frontend tests; actual disposable
-integration passes 60 cases per write/restart stage. Local revision0005 and strict readiness pass.
+Phase 5 adds reviewed quantitative research, two backtest engines, statistical validation, durable jobs,
+immutable results and Romanian Strategy Lab to the existing simulation-only foundation. Acceptance is
+separate from implementation; consult the current report. The owner reports both prior Phase 4 local
+browser runs passed; commands/logs were not supplied. No Phase 6 or external execution is authorized.
 
-Full acceptance remains BLOCKED: risk desktop and full-suite attempts hit macOS Chromium launch
-Permission denied (1100). Full attempt has 3 launch failures, 1 HTTP-only pass and 10 later NOT RUN;
-all 14 cases collect. Owner-reported Phase 3 local passes remain separate evidence. All external demo/
-live orders, generated code and promotion stay disabled. No Phase 5, broker keys, publish/remote/push.
+Phase5.5B now implements the source/UI migration; current browser/visual/manual acceptance remains
+BLOCKED. Read [the report](../PHASE55B_COMPLETION_REPORT.md) and
+[feature coverage](ux-migration-coverage.md). No Phase6 or external execution is enabled.

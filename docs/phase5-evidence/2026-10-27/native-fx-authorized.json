@@ -1,0 +1,12 @@
+{
+  "id": "native-fx-authorized",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/focused_fx.py"
+  ],
+  "started_utc": "2026-10-27T12:31:31.754789+00:00",
+  "duration_seconds": 18.391,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/native-fx-authorized.txt",
+  "sha256": "46cda8d4e07c57d88d5ebaef52f2df11547496434f738d1485ead314efd58e66"
+}

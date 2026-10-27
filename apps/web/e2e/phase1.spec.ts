@@ -17,7 +17,7 @@ function totp(secret: string, offsetSeconds = 0): string {
 
 test('owner setup, MFA, persistent account/risk/policy management, settings, audit and login', async ({
   page,
-}, info) => {
+}) => {
   test.setTimeout(120_000);
   if (
     process.env.E2E_PHASE1_ISOLATED !== '1' ||
@@ -31,9 +31,7 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
   const password = process.env.E2E_OWNER_PASSWORD;
   const setupToken = process.env.E2E_SETUP_TOKEN;
   await page.goto('/');
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Cont & administrare', exact: true }).click();
+  await page.goto('/conturi');
   await page.getByLabel('Nume utilizator', { exact: true }).fill('browser-owner');
   await page.getByLabel('Parolă', { exact: true }).fill(password);
   await page.getByLabel('Nume afișat', { exact: true }).fill('Proprietar sintetic E2E');
@@ -48,7 +46,7 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
   await expect(page.locator('.recovery-codes code')).toHaveCount(10);
   await page.getByRole('button', { name: 'Am salvat codurile' }).click();
 
-  await page.getByRole('button', { name: 'Politici prop firm', exact: true }).click();
+  await page.goto('/conturi/documente');
   const programForm = page.locator('form').filter({ has: page.locator('input[name=phase]') });
   await programForm.getByLabel('Originea înregistrării').selectOption('SYNTHETIC_TEST_FIXTURE');
   await programForm.getByLabel('Denumire', { exact: true }).fill('Program sintetic E2E');
@@ -60,11 +58,11 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
     page.getByRole('heading', { name: 'Program sintetic E2E', exact: true }),
   ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Conturi', exact: true }).click();
+  await page.goto('/conturi');
   await page.getByLabel('Originea înregistrării').selectOption('SYNTHETIC_TEST_FIXTURE');
   await page.getByLabel('Denumire', { exact: true }).fill('Cont sintetic E2E');
   await page.getByLabel('Monedă', { exact: true }).fill('USD');
-  await page.getByLabel('Capital de referință', { exact: true }).fill('25000.12345678');
+  await page.getByLabel('Capital declarat pentru simulare', { exact: true }).fill('25000.12345678');
   await page.getByLabel('Program', { exact: true }).selectOption({ label: 'Program sintetic E2E' });
   await page.getByRole('button', { name: 'Salvează', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Cont sintetic E2E', exact: true })).toBeVisible();
@@ -76,7 +74,10 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
     page.getByRole('heading', { name: 'Cont persistent E2E', exact: true }),
   ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Profiluri de risc', exact: true }).click();
+  await page.goto('/conturi/avansat/inregistrari-risc');
+  await expect(
+    page.getByText('Înregistrări descriptive — nu aplică limite.', { exact: true }),
+  ).toBeVisible();
   await page.getByLabel('Originea înregistrării').selectOption('SYNTHETIC_TEST_FIXTURE');
   await page.getByLabel('Denumire', { exact: true }).fill('Profil sintetic E2E');
   await page.getByLabel('Cont', { exact: true }).selectOption({ label: 'Cont persistent E2E' });
@@ -93,7 +94,7 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
     page.getByRole('heading', { name: 'Profil sintetic E2E', exact: true }),
   ).toBeVisible();
 
-  await page.getByRole('button', { name: 'Politici prop firm', exact: true }).click();
+  await page.goto('/conturi/documente');
   const policyForm = page
     .locator('form')
     .filter({ has: page.locator('input[name=document_digest]') });
@@ -127,7 +128,7 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
   await policy.getByRole('button', { name: 'Înregistrează verificarea sursei' }).click();
   await expect(policy).toContainText('Stare: VERIFIED');
 
-  await page.getByRole('button', { name: 'Securitate', exact: true }).click();
+  await page.goto('/setari/utilizatori');
   await page.getByLabel('Nume utilizator', { exact: true }).fill('browser-viewer');
   await page.getByLabel('Nume afișat', { exact: true }).fill('Cititor sintetic E2E');
   await page
@@ -138,7 +139,7 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
   await expect(
     page.getByRole('heading', { name: 'Cititor sintetic E2E', exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Jurnal de audit', exact: true }).click();
+  await page.goto('/setari/istoric');
   await page.getByRole('button', { name: 'Verifică integritatea', exact: true }).click();
   await expect(page.getByRole('status')).toContainText('Lanț verificat');
   await expect(page.locator('.audit-timeline')).toContainText('policy.verification_recorded');
@@ -148,14 +149,33 @@ test('owner setup, MFA, persistent account/risk/policy management, settings, aud
   await page.getByLabel('Parolă', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Continuă cu parola', exact: true }).click();
   await page.getByLabel('Cod MFA', { exact: true }).fill(totp(secret, 30));
+  // click() does not await the async handler. A hard navigation can discard the rotated cookie.
+  const verified = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname === '/api/v1/auth/mfa/verify' &&
+      response.request().method() === 'POST',
+  );
   await page.getByRole('button', { name: 'Verifică MFA', exact: true }).click();
+  const verifiedResponse = await verified;
+  expect(verifiedResponse.status()).toBe(200);
+  expect(await verifiedResponse.finished()).toBeNull();
+  // Assert individual public fields only; never attach a session object or response headers.
+  const verifiedSession = await verifiedResponse.json();
+  expect(verifiedSession.state).toBe('FULL');
+  expect(verifiedSession.user.role).toBe('OWNER');
+  expect(verifiedSession.user.username).toBe('browser-owner');
+  await expect(page.getByRole('button', { name: 'Deconectare', exact: true })).toBeVisible();
+  const meResponse = await page.request.get('/api/v1/auth/me');
+  expect(meResponse.status()).toBe(200);
+  const currentSession = await meResponse.json();
+  expect(currentSession.state).toBe('FULL');
+  expect(currentSession.user.id).toBe(verifiedSession.user.id);
+  await page.goto('/conturi');
   await expect(
     page.getByRole('heading', { name: 'Cont persistent E2E', exact: true }),
   ).toBeVisible();
   await page.reload();
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Cont & administrare', exact: true }).click();
+  await page.goto('/conturi');
   await expect(
     page.getByRole('heading', { name: 'Cont persistent E2E', exact: true }),
   ).toBeVisible();

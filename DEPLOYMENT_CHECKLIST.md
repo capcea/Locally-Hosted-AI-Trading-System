@@ -278,3 +278,32 @@ make secret-scan
 
 The disposable harness cleans only its UUID-owned test resources. Do not delete development volumes,
 introduce credentials, publish/push, bypass managed browser protections or start Phase 5 automatically.
+
+## Current Phase 5 gate — 2026-10-27 (supersedes earlier current-phase statements)
+
+This remains a local SIMULATED release. No external orders, public deployment or automatic promotion
+is authorized. Exact commands/exits and limits are in PHASE5_COMPLETION_REPORT.md and its evidence ledger.
+
+- [x] Owner confirms focused Phase4 desktop + full14 cases passed locally: OWNER_REPORTED_PASS;
+      supplied answer only, no command/log evidence, separate from agent verification.
+- [x] Reviewed fixed strategies, two research engines, immutable provenance and stored results exist.
+- [x] Actual journal/gateway reused; independent simulated accounts/clocks; no owner balances traded.
+- [x] Actual research crash/cancel/reproduction/immutable storage and MTF/FX tests pass in disposable services.
+- [x] make check:208 Python +16 frontend tests, types/lint/build. make contracts-check matches generated files.
+- [x] Fresh private0600 pg_dump and all40 legacy table fingerprints captured before additive0006.
+- [x] After0006 all40 fingerprints and three data container IDs/mounts unchanged; owner/MFA retained.
+- [x] Eight long-running local services healthy; strict readiness200 and all execution flags false.
+- [x] No ORM drift; immutable research grants, retained job records and HMAC audit verification pass.
+- [x] Research worker read-only/control-only/no published port/no broker/admin/bootstrap credentials/socket;
+      1CPU/1GiB/128PIDs/256MiB temporary filesystem verified. No generated-code execution capability.
+- [x] Python/npm dependency audits and local Actions/Compose validation pass; remote CI is NOT RUN.
+- [ ] Current Phase5 focused desktop browser assertion executes and passes: managed Chromium launch1100.
+- [ ] Complete current16-case desktop/mobile E2E acceptance passes; inspect report for executed/not-run totals.
+- [ ] Entitled real historical coverage and actual source assumptions establish useful external research.
+- [ ] Independent final-holdout custodian certifies secrecy; existing prior exposure remains UNKNOWN.
+- [ ] Five-year tick-scale load, disk capacity/orphan retention alerts and off-host restore acceptance.
+- [ ] Initial commit/remote CI/private GitHub creation/push: Git is read-only and remote actions lack approval.
+- [ ] Phase5 fully accepted and separately authorized Phase6 scope. Do not start Phase6 automatically.
+
+ML/LLM/hybrid judges, arbitrary generated-code runner, adaptive paper gate, broker execution and live
+promotion are NOT IMPLEMENTED. No broker credentials are required or introduced by Phase5.

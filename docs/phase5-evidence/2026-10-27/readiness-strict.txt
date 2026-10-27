@@ -1,0 +1,1 @@
+[{"id":"postgres","name":"PostgreSQL","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":29},{"id":"redis","name":"Redis","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":30},{"id":"storage","name":"Stocare obiecte","status":"HEALTHY","detail":"Verificare directă reușită.","latency_ms":30}]

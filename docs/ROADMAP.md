@@ -1,11 +1,9 @@
 # Phased roadmap and acceptance gates
 
-Updated 2026-10-27. Phase 4 deterministic SIMULATED risk gateway, account ledger, atomic
-reservations, exact versioned policies, independent monitor and Romanian Risk Center are implemented.
-Native/portable acceptance passes; managed browser execution remains separately BLOCKED. Owner-reported
-Phase 3 local acceptance is OWNER_REPORTED_PASS, not agent-executed evidence. External MT5/cTrader
-connectivity remains unverified. See [../PHASE4_COMPLETION_REPORT.md](../PHASE4_COMPLETION_REPORT.md).
-No Phase 5 work has started; stop at Phase 4 until its acceptance gaps are resolved.
+Updated 2026-10-27. Phase 5 trusted quantitative research is implemented and undergoing the acceptance
+checks recorded in [../PHASE5_COMPLETION_REPORT.md](../PHASE5_COMPLETION_REPORT.md). The owner reports
+prior Phase 4 desktop and full 14-case browser acceptance passed locally; no commands/logs supplied.
+External MT5/cTrader connectivity and all broker orders remain unverified/disabled. No Phase 6 started.
 
 The original specification remains authoritative. No phase is complete merely because its navigation
 item, interface or documentation exists. Phase transitions require working code and evidence.
@@ -33,7 +31,8 @@ item, interface or documentation exists. Phase transitions require working code 
    atomic reservations, mandatory simulated gateway, independent monitor and durable STOP/FLATTEN.
    Property/adversarial/native multiprocess/crash/restart tests pass. External orders remain denied;
    the current shared-host/key contract does not certify a future independent broker executor.
-5. **Backtesting:** vectorbt screening and independent event-driven simulation with bid/ask, costs,
+5. **Backtesting — implemented/native-tested, browser BLOCKED:** PyArrow vectorized screening and
+   independent event-driven simulation with bid/ask, costs,
    lifecycle trace, gap semantics, deterministic replay and independent baselines. Include OOS,
    walk-forward, uncertainty and multiple-testing corrections; never fabricate history.
 6. **Model gateway and research graph:** private authenticated Ollama, verified exact model digests,
@@ -52,3 +51,9 @@ item, interface or documentation exists. Phase transitions require working code 
     reproducibility suite and reversible endpoint switch. Test GPU outage while independent demo
     execution remains safe. Deliver readiness report; do not automatically activate real trading.
 
+
+Phase 5 current implementation supersedes the earlier planned-only description: fixed baselines,
+Arrow screening, event-journal/gateway validation, immutable experiments, walk-forward/uncertainty,
+protected final release and Strategy Lab. Acceptance still requires the actual current test evidence.
+Phase 6 is the recommended NEXT module only after Phase 5 acceptance and a separate request: a bounded
+private AI gateway with typed untrusted outputs and no execution/generated-code capability.

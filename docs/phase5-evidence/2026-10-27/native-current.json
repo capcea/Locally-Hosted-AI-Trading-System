@@ -1,0 +1,12 @@
+{
+  "id": "native-current",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/focused_services.py"
+  ],
+  "started_utc": "2026-10-27T12:21:23.731029+00:00",
+  "duration_seconds": 136.481,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/native-current.txt",
+  "sha256": "6fcb63a2a1392747b008c2ecc09e64d9650c88ba39663440d072b205dd11d16f"
+}

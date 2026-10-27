@@ -10,5 +10,7 @@
   "duration_seconds": 10.997,
   "exit_code": 1,
   "log": "docs/phase5-evidence/2026-10-27/native-research-context.txt",
-  "sha256": "7cecf6c039b8c03d8cac75bda0bb299da8fdaf8c27e985fbfca07754c4cb647b"
+  "sha256": "0eb1679fe93566f105940356dceb6d8c0315c21d76601c50a5348d47229b5faa",
+  "original_log_sha256": "7cecf6c039b8c03d8cac75bda0bb299da8fdaf8c27e985fbfca07754c4cb647b",
+  "redaction": "One synthetic idempotency identifier in pytest repr; assertions/errors retained. Private original retained; no detector exclusion."
 }

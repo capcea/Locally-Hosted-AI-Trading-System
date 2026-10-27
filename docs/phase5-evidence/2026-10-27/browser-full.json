@@ -1,0 +1,12 @@
+{
+  "id": "browser-full",
+  "command": [
+    "make",
+    "browser-integration"
+  ],
+  "started_utc": "2026-10-27T12:31:59.104670+00:00",
+  "duration_seconds": 331.531,
+  "exit_code": 2,
+  "log": "docs/phase5-evidence/2026-10-27/browser-full.txt",
+  "sha256": "a5f5e0b5a89abb72365b90e8f3817884f52851ba08a81ba6f85abf69734ac48b"
+}

@@ -1,0 +1,258 @@
+.venv/bin/python -m scripts.integration_services --browser
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#3 DONE 0.0s
+
+#4 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#4 DONE 0.0s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#7 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.0s done
+#7 DONE 0.0s
+
+#8 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#8 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.0s done
+#8 DONE 0.0s
+
+#9 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#9 CACHED
+
+#10 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#10 CACHED
+
+#11 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#11 CACHED
+
+#12 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#12 CACHED
+
+#13 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#13 CACHED
+
+#14 [build 2/5] WORKDIR /src
+#14 CACHED
+
+#15 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:87d572b03cbca3f868a0ab3a02e63da90cef5b7103ceb31c5b745ddf1d6a0032 0.0s done
+#17 exporting config sha256:3a39c99323b77b52e096db248e27f9cfe7a167f157ed4a2d1c7042818462455c 0.0s done
+#17 exporting attestation manifest sha256:06711948c9c7a88c2ddbfabbadb014234d9ea3dd5be2941af8a04a2a0cadf398 0.0s done
+#17 exporting manifest list sha256:6fb27a4ef23bdc53de2ad22fc045b40f2942c131aae508b79d9593ac28f9be27 0.1s done
+#17 naming to docker.io/library/phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio:latest
+#17 unpacking to docker.io/library/phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio:latest 0.0s done
+#17 DONE 0.2s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio Building 
+ Image phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio Built 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_postgres Creating 
+ Network phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default Creating 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_postgres Creating 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_redis Creating 
+ Network phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default Creating 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_redis Creating 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_storage Creating 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_storage Creating 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_redis Created 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_redis Created 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_storage Created 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_storage Created 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_postgres Created 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_postgres Created 
+ Network phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default Created 
+ Network phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default Created 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Creating 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Creating 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Creating 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Created 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Created 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Created 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Starting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Starting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Starting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Started 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Started 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Started 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Waiting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Waiting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Waiting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Healthy 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Healthy 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+0660821f7a7b4b02980d977b7b315098b5a6dfe9fd77eb7d324bf96384019dd0
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:58672
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 0660821f7a7b4b02980d977b7b315098b5a6dfe9fd77eb7d324bf96384019dd0
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"58672"}]}
+PASSED: postgres 127.0.0.1:58672 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+b49d59afb7b9ddf894a3063dcf26e4582c9ff13eb3c3dc1eb5b28d4e89ba4a88
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:58670
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' b49d59afb7b9ddf894a3063dcf26e4582c9ff13eb3c3dc1eb5b28d4e89ba4a88
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"58670"}]}
+PASSED: redis 127.0.0.1:58670 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+39c69da3135675318725c823f5a8e2913f48c185471fe294c69224fba70c1bc4
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:58671
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 39c69da3135675318725c823f5a8e2913f48c185471fe294c69224fba70c1bc4
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"58671"}]}
+PASSED: minio 127.0.0.1:58671 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py tests/test_market_integration.py tests/test_execution_integration.py tests/test_risk_integration.py tests/test_research_integration.py tests/test_research_fx_integration.py -m isolated_services -q
+........................................................................ [ 94%]
+....                                                                     [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+76 passed, 1 warning in 129.48s (0:02:09)
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' stop postgres redis minio
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Stopping 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Stopping 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Stopping 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Stopped 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Stopped 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Stopped 
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up -d --wait --wait-timeout 180
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Starting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Starting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Starting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Started 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Started 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Started 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Waiting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Waiting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Waiting 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Healthy 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Healthy 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Healthy 
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+0660821f7a7b4b02980d977b7b315098b5a6dfe9fd77eb7d324bf96384019dd0
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:60185
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 0660821f7a7b4b02980d977b7b315098b5a6dfe9fd77eb7d324bf96384019dd0
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"60185"}]}
+PASSED: postgres 127.0.0.1:60185 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+b49d59afb7b9ddf894a3063dcf26e4582c9ff13eb3c3dc1eb5b28d4e89ba4a88
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:60183
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' b49d59afb7b9ddf894a3063dcf26e4582c9ff13eb3c3dc1eb5b28d4e89ba4a88
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"60183"}]}
+PASSED: redis 127.0.0.1:60183 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+39c69da3135675318725c823f5a8e2913f48c185471fe294c69224fba70c1bc4
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:60184
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 39c69da3135675318725c823f5a8e2913f48c185471fe294c69224fba70c1bc4
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"60184"}]}
+PASSED: minio 127.0.0.1:60184 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py tests/test_market_integration.py tests/test_execution_integration.py tests/test_risk_integration.py tests/test_research_integration.py tests/test_research_fx_integration.py -m isolated_services -q
+........................................................................ [ 94%]
+....                                                                     [100%]
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+76 passed, 1 warning in 122.28s (0:02:02)
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m scripts.browser_acceptance
++ /opt/homebrew/bin/npm run test:e2e -- e2e/phase5.spec.ts --project=desktop --workers=1
+
+> trading-research-web@0.1.0 test:e2e
+> playwright test e2e/phase5.spec.ts --project=desktop --workers=1
+
+
+Running 1 test using 1 worker
+
+  ✘  1 [desktop] › e2e/phase5.spec.ts:5:1 › Strategy Lab persists real admitted-data experiments, risk-approved trades, replay and cancellation (1ms)
+
+
+  1) [desktop] › e2e/phase5.spec.ts:5:1 › Strategy Lab persists real admitted-data experiments, risk-approved trades, replay and cancellation 
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-jbxhGM --remote-debugging-pipe --no-startup-window
+    <launched> pid=87440
+    [pid=87440][err] [1027/164056.561117:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+    [pid=87440][err] [1027/164056.576978:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+    [pid=87440][err] [1027/164056.586410:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.87440: Permission denied (1100)
+    Call log:
+      - <launching> /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,AvoidCorsURLLoaderRestartOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/p3/gjb6v4lj31ddtztft52kk2400000gn/T/playwright_chromiumdev_profile-jbxhGM --remote-debugging-pipe --no-startup-window
+      - <launched> pid=87440
+      - [pid=87440][err] [1027/164056.561117:ERROR:base/power_monitor/thermal_state_observer_mac.mm:122] ThermalStateObserverMac unable to register to power notifications. Result: 9
+      - [pid=87440][err] [1027/164056.576978:ERROR:net/dns/dns_config_service_posix.cc:139] DNS config watch failed to start.
+      - [pid=87440][err] [1027/164056.586410:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.87440: Permission denied (1100)
+      - [pid=87440] <gracefully close start>
+      - [pid=87440] <kill>
+      - [pid=87440] <will force kill>
+      - [pid=87440] exception while trying to kill process: Error: kill EPERM
+      - [pid=87440] <process did exit: exitCode=null, signal=SIGTRAP>
+      - [pid=87440] starting temporary directories cleanup
+      - [pid=87440] finished temporary directories cleanup
+      - [pid=87440] <gracefully close end>
+
+
+    Error Context: test-results/phase5-Strategy-Lab-persis-0b741-des-replay-and-cancellation-desktop/error-context.md
+
+  1 failed
+    [desktop] › e2e/phase5.spec.ts:5:1 › Strategy Lab persists real admitted-data experiments, risk-approved trades, replay and cancellation 
+
++ /usr/local/bin/docker compose --project-name phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-wl_hhr3p/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Stopping 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Stopping 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Stopping 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Stopped 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Removing 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Stopped 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Removing 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-minio-1 Removed 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Stopped 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Removing 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-postgres-1 Removed 
+ Container phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b-redis-1 Removed 
+ Network phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default Removing 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_storage Removing 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_postgres Removing 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_redis Removing 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_postgres Removed 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_storage Removed 
+ Volume phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_test_redis Removed 
+ Network phase0-test-2829e650dd9047e5ac9ab6ce41f21b6b_default Removed 
+FAILED: Command exited 1; no service acceptance claimed
+make: *** [browser-integration] Error 1

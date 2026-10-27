@@ -1,775 +1,538 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Activity,
-  ArrowDownRight,
-  ArrowRight,
-  ArrowUpRight,
-  Beaker,
-  BookOpen,
-  Box,
-  Braces,
-  ChartNoAxesCombined,
-  Check,
-  ChevronRight,
-  CircleHelp,
-  Clock3,
-  Database,
-  Fingerprint,
+  Home,
   FlaskConical,
-  Layers3,
-  LayoutDashboard,
-  LockKeyhole,
-  Menu,
-  Moon,
-  Network,
-  RefreshCw,
-  Route,
-  Search,
-  Server,
+  ChartNoAxesCombined,
   ShieldCheck,
-  ShieldOff,
+  Settings,
+  Moon,
   Sun,
-  Workflow,
-  X,
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
-import { getOverview, isStale, readinessSummary } from './api';
-import type { Overview, Service } from './api';
-import { locale, ro } from './locale';
-import Management from './Management';
+import { AuthProvider, useAuth } from './auth/AuthProvider';
+import { Authentication, Workspace, Security } from './Management';
+import type { Tab } from './Management';
+import { getOverview, isStale } from './api';
+import type { Overview } from './api';
+import { api } from './management-api';
+import type { RecordItem } from './management-api';
+import { allRecords } from './records';
+import { primary } from './navigation/routes';
+import { Link, navigate, useRoute } from './navigation/history';
 import RiskBanner from './RiskBanner';
+import RiskCenter from './RiskCenter';
+import MarketData from './MarketData';
+import BrokerCenter from './BrokerCenter';
+import StrategyLab from './StrategyLab';
+import HomePage from './home/HomePage';
+import { InfrastructurePage, GovernancePage, RoadmapPage } from './LegacyPublic';
+import { Evidence } from './ui/Controls';
+import { PublicReadTime } from './ui/PublicReadTime';
 
-type Page =
-  | 'overview'
-  | 'infrastructure'
-  | 'governance'
-  | 'roadmap'
-  | 'management'
-  | 'market'
-  | 'broker'
-  | 'riskCenter'
-  | 'research';
-const navigation: { id: Page; icon: LucideIcon }[] = [
-  { id: 'overview', icon: LayoutDashboard },
-  { id: 'infrastructure', icon: Server },
-  { id: 'governance', icon: ShieldCheck },
-  { id: 'roadmap', icon: Route },
-  { id: 'management', icon: Fingerprint },
-  { id: 'market', icon: Database },
-  { id: 'broker', icon: Network },
-  { id: 'riskCenter', icon: ShieldCheck },
-  { id: 'research', icon: FlaskConical },
+const icons = [Home, FlaskConical, ChartNoAxesCombined, ShieldCheck, Settings];
+const settingsLinks = [
+  ['/setari/aspect', 'Aspect'],
+  ['/setari/securitate', 'Securitate și MFA'],
+  ['/setari/utilizatori', 'Utilizatori și roluri'],
+  ['/setari/istoric', 'Istoric verificabil'],
+  ['/setari/surse', 'Surse de date'],
+  ['/setari/catalog', 'Catalog de instrumente'],
+  ['/setari/registru-tehnic', 'Registru tehnic'],
+  ['/setari/diagnostic', 'Starea serviciilor'],
+  ['/setari/despre', 'Capabilități și limite'],
+  ['/setari/despre/plan', 'Plan de dezvoltare'],
 ];
-const serviceIcons: Record<string, LucideIcon> = {
-  api: Braces,
-  postgres: Database,
-  redis: Layers3,
-  storage: Box,
-  mt5: ChartNoAxesCombined,
-  ctrader: Network,
-  ollama: Workflow,
-  executor: ShieldOff,
-};
-
-function Badge({ children, tone = '' }: { children: React.ReactNode; tone?: string }) {
-  return <span className={`badge ${tone}`}>{children}</span>;
-}
-
-function ServiceRow({ service, stale }: { service: Service; stale: boolean }) {
-  const Icon = serviceIcons[service.id] || Server;
-  return (
-    <div className="service-row">
-      <div className="service-icon">
-        <Icon size={19} />
-      </div>
-      <div className="service-copy">
-        <strong>{service.name}</strong>
-        <span>{service.detail}</span>
-      </div>
-      <span className={`service-status ${stale ? 'stale' : service.status.toLowerCase()}`}>
-        <i />
-        {stale ? 'Neverificat' : ro.statuses[service.status]}
-      </span>
-    </div>
-  );
-}
-
-function SafetyNotice() {
-  return (
-    <div className="safety-notice">
-      <ShieldCheck size={19} />
-      <div>
-        <strong>Mediu de cercetare izolat</strong>
-        <span>
-          Tranzacționarea live și trimiterea ordinelor sunt dezactivate în această versiune.
-        </span>
-      </div>
-      <Badge>SIMULATED</Badge>
-    </div>
-  );
-}
-
-function OverviewPage({
-  data,
-  stale,
-  navigate,
-}: {
-  data: Overview;
-  stale: boolean;
-  navigate: (page: Page) => void;
-}) {
-  const profile = data.reference_profile;
-  const readiness = readinessSummary(data.services);
-  return (
-    <>
-      <section className="hero">
-        <div className="hero-copy">
-          <span className="eyebrow">
-            <span className="small-dot" /> WORKSPACE / 001
-          </span>
-          <h2>
-            Cercetare riguroasă.
-            <br />
-            <span>Fiecare decizie, verificabilă.</span>
-          </h2>
-          <p>
-            Un spațiu pentru ipoteze, experimente reproductibile și strategii validate înainte de
-            execuție.
-          </p>
-          <button className="primary-button" onClick={() => navigate('roadmap')}>
-            Explorează planul de dezvoltare <ArrowUpRight size={17} />
-          </button>
-        </div>
-        <div className="hero-visual" aria-hidden="true">
-          <div className="orbit orbit-1" />
-          <div className="orbit orbit-2" />
-          <div className="orbit orbit-3" />
-          <div className="orbital-label label-1">
-            <Beaker size={14} /> IPOTEZĂ
-          </div>
-          <div className="orbital-label label-2">
-            <ShieldCheck size={14} /> VALIDARE
-          </div>
-          <div className="orbital-label label-3">
-            <Fingerprint size={14} /> TRASABILITATE
-          </div>
-          <div className="visual-core">
-            <ChartNoAxesCombined size={44} strokeWidth={1.2} />
-          </div>
-          <div className="visual-caption">RESEARCH FIRST. ALWAYS.</div>
-        </div>
-        <span className="hero-phase">
-          FAZA 04 <span>/ RISC INDEPENDENT · SIMULATED</span>
-        </span>
-      </section>
-
-      <div className="section-heading">
-        <h2>
-          Profil de referință <span>USD</span>
-        </h2>
-        <span className="muted text-xs">Exemplu de configurare · fără cont conectat</span>
-      </div>
-      <section className="metrics" aria-label="Profil de referință, nu valori de cont">
-        <Metric
-          label="Capital de referință"
-          value={new Intl.NumberFormat(locale, {
-            style: 'currency',
-            currency: 'USD',
-            maximumFractionDigits: 0,
-          }).format(Number(profile.equity))}
-          icon={Layers3}
-          footer="Configurație inițială, nu sold real"
-        />
-        <Metric
-          label="Risc per tranzacție"
-          value={`${profile.risk_per_trade_pct}%`}
-          icon={ArrowUpRight}
-          footer="Prag propus · motorul de risc urmează"
-        />
-        <Metric
-          label="Limită pierdere zilnică"
-          value={`${profile.daily_loss_pct}%`}
-          icon={ArrowDownRight}
-          footer="Prag propus · include P&L flotant"
-        />
-        <Metric
-          label="Drawdown total"
-          value={`${profile.total_drawdown_pct}%`}
-          icon={ShieldCheck}
-          footer="Prag propus · bază de calcul de definit"
-        />
-      </section>
-
-      <div className="dashboard-grid">
-        <section className="panel pipeline-panel">
-          <div className="panel-heading">
-            <div>
-              <span className="eyebrow">DE LA IDEE LA DOVEZI</span>
-              <h2>Fluxul de cercetare</h2>
-            </div>
-            <Badge>Planificat</Badge>
-          </div>
-          <div className="pipeline">
-            {[
-              { Icon: Search, name: 'Descoperire', note: 'Surse & ipoteze' },
-              { Icon: Braces, name: 'Experiment', note: 'Cod izolat' },
-              { Icon: Activity, name: 'Validare', note: 'OOS & risc' },
-              { Icon: FlaskConical, name: 'Paper trading', note: 'Observație' },
-            ].map(({ Icon, name, note }, index) => (
-              <div className="pipeline-step" key={name}>
-                <div className="step-icon">
-                  <Icon size={23} />
-                  {index < 3 && <ChevronRight className="step-arrow" size={17} />}
-                </div>
-                <strong>{name}</strong>
-                <span>{note}</span>
-                <small>0{index + 1}</small>
-              </div>
-            ))}
-          </div>
-          <div className="empty-research">
-            <div className="empty-symbol">
-              <FlaskConical size={22} />
-            </div>
-            <div>
-              <h3>Primul experiment începe cu date verificate.</h3>
-              <p>
-                Nu există experimente rulate sau rezultate de performanță. Conectarea datelor și
-                agenții sunt în planul de implementare.
-              </p>
-            </div>
-          </div>
-          <div className="panel-bottom">
-            <span>
-              <LockKeyhole size={13} /> Promovarea live va necesita aprobarea proprietarului.
-            </span>
-            <button className="text-button" onClick={() => navigate('governance')}>
-              Vezi regulile <ArrowRight size={14} />
-            </button>
-          </div>
-        </section>
-
-        <section className="panel infrastructure-panel">
-          <div className="panel-heading">
-            <div>
-              <span className="eyebrow">VERIFICARE DIRECTĂ</span>
-              <h2>Starea infrastructurii</h2>
-            </div>
-            <span className="status-count">
-              {stale ? '—' : `${readiness.healthy}/${readiness.total}`}
-            </span>
-          </div>
-          {data.services.slice(0, 4).map((service) => (
-            <ServiceRow key={service.id} service={service} stale={stale} />
-          ))}
-          <button className="wide-link" onClick={() => navigate('infrastructure')}>
-            Toate serviciile și integrările <ArrowUpRight size={15} />
-          </button>
-        </section>
-      </div>
-
-      <div className="bottom-grid">
-        <section className="panel instruments-panel">
-          <div className="panel-heading">
-            <div>
-              <span className="eyebrow">UNIVERS DE CERCETARE</span>
-              <h2>Clase de instrumente</h2>
-            </div>
-            <Badge>Fără feed</Badge>
-          </div>
-          <div className="instrument-list">
-            {[
-              ['FX', 'Forex', 'EURUSD · GBPUSD · USDJPY'],
-              ['AU', 'Metale', 'XAUUSD · XAGUSD'],
-              ['IX', 'Indici', 'Mapare specifică brokerului'],
-              ['₿', 'Crypto', 'Disponibilitate de verificat'],
-            ].map(([symbol, title, description]) => (
-              <div className="instrument" key={title}>
-                <span className="instrument-symbol">{symbol}</span>
-                <div>
-                  <strong>{title}</strong>
-                  <span>{description}</span>
-                </div>
-                <span className="dash">—</span>
-              </div>
-            ))}
-          </div>
-          <p className="panel-note">
-            Lista este orientativă. Niciun simbol nu este confirmat ca tranzacționabil.
-          </p>
-        </section>
-        <section className="next-panel">
-          <span className="eyebrow">CHECKPOINT CURENT</span>
-          <div className="next-phase">
-            02 <ArrowUpRight size={27} />
-          </div>
-          <h2>
-            Date, timp
-            <br />
-            și proveniență.
-          </h2>
-          <p>
-            Importuri și verificări persistente disponibile. Acceptarea în browser rămâne necesară.
-          </p>
-          <button className="text-button" onClick={() => navigate('roadmap')}>
-            Vezi criteriile de acceptare <ArrowRight size={16} />
-          </button>
-        </section>
-      </div>
-    </>
-  );
-}
-
-function Metric({
-  label,
-  value,
-  icon: Icon,
-  footer,
-}: {
-  label: string;
-  value: string;
-  icon: LucideIcon;
-  footer: string;
-}) {
-  return (
-    <article className="metric">
-      <div>
-        <span>{label}</span>
-        <Icon size={17} />
-      </div>
-      <strong>{value}</strong>
-      <small>{footer}</small>
-    </article>
-  );
-}
-
-function InfrastructurePage({ data, stale }: { data: Overview; stale: boolean }) {
-  const [filter, setFilter] = useState('');
-  const services = data.services.filter((service) =>
-    `${service.name} ${service.detail}`
-      .toLocaleLowerCase(locale)
-      .includes(filter.toLocaleLowerCase(locale)),
-  );
-  return (
-    <>
-      <div className="page-intro">
-        <span className="eyebrow">DEPENDENȚE & INTEGRĂRI</span>
-        <h2>
-          Conexiuni explicite.
-          <br />
-          <span>Stare verificată.</span>
-        </h2>
-        <p>
-          Fiecare serviciu își raportează starea. O dependență indisponibilă blochează verificarea
-          de pregătire.
-        </p>
-      </div>
-      <section className="panel">
-        <div className="panel-heading">
-          <h2>Servicii</h2>
-          <label className="search-box">
-            <Search size={16} />
-            <input
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-              placeholder="Caută un serviciu…"
-              aria-label="Caută un serviciu"
-            />
-          </label>
-        </div>
-        <div className="full-service-list">
-          {services.map((service) => (
-            <ServiceRow key={service.id} service={service} stale={stale} />
-          ))}
-          {services.length === 0 && <p className="no-results">Niciun serviciu găsit.</p>}
-        </div>
-        <div className="panel-bottom">
-          <span>
-            <Clock3 size={14} /> Actualizare automată la 15 secunde. Starea devine neverificată la
-            pierderea conexiunii.
-          </span>
-        </div>
-      </section>
-      <div className="info-callout">
-        <CircleHelp size={20} />
-        <div>
-          <h3>Pornire locală</h3>
-          <p>
-            Rulează <code>make dev</code> pentru PostgreSQL, Redis, stocare și aplicație. MT5,
-            cTrader și gateway-ul AI necesită implementarea etapelor următoare.
-          </p>
-        </div>
-      </div>
-    </>
-  );
-}
-
-function GovernancePage({ data }: { data: Overview }) {
-  return (
-    <>
-      <div className="page-intro">
-        <span className="eyebrow">LIMITE DE ÎNCREDERE</span>
-        <h2>
-          Siguranța este
-          <br />
-          <span>o proprietate a sistemului.</span>
-        </h2>
-        <p>Administrarea necesită autentificare și MFA. Nu există un flux de activare live.</p>
-      </div>
-      <div className="governance-grid">
-        {[
-          {
-            icon: ShieldCheck,
-            name: 'Execuție refuzată',
-            value: data.safety.executor_capability,
-            text: 'API-ul și contractul executorului refuză toate ordinele. Variabilele de mediu nu pot activa tranzacționarea.',
-          },
-          {
-            icon: Fingerprint,
-            name: 'Aprobări umane',
-            value: 'IDENTITATE & MFA · FAZA 1',
-            text: 'Conturile și configurările sunt protejate prin autentificare, roluri și MFA. Aprobările pentru execuție live nu sunt implementate.',
-          },
-          {
-            icon: LockKeyhole,
-            name: 'Cercetare izolată',
-            value: 'EXECUȚIE COD DEZACTIVATĂ',
-            text: 'Nu este instalat un runner pentru cod generat. Niciun agent nu poate executa strategii în acest mediu.',
-          },
-          {
-            icon: BookOpen,
-            name: 'Politici verificate',
-            value: 'NEVERIFICATE',
-            text: 'FTMO, FundedNext și The5ers necesită politici versionate pentru programul și contul exact. Nicio permisiune de trading nu este presupusă.',
-          },
-        ].map(({ icon: Icon, name, value, text }) => (
-          <section className="panel rule-card" key={name}>
-            <div className="rule-icon">
-              <Icon size={23} />
-            </div>
-            <h3>{name}</h3>
-            <Badge>{value}</Badge>
-            <p>{text}</p>
-          </section>
-        ))}
-      </div>
-      <section className="panel block-reasons">
-        <div className="panel-heading">
-          <h2>Motivele blocării execuției</h2>
-          <Badge tone="amber">4 controale active</Badge>
-        </div>
-        {data.safety.reasons.map((reason) => (
-          <div key={reason}>
-            <LockKeyhole size={16} />
-            <code>{reason}</code>
-            <Check size={17} />
-          </div>
-        ))}
-      </section>
-    </>
-  );
-}
-
-function RoadmapPage({ data }: { data: Overview }) {
-  return (
-    <>
-      <div className="page-intro">
-        <span className="eyebrow">DEZVOLTARE ÎN ETAPE</span>
-        <h2>
-          Fiecare etapă are
-          <br />
-          <span>o condiție de trecere.</span>
-        </h2>
-        <p>
-          Extindem platforma numai după verificarea etapei curente. Conectarea reală și rezultatele
-          nu sunt presupuse.
-        </p>
-      </div>
-      <div className="roadmap-list">
-        {data.roadmap.map((phase) => (
-          <section
-            className={`panel roadmap-item ${phase.status === 'CURRENT' ? 'current' : ''}`}
-            key={phase.number}
-          >
-            <span className="phase-number">{String(phase.number).padStart(2, '0')}</span>
-            <div>
-              <h3>{phase.title}</h3>
-              <p>{phase.acceptance}</p>
-            </div>
-            <Badge tone={phase.status === 'CURRENT' ? 'green' : ''}>
-              {phase.status === 'CURRENT' ? 'Etapa curentă' : 'Planificat'}
-            </Badge>
-          </section>
-        ))}
-      </div>
-    </>
-  );
-}
-
-export default function App() {
-  const [page, setPage] = useState<Page>('overview');
-  const [data, setData] = useState<Overview | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+const accountLinks = [
+  ['/conturi', 'Conturi pentru simulare'],
+  ['/conturi/siguranta', 'Siguranță, limite și politici aplicate'],
+  ['/conturi/documente', 'Documente și programe'],
+  ['/conturi/conexiuni', 'Observații broker · numai citire'],
+  ['/conturi/avansat/inregistrari-risc', 'Înregistrări descriptive de risc'],
+  ['/conturi/avansat/simulator', 'Simulator manual avansat'],
+];
+const researchLinks = [
+  ['/testeaza/nou', 'Test nou'],
+  ['/testeaza/strategii', 'Strategii revizuite'],
+  ['/testeaza/activitate', 'Activitatea testelor'],
+  ['/testeaza/date', 'Date pentru teste'],
+  ['/testeaza/date/import', 'Adaugă date istorice'],
+  ['/testeaza/evaluare-finala', 'Evaluare finală protejată'],
+];
+function Shell() {
+  const route = useRoute();
+  const {
+    session,
+    setSession,
+    loading: authLoading,
+    unavailable,
+    refresh: refreshSession,
+    expire,
+  } = useAuth();
+  const [overview, setOverview] = useState<Overview | null>(null);
+  const [overviewError, setOverviewError] = useState(false);
   const [lastSuccess, setLastSuccess] = useState<number | null>(null);
   const [now, setNow] = useState(Date.now());
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [light, setLight] = useState(() => {
+  const [accounts, setAccounts] = useState<RecordItem[]>([]);
+  const [accountError, setAccountError] = useState(false);
+  const [accountId, setAccountId] = useState('');
+  const [accountsOwner, setAccountsOwner] = useState('');
+  const [contextOwner, setContextOwner] = useState('');
+  const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem('research-theme') === 'light';
+      return localStorage.getItem('research-theme') ?? 'system';
     } catch {
-      return false;
+      return 'system';
     }
   });
+  const [systemLight, setSystemLight] = useState(
+    () => matchMedia('(prefers-color-scheme: light)').matches,
+  );
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const request = useRef<AbortController | null>(null);
-
+  const full = session?.state === 'FULL';
+  const ownerId = session?.user.id ?? '';
+  const selectedAccount = route.accountId ?? (contextOwner === ownerId ? accountId : '');
+  const chooseAccount = useCallback(
+    (id: string) => {
+      setContextOwner(ownerId);
+      setAccountId(id);
+    },
+    [ownerId],
+  );
+  const visibleAccounts = accountsOwner === session?.user.id ? accounts : [];
   const refresh = useCallback(async () => {
     request.current?.abort();
-    const controller = new AbortController();
-    request.current = controller;
-    setLoading(true);
-    const timeout = window.setTimeout(() => controller.abort('timeout'), 10_000);
+    const c = new AbortController();
+    request.current = c;
+    const timeout = setTimeout(() => c.abort(), 10000);
     try {
-      const snapshot = await getOverview(controller.signal);
-      if (request.current !== controller) return;
-      setData(snapshot);
-      setError(null);
-      setLastSuccess(Date.now());
-      setNow(Date.now());
+      const value = await getOverview(c.signal);
+      if (request.current === c) {
+        setOverview(value);
+        setOverviewError(false);
+        setLastSuccess(Date.now());
+      }
     } catch {
-      if (
-        request.current === controller &&
-        (!controller.signal.aborted || controller.signal.reason === 'timeout')
-      )
-        setError('Conexiunea cu API-ul nu este disponibilă.');
+      if (request.current === c) setOverviewError(true);
     } finally {
       clearTimeout(timeout);
-      if (request.current === controller) setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     void refresh();
-    const interval = window.setInterval(() => {
+    const poll = setInterval(() => {
       setNow(Date.now());
       void refresh();
-    }, 15_000);
+    }, 15000);
     return () => {
-      clearInterval(interval);
+      clearInterval(poll);
       request.current?.abort();
-      request.current = null;
     };
   }, [refresh]);
   useEffect(() => {
+    const media = matchMedia('(prefers-color-scheme: light)');
+    const update = () => setSystemLight(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  const light = theme === 'light' || (theme === 'system' && systemLight);
+  useEffect(() => {
     document.documentElement.dataset.theme = light ? 'light' : 'dark';
     try {
-      localStorage.setItem('research-theme', light ? 'light' : 'dark');
+      localStorage.setItem('research-theme', theme);
     } catch {
       /* Nonessential preference. */
     }
-  }, [light]);
-
-  const stale = Boolean(error) || isStale(lastSuccess, now);
-  const navigate = (target: Page) => {
-    setPage(target);
-    setMobileOpen(false);
+  }, [light, theme]);
+  useEffect(() => {
+    titleRef.current?.focus();
     window.scrollTo({ top: 0 });
-  };
+  }, [route.path]);
+  useEffect(() => {
+    if (!full) {
+      setAccounts([]);
+      setAccountId('');
+      setAccountsOwner('');
+      setContextOwner('');
+      return;
+    }
+    let active = true;
+    void allRecords('accounts')
+      .then((a) => {
+        if (active) {
+          setAccounts(a);
+          setAccountsOwner(ownerId);
+          setAccountError(false);
+        }
+      })
+      .catch(() => {
+        if (active) setAccountError(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [full, ownerId, route.path]);
+  const stale = overviewError || isStale(lastSuccess, now);
+  const publicPage = ['home', 'diagnostics', 'about', 'roadmap', 'not-found'].includes(
+    route.screen,
+  );
+  const title =
+    route.screen === 'home'
+      ? 'Acasă'
+      : route.screen === 'not-found'
+        ? 'Pagina nu există'
+        : (primary.find((p) => p.area === route.area)?.label ?? 'Autentificare');
+  const links =
+    route.area === 'settings'
+      ? settingsLinks
+      : route.area === 'accounts'
+        ? accountLinks
+        : route.area === 'research'
+          ? researchLinks
+          : route.area === 'results'
+            ? [
+                ['/rezultate', 'Rezultate stocate'],
+                ['/rezultate/compara', 'Compară două teste'],
+                ['/rezultate/simulari', 'Jurnale de simulare manuală'],
+              ]
+            : [];
+  const tab: Tab =
+    route.screen === 'audit'
+      ? 'audit'
+      : route.screen === 'security'
+        ? 'security'
+        : ((route.section ?? 'accounts') as Tab);
   return (
-    <div className="app-shell">
+    <div className="product-shell">
       <a className="skip-link" href="#main-content">
         Mergi la conținut
       </a>
-      {mobileOpen && (
-        <button
-          className="sidebar-scrim"
-          onClick={() => setMobileOpen(false)}
-          aria-label="Închide meniul"
-        />
-      )}
-      <aside className={`sidebar ${mobileOpen ? 'open' : ''}`}>
-        <div className="brand">
-          <span className="brand-mark">
-            <ChartNoAxesCombined size={23} />
+      <aside className="product-sidebar">
+        <Link href="/" className="product-brand">
+          <ChartNoAxesCombined aria-hidden="true" />
+          <span>
+            Trade Research<small>Cercetare. Dovezi. Control.</small>
           </span>
-          <div>
-            Trade<span>RESEARCH PLATFORM</span>
-          </div>
-          <button
-            className="icon-button mobile-close"
-            onClick={() => setMobileOpen(false)}
-            aria-label="Închide navigarea"
-          >
-            <X size={19} />
-          </button>
-        </div>
-        <div className="workspace-selector">
-          <span className="workspace-avatar">R</span>
-          <div>
-            Research workspace<span>Mediu local</span>
-          </div>
-          <Badge>SIM</Badge>
-        </div>
-        <span className="nav-label">CENTRUL DE CONTROL</span>
-        <nav aria-label="Navigare principală">
-          {navigation.map(({ id, icon: Icon }) => (
-            <button
-              key={id}
-              className={`nav-item ${page === id ? 'active' : ''}`}
-              aria-current={page === id ? 'page' : undefined}
-              onClick={() => navigate(id)}
-            >
-              <Icon size={18} />
-              <span>{ro[id]}</span>
-              {page === id && <span className="nav-active-dot" />}
-            </button>
-          ))}
+        </Link>
+        <nav className="primary-nav" aria-label="Navigare principală">
+          {primary.map((p, i) => {
+            const Icon = icons[i];
+            return (
+              <Link
+                key={p.path}
+                href={p.path}
+                aria-current={route.area === p.area ? 'page' : undefined}
+                aria-label={p.label}
+              >
+                <Icon aria-hidden="true" size={20} />
+                <span>{p.label}</span>
+              </Link>
+            );
+          })}
         </nav>
-        <span className="nav-label future-label">ÎN DEZVOLTARE</span>
-        <div className="future-navigation">
-          {[
-            { Icon: ChartNoAxesCombined, name: 'Backtesting', phase: '05' },
-            { Icon: Workflow, name: 'Agenți AI', phase: '06' },
-            { Icon: Activity, name: 'Execuție & audit', phase: '08' },
-          ].map(({ Icon, name, phase }) => (
-            <button
-              key={name}
-              className="nav-item future"
-              onClick={() => navigate('roadmap')}
-              title={`Planificat în faza ${phase}`}
-            >
-              <Icon size={18} />
-              <span>{name}</span>
-              <LockKeyhole size={12} />
-            </button>
-          ))}
-        </div>
-        <div className="sidebar-bottom">
-          <div className="isolation-card">
-            <ShieldCheck size={20} />
-            <strong>Cercetare în siguranță</strong>
-            <p>
-              Nicio conexiune la bani reali.
-              <br />
-              Niciun ordin executabil.
-            </p>
-            <span>
-              <i /> SIMULATION ONLY
-            </span>
-          </div>
-          <a className="documentation" href="/openapi.json" target="_blank" rel="noreferrer">
-            <BookOpen size={17} /> Contract API <ArrowUpRight size={14} />
-          </a>
-          <div className="sidebar-footer">
-            <span className="local-avatar">L</span>
-            <div>
-              Stare publică<span>Administrare cu autentificare</span>
-            </div>
-          </div>
-        </div>
+        <p className="sidebar-mode">
+          SIMULATED / DENY_ALL
+          <br />
+          Fără ordine către brokeri externi
+        </p>
       </aside>
-      <div className="main-shell">
-        <header className="topbar">
-          <div className="breadcrumb">
+      <div className="product-main">
+        <header className="product-header">
+          <span>Platformă de cercetare</span>
+          <div className="header-controls">
             <button
-              className="icon-button mobile-menu"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Deschide meniul"
-              aria-expanded={mobileOpen}
-            >
-              <Menu size={20} />
-            </button>
-            <span>Workspace</span>
-            <ChevronRight size={14} />
-            <strong>{ro[page]}</strong>
-          </div>
-          <div className="topbar-actions">
-            <span className="environment-indicator">
-              <i /> SIMULARE
-            </span>
-            <span className="top-divider" />
-            <button
+              type="button"
               className="icon-button"
-              onClick={() => setLight(!light)}
               aria-label={light ? 'Activează tema întunecată' : 'Activează tema luminoasă'}
+              onClick={() => setTheme(light ? 'dark' : 'light')}
             >
-              {light ? <Moon size={18} /> : <Sun size={18} />}
+              {light ? <Moon /> : <Sun />}
             </button>
-            <span
-              className="user-avatar"
-              title="Mediu local; identitatea se verifică în administrare"
-            >
-              L
-            </span>
+            {full ? (
+              <>
+                <span>
+                  {session.user.display_name} · {session.user.role}
+                </span>
+                <button
+                  className="text-button"
+                  onClick={() =>
+                    void api('/auth/logout', { method: 'POST', csrf: session.csrf_token, body: {} })
+                      .then(() => {
+                        setAccountId('');
+                        setSession(null);
+                      })
+                      .catch(() => refreshSession())
+                  }
+                >
+                  Deconectare
+                </button>
+              </>
+            ) : (
+              <Link href="/autentificare">Autentificare</Link>
+            )}
           </div>
         </header>
-        <main id="main-content">
-          <div className="page-heading">
+        <main id="main-content" tabIndex={-1}>
+          <header className="page-heading">
             <div>
-              <span className="eyebrow">AI TRADING RESEARCH</span>
-              <h1>{page === 'overview' ? 'Centrul de cercetare' : ro[page]}</h1>
+              <h1 ref={titleRef} tabIndex={-1}>
+                {title}
+              </h1>
               <p>
-                {page === 'overview'
-                  ? 'Vizibilitate completă. Control înainte de execuție.'
-                  : 'Un sistem construit pentru verificare și trasabilitate.'}
+                {route.area === 'research'
+                  ? 'Teste istorice, cu ipoteze clare și rezultate verificabile.'
+                  : route.area === 'results'
+                    ? 'Ce s-a întâmplat în simulare și ce nu putem concluziona.'
+                    : 'Starea platformei și următorul pas.'}
               </p>
             </div>
-            <button className="secondary-button" onClick={() => void refresh()} disabled={loading}>
-              <RefreshCw size={15} className={loading ? 'spin' : ''} />{' '}
-              {loading ? 'Se verifică…' : 'Actualizează'}
-            </button>
+            {full && (
+              <label className="account-context">
+                Contul de lucru
+                <select
+                  aria-label="Contul de lucru"
+                  value={selectedAccount}
+                  onChange={(e) => {
+                    chooseAccount(e.target.value);
+                    if (route.area === 'accounts' && e.target.value)
+                      navigate(`/conturi/${e.target.value}/siguranta`);
+                  }}
+                >
+                  <option value="">Alege contul când este necesar</option>
+                  {visibleAccounts.map((a) => (
+                    <option key={a.id} value={a.id}>
+                      {a.data.name}
+                    </option>
+                  ))}
+                </select>
+                {accountError && (
+                  <small>UNKNOWN · lista conturilor nu poate fi citită complet.</small>
+                )}
+              </label>
+            )}
+          </header>
+          <div className="mode-strip">
+            SIMULARE · ordine externe blocate <span>SIMULATED / DENY_ALL</span>
           </div>
-          {data && !stale && <SafetyNotice />}
-          {error && (
-            <div className="error-banner" role="alert">
-              <ShieldOff size={19} />
-              <div>
-                <strong>Conexiunea cu API-ul nu este disponibilă.</strong>
-                <span>
-                  {data
-                    ? 'Stările afișate anterior sunt neverificate. Reîncercare automată la 15 secunde.'
-                    : 'Pornește API-ul cu make local-api, apoi actualizează pagina.'}
-                </span>
-              </div>
-            </div>
+          {full && <RiskBanner key={session.user.id} />}
+          {links.length > 0 && (
+            <nav className="section-navigation" aria-label="În această secțiune">
+              {links.map(([href, label]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  aria-current={route.path === href ? 'page' : undefined}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
           )}
-          {!data && loading && (
-            <div className="loading-panel" role="status">
-              <RefreshCw size={25} className="spin" />
-              <h2>Verificăm mediul de cercetare…</h2>
-              <p>Stările sunt citite direct din API.</p>
-            </div>
+          {unavailable && (
+            <p role="alert" className="error-banner">
+              UNAVAILABLE · nu putem verifica sesiunea. Nu presupunem că accesul este confirmat.{' '}
+              <button onClick={() => void refreshSession()}>Verifică sesiunea</button>
+            </p>
           )}
-          {data && (
+          {overviewError && ['home', 'diagnostics'].includes(route.screen) && (
+            <p className="error-banner" role="alert">
+              Conexiunea cu API-ul nu este disponibilă. Starea publică este neverificată;
+              autentificarea și siguranța se verifică separat.
+            </p>
+          )}
+          {authLoading && !publicPage ? (
+            <p role="status">Verificăm sesiunea…</p>
+          ) : !full && !publicPage ? (
+            <Authentication session={session} setSession={setSession} />
+          ) : (
             <>
-              <RiskBanner onOpen={() => setPage('riskCenter')} />
-              {page === 'overview' && (
-                <OverviewPage data={data} stale={stale} navigate={navigate} />
+              {route.screen === 'home' && (
+                <HomePage
+                  key={session?.user.id ?? 'public'}
+                  overview={overview}
+                  stale={stale}
+                  refresh={() => void refresh()}
+                />
               )}
-              {page === 'infrastructure' && <InfrastructurePage data={data} stale={stale} />}
-              {page === 'governance' && <GovernancePage data={data} />}
-              {page === 'roadmap' && <RoadmapPage data={data} />}
-              {page === 'management' && <Management />}
-              {page === 'market' && <Management key="market" initialSection="market" />}
-              {page === 'broker' && <Management key="broker" initialSection="broker" />}
-              {page === 'research' && <Management key="research" initialSection="research" />}
-              {page === 'riskCenter' && <Management key="riskCenter" initialSection="riskCenter" />}
+              {route.screen === 'auth' && (
+                <>
+                  <p>Identitatea este confirmată în doi pași.</p>
+                  {full ? (
+                    <Link href="/testeaza/nou">Continuă cu un test</Link>
+                  ) : (
+                    <Authentication session={session} setSession={setSession} />
+                  )}
+                </>
+              )}
+              {full && route.screen === 'records' && (
+                <Workspace
+                  key={route.section}
+                  session={session}
+                  setSession={setSession}
+                  initialSection={tab}
+                />
+              )}
+              {full && route.screen === 'security' && (
+                <Security
+                  session={session}
+                  setSession={setSession}
+                  mode={route.section === 'utilizatori' ? 'users' : 'personal'}
+                />
+              )}
+              {full && route.screen === 'audit' && (
+                <Workspace session={session} setSession={setSession} initialSection="audit" />
+              )}
+              {full && route.screen === 'risk' && (
+                <RiskCenter
+                  key={selectedAccount}
+                  session={session}
+                  onExpired={expire}
+                  initialAccount={selectedAccount}
+                  onAccountChange={(id) => {
+                    chooseAccount(id);
+                    if (route.accountId && id) navigate(`/conturi/${id}/siguranta`);
+                  }}
+                />
+              )}
+              {full && route.screen === 'broker' && (
+                <BrokerCenter session={session} onExpired={expire} />
+              )}
+              {full && route.screen === 'data' && (
+                <MarketData session={session} onExpired={expire} />
+              )}
+              {full && route.screen === 'research' && (
+                <StrategyLab
+                  session={session}
+                  onExpired={expire}
+                  initialAccount={selectedAccount}
+                  onAccountChange={chooseAccount}
+                />
+              )}
+              {full && route.screen === 'registry' && (
+                <section className="panel">
+                  <h2>Registru tehnic · operațiuni API</h2>
+                  <p>
+                    Înregistrările descriptive nu sunt strategii revizuite, experimente reale sau
+                    aprobări de execuție.
+                  </p>
+                  <Evidence
+                    value={[
+                      'firms',
+                      'programs',
+                      'venues',
+                      'instruments',
+                      'accounts',
+                      'brokers',
+                      'risk-profiles',
+                      'policies',
+                      'strategies',
+                      'strategy-versions',
+                      'experiments',
+                      'approvals',
+                      'incidents',
+                    ]}
+                  />
+                  <a href="/openapi.json">Inspectează contractul și operațiunile autorizate</a>
+                </section>
+              )}
+              {route.screen === 'settings' && (
+                <section className="panel">
+                  <h2>Preferințe și acces</h2>
+                  <label>
+                    Aspect
+                    <select
+                      aria-label="Aspect"
+                      value={theme}
+                      onChange={(e) => setTheme(e.target.value)}
+                    >
+                      <option value="system">Urmează sistemul</option>
+                      <option value="light">Luminos</option>
+                      <option value="dark">Întunecat</option>
+                    </select>
+                  </label>
+                  <p>Limba produsului: română. Setările vizuale nu schimbă drepturile de acces.</p>
+                  <ul>
+                    {settingsLinks.map(([href, label]) => (
+                      <li key={href}>
+                        <Link href={href}>{label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+              {route.screen === 'diagnostics' && (
+                <>
+                  <h2>Starea serviciilor</h2>
+                  <button className="secondary-button" onClick={() => void refresh()}>
+                    Actualizează starea publică
+                  </button>
+                  {overview ? (
+                    <InfrastructurePage data={overview} stale={stale} />
+                  ) : (
+                    <p>UNKNOWN · Nu există un răspuns public verificat.</p>
+                  )}
+                </>
+              )}
+              {route.screen === 'about' && (
+                <>
+                  <section className="panel">
+                    <h2>Capabilități și limite</h2>
+                    <p>
+                      Teste cantitative pe date admise, execuție simulată și control independent al
+                      riscului. AI, promovarea automată și ordinele externe nu sunt disponibile.
+                    </p>
+                    <a href="/openapi.json">Contract API</a>
+                  </section>
+                  {overview && (
+                    <>
+                      <GovernancePage data={overview} />
+                      <section className="panel">
+                        <h2>Exemplu de configurație · nu se aplică</h2>
+                        <p>
+                          Valorile de referință sunt exemple din configurația publică. Nu sunt
+                          solduri de broker, performanță sau limite aplicate conturilor tale.
+                        </p>
+                        <Evidence
+                          title="Configurația de referință, fără autoritate de risc"
+                          value={overview.reference_profile}
+                        />
+                      </section>
+                    </>
+                  )}
+                </>
+              )}
+              {route.screen === 'roadmap' &&
+                (overview ? (
+                  <RoadmapPage data={overview} />
+                ) : (
+                  <p>Planul nu poate fi citit acum. Aceasta nu indică activitate de cercetare.</p>
+                ))}
+              {route.screen === 'not-found' && (
+                <section className="panel">
+                  <p>Verifică legătura. Nu afișăm date sau identități dintr-un cont neautorizat.</p>
+                  <Link href="/">Revino acasă</Link>
+                </section>
+              )}
             </>
           )}
           <footer className="main-footer">
-            <span>
-              Trade Research <span className="footer-dot">·</span> Identitate & date
-            </span>
-            <span>
-              <span className={`footer-status-dot ${stale ? 'stale' : ''}`} />
-              {lastSuccess
-                ? `Ultima verificare ${new Date(lastSuccess).toLocaleTimeString(locale)}`
-                : 'În așteptarea API-ului'}{' '}
-              <span className="footer-dot">·</span> v0.1.0
-            </span>
+            Trade Research · Execuție simulată ·{' '}
+            {lastSuccess ? (
+              <>
+                Stare publică citită la <PublicReadTime at={lastSuccess} />
+              </>
+            ) : (
+              'Stare publică necunoscută'
+            )}
           </footer>
         </main>
       </div>
     </div>
+  );
+}
+export default function App() {
+  return (
+    <AuthProvider>
+      <Shell />
+    </AuthProvider>
   );
 }

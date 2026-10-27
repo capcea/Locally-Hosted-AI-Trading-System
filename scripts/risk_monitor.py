@@ -10,7 +10,7 @@ from sqlalchemy import select, text
 
 from apps.api.config import Settings
 from packages.persistence.audit import append_event
-from packages.persistence.models import TradingAccount
+from packages.persistence.models import TradingAccount, User
 from packages.persistence.store import Store
 from packages.research.models import ResearchAccount
 from packages.risk.models import AccountControl
@@ -30,6 +30,15 @@ def once(store: Store, key: str) -> int:
     checked = 0
     for account_id in accounts:
         with store.session() as db, db.begin():
+            owner_id = db.scalar(
+                select(TradingAccount.owner_id).where(TradingAccount.id == account_id)
+            )
+            if owner_id is None:
+                continue
+            # Authenticated requests serialize owner -> account -> audit head. Incident/ledger
+            # inserts also take an owner FK lock, so taking the account first can deadlock them.
+            # Read mutable account/control state only after the owner lock has been acquired.
+            db.execute(select(User.id).where(User.id == owner_id).with_for_update()).scalar_one()
             account = db.get(TradingAccount, account_id)
             control = db.get(AccountControl, account_id)
             if account is None or control is None:

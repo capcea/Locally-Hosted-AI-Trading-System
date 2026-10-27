@@ -1,0 +1,12 @@
+{
+  "id": "label-integration",
+  "command": [
+    "make",
+    "integration"
+  ],
+  "started_utc": "2026-10-27T14:36:52.364731+00:00",
+  "duration_seconds": 271.41,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/label-integration.txt",
+  "sha256": "6590293e999d9076ded7454696f56528a84ccef877f9f5d1c6eef21f7cd0ec71"
+}

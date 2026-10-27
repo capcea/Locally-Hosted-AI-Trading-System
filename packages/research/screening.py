@@ -22,6 +22,8 @@ def screen(
     ordinal = 0
     start, end = phase_range(plan)
     for parameters in plan.parameters:
+        if parameters.entry_order_type != "MARKET":
+            raise ValueError("SCREEN_PENDING_ORDERS_REQUIRE_EVENT_ENGINE")
         for stress in plan.cost_multipliers:
             pnl = Decimal(0)
             observations = 0
@@ -31,7 +33,7 @@ def screen(
                     continue
                 if dataset["pin"].symbol.profit_currency != plan.assumptions.account_currency:
                     raise ValueError("SCREEN_CROSS_CURRENCY_REQUIRES_EVENT_ENGINE")
-                if any(d["pin"].role == "CONFIRMATION" for d in datasets):
+                if any(d["pin"].role != "EXECUTION" for d in datasets):
                     raise ValueError("CONFIRMATION_STREAMS_REQUIRE_EVENT_ENGINE")
                 rows = sorted(dataset["rows"], key=lambda r: (r.available_at, r.sequence))
                 history = []
@@ -165,7 +167,12 @@ def screen(
                     "paper_eligible": False,
                     "source": "SIMULATED",
                     "unknown_funding_cost": plan.assumptions.swap_per_unit_per_day is None,
-                    "warning": "Exploratory Arrow mark-to-close model with one-observation lag and maximum declared latency; no SL/TP, pending-order, liquidity, calendar or risk certification. Event validation mandatory.",
+                    "warning": (
+                        "Exploratory Arrow mark-to-close model with one-observation lag "
+                        "and maximum declared latency; no SL/TP, pending-order, "
+                        "liquidity, calendar or risk certification. Event validation "
+                        "mandatory."
+                    ),
                 }
             )
             ordinal += 1

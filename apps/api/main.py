@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import re
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
@@ -198,10 +199,25 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     @app.exception_handler(SQLAlchemyError)
-    async def storage_failure(_: Request, __: SQLAlchemyError) -> JSONResponse:
+    async def storage_failure(request: Request, error: SQLAlchemyError) -> JSONResponse:
+        # Never stringify database exceptions: their statements/parameters can contain secrets.
+        sqlstate = getattr(getattr(error, "orig", None), "sqlstate", None)
+        logger.error(
+            json.dumps(
+                {
+                    "event": "persistence_failure",
+                    "request_id": str(request.state.correlation_id),
+                    "category": "PERSISTENCE_TRANSACTION_FAILED",
+                    "sqlstate": sqlstate
+                    if isinstance(sqlstate, str) and re.fullmatch(r"[0-9A-Z]{5}", sqlstate)
+                    else None,
+                }
+            )
+        )
         return JSONResponse(
             status_code=503,
             content={"detail": "Persistent service unavailable; no change accepted"},
+            headers={"X-Error-Category": "PERSISTENCE_TRANSACTION_FAILED"},
         )
 
     @app.exception_handler(DataIntegrityError)

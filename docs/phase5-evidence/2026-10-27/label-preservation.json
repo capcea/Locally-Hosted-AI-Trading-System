@@ -1,0 +1,13 @@
+{
+  "id": "label-preservation",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/preserve.py",
+    "after"
+  ],
+  "started_utc": "2026-10-27T14:41:07.183766+00:00",
+  "duration_seconds": 4.39,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/label-preservation.txt",
+  "sha256": "8c7ba7889d541ed5fef5f57b5928727eba6274c4f9e8ed95017a26a2415222df"
+}

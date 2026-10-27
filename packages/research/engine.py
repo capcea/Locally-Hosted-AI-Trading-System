@@ -3,7 +3,7 @@
 import hashlib
 from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
-from decimal import ROUND_CEILING, Decimal
+from decimal import ROUND_CEILING, Decimal, localcontext
 from typing import Any
 from uuid import UUID, uuid4
 from zoneinfo import ZoneInfo
@@ -202,7 +202,7 @@ def closing_window(
     return min(strategy_remaining, venue_remaining) <= buffer or reset
 
 
-def event_trial(
+def _event_trial(
     db: Session,
     research: ResearchRun,
     plan: ExperimentInput,
@@ -244,6 +244,7 @@ def event_trial(
     runs: dict[str, SimulationRun] = {}
     histories: dict[str, list[dict[str, Any]]] = {}
     signals = []
+    fx_observations: list[tuple[dict[str, Any], Any]] = []
     curve: list[dict[str, Any]] = []
     start, end = evaluation_range or phase_range(plan)
     for dataset in datasets:
@@ -347,10 +348,14 @@ def event_trial(
     sequences = {k: 0 for k in runs}
     regimes: dict[str, dict[str, str]] = {k: {} for k in runs}
     pending_exits: set[str] = set()
+    emitted_signal: dict[str, str] = {}
     trace: list[dict[str, Any]] = []
 
     def command(run: SimulationRun, action: str, at: datetime, **kwargs: Any) -> dict[str, Any]:
         correlation_id = uuid4()
+        account_control = db.get(AccountControl, account.id)
+        if account_control is None or account_control.manual_stop:
+            raise ValueError("RESEARCH_ACCOUNT_EMERGENCY_STOP")
         receipt, _ = execute(
             db,
             run,
@@ -373,6 +378,22 @@ def event_trial(
                 "source": "SIMULATED",
             },
         )
+        control_now = db.get(AccountControl, account.id)
+        if start <= at <= end and control_now:
+            if not control_now.state.get("data_verified"):
+                raise ValueError("RESEARCH_ACCOUNT_DATA_UNVERIFIED")
+            values_now: Any = control_now.state["values"]
+            curve.append(
+                {
+                    "at": at.isoformat(),
+                    "timestamp": at.timestamp(),
+                    "equity": str(values_now["equity"]),
+                    "daily_headroom": control_now.state.get("daily_headroom"),
+                    "total_headroom": control_now.state.get("total_headroom"),
+                    "open_risk": str(values_now["open_risk"]),
+                    "pending_risk": str(values_now["pending_risk"]),
+                }
+            )
         db.commit()
         trace.append(
             {
@@ -407,9 +428,15 @@ def event_trial(
             continue
         if index % 10 == 0:
             heartbeat(min(95, index * 95 // len(records)))
+        from packages.research.fx import update as update_fx
+
+        fx_observations.append((dataset, row))
+        update_fx(db, plan, datasets, fx_observations, runs, at, key)
+        if dataset["pin"].role == "FX":
+            continue
         close = row.close if row.close is not None else (row.bid + row.ask) / 2
         history = histories[dataset_id]
-        if dataset["pin"].role == "CONFIRMATION":
+        if dataset["pin"].role in {"SIGNAL", "CONFIRMATION"}:
             history.append(
                 {
                     "at": at.isoformat(),
@@ -525,13 +552,36 @@ def event_trial(
         )
         from packages.research.strategies import signal
 
-        direction = signal(plan.strategy, history, p, at) if start <= at < end else 0
+        features = history
+        if plan.signal_timeframe != "NATIVE":
+            feature_stream = next(
+                d
+                for d in datasets
+                if d["pin"].role == "SIGNAL"
+                and d["instrument_id"] == dataset["instrument_id"]
+                and d["timeframe"] == plan.signal_timeframe
+            )
+            features = [
+                point
+                for point in histories[feature_stream["dataset_id"]]
+                if datetime.fromisoformat(point["at"]) < at
+            ]
+        fresh_feature = bool(features) and emitted_signal.get(dataset_id) != features[-1]["at"]
+        direction = (
+            signal(plan.strategy, features, p, at) if fresh_feature and start <= at < end else 0
+        )
+        if fresh_feature:
+            emitted_signal[dataset_id] = features[-1]["at"]
         for confirmation in datasets:
             if confirmation["pin"].role == "CONFIRMATION" and (
                 confirmation["instrument_id"] == dataset["instrument_id"]
                 or p.cross_asset_confirmation
             ):
-                h = histories[confirmation["dataset_id"]]
+                h = [
+                    x
+                    for x in histories[confirmation["dataset_id"]]
+                    if datetime.fromisoformat(x["at"]) < at
+                ]
                 compared = direction * (1 if p.confirmation_direction == "SAME" else -1)
                 if (
                     len(h) < p.slow
@@ -608,7 +658,7 @@ def event_trial(
             )
             from packages.research.strategies import observed_regime
 
-            known_regime = observed_regime(history, p, spec.tick_size)
+            known_regime = observed_regime(features, p, spec.tick_size)
             for submitted_order in SimState.model_validate(run.state).orders.values():
                 if submitted_order.idempotency_key == f"research-{len(trace) - 1}-SUBMIT":
                     regimes[dataset_id][str(submitted_order.id)] = known_regime
@@ -618,7 +668,7 @@ def event_trial(
                 {
                     "regime": known_regime,
                     "source_sequence": row.sequence,
-                    "feature_window_digest": digest(history),
+                    "feature_window_digest": digest(features),
                     "dataset_id": dataset_id,
                     "at": at.isoformat(),
                     "direction": direction,
@@ -645,6 +695,9 @@ def event_trial(
     if not curve:
         raise ValueError("NO_EVALUATION_OBSERVATIONS")
     final_at = end
+    from packages.research.fx import update as update_fx
+
+    update_fx(db, plan, datasets, fx_observations, runs, final_at, key)
     for run in runs.values():
         state = SimState.model_validate(run.state)
         for order in state.orders.values():
@@ -704,7 +757,7 @@ def event_trial(
         if point.get("total_headroom") is not None
     ]
     result_metrics = metrics(
-        curve, trades, float(account.initial_capital), plan.seed, plan.bootstrap_samples
+        curve, trades, account.initial_capital, plan.seed, plan.bootstrap_samples
     )
     result_metrics["maximum_daily_internal_risk_utilization"] = str(max(daily_util, default=D(0)))
     result_metrics["maximum_total_internal_risk_utilization"] = str(max(total_util, default=D(0)))
@@ -757,3 +810,33 @@ def event_trial(
         "ohlc_rule": "MODELED_AT_BAR_AVAILABILITY_ADVERSE_FIRST_REJECT_BOTH_TOUCH",
         "paper_eligible": False,
     }
+
+
+def event_trial(
+    db: Session,
+    research: ResearchRun,
+    plan: ExperimentInput,
+    datasets: list[dict[str, Any]],
+    p: Parameters,
+    stress: Decimal,
+    attempt: int,
+    ordinal: int,
+    key: str,
+    heartbeat: Callable[[int], None],
+    evaluation_range: tuple[datetime, datetime] | None = None,
+) -> dict[str, Any]:
+    with localcontext() as precision:
+        precision.prec = 80
+        return _event_trial(
+            db,
+            research,
+            plan,
+            datasets,
+            p,
+            stress,
+            attempt,
+            ordinal,
+            key,
+            heartbeat,
+            evaluation_range,
+        )

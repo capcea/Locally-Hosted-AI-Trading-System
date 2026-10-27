@@ -1,0 +1,13 @@
+{
+  "id": "whitespace-final",
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "started_utc": "2026-10-27T12:40:38.478406+00:00",
+  "duration_seconds": 0.017,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/whitespace-final.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

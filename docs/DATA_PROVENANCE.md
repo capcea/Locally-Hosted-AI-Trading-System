@@ -95,3 +95,17 @@ MinIO locking/checksums, Parquet readback, restart and killed-worker recovery, p
 Benchmarks use labeled 30,000-row synthetic files and real services; they do not establish five-year,
 production-tick-scale throughput. Browser proof is still blocked. Actual MT5, premium feeds, intraday/
 tick/free metals/index/crypto provider coverage and a calendar feed remain unverified or unavailable.
+
+## Phase 5 research provenance
+
+Research reopens the actual Phase 2 immutable manifest and objects, checks checksum/version, ownership,
+VALID quality, declared contract/calendar, bounded coverage and event<=observation<=availability.
+Closed-bar values require close-time availability; MTF and confirmation joins require strictly prior
+availability. No prices/ticks/publication times are interpolated. FX-role inputs accept only admitted
+Forex bid/ask ticks and update immutable conversion evidence using earlier observations; freshness and
+conversion remain actual gateway checks. Rates are not manufactured or silently held valid forever.
+
+Results remain SIMULATED even with HISTORICAL input; dataset provenance stays separately recorded.
+Native fixtures use synthetic ticks/bars, not verified market performance or five years of history.
+Internal simulated account/connection records are synthetic execution records, not external balances.
+Protected holdout intervals exclude overlapping owner aliases; prior exposure is not certified untouched.

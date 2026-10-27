@@ -1,0 +1,12 @@
+{
+  "id": "check-typed",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T12:22:02.579737+00:00",
+  "duration_seconds": 13.163,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/check-typed.txt",
+  "sha256": "bd373f3ac01cccf39130f8ea314efebab5ae1576e11dd3a76bfcc45eef25d05e"
+}

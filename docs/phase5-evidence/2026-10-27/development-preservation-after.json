@@ -1,0 +1,13 @@
+{
+  "id": "development-preservation-after",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/preserve.py",
+    "after"
+  ],
+  "started_utc": "2026-10-27T12:27:00.814928+00:00",
+  "duration_seconds": 10.249,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/development-preservation-after.txt",
+  "sha256": "f42cb0e1b72c799b8469417f6452456f24c0d0f7d3bf61e5c84824690a6c871a"
+}

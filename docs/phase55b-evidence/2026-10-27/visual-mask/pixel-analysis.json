@@ -1,0 +1,49 @@
+{
+  "dimensions": {
+    "expected": [
+      1280,
+      1047
+    ],
+    "actual": [
+      1280,
+      1047
+    ]
+  },
+  "different_rgba_pixels": 84,
+  "difference_bounds_inclusive": {
+    "x_min": 1189,
+    "y_min": 962,
+    "x_max": 1192,
+    "y_max": 982
+  },
+  "changed_colors": {
+    "245,247,250,255 -> 255,0,255,255": 84
+  },
+  "masks": {
+    "expected": {
+      "pixels": 1155,
+      "bounds_inclusive": {
+        "x_min": 1193,
+        "y_min": 962,
+        "x_max": 1247,
+        "y_max": 982
+      }
+    },
+    "actual": {
+      "pixels": 1239,
+      "bounds_inclusive": {
+        "x_min": 1189,
+        "y_min": 962,
+        "x_max": 1247,
+        "y_max": 982
+      }
+    }
+  },
+  "baseline_matches_expected": true,
+  "sha256": {
+    "expected": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4",
+    "actual": "d0c4a17d774eeb630c1191c8906a978eba36d761b02178b8b3b7f4b9671a4022",
+    "diff": "c68a873ca526177b3f025336ba38bd59a101e87b809678adccc1c39b49f6bc2a",
+    "baseline": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4"
+  }
+}

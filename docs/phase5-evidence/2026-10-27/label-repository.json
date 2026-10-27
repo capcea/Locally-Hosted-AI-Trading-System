@@ -1,0 +1,12 @@
+{
+  "id": "label-repository",
+  "command": [
+    "make",
+    "repository-check"
+  ],
+  "started_utc": "2026-10-27T14:46:31.207347+00:00",
+  "duration_seconds": 0.053,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/label-repository.txt",
+  "sha256": "d2320e85ae4a4178ffbc04155f02b9316a9d41c40e5f948d6fb6e5e4e75b8a9c"
+}

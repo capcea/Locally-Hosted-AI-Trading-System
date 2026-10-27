@@ -1,0 +1,7 @@
+{
+  "method": "TypeScript AST expression comparison, ignoring formatting only",
+  "original_assertion_statements": 16,
+  "current_assertion_statements": 26,
+  "missing_original_assertions": 0,
+  "global_timeout_unchanged": true
+}

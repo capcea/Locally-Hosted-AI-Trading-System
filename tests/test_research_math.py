@@ -95,10 +95,10 @@ def test_metrics_exact_profit_drawdown_and_small_sample_refusal() -> None:
         7,
         100,
     )
-    assert result["net_profit"] == -1 and result["max_drawdown"] == 11
+    assert Decimal(result["net_profit"]) == -1 and Decimal(result["max_drawdown"]) == 11
     assert result["max_drawdown_fraction"] == pytest.approx(0.1)
     assert result["profit_factor"] == pytest.approx(10 / 11)
-    assert result["expectancy"] == -0.5 and result["win_rate"] == 0.5
+    assert Decimal(result["expectancy"]) == Decimal("-.5") and result["win_rate"] == 0.5
     assert result["sharpe"] is None and result["sortino"] is None and result["calmar"] is None
     assert result["uncertainty"]["bootstrap_mean_95"] is None
 
@@ -129,3 +129,43 @@ def test_bounded_parameter_contract_rejects_float_sizing() -> None:
     with pytest.raises(ValueError):
         Parameters(fast=30, slow=10)
     assert Parameters(volume=Decimal(".01")).volume == Decimal(".01")
+
+
+def test_monetary_metrics_preserve_subcent_pnl_at_large_declared_capital() -> None:
+    capital = Decimal("10000000000000000")
+    result = metrics(
+        [
+            {"equity": str(capital), "at": "2024-01-01", "timestamp": 0},
+            {"equity": str(capital + Decimal(".00000001")), "at": "2024-01-02", "timestamp": 86400},
+        ],
+        [],
+        capital,
+        1,
+        100,
+    )
+    assert Decimal(result["net_profit"]) == Decimal(".00000001")
+    assert result["net_return"] > 0
+
+
+def test_irregular_daily_coverage_cannot_produce_annualized_sharpe() -> None:
+    points = [
+        {
+            "equity": str(100 + i),
+            "at": (START + timedelta(days=i * 2)).isoformat(),
+            "timestamp": float(i * 2 * 86400),
+        }
+        for i in range(40)
+    ]
+    result = metrics(points, [], 100, 1, 100)
+    assert result["sharpe"] is None and result["sortino"] is None
+    assert result["ratios_reason"] == "IRREGULAR_CALENDAR_DAILY_OBSERVATIONS"
+
+
+def test_near_insolvency_positive_equity_does_not_round_cagr_into_log_domain_error() -> None:
+    points = [
+        {"equity": "10000000000000000", "at": "2024-01-01", "timestamp": 0},
+        {"equity": "0.00000001", "at": "2025-01-02", "timestamp": 367 * 86400},
+    ]
+    result = metrics(points, [], Decimal("10000000000000000"), 1, 100)
+    assert Decimal(result["net_profit"]) == Decimal("-9999999999999999.99999999")
+    assert result["calmar"] is None  # No invented intermediate daily observations.

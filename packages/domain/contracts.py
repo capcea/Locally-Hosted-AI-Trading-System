@@ -72,7 +72,7 @@ class Phase(Contract):
 class Overview(Contract):
     application: str = "AI Trading Research Platform"
     version: str = "0.1.0"
-    phase: int = 4
+    phase: int = 5
     timestamp: datetime
     uptime_seconds: int
     safety: SafetyState

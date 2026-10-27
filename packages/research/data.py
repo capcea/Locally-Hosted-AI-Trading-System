@@ -80,19 +80,32 @@ def pinned(
         from packages.risk.sizing import loss_conversion, payoff_multiplier
 
         payoff_multiplier(pin.symbol, pin.context.financial, plan.chronology.start)
-        loss_conversion(
-            pin.symbol.profit_currency,
-            plan.assumptions.account_currency,
-            pin.context.financial.fx,
-            plan.chronology.start,
-        )
-        if (
-            not pin.context.financial.automated
-            or pin.context.financial.execution_style != "INTRADAY_BENCHMARK"
+        if pin.role == "FX" and (
+            dataset.spec["data_type"] != "TICK"
+            or pin.symbol.asset_class != "FOREX"
+            or not pin.context.financial.base_currency
         ):
-            raise ValueError("REVIEWED_BASELINES_MUST_DECLARE_AUTOMATED_EXECUTION_STYLE")
-        if pin.context.financial.margin_per_unit is None:
-            raise ValueError("RESEARCH_MARGIN_UNVERIFIED")
+            raise ValueError("FX_REQUIRES_VERIFIED_FOREX_TICKS")
+        if pin.role == "EXECUTION":
+            # Empty FX evidence may be supplied causally by admitted tick streams.
+            # The real gateway still refuses every order until that evidence is fresh.
+            can_observe_fx = any(p.role == "FX" for p in plan.datasets) or (
+                pin.symbol.asset_class == "FOREX" and pin.context.financial.base_currency
+            )
+            if pin.context.financial.fx or not can_observe_fx:
+                loss_conversion(
+                    pin.symbol.profit_currency,
+                    plan.assumptions.account_currency,
+                    pin.context.financial.fx,
+                    plan.chronology.start,
+                )
+            if (
+                not pin.context.financial.automated
+                or pin.context.financial.execution_style != "INTRADAY_BENCHMARK"
+            ):
+                raise ValueError("REVIEWED_BASELINES_MUST_DECLARE_AUTOMATED_EXECUTION_STYLE")
+            if pin.context.financial.margin_per_unit is None:
+                raise ValueError("RESEARCH_MARGIN_UNVERIFIED")
         if dataset.spec["data_type"] == "BAR" and pin.role == "EXECUTION":
             interval = TIMEFRAMES[str(dataset.spec["timeframe"])]
             if any(
@@ -108,7 +121,7 @@ def pinned(
         for field in ("timezone", "weekdays", "holidays", "opens", "closes"):
             if pin.symbol.calendar.model_dump(mode="json")[field] != dataset_calendar[field]:
                 raise ValueError("DATASET_AND_EXECUTION_SESSION_CALENDARS_CONFLICT")
-        if any(
+        if pin.role == "EXECUTION" and any(
             p.volume < pin.symbol.min_volume
             or p.volume > pin.symbol.max_volume
             or p.volume % pin.symbol.volume_step
@@ -162,6 +175,32 @@ def pinned(
     execution = [d for d in result if d["pin"].role == "EXECUTION"]
     if not execution or len({d["instrument_id"] for d in execution}) != len(execution):
         raise ValueError("ONE_EXECUTION_STREAM_PER_INSTRUMENT_REQUIRED")
+    if plan.signal_timeframe != "NATIVE":
+        for stream in execution:
+            signal_streams = [
+                d
+                for d in result
+                if d["pin"].role == "SIGNAL"
+                and d["instrument_id"] == stream["instrument_id"]
+                and d["timeframe"] == plan.signal_timeframe
+            ]
+            if len(signal_streams) != 1:
+                raise ValueError("ONE_PINNED_SIGNAL_TIMEFRAME_PER_INSTRUMENT_REQUIRED")
+    if read:
+        for stream in execution:
+            features = (
+                stream
+                if plan.signal_timeframe == "NATIVE"
+                else next(
+                    d
+                    for d in result
+                    if d["pin"].role == "SIGNAL"
+                    and d["instrument_id"] == stream["instrument_id"]
+                    and d["timeframe"] == plan.signal_timeframe
+                )
+            )
+            if len(features["rows"]) < max(max(p.slow, p.lookback + 1) for p in plan.parameters):
+                raise ValueError("INSUFFICIENT_ADMITTED_WARMUP")
     if any(d["type"] == "BAR" for d in execution) and plan.bar_spread is None:
         raise ValueError("OHLC_REQUIRES_EXPLICIT_SYNTHETIC_SPREAD")
     return result

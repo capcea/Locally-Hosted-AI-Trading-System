@@ -1,0 +1,15 @@
+{
+  "id": "dependencies-node",
+  "command": [
+    "npm",
+    "--prefix",
+    "apps/web",
+    "audit",
+    "--audit-level=high"
+  ],
+  "started_utc": "2026-10-27T12:23:05.605721+00:00",
+  "duration_seconds": 0.815,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/dependencies-node.txt",
+  "sha256": "6d8c5c8f3d7684adb070417bd608d01ae90aa3dc26a65af03ffda4955f38d9a3"
+}

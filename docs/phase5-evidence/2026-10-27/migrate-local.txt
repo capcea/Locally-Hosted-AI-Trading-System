@@ -1,0 +1,3 @@
+Schema migrated and restricted runtime role granted; credentials not printed.
+ Container ai-trading-research-migrate-run-0129df4f2d31 Creating 
+ Container ai-trading-research-migrate-run-0129df4f2d31 Created 

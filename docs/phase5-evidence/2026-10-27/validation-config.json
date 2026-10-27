@@ -1,0 +1,11 @@
+{
+  "id": "validation-config",
+  "command": [
+    ".tools/bin/actionlint"
+  ],
+  "started_utc": "2026-10-27T12:30:04.469548+00:00",
+  "duration_seconds": 0.019,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/validation-config.txt",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

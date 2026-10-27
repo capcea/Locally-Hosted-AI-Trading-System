@@ -1,7 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { api, ApiError } from './management-api';
-import type { RecordItem, RecordPage, Session } from './management-api';
+import EmergencyActions from './ui/EmergencyActions';
+import { safetyLabel } from './RiskBanner';
+import { allRecords } from './records';
+import type { RecordItem, Session } from './management-api';
 import type { components } from './generated/api';
 
 type Status = components['schemas']['AccountStatus'];
@@ -96,13 +99,25 @@ function Flag({
 export default function RiskCenter({
   session,
   onExpired,
+  initialAccount = '',
+  onAccountChange,
 }: {
   session: Session;
   onExpired: () => void;
+  initialAccount?: string;
+  onAccountChange?: (id: string) => void;
 }) {
   const [records, setRecords] = useState<Record<string, RecordItem[]>>({});
   const [runs, setRuns] = useState<RunSummary[]>([]);
-  const [accountId, setAccountId] = useState('');
+  const [accountId, setAccountId] = useState(initialAccount);
+  const currentAccount = useRef(initialAccount);
+  const [statusFailed, setStatusFailed] = useState(false);
+  const [now, setNow] = useState(Date.now());
+  const [lastRead, setLastRead] = useState<number | null>(null);
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, []);
   const [runId, setRunId] = useState('');
   const [run, setRun] = useState<Run | null>(null);
   const [status, setStatus] = useState<Status | null>(null);
@@ -135,27 +150,46 @@ export default function RiskCenter({
       'policies',
       'incidents',
     ];
-    const pages = await Promise.all(
-      kinds.map((kind) => api<RecordPage>(`/records/${kind}?limit=100`)),
-    );
-    setRecords(Object.fromEntries(kinds.map((kind, index) => [kind, pages[index].items])));
+    const accounts = await allRecords('accounts');
+    setRecords((old) => ({ ...old, accounts }));
+    const other = kinds.filter((kind) => kind !== 'accounts');
+    const pages = await Promise.allSettled(other.map((kind) => allRecords(kind)));
+    setRecords((old) => ({
+      ...old,
+      accounts,
+      ...Object.fromEntries(
+        other.flatMap((kind, index) => {
+          const p = pages[index];
+          return p.status === 'fulfilled' ? [[kind, p.value]] : [];
+        }),
+      ),
+    }));
     setRuns(await api<RunSummary[]>('/execution/simulations?limit=50'));
   }, []);
   const refresh = useCallback(async () => {
     if (!accountId) return;
     const base = `/risk/accounts/${accountId}`;
-    const [s, p, policies, d, r] = await Promise.all([
+    const values = await Promise.allSettled([
       api<Status>(base + '/status'),
       api<Profile[]>(base + '/profiles'),
       api<Policy[]>(base + '/policies'),
       api<History[]>(base + `/decisions?offset=${page * 20}&limit=20`),
       api<Reservation[]>(base + '/reservations?limit=100'),
-    ]);
-    setStatus(s);
-    setProfiles(p);
-    setPolicies(policies);
-    setDecisions(d);
-    setReservations(r);
+    ] as const);
+    if (currentAccount.current !== accountId) return;
+    const [s, p, policy, d, r] = values;
+    setStatusFailed(s.status === 'rejected');
+    if (s.status === 'fulfilled') {
+      setStatus(s.value);
+      setLastRead(Date.now());
+    }
+    // Retain last known stop information, but never authorize a mutation from a failed read.
+    if (p.status === 'fulfilled') setProfiles(p.value);
+    if (policy.status === 'fulfilled') setPolicies(policy.value);
+    if (d.status === 'fulfilled') setDecisions(d.value);
+    if (r.status === 'fulfilled') setReservations(r.value);
+    const rejected = values.find((value) => value.status === 'rejected');
+    if (rejected?.status === 'rejected') throw rejected.reason;
   }, [accountId, page]);
   useEffect(() => {
     void load().catch(fail);
@@ -228,7 +262,7 @@ export default function RiskCenter({
   const currentRuns = runs.filter((r) => r.account_id === accountId);
   return (
     <section className="panel management-panel risk-center" aria-label="Centru de risc">
-      <h2>Centru de risc — SIMULATED</h2>
+      <h2>Siguranța contului — SIMULATED</h2>
       <p>
         Calcule deterministe pe valori sintetice. Limitele de referință sunt interne, editabile și
         nu reprezintă reguli oficiale ale firmelor. Nicio decizie nu permite ordine demo sau LIVE.
@@ -244,7 +278,9 @@ export default function RiskCenter({
           aria-label="Cont pentru controlul riscului"
           value={accountId}
           onChange={(e) => {
+            currentAccount.current = e.target.value;
             setAccountId(e.target.value);
+            onAccountChange?.(e.target.value);
             setRunId('');
             setResult(null);
             setPage(0);
@@ -260,6 +296,14 @@ export default function RiskCenter({
       </Field>
       {accountId && (
         <>
+          <div className="notice" role="status">
+            <strong>{safetyLabel(status, now, statusFailed)}</strong>
+            <p>
+              Cont: {account?.data.name ?? accountId}. Citire:{' '}
+              {lastRead ? new Date(lastRead).toLocaleTimeString('ro-RO') : 'necunoscută'}. Starea
+              serviciilor nu acordă permisiune de tranzacționare.
+            </p>
+          </div>
           {status && (
             <section aria-label="Stare risc cont" className="management-card">
               <h3>
@@ -280,10 +324,10 @@ export default function RiskCenter({
                   'Finanțare modelată': status.values?.funding,
                   'Risc poziții': status.values?.open_risk,
                   'Risc ordine în așteptare': status.values?.pending_risk,
-                  'Rezervări (pot include riscul deja afișat)': status.values?.reserved_risk,
+                  'Risc deja alocat (poate include sume afișate)': status.values?.reserved_risk,
                   'Marjă modelată': status.values?.margin_used,
-                  'Headroom zilnic': status.daily_headroom,
-                  'Headroom total': status.total_headroom,
+                  'Până la limita zilnică': status.daily_headroom,
+                  'Până la limita totală': status.total_headroom,
                 }).map(([label, value]) => (
                   <div key={label}>
                     <dt>{label}</dt>
@@ -297,7 +341,7 @@ export default function RiskCenter({
               </p>
               <details>
                 <summary>Expunere corelată și integritatea registrului</summary>
-                <pre className="market-json">
+                <pre tabIndex={0} className="market-json">
                   {JSON.stringify(
                     {
                       groups: status.values?.groups,
@@ -312,53 +356,24 @@ export default function RiskCenter({
             </section>
           )}
           {owner && (
-            <form
-              className="management-form"
-              aria-label="Urgență risc"
-              onSubmit={submit(async (data) => {
-                if (!status) throw new Error('Reîncarcă starea contului.');
-                if (get(data, 'action') === 'MONITOR') {
-                  await post(`/risk/accounts/${accountId}/monitor`, {});
-                  setNotice(
-                    'Monitorul a verificat datele persistente; verifică motivele de refuz.',
-                  );
-                } else {
-                  const result = await post<{
-                    completed: boolean;
-                    reasons?: string[];
-                    remaining_positions: number;
-                  }>(`/risk/accounts/${accountId}/emergency`, {
-                    key: crypto.randomUUID(),
-                    action: get(data, 'action'),
-                    expected_revision: status.revision,
-                    acknowledged_simulated_only: true,
-                  });
-                  setNotice(
-                    result.completed
-                      ? 'Operațiune persistentă confirmată. Ordinele externe rămân interzise.'
-                      : `Operațiune incompletă: ${(result.reasons ?? []).join(', ')}; poziții rămase: ${result.remaining_positions}`,
-                  );
-                }
-              })}
-            >
-              <h3>Monitor și comenzi de urgență</h3>
-              <Choice
-                name="action"
-                label="Acțiune de siguranță"
-                values={['STOP_NEW_ENTRIES', 'MONITOR', 'CLEAR_STOP', 'FLATTEN']}
-              />
-              <p>
-                STOP blochează intrările și persistă la restart. CLEAR necesită date valide și MFA
-                recent. FLATTEN încearcă doar închiderea pozițiilor simulate folosind cotațiile și
-                lichiditatea disponibile.
-              </p>
-              <Ack name="emergency_ack">
-                Confirm acțiunea exclusiv simulată; nu închid poziții reale.
-              </Ack>
-              <button className="secondary-button" disabled={busy || !status}>
-                Aplică acțiunea de siguranță
-              </button>
-            </form>
+            <EmergencyActions
+              key={accountId}
+              accountId={accountId}
+              accountName={account?.data.name ?? accountId}
+              status={statusFailed ? null : status}
+              session={session}
+              onError={fail}
+              onDone={async (message) => {
+                setNotice(message);
+                await refresh();
+              }}
+            />
+          )}
+          {!owner && (
+            <p>
+              Doar proprietarul, cu MFA recent, poate modifica limitele și confirma
+              oprirea/deblocarea sau închiderea simulată.
+            </p>
           )}
           {owner && (
             <details open={!profiles.length}>
@@ -451,7 +466,7 @@ export default function RiskCenter({
           )}
           <details>
             <summary>Versiuni de profil ({profiles.length})</summary>
-            <pre className="market-json" aria-label="Profiluri de risc persistente">
+            <pre tabIndex={0} className="market-json" aria-label="Profiluri de risc persistente">
               {JSON.stringify(profiles, null, 2)}
             </pre>
           </details>
@@ -616,7 +631,9 @@ export default function RiskCenter({
                 </p>
                 <details>
                   <summary>Reguli, proveniență și amprentă</summary>
-                  <pre className="market-json">{JSON.stringify(p, null, 2)}</pre>
+                  <pre tabIndex={0} className="market-json">
+                    {JSON.stringify(p, null, 2)}
+                  </pre>
                 </details>
                 {owner && (
                   <form
@@ -813,8 +830,17 @@ export default function RiskCenter({
           {result && (
             <section aria-label="Rezultat calculator risc">
               <h3>{result.decision} · SIMULATED</h3>
+              <p>
+                {result.decision === 'ALLOW'
+                  ? 'Propunerea respectă aceste verificări de simulare. Nu a fost trimis niciun ordin.'
+                  : result.decision === 'DENY'
+                    ? 'Propunerea nu este permisă de limitele verificate.'
+                    : 'Nu există suficiente informații verificate pentru a permite propunerea.'}
+              </p>
               <p>{result.reasons.join(', ')}</p>
-              <pre className="market-json">{JSON.stringify(result, null, 2)}</pre>
+              <pre tabIndex={0} className="market-json">
+                {JSON.stringify(result, null, 2)}
+              </pre>
             </section>
           )}
           <section aria-label="Istoric decizii risc">
@@ -830,7 +856,9 @@ export default function RiskCenter({
                 </p>
                 <details>
                   <summary>Calcul și dovezi</summary>
-                  <pre className="market-json">{JSON.stringify(d.result, null, 2)}</pre>
+                  <pre tabIndex={0} className="market-json">
+                    {JSON.stringify(d.result, null, 2)}
+                  </pre>
                 </details>
               </article>
             ))}
@@ -850,8 +878,14 @@ export default function RiskCenter({
             </button>
           </section>
           <section aria-label="Rezervări active">
-            <h3>Rezervări durabile</h3>
-            <pre className="market-json">{JSON.stringify(reservations, null, 2)}</pre>
+            <h3>Risc deja alocat</h3>
+            <p>
+              Include angajamente în așteptare și expunere nelămurită. Nu aduna din nou valori deja
+              incluse în risc.
+            </p>
+            <pre tabIndex={0} className="market-json">
+              {JSON.stringify(reservations, null, 2)}
+            </pre>
           </section>
           <section aria-label="Incidente risc">
             <h3>Incidente persistente</h3>

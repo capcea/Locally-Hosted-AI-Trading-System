@@ -129,6 +129,7 @@ def enforce_policy_caps(limits: Limits, terms: PolicyTerms) -> None:
 def configure_profile(account_id: UUID, body: ProfileInput, identity: FullIdentity) -> ProfileView:
     owner(identity)
     account = account_for(identity, account_id)
+    frozen_research_account(identity, account.id)
     scope = scope_key(identity, account, body)
     policy = identity.db.scalar(
         select(RiskPolicy)
@@ -240,6 +241,7 @@ def policy_view(policy: RiskPolicy) -> PolicyView:
 def create_policy(account_id: UUID, body: PolicyInput, identity: FullIdentity) -> PolicyView:
     owner(identity)
     account = account_for(identity, account_id)
+    frozen_research_account(identity, account.id)
     if body.expires_at <= body.effective_at or body.terms.currency != account.currency:
         raise HTTPException(422, "Invalid policy period/currency")
     if account.program_id is None:
@@ -384,6 +386,7 @@ def configure_context(
 ) -> dict[str, object]:
     owner(identity)
     run = run_for(identity, run_id)
+    frozen_research_account(identity, run.account_id)
     state = SimState.model_validate(run.state)
     last = identity.db.scalar(
         select(RunContext)
@@ -708,3 +711,10 @@ def emergency(
     )
     identity.audit("risk.emergency_" + body.action.lower(), entity_id=account_id, after=result)
     return result
+
+
+def frozen_research_account(identity: FullIdentity, account_id: UUID) -> None:
+    from packages.research.models import ResearchAccount
+
+    if identity.db.scalar(select(ResearchAccount).where(ResearchAccount.account_id == account_id)):
+        raise HTTPException(403, "RESEARCH_ASSUMPTIONS_ARE_FROZEN")

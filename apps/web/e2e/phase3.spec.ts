@@ -16,7 +16,7 @@ function totp(secret: string) {
 
 test('synthetic orders persist, deduplicate, reconcile uncertainty and keep external execution denied', async ({
   page,
-}, info) => {
+}) => {
   test.setTimeout(120000);
   if (
     process.env.E2E_PHASE1_ISOLATED !== '1' ||
@@ -25,9 +25,7 @@ test('synthetic orders persist, deduplicate, reconcile uncertainty and keep exte
   )
     throw new Error('Use the disposable broker browser harness.');
   await page.goto('/');
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Cont & administrare', exact: true }).click();
+  await page.goto('/conturi');
   await page.getByLabel('Nume utilizator', { exact: true }).fill('broker-owner');
   await page.getByLabel('Parolă', { exact: true }).fill(process.env.E2E_OWNER_PASSWORD);
   await page.getByLabel('Nume afișat', { exact: true }).fill('Proprietar sintetic broker');
@@ -44,18 +42,18 @@ test('synthetic orders persist, deduplicate, reconcile uncertainty and keep exte
   await page.getByLabel('Originea înregistrării').selectOption('SYNTHETIC_TEST_FIXTURE');
   await page.getByLabel('Denumire', { exact: true }).fill('Cont simulator E2E');
   await page.getByLabel('Monedă', { exact: true }).fill('USD');
-  await page.getByLabel('Capital de referință', { exact: true }).fill('25000');
+  await page.getByLabel('Capital declarat pentru simulare', { exact: true }).fill('25000');
   await page.getByRole('button', { name: 'Salvează', exact: true }).click();
   await expect(
     page.getByRole('heading', { name: 'Cont simulator E2E', exact: true }),
   ).toBeVisible();
-  await page.getByRole('button', { name: 'Date de piață', exact: true }).last().click();
+  await page.goto('/setari/catalog');
   const instrument = page.getByRole('form', { name: 'Înregistrare instrument', exact: true });
   await instrument.getByLabel('Simbol canonic', { exact: true }).fill('EURUSD');
   await instrument.getByLabel('Clasă de active', { exact: true }).selectOption('FOREX');
   await instrument.getByRole('button', { name: 'Salvează instrumentul' }).click();
-  await expect(page.getByLabel('Instrument import', { exact: true })).toContainText('EURUSD');
-  await page.getByRole('button', { name: 'Broker & simulator', exact: true }).last().click();
+  await expect(page.getByRole('heading', { name: 'EURUSD', exact: true })).toBeVisible();
+  await page.goto('/conturi/conexiuni');
   const connection = page.getByRole('form', { name: 'Conexiune broker', exact: true });
   await connection.getByLabel('Denumire conexiune', { exact: true }).fill('Broker sintetic E2E');
   await connection
@@ -65,6 +63,7 @@ test('synthetic orders persist, deduplicate, reconcile uncertainty and keep exte
   await expect(
     page.getByRole('heading', { name: 'Broker sintetic E2E', exact: true }),
   ).toBeVisible();
+  await page.goto('/conturi/avansat/simulator');
   const scenario = page.getByRole('form', { name: 'Scenariu sintetic', exact: true });
   await scenario.getByLabel('Denumire scenariu', { exact: true }).fill('Scenariu sintetic E2E');
   await scenario
@@ -139,9 +138,7 @@ test('synthetic orders persist, deduplicate, reconcile uncertainty and keep exte
   ).toHaveCount(2);
   expect(JSON.parse((await fills.textContent())!)).toHaveLength(2);
   await page.reload();
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Broker & simulator', exact: true }).click();
+  await page.goto('/conturi/avansat/simulator');
   await page.getByRole('button', { name: 'Explorează Scenariu sintetic E2E', exact: true }).click();
   await expect(page.getByLabel('Evenimente jurnal', { exact: true })).toContainText(
     'STATE_COMMITTED',

@@ -6,7 +6,7 @@ import time
 from datetime import timedelta
 from uuid import uuid4
 
-from sqlalchemy import or_, select, text
+from sqlalchemy import func, or_, select, text
 
 from apps.api.config import Settings
 from packages.execution.journal import digest
@@ -77,6 +77,7 @@ class Worker:
             job.worker_token = token
             job.lease_until = now + timedelta(seconds=30)
             job.attempts += 1
+            job.progress = 0
             job.state = "RUNNING"
             run_id, job_id, attempt = job.run_id, job.id, job.attempts
         began = time.monotonic()
@@ -86,6 +87,8 @@ class Worker:
                 current = db.get(ResearchJob, job_id, with_for_update=True)
                 if current is None or current.worker_token != token or current.cancel_requested:
                     raise Cancelled("CANCELLED_OR_FENCED")
+                if current.lease_until is None or current.lease_until < utcnow():
+                    raise Cancelled("LEASE_EXPIRED")
                 if time.monotonic() - began > plan.max_seconds:
                     raise ValueError("RESEARCH_TIME_QUOTA_EXCEEDED")
                 research_scope = db.get(ResearchRun, run_id)
@@ -226,6 +229,18 @@ class Worker:
                     or current.cancel_requested
                 ):
                     raise Cancelled("CANCELLED_BEFORE_PUBLICATION")
+                if current.lease_until is None or current.lease_until < utcnow():
+                    raise Cancelled("LEASE_EXPIRED")
+                size = (
+                    db.scalar(
+                        select(func.sum(ResearchResult.artifact["bytes"].as_integer())).where(
+                            ResearchResult.owner_id == research.owner_id
+                        )
+                    )
+                    or 0
+                )
+                if size + len(content) > 256 * 1024 * 1024:
+                    raise ValueError("OWNER_PUBLISHED_RESULT_STORAGE_QUOTA_EXCEEDED")
                 assert_current(db, research, plan)
                 pinned(db, plan, research.owner_id, self.objects, read=False)
                 owner = db.get(User, research.owner_id, with_for_update=True)
@@ -261,7 +276,13 @@ class Worker:
             with self.db.session() as db, db.begin():
                 current = db.get(ResearchJob, job_id, with_for_update=True)
                 if current and current.worker_token == token:
-                    current.state = "CANCELLED" if isinstance(error, Cancelled) else "FAILED"
+                    current.state = (
+                        "RETRY"
+                        if str(error) == "LEASE_EXPIRED" and current.attempts < 3
+                        else "CANCELLED"
+                        if isinstance(error, Cancelled) and str(error) != "LEASE_EXPIRED"
+                        else "FAILED"
+                    )
                     current.error = str(error)[:100]
                     current.lease_until = None
                     append_event(

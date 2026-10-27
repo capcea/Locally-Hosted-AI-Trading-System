@@ -1,0 +1,10 @@
+{
+  "classification": "OWNER_LOCAL_UI_ASSERTION_FAILURE",
+  "source": "apps/web/test-results/phase5-Strategy-Lab-persis-0b741-des-replay-and-cancellation-desktop/error-context.md",
+  "artifact_sha256": "621bd76ea7356e0c5ff0b764ad32c024f3e533e216569288f1684458a3c6cb43",
+  "browser_launched": "owner report and timeout at actual UI assertion",
+  "locator": "region Laborator de strategii / exact label Cont surs\u0103 verificat",
+  "dom_snapshot_available": false,
+  "server_logs_available": false,
+  "command_exit_code": "not supplied; do not infer"
+}

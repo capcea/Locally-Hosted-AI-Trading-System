@@ -1,0 +1,66 @@
+{
+  "review": "336-pixel post-fix owner screenshot",
+  "analysis_command": [
+    "node",
+    ".cache/phase55b-visual-review/pixels.cjs"
+  ],
+  "analysis_exit_code": 0,
+  "pixel_analysis": {
+    "dimensions": {
+      "expected": [
+        1280,
+        1047
+      ],
+      "actual": [
+        1280,
+        1047
+      ]
+    },
+    "different_rgba_pixels": 336,
+    "difference_bounds_inclusive": {
+      "x_min": 1177,
+      "y_min": 962,
+      "x_max": 1192,
+      "y_max": 982
+    },
+    "changed_colors": {
+      "245,247,250,255 -> 255,0,255,255": 336
+    },
+    "masks": {
+      "expected": {
+        "pixels": 1155,
+        "bounds_inclusive": {
+          "x_min": 1193,
+          "y_min": 962,
+          "x_max": 1247,
+          "y_max": 982
+        }
+      },
+      "actual": {
+        "pixels": 1491,
+        "bounds_inclusive": {
+          "x_min": 1177,
+          "y_min": 962,
+          "x_max": 1247,
+          "y_max": 982
+        }
+      }
+    },
+    "baseline_matches_expected": true,
+    "sha256": {
+      "expected": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4",
+      "actual": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+      "diff": "28bd12c7ba55e59ef58cb84663dc2253b6edbb62b8165036696fd67f914a9d81",
+      "baseline": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4"
+    }
+  },
+  "classification": "Old baseline versus intentional stable clock-slot geometry; all other RGBA pixels identical",
+  "baseline_target": "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png",
+  "candidate": "home-light-desktop-darwin.candidate.png",
+  "approval": "PENDING OWNER APPROVAL",
+  "baseline_modified": false,
+  "source_modified": false,
+  "browser_agent_execution": false,
+  "other_theme_viewport_references": "Not approved or generated; no new actual images supplied",
+  "remaining_gate": "Approved reference then rerun focused UX and all 20 desktop/mobile cases without rewriting. The refresh-dimension assertion after screenshots has not yet been reached by this failed visual case."
+}

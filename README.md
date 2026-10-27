@@ -1,16 +1,14 @@
 # AI Trading Research Platform
 
 A local simulation-only research platform built from [the master specification](docs/PRODUCT_SPEC.md).
-Phase 4 adds a deterministic simulated risk gateway, account equity/drawdown ledger, atomic risk
-reservations, exact policy/profile versions, independent monitor and Romanian Risk Center to the
-identity, immutable market data and durable simulator foundation. Native/portable checks pass;
-**full Phase 4 acceptance is blocked by managed Chromium launch**. See the
-[Phase 4 report](PHASE4_COMPLETION_REPORT.md).
+Phase 5 adds eight reviewed quantitative baselines, vectorized exploratory screening, cost-aware
+event backtests through the actual simulator/risk gateway, immutable experiments, statistical validation,
+durable jobs and Romanian Strategy Lab. See [Phase 5 implementation and measured acceptance](PHASE5_COMPLETION_REPORT.md).
 
-All external broker orders remain DENY_ALL. No generated-code runner, external broker-capable
-executor, strategy backtester, AI inference or paper engine is implemented. Synthetic values never
-certify real balances, tradability, external margin/protection or performance. Current risk HMACs
-have SIMULATED scope only; actual MT5/cTrader connectivity is unverified.
+All results are SIMULATED; actual dataset provenance is recorded separately. No profitable strategy,
+five-year history, external broker connectivity or independent untouched-holdout custody is certified.
+All external orders remain DENY_ALL. Generated-code execution, AI judges, paper/live promotion and
+Phase 6 are NOT IMPLEMENTED. Owner authentication/MFA and immutable risk/data boundaries are preserved.
 
 ## Start locally
 
@@ -88,7 +86,11 @@ enter localStorage; TOTP seeds are encrypted, passwords are Argon2id hashes and 
 
 ## Documentation
 
-- [Phase 4 report and exact tests](PHASE4_COMPLETION_REPORT.md)
+- [Phase 5 report and exact tests](PHASE5_COMPLETION_REPORT.md)
+- [Strategy framework](docs/STRATEGY_FRAMEWORK.md), [backtest engines](docs/BACKTEST_ENGINE_SPEC.md)
+- [Statistics](docs/STATISTICAL_VALIDATION.md), [bias prevention](docs/BIAS_AND_LEAKAGE_PREVENTION.md)
+- [Reproduction](docs/EXPERIMENT_REPRODUCIBILITY.md)
+- [Phase 4 historical report](PHASE4_COMPLETION_REPORT.md)
 - [Risk calculations](docs/RISK_CALCULATIONS.md), [authorization protocol](docs/RISK_AUTHORIZATION_PROTOCOL.md)
 - [Phase 3 historical report](PHASE3_COMPLETION_REPORT.md)
 - [Phase 2 historical report](PHASE2_COMPLETION_REPORT.md)
@@ -101,7 +103,7 @@ enter localStorage; TOTP seeds are encrypted, passwords are Argon2id hashes and 
 - [Historical Phase 0 report](PHASE0_COMPLETION_REPORT.md), [audit](AUDIT_REPORT.md)
 - [GitHub preparation](docs/GITHUB_PREPARATION.md), [external references](docs/external-sources.md)
 
-Phase 4 code/native tests are implemented; full browser acceptance and actual broker reads remain blocked. No remote repository, push, public deployment or live-trading operation is authorized here.
+Phase 5 acceptance is recorded in its current report; actual broker reads remain unverified. No remote repository, push, public deployment or live-trading operation is authorized here.
 
 ## Market data
 

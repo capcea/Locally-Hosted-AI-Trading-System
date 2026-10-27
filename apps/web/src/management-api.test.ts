@@ -42,4 +42,21 @@ describe('identity client boundary', () => {
     await expect(api('/auth/me')).rejects.toBeInstanceOf(ApiError);
     await expect(api('/auth/me')).rejects.not.toThrow('sensitive fixture detail');
   });
+  it('does not echo an arbitrary uppercase error body as a trusted research code', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify({ detail: 'PRIVATE_UPPERCASE_VALUE' }), { status: 409 }),
+        ),
+    );
+    await expect(api('/research/experiments')).rejects.not.toThrow('PRIVATE_UPPERCASE_VALUE');
+  });
+  it('does not prescribe a fabricated retry timer or retry an uncertain write automatically', async () => {
+    const request = vi.fn().mockResolvedValue(new Response(null, { status: 429 }));
+    vi.stubGlobal('fetch', request);
+    await expect(api('/auth/login')).rejects.not.toThrow('15 minute');
+    expect(request).toHaveBeenCalledTimes(1);
+  });
 });

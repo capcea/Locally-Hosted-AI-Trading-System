@@ -1,0 +1,12 @@
+{
+  "id": "check-first",
+  "command": [
+    "make",
+    "check"
+  ],
+  "started_utc": "2026-10-27T12:21:19.308722+00:00",
+  "duration_seconds": 2.281,
+  "exit_code": 2,
+  "log": "docs/phase5-evidence/2026-10-27/check-first.txt",
+  "sha256": "86f5837d932c60f88610fae311b28cc835240e5201e598384aa4a790eec4d51d"
+}

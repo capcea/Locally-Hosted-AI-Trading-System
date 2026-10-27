@@ -1,0 +1,13 @@
+{
+  "id": "math-precision",
+  "command": [
+    ".venv/bin/pytest",
+    "tests/test_research_math.py",
+    "-q"
+  ],
+  "started_utc": "2026-10-27T12:29:57.253532+00:00",
+  "duration_seconds": 1.499,
+  "exit_code": 0,
+  "log": "docs/phase5-evidence/2026-10-27/math-precision.txt",
+  "sha256": "662e60dd1d1f784146743de9f6a9ac68a45f3517d446fd2bcb7e02407322832a"
+}

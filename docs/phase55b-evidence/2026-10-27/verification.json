@@ -1,0 +1,591 @@
+{
+  "phase": "5.5B",
+  "date": "2026-10-27",
+  "acceptance": "BLOCKED / NOT COMPLETE",
+  "final_runs": {
+    "check": "check-final-guards",
+    "integration": "integration-final",
+    "contracts_check": "contracts-final",
+    "smoke_demo": "smoke-final",
+    "secret_scan": "secret-report-final",
+    "repository_check": "repository-report-final",
+    "whitespace": "whitespace-report-final",
+    "browser_collection_only": "browser-collection",
+    "api_image_build": "build-current",
+    "web_image_build": "build-web-verified",
+    "api_refresh": "refresh-local",
+    "web_refresh": "refresh-web-verified",
+    "runtime_api_validation": "runtime-api"
+  },
+  "commands": [
+    {
+      "label": "browser-collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.739,
+      "output": ".cache/phase55b/browser-collection.txt"
+    },
+    {
+      "label": "build-current",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "api",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.342,
+      "output": ".cache/phase55b/build-current.txt"
+    },
+    {
+      "label": "build-local",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "api",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.198,
+      "output": ".cache/phase55b/build-local.txt"
+    },
+    {
+      "label": "build-web-complete",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.293,
+      "output": ".cache/phase55b/build-web-complete.txt"
+    },
+    {
+      "label": "build-web-current",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.257,
+      "output": ".cache/phase55b/build-web-current.txt"
+    },
+    {
+      "label": "build-web-final",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.102,
+      "output": ".cache/phase55b/build-web-final.txt"
+    },
+    {
+      "label": "build-web-verified",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.212,
+      "output": ".cache/phase55b/build-web-verified.txt"
+    },
+    {
+      "label": "check-acceptance-source",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.856,
+      "output": ".cache/phase55b/check-acceptance-source.txt"
+    },
+    {
+      "label": "check-complete-source",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.97,
+      "output": ".cache/phase55b/check-complete-source.txt"
+    },
+    {
+      "label": "check-current",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.863,
+      "output": ".cache/phase55b/check-current.txt"
+    },
+    {
+      "label": "check-final-current",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.983,
+      "output": ".cache/phase55b/check-final-current.txt"
+    },
+    {
+      "label": "check-final-guards",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.9,
+      "output": ".cache/phase55b/check-final-guards.txt"
+    },
+    {
+      "label": "check-final",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.874,
+      "output": ".cache/phase55b/check-final.txt"
+    },
+    {
+      "label": "check-first",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 1.313,
+      "output": ".cache/phase55b/check-first.txt"
+    },
+    {
+      "label": "check-release",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.714,
+      "output": ".cache/phase55b/check-release.txt"
+    },
+    {
+      "label": "check-verified",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.89,
+      "output": ".cache/phase55b/check-verified.txt"
+    },
+    {
+      "label": "contracts-check",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.664,
+      "output": ".cache/phase55b/contracts-check.txt"
+    },
+    {
+      "label": "contracts-final",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.053,
+      "output": ".cache/phase55b/contracts-final.txt"
+    },
+    {
+      "label": "integration-final",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 232.698,
+      "output": ".cache/phase55b/integration-final.txt"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 232.188,
+      "output": ".cache/phase55b/integration.txt"
+    },
+    {
+      "label": "refresh-local",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "api",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 22.156,
+      "output": ".cache/phase55b/refresh-local.txt"
+    },
+    {
+      "label": "refresh-web-current",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.959,
+      "output": ".cache/phase55b/refresh-web-current.txt"
+    },
+    {
+      "label": "refresh-web-verified",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.034,
+      "output": ".cache/phase55b/refresh-web-verified.txt"
+    },
+    {
+      "label": "repository-check",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.129,
+      "output": ".cache/phase55b/repository-check.txt"
+    },
+    {
+      "label": "repository-final",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.108,
+      "output": ".cache/phase55b/repository-final.txt"
+    },
+    {
+      "label": "repository-report-final",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.139,
+      "output": ".cache/phase55b/repository-report-final.txt"
+    },
+    {
+      "label": "runtime-api",
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase55b/verify_runtime.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.459,
+      "output": ".cache/phase55b/runtime-api.txt"
+    },
+    {
+      "label": "secret-final",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.866,
+      "output": ".cache/phase55b/secret-final.txt"
+    },
+    {
+      "label": "secret-report-final",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.772,
+      "output": ".cache/phase55b/secret-report-final.txt"
+    },
+    {
+      "label": "secret-scan",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.913,
+      "output": ".cache/phase55b/secret-scan.txt"
+    },
+    {
+      "label": "smoke-current",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.279,
+      "output": ".cache/phase55b/smoke-current.txt"
+    },
+    {
+      "label": "smoke-demo",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.215,
+      "output": ".cache/phase55b/smoke-demo.txt"
+    },
+    {
+      "label": "smoke-final",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.274,
+      "output": ".cache/phase55b/smoke-final.txt"
+    },
+    {
+      "label": "whitespace-report-final",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.06,
+      "output": ".cache/phase55b/whitespace-report-final.txt"
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.053,
+      "output": ".cache/phase55b/whitespace.txt"
+    }
+  ],
+  "test_counts": {
+    "portable_python_passed": 208,
+    "frontend_unit_passed": 94,
+    "portable_service_cases_deselected_not_passed": 77,
+    "integration_readiness_passed": 1,
+    "isolated_service_cases_before_restart_passed": 76,
+    "isolated_service_cases_after_restart_passed": 76
+  },
+  "source_scope": {
+    "baseline_files": 1014,
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55_DESIGN_SYSTEM.md",
+      "PHASE55_IMPLEMENTATION_PLAN.md",
+      "PHASE55_INFORMATION_ARCHITECTURE.md",
+      "PHASE55_UX_BLUEPRINT.md",
+      "PHASE55_UX_COPY.md",
+      "apps/api/market/routes.py",
+      "apps/api/research/routes.py",
+      "apps/web/e2e/phase1.spec.ts",
+      "apps/web/e2e/phase2.spec.ts",
+      "apps/web/e2e/phase3.spec.ts",
+      "apps/web/e2e/phase4.spec.ts",
+      "apps/web/e2e/phase5.spec.ts",
+      "apps/web/e2e/platform.spec.ts",
+      "apps/web/e2e/risk-fixture.ts",
+      "apps/web/e2e/risk-workflow.ts",
+      "apps/web/src/App.tsx",
+      "apps/web/src/BrokerCenter.tsx",
+      "apps/web/src/Management.tsx",
+      "apps/web/src/MarketData.tsx",
+      "apps/web/src/RiskBanner.tsx",
+      "apps/web/src/RiskCenter.tsx",
+      "apps/web/src/StrategyLab.tsx",
+      "apps/web/src/generated/api.ts",
+      "apps/web/src/main.tsx",
+      "apps/web/src/management-api.test.ts",
+      "apps/web/src/management-api.ts",
+      "apps/web/src/management-locale.ts",
+      "apps/web/vitest.config.ts",
+      "docs/ARCHITECTURE.md",
+      "docs/IMPLEMENTATION_STATUS.md",
+      "docs/openapi.json",
+      "packages/market/contracts.py",
+      "scripts/browser_acceptance.py",
+      "tests/test_market_integration.py",
+      "tests/test_research_integration.py"
+    ],
+    "unexpected_changes": [],
+    "new_selected_files": [
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/web/e2e/ux-visual.spec.ts",
+      "apps/web/e2e/ux-workflows.spec.ts",
+      "apps/web/src/FinalEvaluation.tsx",
+      "apps/web/src/LegacyPublic.tsx",
+      "apps/web/src/auth/AuthProvider.tsx",
+      "apps/web/src/copy/ro.ts",
+      "apps/web/src/home/HomePage.tsx",
+      "apps/web/src/navigation/history.tsx",
+      "apps/web/src/navigation/routes.test.ts",
+      "apps/web/src/navigation/routes.ts",
+      "apps/web/src/records.test.ts",
+      "apps/web/src/records.ts",
+      "apps/web/src/research-drafts.ts",
+      "apps/web/src/results/AdvancedStatistics.tsx",
+      "apps/web/src/results/ResultView.test.tsx",
+      "apps/web/src/results/ResultView.tsx",
+      "apps/web/src/safety.test.ts",
+      "apps/web/src/ui/Controls.tsx",
+      "apps/web/src/ui/EmergencyActions.tsx",
+      "apps/web/src/ui/product.css",
+      "apps/web/src/ui/tokens.css",
+      "docs/FRONTEND_UX.md",
+      "docs/PHASE55B_ACCESSIBILITY_CHECKLIST.md",
+      "docs/phase55b-evidence/2026-10-27/README.md",
+      "docs/phase55b-evidence/2026-10-27/verification.json",
+      "docs/ux-migration-coverage.md"
+    ],
+    "protected_core_files_unchanged": 51,
+    "inventory_coverage": 42,
+    "issue_statuses": 24,
+    "missing_links": []
+  },
+  "local_container_preservation": {
+    "protected": {
+      "postgres": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "redis": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "minio": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "market-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "research-worker": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      },
+      "risk-monitor": {
+        "same_container": true,
+        "same_mounts": true,
+        "health": "healthy"
+      }
+    },
+    "api_health": "healthy",
+    "web_health": "healthy",
+    "statement": "Container/mount identities preserved. Operational rows can evolve; byte-for-byte row equality was not measured."
+  },
+  "runtime_api": {
+    "readiness": 200,
+    "served_openapi_matches_source": true,
+    "unauthenticated_job_read": 401,
+    "mode": "SIMULATED",
+    "executor": "DENY_ALL",
+    "live_orders_generated_code": false
+  },
+  "browser": {
+    "status": "BLOCKED",
+    "command": [
+      "make",
+      "browser-integration"
+    ],
+    "exit_code": null,
+    "executed": false,
+    "origin": "http://127.0.0.1:5173",
+    "reason": "Managed browser origin gate denied network egress due to a saved user permission setting. No alternate surface, CLI launch, raw CDP or proxy workaround attempted."
+  },
+  "collection_only": {
+    "cases": 20,
+    "files": 8,
+    "existing_cases": 16,
+    "new_viewport_cases": 4,
+    "desktop_cases": 10,
+    "mobile_emulation_cases": 10
+  },
+  "manual_accessibility": {
+    "status": "NOT RUN / BLOCKED",
+    "wcag_certification": false
+  },
+  "visual_baselines": {
+    "status": "NOT CREATED / BLOCKED",
+    "fabricated_images": false
+  },
+  "external_broker_service": {
+    "status": "NOT VERIFIED",
+    "orders": "DENY_ALL"
+  },
+  "safety": "SIMULATED / DENY_ALL; no Phase 6; no development volume reset",
+  "evidence_limits": "Command metadata references private raw logs. Source tests and native integration do not establish rendered, visual, accessibility or real-device acceptance."
+}

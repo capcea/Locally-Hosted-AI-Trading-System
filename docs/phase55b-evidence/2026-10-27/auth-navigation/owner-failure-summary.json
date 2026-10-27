@@ -1,0 +1,12 @@
+{
+  "source": "apps/web/test-results/phase1-owner-setup-MFA-per-b5bb6-nt-settings-audit-and-login-desktop/error-context.md",
+  "sha256": "9e74847d079cde7a6e98f14cd455621c043a749a170b05059ea42b7ce858d902",
+  "assertion": "phase1.spec.ts:156, exact persistent account heading missing after relogin",
+  "dom_findings": {
+    "password_login_form_present": true,
+    "full_only_logout_button_present": false,
+    "account_heading_present": false
+  },
+  "original_mfa_response_and_network_abort_not_available": true,
+  "privacy": "Only allowlisted booleans retained; no DOM, passwords, OTPs, seeds, cookies or tokens copied"
+}

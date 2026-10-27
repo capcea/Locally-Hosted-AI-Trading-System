@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { researchErrors } from './copy/ro';
 import type { components } from './generated/api';
 
 export type Session = components['schemas']['SessionView'];
@@ -52,12 +53,23 @@ export async function api<T>(
       404: 'Înregistrarea nu există sau nu îți aparține.',
       409: 'Conflict: reîncarcă datele și verifică versiunea sau condițiile acțiunii.',
       422: 'Date invalide. Verifică toate câmpurile și folosește valori zecimale exacte.',
-      429: 'Prea multe încercări. Reîncearcă după 15 minute.',
-      503: 'Serviciul persistent nu este pregătit. Configurarea identității și migrarea sunt necesare.',
+      429: 'Prea multe încercări. Reîncearcă mai târziu; nu presupunem un interval de așteptare.',
+      503:
+        options.method && options.method !== 'GET'
+          ? 'Nu putem confirma solicitarea. Verifică activitatea înainte de a trimite din nou.'
+          : 'Serviciul necesar nu răspunde. Păstrează draftul și reîncarcă informațiile.',
     };
+    let detailCode = '';
+    if (path.startsWith('/research/')) {
+      const detail = (await response.json().catch(() => null)) as { detail?: unknown } | null;
+      if (typeof detail?.detail === 'string' && Object.hasOwn(researchErrors, detail.detail))
+        detailCode = ' ' + researchErrors[detail.detail] + ' [' + detail.detail + ']';
+    }
+    if (response.status === 401 && path !== '/auth/login' && typeof window !== 'undefined')
+      window.dispatchEvent(new Event('research-session-expired'));
     throw new ApiError(
       response.status,
-      labels[response.status] ?? 'Cererea nu a putut fi finalizată.',
+      (labels[response.status] ?? 'Cererea nu a putut fi finalizată.') + detailCode,
     );
   }
   if (response.status === 204) return undefined as T;
@@ -66,4 +78,20 @@ export async function api<T>(
 
 export function parseSession(value: unknown): Session {
   return sessionSchema.parse(value);
+}
+
+export function safeError(error: unknown): string {
+  if (error instanceof ApiError) return error.message;
+  if (error instanceof SyntaxError)
+    return 'Configurația JSON nu este validă. Verifică formatul; nu executăm cod din acest câmp.';
+  const known = [
+    'Configurează și verifică mai întâi contextul de risc al șablonului.',
+    'Selectează un fișier CSV sau Parquet.',
+    'Reîncarcă starea contului.',
+    'Setul și șablonul trebuie să aibă același instrument. Pentru portofolii folosește configurația JSON avansată.',
+    'Catalogul nu a putut fi citit complet. Nu presupunem că înregistrările lipsă sunt sigure sau inexistente.',
+  ];
+  return error instanceof Error && known.includes(error.message)
+    ? error.message
+    : 'Operațiunea nu a putut fi verificată. Păstrează setările neconfidențiale și verifică starea înainte de a retrimite.';
 }

@@ -1,0 +1,6 @@
+PASSED: all 3 data container IDs and volume mounts unchanged.
+Traceback (most recent call last):
+  File "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase5/preserve.py", line 29, in <module>
+    assert set(changes) <= {'login_sessions'}, 'Unexpected legacy changes: '+repr(changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Unexpected legacy changes: ['audit_events', 'audit_head', 'login_sessions', 'rate_buckets', 'users']

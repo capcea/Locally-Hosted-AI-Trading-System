@@ -1,0 +1,12 @@
+{
+  "id": "native-fx-error",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/focused_fx.py"
+  ],
+  "started_utc": "2026-10-27T12:30:56.530955+00:00",
+  "duration_seconds": 8.204,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/native-fx-error.txt",
+  "sha256": "709148d94148930081e41cd9c66277af29f6bc5c9b0f59191e53184e505315e1"
+}

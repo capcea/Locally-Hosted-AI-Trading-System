@@ -217,6 +217,7 @@ def main(*, browser: bool = False) -> int:
                         "tests/test_execution_integration.py",
                         "tests/test_risk_integration.py",
                         "tests/test_research_integration.py",
+                        "tests/test_research_fx_integration.py",
                         "-m",
                         "isolated_services",
                         "-q",

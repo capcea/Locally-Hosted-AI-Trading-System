@@ -2,7 +2,7 @@ import { createHmac } from 'node:crypto';
 import { expect } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
-function totp(secret: string) {
+export function totp(secret: string) {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
   const bits = [...secret].map((x) => alphabet.indexOf(x).toString(2).padStart(5, '0')).join('');
   const key = Buffer.from((bits.match(/.{8}/g) ?? []).map((x) => parseInt(x, 2)));
@@ -36,8 +36,10 @@ export async function seedRiskFixture(page: Page, mobile: boolean) {
   )
     throw new Error('Use the disposable risk browser harness.');
   await page.goto('/');
-  if (mobile) await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Cont & administrare', exact: true }).click();
+  const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
+  await expect(primary.getByRole('link')).toHaveCount(5);
+  if (mobile) await expect(primary.getByRole('link', { name: 'Acasă', exact: true })).toBeVisible();
+  await primary.getByRole('link', { name: 'Conturi și siguranță', exact: true }).click();
   await page.getByLabel('Nume utilizator', { exact: true }).fill('risk-owner');
   await page.getByLabel('Parolă', { exact: true }).fill(process.env.E2E_OWNER_PASSWORD);
   await page.getByLabel('Nume afișat', { exact: true }).fill('Proprietar risc sintetic');

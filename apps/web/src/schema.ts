@@ -9,7 +9,14 @@ const text = z.string().max(2000);
 export const overviewSchema = z.strictObject({
   application: z.literal('AI Trading Research Platform'),
   version: z.literal('0.1.0'),
-  phase: z.union([z.literal(0), z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
+  phase: z.union([
+    z.literal(0),
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+    z.literal(5),
+  ]),
   timestamp: z.iso.datetime({ offset: true }),
   uptime_seconds: z.number().int().nonnegative(),
   trading_data_available: z.literal(false),

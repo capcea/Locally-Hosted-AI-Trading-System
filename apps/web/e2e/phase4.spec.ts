@@ -69,9 +69,7 @@ test('risk profiles, what-if, reservations and durable owner emergency controls 
   );
   expect(denied.risk.reasons).toContain('STOP_NEW_ENTRIES');
   await page.reload();
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Centru de risc', exact: true }).click();
+  await page.goto('/conturi/siguranta');
   await center
     .getByLabel('Cont pentru controlul riscului', { exact: true })
     .selectOption({ label: 'Cont risc E2E' });

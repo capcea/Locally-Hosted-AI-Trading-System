@@ -1,0 +1,12 @@
+{
+  "id": "native-fx-venue",
+  "command": [
+    ".venv/bin/python",
+    ".cache/phase5/focused_fx.py"
+  ],
+  "started_utc": "2026-10-27T12:29:56.214935+00:00",
+  "duration_seconds": 7.948,
+  "exit_code": 1,
+  "log": "docs/phase5-evidence/2026-10-27/native-fx-venue.txt",
+  "sha256": "3ef1a6cf81be88c892ce2ff3d4204efe455f262e01202c6bdac1eb14038d3c3c"
+}

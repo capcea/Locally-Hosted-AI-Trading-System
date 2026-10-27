@@ -1,0 +1,43 @@
+{
+  "status": "OWNER_APPROVED_AND_APPLIED",
+  "approved_scope": "Only home-light-desktop-darwin.png",
+  "owner_response": "Approve light desktop reference",
+  "applied_at_utc": "2026-10-27T21:11:51.029002+00:00",
+  "target": "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png",
+  "candidate": "docs/phase55b-evidence/2026-10-27/visual-reference-review/home-light-desktop-darwin.candidate.png",
+  "old_sha256": "437e527602f416199fc5624afabced6dc010b0b0fbd35bb6223d2d07b0c0e5a4",
+  "approved_sha256": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+  "other_references_unchanged": {
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png": "a92222f6683c78800603bb230b1b2b26f98719ca1d6dcab12b204e46d9919e63"
+  },
+  "copy_method": "Exact byte copy of inspected genuine owner-run PNG; no snapshot rewriting command",
+  "offline_comparison_to_captured_actual": "Byte-identical; zero differing pixels. This is not a fresh browser test pass.",
+  "browser_rerun": "NOT EXECUTED; existing managed-origin restriction",
+  "full_suite_gate": "All 20 desktop/mobile scenarios still required; dark/mobile references not approved or changed",
+  "checks": [
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "scope_verification": {
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png"
+    ],
+    "all_other_starting_files_preserved": true
+  }
+}

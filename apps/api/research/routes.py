@@ -2,6 +2,7 @@
 
 import json
 from datetime import timedelta
+from decimal import Decimal
 from typing import Any, Literal
 from uuid import UUID, uuid4
 
@@ -67,6 +68,7 @@ def view(db: Any, run: ResearchRun) -> dict[str, Any]:
             "state": job.state,
             "progress": job.progress,
             "attempts": job.attempts,
+            "cancel_requested": job.cancel_requested,
             "error": job.error,
         }
         if job
@@ -311,6 +313,7 @@ def results(
     trial: int = Query(0, ge=0, le=23),
     offset: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
+    chart: bool = False,
 ) -> dict[str, Any]:
     body = result_for(run_id, identity, request)
     if trial >= len(body["trials"]):
@@ -343,6 +346,20 @@ def results(
             ],
         }
     values = selected.get(section, [])
+    if chart and section == "equity" and len(values) > limit:
+        size = max(1, limit // 2 - 1)
+        indices = {0, len(values) - 1}
+        for number in range(size):
+            begin = number * len(values) // size
+            end = (number + 1) * len(values) // size
+            indices.add(min(range(begin, end), key=lambda i: Decimal(str(values[i]["equity"]))))
+            indices.add(max(range(begin, end), key=lambda i: Decimal(str(values[i]["equity"]))))
+        return {
+            "items": [values[i] for i in sorted(indices)],
+            "total": len(values),
+            "sampling": "bucket min/max over complete range; chart only",
+            "source": "SIMULATED",
+        }
     if isinstance(values, dict):
         return {"items": values, "source": "SIMULATED"}
     return {

@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-28",
+  "status": "AWAITING_OWNER_APPROVAL",
+  "failure_category": "MISSING_MOBILE_REFERENCES",
+  "original_diff_available": false,
+  "original_reference_missing": true,
+  "owner_reported_visual_failures": 1,
+  "owner_reported_other_passes": 1,
+  "backend_failures_reported": [],
+  "error_context": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-mobile/error-context.md",
+  "error_context_sha256": "14b893afae09976ea174d79ab3e8a5a0434950dfcef0e39ee8d6ecd556b27b3b",
+  "images": [
+    {
+      "theme": "light",
+      "actual": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-mobile/home-light-actual.png",
+      "candidate": "docs/phase55b-evidence/2026-10-28/mobile-reference-review/home-light-mobile-darwin.candidate.png",
+      "reference": "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-mobile-darwin.png",
+      "sha256": "96700c32f36e584a0198021077ec085f1362ff1021d125e3507d54ed7d6cc519",
+      "dimensions": [
+        390,
+        1317
+      ],
+      "clock_mask": {
+        "pixels": 1491,
+        "bounds_inclusive": [
+          16,
+          1164,
+          86,
+          1184
+        ]
+      },
+      "byte_identical_to_current_generated_reference": true,
+      "owner_approved": false
+    },
+    {
+      "theme": "dark",
+      "actual": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-mobile/home-dark-actual.png",
+      "candidate": "docs/phase55b-evidence/2026-10-28/mobile-reference-review/home-dark-mobile-darwin.candidate.png",
+      "reference": "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-mobile-darwin.png",
+      "sha256": "4626b942a2d2b1835ec6e58f48914a927790804dca6baf2f11f66e59bcba67ea",
+      "dimensions": [
+        390,
+        1317
+      ],
+      "clock_mask": {
+        "pixels": 1491,
+        "bounds_inclusive": [
+          16,
+          1164,
+          86,
+          1184
+        ]
+      },
+      "byte_identical_to_current_generated_reference": true,
+      "owner_approved": false
+    }
+  ],
+  "inspection": {
+    "method": "Offline inspection of genuine owner-captured PNGs",
+    "signed_out_public_home": true,
+    "authentication_inputs_visible": false,
+    "mode_label_visible": "SIMULATED / DENY_ALL",
+    "system_state_visible": "UNKNOWN",
+    "primary_navigation_items": 5,
+    "fixed_mobile_navigation": "Visible at viewport bottom within full-page capture; scrolling/occlusion is not interactively validated",
+    "keyboard_focus": "Heading focus outline visible; no accessibility compliance inferred"
+  },
+  "changes": {
+    "reference_files_written_by_agent": false,
+    "test_source_changed": false,
+    "application_source_changed": false,
+    "tolerances_changed": false,
+    "desktop_references_changed": false
+  },
+  "acceptance": {
+    "current_browser_run": "FAILED",
+    "fresh_agent_browser_execution": "BLOCKED by existing managed-origin restriction",
+    "full_20_cases": "NOT VERIFIED",
+    "manual_accessibility": "NOT VERIFIED"
+  }
+}

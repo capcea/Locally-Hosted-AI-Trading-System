@@ -1,0 +1,9 @@
+users: 1 old rows, 1 current rows; 0 removed; changed fields: last_totp_step
+VERIFIED: existing user IDs, roles, password hashes and enrolled MFA secrets unchanged; only last accepted TOTP step advanced.
+audit_events: 5 old rows, 8 current rows; 0 removed; changed fields: none
+New audit event types: {'login.password_accepted': 1, 'mfa.failed': 1, 'mfa.verified': 1}
+VERIFIED: all original audit events unchanged; new events appended.
+login_sessions: 4 old rows, 6 current rows; 0 removed; changed fields: none
+rate_buckets: 4 old rows, 4 current rows; 0 removed; changed fields: count,expires_at
+VERIFIED: current complete audit HMAC chain valid; 8 events.
+Old whole-database equality guard remains FAILED against the earlier snapshot; no evidence is rewritten. No database mutations performed by this diagnostic.

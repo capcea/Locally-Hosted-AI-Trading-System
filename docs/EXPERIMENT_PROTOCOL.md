@@ -11,3 +11,14 @@ trade count, independent regimes, drawdown/underwater time and weakest periods. 
 sample cannot promote a strategy. Evidence and concise decision summaries are stored; private model
 chain-of-thought is not required or retained.
 
+
+## Implemented Phase 5 protocol
+
+Use owner-MFA research APIs/Strategy Lab, pin the reviewed strategy and actual immutable manifests,
+and explicitly approve source-policy cloning into isolated SIM accounts. Discovery/calibration/
+validation/final phases, purge/embargo and independent OOS accounts are implemented. Register every
+candidate/fold/cost hypothesis before work, including failed/cancelled attempts. Select on training
+results only. Final release freezes one event scope once; prior exposure stays UNKNOWN. No adaptive
+paper gate, ML/LLM filter or promotion is implemented. Details: STATISTICAL_VALIDATION.md,
+BIAS_AND_LEAKAGE_PREVENTION.md and EXPERIMENT_REPRODUCIBILITY.md. Exact current tests live in the
+Phase 5 completion report; this protocol is not acceptance evidence or a performance claim.

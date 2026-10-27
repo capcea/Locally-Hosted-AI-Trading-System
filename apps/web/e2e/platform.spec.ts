@@ -7,35 +7,42 @@ test.beforeEach(async ({ request }) => {
   parseOverview(await response.json());
 });
 
-test('browse real status, filter services, inspect governance and roadmap', async ({
-  page,
-}, info) => {
+test('browse real status, filter services, inspect governance and roadmap', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Centrul de cercetare' })).toBeVisible();
-  await expect(page.getByText('Nu există experimente rulate', { exact: false })).toBeVisible();
-  await page.getByRole('button', { name: 'Toate serviciile și integrările' }).click();
+  await expect(page.getByRole('heading', { name: 'Acasă', exact: true })).toBeVisible();
+  const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
+  await expect(primary.getByRole('link')).toHaveCount(5);
+  await expect(
+    page.getByText('Nu afișăm rezultate sau solduri presupuse.', { exact: false }),
+  ).toBeVisible();
+  await page.getByRole('link', { name: 'Vezi diagnostic', exact: true }).click();
   await page.getByRole('textbox', { name: 'Caută un serviciu' }).fill('MetaTrader');
   await expect(page.getByText('MetaTrader 5', { exact: true })).toBeVisible();
   await expect(page.getByText('cTrader Open API', { exact: true })).toHaveCount(0);
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Siguranță & guvernanță', exact: true }).click();
+  await primary.getByRole('link', { name: 'Setări', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'În această secțiune' })
+    .getByRole('link', { name: 'Capabilități și limite', exact: true })
+    .click();
   await expect(page.getByText('DENY_ALL', { exact: true })).toBeVisible();
-  if (info.project.name === 'mobile')
-    await page.getByRole('button', { name: 'Deschide meniul' }).click();
-  await page.getByRole('button', { name: 'Plan de implementare', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'În această secțiune' })
+    .getByRole('link', { name: 'Plan de dezvoltare', exact: true })
+    .click();
   await expect(page.getByRole('heading', { name: 'Cloud → local' })).toBeVisible();
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth > window.innerWidth,
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(
+    false,
   );
-  expect(overflow).toBe(false);
 });
 
 test('API outage is explicit and clears confidence in previous health', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Starea infrastructurii' })).toBeVisible();
+  await page.goto('/setari/diagnostic');
+  await expect(
+    page.getByRole('heading', { name: 'Starea serviciilor', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('.service-status').first()).toBeVisible();
   await page.route('**/api/v1/overview', (route) => route.abort());
-  await page.getByRole('button', { name: 'Actualizează', exact: true }).click();
+  await page.getByRole('button', { name: 'Actualizează starea publică', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Conexiunea cu API-ul nu este disponibilă');
   await expect(page.locator('.service-status').first()).toHaveText('Neverificat');
 });
