@@ -40,7 +40,15 @@ function Shell() {
     refresh: refreshSession,
     expire,
   } = useAuth();
-  const { overview, error: overviewError, receivedAt: lastSuccess, stale, refresh } = useOverview();
+  const {
+    overview,
+    error: overviewError,
+    receivedAt: lastSuccess,
+    loading: overviewLoading,
+    now,
+    stale,
+    refresh,
+  } = useOverview();
   const [accounts, setAccounts] = useState<RecordItem[]>([]);
   const [accountError, setAccountError] = useState(false);
   const [accountId, setAccountId] = useState('');
@@ -125,7 +133,17 @@ function Shell() {
       <a className="skip-link" href="#main-content">
         Mergi la conținut
       </a>
-      {!cockpitHome && <CockpitNavigation route={route} />}
+      {!cockpitHome && (
+        <CockpitNavigation
+          route={route}
+          overview={overview}
+          stale={stale}
+          now={now}
+          error={Boolean(overviewError)}
+          loading={overviewLoading}
+          refresh={() => void refresh()}
+        />
+      )}
       <div className="product-main">
         {!cockpitHome && (
           <CockpitTopbar
