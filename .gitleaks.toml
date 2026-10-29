@@ -1,0 +1,13 @@
+title = "Local AI Trading targeted secret-scan exclusions"
+
+[extend]
+useDefault = true
+
+# Single historical pytest failure context: the reported experiment "key"
+# is a synthetic test identifier, not an API credential. Preserve all
+# upstream Gitleaks detection rules; no rule/path-wide exclusion.
+[[allowlists]]
+description = "Historical synthetic research experiment key false positive"
+condition = "AND"
+commits = ["6f99df3bf696867dc3c7f972b3ff8e9982cddf4e"]
+paths = ["^docs/phase5-evidence/2026-10-27/native-research-context\\.txt$"]
