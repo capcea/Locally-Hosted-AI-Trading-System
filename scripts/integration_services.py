@@ -86,6 +86,7 @@ def inspected_loopback_port(output: str, container_port: str) -> int:
 def main(
     *,
     browser: bool = False,
+    browser_only: bool = False,
     campaigns_only: bool = False,
     openrouter_only: bool = False,
     risk_only: bool = False,
@@ -251,14 +252,14 @@ def main(
                     timeout=600,
                 )
 
-            test_stage("write")
-            # Retain this project's volumes across graceful stop/start, not simulated power loss.
-            run([*compose, "stop", "postgres", "redis", "minio"], timeout=60)
-            run([*compose, "up", "-d", "--wait", "--wait-timeout", "180"])
-            # Docker may reassign ephemeral ports when stopped containers start again.
-            config.update(service_ports())
-            test_stage("verify")
-            if browser:
+            if not browser_only:
+                test_stage("write")
+                # Verify native-service restart persistence in the full integration mode.
+                run([*compose, "stop", "postgres", "redis", "minio"], timeout=60)
+                run([*compose, "up", "-d", "--wait", "--wait-timeout", "180"])
+                config.update(service_ports())
+                test_stage("verify")
+            if browser or browser_only:
                 run([sys.executable, "-m", "scripts.browser_acceptance"], timeout=900)
         except (OSError, RuntimeError, ValueError, subprocess.TimeoutExpired) as error:
             print(f"FAILED: {error}", file=sys.stderr)
@@ -271,7 +272,7 @@ def main(
                 print(f"FAILED cleanup: inspect disposable project {project}", file=sys.stderr)
                 code = 1
         if code == 0:
-            print("PASSED: isolated migrations, round trips and graceful-restart persistence.")
+            print("PASSED: isolated browser acceptance." if browser_only else "PASSED: isolated migrations, round trips and graceful-restart persistence.")
         return code
 
 
@@ -283,6 +284,9 @@ if __name__ == "__main__":
         "--browser",
         action="store_true",
         help="Run actual Playwright; requires permitted browser execution",
+    )
+    parser.add_argument(
+        "--browser-only", action="store_true", help="Run real Playwright with disposable services, without repeating native integration stages"
     )
     parser.add_argument(
         "--campaigns-only", action="store_true", help="Focused real-service campaign suite"
@@ -301,6 +305,7 @@ if __name__ == "__main__":
         sum(
             (
                 args.browser,
+                args.browser_only,
                 args.campaigns_only,
                 args.openrouter_only,
                 args.risk_only,
@@ -313,6 +318,7 @@ if __name__ == "__main__":
     raise SystemExit(
         main(
             browser=args.browser,
+            browser_only=args.browser_only,
             campaigns_only=args.campaigns_only,
             openrouter_only=args.openrouter_only,
             risk_only=args.risk_only,
