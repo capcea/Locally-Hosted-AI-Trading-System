@@ -18,3 +18,32 @@ jobs:
           node-version: '24.7.0'
       - run: npm --prefix apps/web ci --no-audit --no-fund
       - run: npm --prefix apps/web run build
+      - name: Verify sandboxed cockpit renders with actual Nginx CSP
+        run: |
+          docker build -f apps/web/Dockerfile -t local-ai-cockpit:test apps/web
+          docker run -d --name local-ai-cockpit-test -p 127.0.0.1:5173:8080 local-ai-cockpit:test
+          cd apps/web
+          npx playwright install --with-deps chromium
+          node --input-type=module <<'EOF'
+          import { chromium } from '@playwright/test';
+          const browser = await chromium.launch({ headless: true });
+          try {
+            const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+            await page.goto('http://127.0.0.1:5173/', { waitUntil: 'load' });
+            const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+            await cockpit.locator('.sidebar').waitFor({ state: 'visible' });
+            const bg = await cockpit.locator('body').evaluate(e => getComputedStyle(e).backgroundColor);
+            const grid = await cockpit.locator('.shell').evaluate(e => getComputedStyle(e).display);
+            const width = await cockpit.locator('.sidebar').evaluate(e => getComputedStyle(e).width);
+            console.log(JSON.stringify({ bg, grid, width }));
+            if (bg !== 'rgb(9, 13, 20)' || grid !== 'grid' || width !== '234px') {
+              throw new Error('Cockpit CSS did not load under production CSP');
+            }
+            await page.screenshot({ path: '/tmp/cockpit-production.png' });
+          } finally {
+            await browser.close();
+          }
+          EOF
+      - name: Stop test container
+        if: always()
+        run: docker rm -f local-ai-cockpit-test || true
