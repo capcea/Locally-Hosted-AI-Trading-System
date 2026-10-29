@@ -18,18 +18,58 @@ jobs:
           node-version: '24.7.0'
       - name: Install locked web dependencies
         run: npm --prefix apps/web ci --no-audit --no-fund
-      - name: Format cockpit changes for review
-        run: |
-          cd apps/web
-          npx prettier --write src/App.tsx src/main.tsx src/cockpit/PlatformChrome.tsx src/cockpit/platform.css
-          node --input-type=module <<'EOF'
-          import fs from 'node:fs';
-          const files = ['src/App.tsx', 'src/main.tsx', 'src/cockpit/PlatformChrome.tsx', 'src/cockpit/platform.css'];
-          console.log('PLATFORM_FORMAT_EXPORT=' + JSON.stringify(Object.fromEntries(files.map(path => [path, fs.readFileSync(path, 'utf8')]))));
-          EOF
       - name: Lint application
         run: npm --prefix apps/web run lint
       - name: TypeScript and Vite build
         run: npm --prefix apps/web run build
       - name: Existing web unit tests
         run: npm --prefix apps/web test
+      - name: Real Nginx and browser visual smoke
+        run: |
+          docker build -f apps/web/Dockerfile -t cockpit-platform:test apps/web
+          docker run -d --name cockpit-platform -p 127.0.0.1:5173:8080 --add-host api:127.0.0.1 cockpit-platform:test
+          for i in $(seq 1 30); do
+            if curl -fsSI http://127.0.0.1:5173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsSI http://127.0.0.1:5173/
+          cd apps/web
+          npx playwright install --with-deps chromium
+          node --input-type=module <<'EOF'
+          import { chromium } from '@playwright/test';
+          const browser = await chromium.launch();
+          try {
+            for (const [path, width, height] of [
+              ['/setari', 1440, 900],
+              ['/testeaza/ai', 1440, 900],
+              ['/testeaza/nou', 1440, 900],
+              ['/rezultate', 1440, 900],
+              ['/conturi/siguranta', 1440, 900],
+              ['/setari', 390, 844],
+            ]) {
+              const page = await browser.newPage({ viewport: { width, height } });
+              await page.goto('http://127.0.0.1:5173' + path, { waitUntil: 'load' });
+              const color = await page.locator('.ai-platform').evaluate(e => getComputedStyle(e).backgroundColor);
+              const nav = await page.locator('.cockpit-sidebar').isVisible();
+              const topbar = await page.locator('.cockpit-topbar').isVisible();
+              const notice = await page.locator('.cockpit-simulation-notice').isVisible();
+              if (color !== 'rgb(9, 13, 20)' || !nav || !topbar || !notice) {
+                throw new Error(path + ' failed Cockpit chrome: ' + JSON.stringify({color,nav,topbar,notice}));
+              }
+              await page.close();
+            }
+            const home = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+            await home.goto('http://127.0.0.1:5173/');
+            const cockpit = home.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+            await cockpit.locator('.sidebar').waitFor();
+            const color = await cockpit.locator('body').evaluate(e => getComputedStyle(e).backgroundColor);
+            if (color !== 'rgb(9, 13, 20)') throw new Error('Homepage Cockpit CSS missing: ' + color);
+            await home.close();
+            console.log('PASS: AI Cockpit homepage + 5 module routes + mobile navigation theme');
+          } finally {
+            await browser.close();
+          }
+          EOF
+      - name: Stop isolated visual test container
+        if: always()
+        run: docker rm -f cockpit-platform || true
