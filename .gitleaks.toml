@@ -1,0 +1,13 @@
+title = "Local AI Trading targeted secret-scan exclusions"
+
+[extend]
+useDefault = true
+
+# This exact historical pytest failure log contains a generated, synthetic
+# research experiment idempotency key (test_research_integration.py::prepared),
+# not an API token. Preserve scanning of all other paths, rules and commits.
+[[allowlists]]
+description = "Synthetic research experiment key in 2026-10-27 native test evidence (false positive)"
+fingerprints = [
+  "6f99df3bf696867dc3c7f972b3ff8e9982cddf4e:docs/phase5-evidence/2026-10-27/native-research-context.txt:generic-api-key:396",
+]
