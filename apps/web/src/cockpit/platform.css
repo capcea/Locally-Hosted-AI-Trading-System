@@ -1,0 +1,539 @@
+/*
+ * AI Cockpit design language shared by every authenticated module.
+ * The homepage keeps the approved isolated HTML mockup intact; advanced pages
+ * use native React, real form controls and existing authorization boundaries.
+ */
+.product-shell.ai-platform {
+  --bg: #090d14;
+  --nav-bg: #0c111b;
+  --panel: #121923;
+  --panel-raised: #1a2432;
+  --text: #ecf1fa;
+  --muted: #98a6bb;
+  --line: #263040;
+  --border: #3a465b;
+  --accent: #a89bff;
+  --on-accent: #17142e;
+  --danger: #ef9cac;
+  --success: #6bd5b1;
+  --attention: #e4b878;
+  --violet: #a89bff;
+  --radius: 14px;
+  --surface: var(--panel);
+  --surface-soft: var(--panel-raised);
+  --sidebar: var(--nav-bg);
+  --accent-text: var(--on-accent);
+  --accent-faint: #211f39;
+  --amber: var(--attention);
+  display: grid;
+  grid-template-columns: 234px minmax(0, 1fr);
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.ai-platform .cockpit-sidebar {
+  background: #0c111b;
+  border-right: 1px solid #1e2735;
+  padding: 30px 15px 23px;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 15;
+}
+.ai-platform .cockpit-brand {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  color: #edf0fa;
+  text-decoration: none;
+  padding: 0 9px 39px;
+}
+.ai-platform .cockpit-brand-mark {
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #5550af, #a899ff);
+  box-shadow: 0 3px 23px #8474ff33;
+  color: #fff;
+}
+.ai-platform .cockpit-brand strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  line-height: 1.05;
+}
+.ai-platform .cockpit-brand small {
+  display: block;
+  margin-top: 6px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #7f8ba6;
+  font-weight: 700;
+}
+.ai-platform .cockpit-nav-label {
+  padding: 0 13px 13px;
+  color: #66758c;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.ai-platform .cockpit-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ai-platform .cockpit-nav-group {
+  min-width: 0;
+}
+.ai-platform .cockpit-nav-entry {
+  display: flex;
+  gap: 2px;
+  min-height: 45px;
+  align-items: center;
+}
+.ai-platform .cockpit-nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 12px;
+  height: 45px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #8e9aad;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.ai-platform .cockpit-nav-link:hover {
+  color: #fff;
+  background: #1b2332;
+}
+.ai-platform .cockpit-nav-link.is-active {
+  background: #211f39;
+  color: #c9c3ff;
+  border-color: #3c355b;
+}
+.ai-platform .cockpit-nav-link.is-active::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 13px;
+  height: 17px;
+  width: 3px;
+  border-radius: 10px;
+  background: #a89bff;
+}
+.ai-platform .cockpit-nav-expander {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  flex: 0 0 27px;
+  height: 34px;
+  color: #8d95aa;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 8px;
+}
+.ai-platform .cockpit-nav-expander:hover {
+  color: #c9c3ff;
+  background: #211f39;
+}
+.ai-platform .cockpit-nav-divider {
+  height: 1px;
+  background: #242b36;
+  margin: 22px 12px 18px;
+}
+.ai-platform .cockpit-subnav {
+  display: grid;
+  gap: 2px;
+  padding: 1px 0 9px 31px;
+}
+.ai-platform .cockpit-subnav-link {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  color: #8190a5;
+  font-size: 11px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.ai-platform .cockpit-subnav-link:hover,
+.ai-platform .cockpit-subnav-link.is-active {
+  color: #c9c3ff;
+  background: #211f3988;
+}
+.ai-platform .cockpit-sidebar-bottom {
+  margin-top: auto;
+  padding-top: 20px;
+}
+.ai-platform .cockpit-guard {
+  background: #131b27;
+  border: 1px solid #2b3545;
+  border-radius: 13px;
+  padding: 15px;
+}
+.ai-platform .cockpit-micro {
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  font-weight: 800;
+  color: #7d8da3;
+}
+.ai-platform .cockpit-guard strong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 13px 0 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #dce6f1;
+}
+.ai-platform .cockpit-guard i {
+  display: inline-block;
+  height: 7px;
+  width: 7px;
+  background: #6bd5b1;
+  border-radius: 50%;
+}
+.ai-platform .cockpit-guard p {
+  margin: 0;
+  color: #8a98a9;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.ai-platform .cockpit-version {
+  display: block;
+  padding: 18px 11px 0;
+  font-size: 10px;
+  color: #67778f;
+}
+.ai-platform .product-main {
+  min-width: 0;
+  width: 100%;
+}
+.ai-platform .cockpit-topbar {
+  height: 75px;
+  padding: 0 38px;
+  border-bottom: 1px solid #202838;
+  background: #0d121b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.ai-platform .cockpit-breadcrumb,
+.ai-platform .cockpit-top-actions {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  min-width: 0;
+}
+.ai-platform .cockpit-breadcrumb {
+  color: #8190a5;
+  font-size: 12px;
+  font-weight: 600;
+}
+.ai-platform .cockpit-breadcrumb h1 {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #dfe7f3;
+  margin: 0;
+  outline-offset: 4px;
+  min-width: 0;
+}
+.ai-platform .cockpit-top-actions {
+  gap: 17px;
+}
+.ai-platform .cockpit-top-date {
+  color: #7b8ba1;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ai-platform .cockpit-mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 11px;
+  color: #d2cafa;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: #25233c;
+  border: 1px solid #423b69;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+.ai-platform .cockpit-mode i {
+  display: block;
+  border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  background: #a69bff;
+}
+.ai-platform .cockpit-avatar {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 34px;
+  min-height: 34px;
+  background: #2d3450;
+  border: 1px solid #454c6e;
+  border-radius: 10px;
+  color: #ddd7ff;
+  padding: 0 7px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.ai-platform .cockpit-login {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  text-decoration: none;
+  font-size: 11px;
+  color: #c9c3ff;
+}
+.ai-platform .product-main main:not(.cockpit-main) {
+  max-width: 1680px;
+  width: 100%;
+  padding: 30px 38px 40px;
+  margin: 0 auto;
+}
+.ai-platform .cockpit-page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.ai-platform .cockpit-eyebrow {
+  color: #a89bff;
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+.ai-platform .cockpit-page-heading h2 {
+  margin: 8px 0 6px;
+  font-weight: 750;
+  font-size: 30px;
+  letter-spacing: -1.2px;
+  line-height: 1.2;
+}
+.ai-platform .cockpit-page-heading h2 span { color: #9f94ed; }
+.ai-platform .cockpit-page-heading p {
+  margin: 0;
+  color: #8896ab;
+  font-size: 13px;
+}
+.ai-platform .cockpit-page-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  padding: 10px 14px;
+  min-height: 38px;
+  color: #e2e9f4;
+  background: #19212e;
+  border: 1px solid #3b4558;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.ai-platform .cockpit-page-action:hover { border-color: #7e74ce; }
+.ai-platform .cockpit-simulation-notice {
+  border: 1px solid #493e35;
+  background: linear-gradient(90deg, #30251f, #211e1d 55%, #1b1d24);
+  border-radius: 10px;
+  color: #e9bb87;
+  padding: 10px 14px;
+  margin: 0 0 18px;
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  font-size: 12px;
+  flex-wrap: wrap;
+}
+.ai-platform .cockpit-simulation-notice strong {
+  font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.ai-platform .cockpit-simulation-notice > span { color: #b2a99e; }
+.ai-platform .cockpit-simulation-notice > small {
+  margin-left: auto;
+  color: #ae9a7f;
+  font-size: 11px;
+}
+.ai-platform .cockpit-page-tools {
+  border: 1px solid #263040;
+  border-radius: 10px;
+  background: #121923;
+  margin: 14px 0 20px;
+  padding: 0 16px;
+}
+.ai-platform .cockpit-page-tools > summary {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  color: #b8bbdc;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 0;
+}
+.ai-platform .cockpit-page-tools .section-navigation {
+  margin: 0 0 14px;
+  border: 0;
+}
+.ai-platform .panel,
+.ai-platform .management-panel,
+.ai-platform .management-record,
+.ai-platform .market-data article,
+.ai-platform .risk-center article,
+.ai-platform .research-lab article {
+  border-color: #263040;
+  border-radius: 14px;
+  background: #121923;
+  box-shadow: none;
+}
+.ai-platform .panel,
+.ai-platform .management-panel { margin: 14px 0; padding: 22px; }
+.ai-platform h2, .ai-platform h3 { color: #ecf1fa; }
+.ai-platform .panel h2, .ai-platform .management-panel h2 {
+  font-size: 17px;
+  font-weight: 700;
+}
+.ai-platform :where(p, small, dt) { color: inherit; }
+.ai-platform a { color: #c5baff; }
+.ai-platform a:hover { color: #e0dcff; }
+.ai-platform :where(input:not([type='checkbox']):not([type='radio']),select,textarea) {
+  background: #0d141e;
+  color: #ecf1fa;
+  border-color: #3a465b;
+  border-radius: 9px;
+}
+.ai-platform :where(input,select,textarea)::placeholder { color: #7f8ea4; }
+.ai-platform :where(button,.primary-button) { border-radius: 9px; }
+.ai-platform :where(button:not(.cockpit-avatar):not(.cockpit-nav-expander):not(.text-button):not(.icon-button),.primary-button) {
+  font-size: 13px;
+}
+.ai-platform :where(.primary-button, button.primary-button) {
+  background: #a79bff;
+  border-color: #a79bff;
+  color: #17142e;
+  font-weight: 700;
+}
+.ai-platform .secondary-button,
+.ai-platform .text-button,
+.ai-platform .icon-button {
+  background: #19212e;
+  border-color: #3b4558;
+  color: #e2e9f4;
+}
+.ai-platform :where(.metric-grid > div, .management-record, .management-cards > *, .settings-groups .panel) {
+  border-color: #303a4e;
+  border-radius: 12px;
+  background: #151e2c;
+}
+.ai-platform :where(.risk-global-banner,.notice) {
+  border: 1px solid #3c4254;
+  border-radius: 11px;
+  background: #18212f;
+  color: #e1e9f6;
+}
+.ai-platform .error-banner {
+  background: #2a1d28;
+  border-color: #85525d;
+  color: #ffc3cd;
+}
+.ai-platform :where(table, th, td) { border-color: #2b3546; }
+.ai-platform thead { background: #1a2432; }
+.ai-platform tbody tr:hover { background: #1a2432; }
+.ai-platform :where(pre,.market-json) {
+  background: #0d141e;
+  color: #cbd5e7;
+  border-color: #303a4e;
+}
+.ai-platform :where(.settings-links a, .section-navigation a[aria-current='page']) {
+  border-radius: 8px;
+}
+.ai-platform .settings-links a:hover,
+.ai-platform .section-navigation a[aria-current='page'] {
+  background: #211f39;
+  color: #c9c3ff;
+}
+.ai-platform .main-footer {
+  margin-top: 25px;
+  color: #78869e;
+  font-size: 11px;
+}
+@media (max-width: 1050px) {
+  .product-shell.ai-platform { grid-template-columns: 210px minmax(0,1fr); }
+  .ai-platform .cockpit-topbar { padding: 0 24px; }
+  .ai-platform .product-main main:not(.cockpit-main) { padding: 26px 24px 36px; }
+}
+@media (max-width: 700px) {
+  .product-shell.ai-platform { display: block; }
+  .ai-platform .cockpit-sidebar {
+    position: static;
+    height: auto;
+    padding: 13px 14px 9px;
+    border-right: 0;
+    border-bottom: 1px solid #273047;
+  }
+  .ai-platform .cockpit-brand { padding: 0 4px 12px; }
+  .ai-platform .cockpit-brand strong { font-size: 15px; }
+  .ai-platform .cockpit-brand small { font-size: 8px; }
+  .ai-platform .cockpit-brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .ai-platform .cockpit-nav-label,
+  .ai-platform .cockpit-sidebar-bottom,
+  .ai-platform .cockpit-nav-divider,
+  .ai-platform .cockpit-nav-expander,
+  .ai-platform .cockpit-subnav { display: none; }
+  .ai-platform .cockpit-nav { flex-direction: row; gap: 2px; justify-content: space-between; }
+  .ai-platform .cockpit-nav-group { flex: 1; }
+  .ai-platform .cockpit-nav-entry { min-height: 44px; }
+  .ai-platform .cockpit-nav-link {
+    min-height: 44px;
+    height: auto;
+    padding: 6px 1px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .ai-platform .cockpit-nav-link.is-active::before { display: none; }
+  .ai-platform .cockpit-topbar { height: 58px; padding: 0 15px; }
+  .ai-platform .cockpit-top-date { display: none; }
+  .ai-platform .cockpit-breadcrumb h1 { font-size: 11px; }
+  .ai-platform .product-main main:not(.cockpit-main) { padding: 20px 15px 30px; }
+  .ai-platform .cockpit-page-heading { align-items: flex-start; }
+  .ai-platform .cockpit-page-heading h2 { font-size: 25px; }
+  .ai-platform .cockpit-page-action { font-size: 11px; padding: 8px; }
+  .ai-platform .cockpit-simulation-notice > small { display: none; }
+  .ai-platform .panel, .ai-platform .management-panel { padding: 18px 15px; }
+  .ai-platform .cockpit-page-tools { display: block; }
+  .ai-platform .cockpit-page-tools .section-navigation ul { flex-direction: column; }
+}
