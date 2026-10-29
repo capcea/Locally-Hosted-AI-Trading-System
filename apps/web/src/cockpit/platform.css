@@ -30,7 +30,12 @@
   min-height: 100dvh;
   background: var(--bg);
   color: var(--text);
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -341,7 +346,9 @@
   letter-spacing: -1.2px;
   line-height: 1.2;
 }
-.ai-platform .cockpit-page-heading h2 span { color: #9f94ed; }
+.ai-platform .cockpit-page-heading h2 span {
+  color: #9f94ed;
+}
 .ai-platform .cockpit-page-heading p {
   margin: 0;
   color: #8896ab;
@@ -362,7 +369,9 @@
   font-weight: 700;
   text-decoration: none;
 }
-.ai-platform .cockpit-page-action:hover { border-color: #7e74ce; }
+.ai-platform .cockpit-page-action:hover {
+  border-color: #7e74ce;
+}
 .ai-platform .cockpit-simulation-notice {
   border: 1px solid #493e35;
   background: linear-gradient(90deg, #30251f, #211e1d 55%, #1b1d24);
@@ -377,9 +386,15 @@
   flex-wrap: wrap;
 }
 .ai-platform .cockpit-simulation-notice strong {
-  font: 700 11px ui-monospace, SFMono-Regular, Menlo, monospace;
+  font:
+    700 11px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
 }
-.ai-platform .cockpit-simulation-notice > span { color: #b2a99e; }
+.ai-platform .cockpit-simulation-notice > span {
+  color: #b2a99e;
+}
 .ai-platform .cockpit-simulation-notice > small {
   margin-left: auto;
   color: #ae9a7f;
@@ -417,24 +432,45 @@
   box-shadow: none;
 }
 .ai-platform .panel,
-.ai-platform .management-panel { margin: 14px 0; padding: 22px; }
-.ai-platform h2, .ai-platform h3 { color: #ecf1fa; }
-.ai-platform .panel h2, .ai-platform .management-panel h2 {
+.ai-platform .management-panel {
+  margin: 14px 0;
+  padding: 22px;
+}
+.ai-platform h2,
+.ai-platform h3 {
+  color: #ecf1fa;
+}
+.ai-platform .panel h2,
+.ai-platform .management-panel h2 {
   font-size: 17px;
   font-weight: 700;
 }
-.ai-platform :where(p, small, dt) { color: inherit; }
-.ai-platform a { color: #c5baff; }
-.ai-platform a:hover { color: #e0dcff; }
-.ai-platform :where(input:not([type='checkbox']):not([type='radio']),select,textarea) {
+.ai-platform :where(p, small, dt) {
+  color: inherit;
+}
+.ai-platform a {
+  color: #c5baff;
+}
+.ai-platform a:hover {
+  color: #e0dcff;
+}
+.ai-platform :where(input:not([type='checkbox']):not([type='radio']), select, textarea) {
   background: #0d141e;
   color: #ecf1fa;
   border-color: #3a465b;
   border-radius: 9px;
 }
-.ai-platform :where(input,select,textarea)::placeholder { color: #7f8ea4; }
-.ai-platform :where(button,.primary-button) { border-radius: 9px; }
-.ai-platform :where(button:not(.cockpit-avatar):not(.cockpit-nav-expander):not(.text-button):not(.icon-button),.primary-button) {
+.ai-platform :where(input, select, textarea)::placeholder {
+  color: #7f8ea4;
+}
+.ai-platform :where(button, .primary-button) {
+  border-radius: 9px;
+}
+.ai-platform
+  :where(
+    button:not(.cockpit-avatar):not(.cockpit-nav-expander):not(.text-button):not(.icon-button),
+    .primary-button
+  ) {
   font-size: 13px;
 }
 .ai-platform :where(.primary-button, button.primary-button) {
@@ -450,12 +486,13 @@
   border-color: #3b4558;
   color: #e2e9f4;
 }
-.ai-platform :where(.metric-grid > div, .management-record, .management-cards > *, .settings-groups .panel) {
+.ai-platform
+  :where(.metric-grid > div, .management-record, .management-cards > *, .settings-groups .panel) {
   border-color: #303a4e;
   border-radius: 12px;
   background: #151e2c;
 }
-.ai-platform :where(.risk-global-banner,.notice) {
+.ai-platform :where(.risk-global-banner, .notice) {
   border: 1px solid #3c4254;
   border-radius: 11px;
   background: #18212f;
@@ -466,10 +503,16 @@
   border-color: #85525d;
   color: #ffc3cd;
 }
-.ai-platform :where(table, th, td) { border-color: #2b3546; }
-.ai-platform thead { background: #1a2432; }
-.ai-platform tbody tr:hover { background: #1a2432; }
-.ai-platform :where(pre,.market-json) {
+.ai-platform :where(table, th, td) {
+  border-color: #2b3546;
+}
+.ai-platform thead {
+  background: #1a2432;
+}
+.ai-platform tbody tr:hover {
+  background: #1a2432;
+}
+.ai-platform :where(pre, .market-json) {
   background: #0d141e;
   color: #cbd5e7;
   border-color: #303a4e;
@@ -488,12 +531,20 @@
   font-size: 11px;
 }
 @media (max-width: 1050px) {
-  .product-shell.ai-platform { grid-template-columns: 210px minmax(0,1fr); }
-  .ai-platform .cockpit-topbar { padding: 0 24px; }
-  .ai-platform .product-main main:not(.cockpit-main) { padding: 26px 24px 36px; }
+  .product-shell.ai-platform {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+  .ai-platform .cockpit-topbar {
+    padding: 0 24px;
+  }
+  .ai-platform .product-main main:not(.cockpit-main) {
+    padding: 26px 24px 36px;
+  }
 }
 @media (max-width: 700px) {
-  .product-shell.ai-platform { display: block; }
+  .product-shell.ai-platform {
+    display: block;
+  }
   .ai-platform .cockpit-sidebar {
     position: static;
     height: auto;
@@ -501,18 +552,38 @@
     border-right: 0;
     border-bottom: 1px solid #273047;
   }
-  .ai-platform .cockpit-brand { padding: 0 4px 12px; }
-  .ai-platform .cockpit-brand strong { font-size: 15px; }
-  .ai-platform .cockpit-brand small { font-size: 8px; }
-  .ai-platform .cockpit-brand-mark { width: 34px; height: 34px; flex-basis: 34px; }
+  .ai-platform .cockpit-brand {
+    padding: 0 4px 12px;
+  }
+  .ai-platform .cockpit-brand strong {
+    font-size: 15px;
+  }
+  .ai-platform .cockpit-brand small {
+    font-size: 8px;
+  }
+  .ai-platform .cockpit-brand-mark {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
   .ai-platform .cockpit-nav-label,
   .ai-platform .cockpit-sidebar-bottom,
   .ai-platform .cockpit-nav-divider,
   .ai-platform .cockpit-nav-expander,
-  .ai-platform .cockpit-subnav { display: none; }
-  .ai-platform .cockpit-nav { flex-direction: row; gap: 2px; justify-content: space-between; }
-  .ai-platform .cockpit-nav-group { flex: 1; }
-  .ai-platform .cockpit-nav-entry { min-height: 44px; }
+  .ai-platform .cockpit-subnav {
+    display: none;
+  }
+  .ai-platform .cockpit-nav {
+    flex-direction: row;
+    gap: 2px;
+    justify-content: space-between;
+  }
+  .ai-platform .cockpit-nav-group {
+    flex: 1;
+  }
+  .ai-platform .cockpit-nav-entry {
+    min-height: 44px;
+  }
   .ai-platform .cockpit-nav-link {
     min-height: 44px;
     height: auto;
@@ -524,16 +595,43 @@
     font-size: 10px;
     line-height: 1.2;
   }
-  .ai-platform .cockpit-nav-link.is-active::before { display: none; }
-  .ai-platform .cockpit-topbar { height: 58px; padding: 0 15px; }
-  .ai-platform .cockpit-top-date { display: none; }
-  .ai-platform .cockpit-breadcrumb h1 { font-size: 11px; }
-  .ai-platform .product-main main:not(.cockpit-main) { padding: 20px 15px 30px; }
-  .ai-platform .cockpit-page-heading { align-items: flex-start; }
-  .ai-platform .cockpit-page-heading h2 { font-size: 25px; }
-  .ai-platform .cockpit-page-action { font-size: 11px; padding: 8px; }
-  .ai-platform .cockpit-simulation-notice > small { display: none; }
-  .ai-platform .panel, .ai-platform .management-panel { padding: 18px 15px; }
-  .ai-platform .cockpit-page-tools { display: block; }
-  .ai-platform .cockpit-page-tools .section-navigation ul { flex-direction: column; }
+  .ai-platform .cockpit-nav-link.is-active::before {
+    display: none;
+  }
+  .ai-platform .cockpit-topbar {
+    height: 58px;
+    padding: 0 15px;
+  }
+  .ai-platform .cockpit-top-date {
+    display: none;
+  }
+  .ai-platform .cockpit-breadcrumb h1 {
+    font-size: 11px;
+  }
+  .ai-platform .product-main main:not(.cockpit-main) {
+    padding: 20px 15px 30px;
+  }
+  .ai-platform .cockpit-page-heading {
+    align-items: flex-start;
+  }
+  .ai-platform .cockpit-page-heading h2 {
+    font-size: 25px;
+  }
+  .ai-platform .cockpit-page-action {
+    font-size: 11px;
+    padding: 8px;
+  }
+  .ai-platform .cockpit-simulation-notice > small {
+    display: none;
+  }
+  .ai-platform .panel,
+  .ai-platform .management-panel {
+    padding: 18px 15px;
+  }
+  .ai-platform .cockpit-page-tools {
+    display: block;
+  }
+  .ai-platform .cockpit-page-tools .section-navigation ul {
+    flex-direction: column;
+  }
 }
