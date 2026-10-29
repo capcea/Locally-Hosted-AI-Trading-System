@@ -10,14 +10,18 @@ test('independent safety, reviewed setup, guarded routes, keyboard review and vi
   const me = await (await page.request.get('/api/v1/auth/me')).json();
   expect(me.state).toBe('FULL');
   await page.route('**/api/v1/overview', (route) => route.abort());
-  await page.goto('/');
+  // Outage diagnostics remain visible on the public diagnostic route (not the isolated home iframe).
+  await page.goto('/setari/diagnostic');
   await expect(page.getByRole('alert').first()).toContainText(
     'Conexiunea cu API-ul nu este disponibilă',
   );
   await expect(
     page.getByRole('complementary', { name: 'Siguranță risc globală', exact: true }),
   ).toBeVisible();
-  await page.getByRole('link', { name: 'Siguranță și oprirea intrărilor', exact: true }).click();
+  await page
+    .getByRole('navigation', { name: 'Navigare principală', exact: true })
+    .getByRole('link', { name: 'Siguranță', exact: true })
+    .click();
   const center = page.getByRole('region', { name: 'Centru de risc', exact: true });
   await center
     .getByLabel('Cont pentru controlul riscului', { exact: true })
@@ -69,6 +73,8 @@ test('independent safety, reviewed setup, guarded routes, keyboard review and vi
   await page.goto('/testeaza');
   await expect(wizard).toHaveCount(1);
   await expect(wizard).toBeVisible();
+  // Advanced routes remain navigable via the collapsible section navigator.
+  await page.locator('.cockpit-page-tools summary').click();
   await expect(
     page
       .getByRole('navigation', { name: 'În această secțiune', exact: true })
