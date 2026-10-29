@@ -93,13 +93,7 @@ function Answer({ job, critic, busy }: { job: Job; critic: () => void; busy: boo
   );
 }
 
-function LegacyAICenter({
-  session,
-  advanced = false,
-}: {
-  session: Session;
-  advanced?: boolean;
-}) {
+function LegacyAICenter({ session, advanced = false }: { session: Session; advanced?: boolean }) {
   const route = useRoute();
   const [status, setStatus] = useState<Status | null>(null),
     [models, setModels] = useState<Model[]>([]);
