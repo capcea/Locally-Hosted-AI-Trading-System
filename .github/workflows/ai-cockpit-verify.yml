@@ -31,6 +31,13 @@ jobs:
         run: |
           docker build -f apps/web/Dockerfile -t local-ai-cockpit:test apps/web
           docker run -d --name local-ai-cockpit-test -p 127.0.0.1:5173:8080 local-ai-cockpit:test
+          for i in $(seq 1 30); do
+            if curl -fsSI http://127.0.0.1:5173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          docker logs local-ai-cockpit-test
+          curl -fsSI http://127.0.0.1:5173/
+          curl -fsSI http://127.0.0.1:5173/cockpit.html
           cd apps/web
           npx playwright install --with-deps chromium
           node --input-type=module <<'EOF'
