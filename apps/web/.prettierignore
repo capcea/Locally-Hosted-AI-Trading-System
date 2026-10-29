@@ -6,3 +6,6 @@ test-results/
 playwright-report/
 .cache/
 *.tsbuildinfo
+
+# Exact standalone approved Cockpit visual template (generated HTML).
+public/cockpit.html
