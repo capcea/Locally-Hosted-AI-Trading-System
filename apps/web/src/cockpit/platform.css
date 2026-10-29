@@ -635,3 +635,63 @@
     flex-direction: column;
   }
 }
+
+/* Compact, verified service status – shown on demand, never guessed. */
+.ai-platform .cockpit-health {
+  margin-top: 12px;
+  border: 1px solid #2b3545;
+  background: #131b27;
+  border-radius: 12px;
+  padding: 0 11px;
+  color: #bfc8d7;
+}
+.ai-platform .cockpit-health details {
+  margin: 0;
+}
+.ai-platform .cockpit-health summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-height: 37px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.ai-platform .cockpit-health summary strong {
+  font: 700 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #e4b878;
+}
+.ai-platform .cockpit-health[data-status='HEALTHY'] summary strong { color: #6bd5b1; }
+.ai-platform .cockpit-health[data-status='DOWN'] summary strong { color: #ec8f9f; }
+.ai-platform .cockpit-health p,
+.ai-platform .cockpit-health small {
+  display: block;
+  color: #8a98ab;
+  font-size: 10px;
+  margin: 5px 0 9px;
+}
+.ai-platform .cockpit-health ul { list-style: none; margin: 6px 0; padding: 0; }
+.ai-platform .cockpit-health li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid #283346;
+  padding: 8px 0;
+  font-size: 10px;
+}
+.ai-platform .cockpit-health li strong { color: #e4b878; font-weight: 600; }
+.ai-platform .cockpit-health li[data-status='HEALTHY'] strong { color: #6bd5b1; }
+.ai-platform .cockpit-health li[data-status='DOWN'] strong { color: #ec8f9f; }
+.ai-platform .cockpit-health .cockpit-health-refresh {
+  min-height: 28px;
+  padding: 5px 7px;
+  font-size: 10px;
+  background: #211f39;
+  color: #d2cafa;
+  border: 1px solid #423b69;
+}
+.ai-platform .cockpit-health a {
+  display: inline-block;
+  padding: 7px 0;
+  font-size: 10px;
+}
