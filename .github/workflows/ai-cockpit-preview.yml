@@ -5,7 +5,6 @@ on:
   pull_request:
     paths:
       - 'apps/web/src/**'
-      - '.github/workflows/ai-cockpit-preview.yml'
       - 'apps/web/public/cockpit.html'
       - 'apps/web/nginx.conf'
       - 'apps/web/package.json'
@@ -25,12 +24,6 @@ jobs:
           node-version: '24.7.0'
       - name: Install frontend dependencies
         run: npm --prefix apps/web ci --no-audit --no-fund
-      - name: Print Prettier formatting patch
-        run: |
-          cd apps/web
-          ./node_modules/.bin/prettier --write src/ai/AICenter.tsx src/ai/AIChat.tsx
-          cd ../..
-          git diff --no-ext-diff -- apps/web/src/ai/AICenter.tsx apps/web/src/ai/AIChat.tsx
       - name: Lint frontend
         run: npm --prefix apps/web run lint
       - name: Build frontend
