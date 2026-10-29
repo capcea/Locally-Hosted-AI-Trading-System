@@ -102,7 +102,11 @@ def new_session(
 
 def rotate(identity: Principal, state: str, request: Request, response: Response) -> SessionView:
     identity.session.revoked_at = utcnow()
-    return new_session(identity.db, identity.user, state, request, response)
+    result = new_session(identity.db, identity.user, state, request, response)
+    # Request-scoped yield cleanup runs after headers can be sent. Publish a rotated cookie only
+    # after its new row, old-session revocation, MFA counter and audit have committed atomically.
+    identity.db.commit()
+    return result
 
 
 def revoke_all(db: Session, user: User) -> None:
@@ -194,7 +198,7 @@ def login(body: Credentials, request: Request, response: Response) -> SessionVie
             correlation_id=request.state.correlation_id,
         )
     if result is None:
-        raise HTTPException(401, "Invalid credentials")
+        raise HTTPException(401, "Invalid credentials", headers={"X-Auth-Error": "LOGIN_INVALID"})
     return result
 
 
@@ -248,7 +252,9 @@ def mfa_failure(identity: Principal) -> NoReturn:
     # secrets or MFA counters on failure; the dependency's later rollback is then harmless.
     identity.audit("mfa.failed", entity_id=identity.user.id)
     identity.db.commit()
-    raise HTTPException(401, "Invalid, expired or already used MFA code")
+    raise HTTPException(
+        401, "Invalid, expired or already used MFA code", headers={"X-Auth-Error": "MFA_INVALID"}
+    )
 
 
 @router.post("/mfa/confirm", response_model=RecoveryResult)

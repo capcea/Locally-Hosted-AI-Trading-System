@@ -5,6 +5,7 @@ import { api } from './management-api';
 import { useAuth } from './auth/AuthProvider';
 import { allRecords } from './records';
 import { Link } from './navigation/history';
+import { Shield } from 'lucide-react';
 
 type Status = components['schemas']['AccountStatus'];
 export function safetyLabel(status: Status | null, now: number, failed = false) {
@@ -22,6 +23,25 @@ export function safetyLabel(status: Status | null, now: number, failed = false) 
   return 'Verificare obligatorie la fiecare ordin simulat';
 }
 type Row = { account: RecordItem; status: Status | null; observed: number; failed: boolean };
+export function safetyOverview({
+  failed,
+  checked,
+  count,
+  issues,
+}: {
+  failed: boolean;
+  checked: number | null;
+  count: number;
+  issues: number;
+}) {
+  if (failed) return 'UNAVAILABLE · acoperirea conturilor nu poate fi verificată';
+  if (checked === null) return 'UNKNOWN · verificăm siguranța conturilor';
+  if (count === 0) return 'Niciun cont în lista citită';
+  const scope = count === 1 ? '1 cont citit' : `${count} conturi citite`;
+  if (issues > 0)
+    return `${issues === 1 ? 'Un cont necesită' : `${issues} conturi necesită`} verificare · ${scope}`;
+  return `${scope} · verificare la fiecare ordin simulat`;
+}
 export default function RiskBanner() {
   const { session, unavailable } = useAuth();
   const [rows, setRows] = useState<Row[]>([]);
@@ -86,22 +106,37 @@ export default function RiskBanner() {
     (r) =>
       safetyLabel(r.status, now, r.failed) !== 'Verificare obligatorie la fiecare ordin simulat',
   );
+  const stopped = rows.filter((r) => r.status?.manual_stop || r.status?.automatic_stop);
   return (
-    <aside className="risk-global-banner" aria-label="Siguranță risc globală">
-      <div>
+    <aside
+      className="risk-global-banner"
+      aria-label="Siguranță risc globală"
+      data-attention={failed || unavailable || checked === null || issues.length > 0}
+    >
+      <Shield size={20} aria-hidden="true" className="risk-banner-icon" />
+      <div className="risk-banner-copy">
         <strong>
-          {failed || unavailable
-            ? 'UNAVAILABLE · acoperirea conturilor nu poate fi verificată'
-            : checked === null
-              ? 'UNKNOWN · verificăm siguranța conturilor'
-              : `${issues.length} conturi necesită verificare din ${rows.length} conturi citite`}
+          {safetyOverview({
+            failed: failed || unavailable,
+            checked,
+            count: rows.length,
+            issues: issues.length,
+          })}
         </strong>
         <p>
-          SIMULATED / DENY_ALL · Ordine externe blocate.{' '}
-          {checked
+          {checked !== null
             ? `Citire: ${new Date(checked).toLocaleTimeString('ro-RO')}.`
             : 'Nu presupunem că lipsa datelor înseamnă siguranță.'}
         </p>
+        {stopped.length > 0 && (
+          <p className="risk-stop-warning">
+            Oprire în ultima stare citită: {stopped.length}{' '}
+            {stopped.length === 1 ? 'cont' : 'conturi'}. Verifică starea fiecărui cont.
+          </p>
+        )}
+        {!failed && !unavailable && checked !== null && !rows.length && (
+          <Link href="/conturi">Configurează un cont pentru simulare</Link>
+        )}
       </div>
       <Link className="secondary-button" href="/conturi/siguranta">
         Siguranță și oprirea intrărilor

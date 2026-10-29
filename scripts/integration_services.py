@@ -83,7 +83,14 @@ def inspected_loopback_port(output: str, container_port: str) -> int:
     return mapped_loopback_port(f"{binding['HostIp']}:{binding['HostPort']}")
 
 
-def main(*, browser: bool = False) -> int:
+def main(
+    *,
+    browser: bool = False,
+    campaigns_only: bool = False,
+    openrouter_only: bool = False,
+    risk_only: bool = False,
+    auth_only: bool = False,
+) -> int:
     docker = shutil.which("docker")
     if docker is None:
         print("BLOCKED: Docker CLI unavailable.", file=sys.stderr)
@@ -211,13 +218,32 @@ def main(*, browser: bool = False) -> int:
                         sys.executable,
                         "-m",
                         "pytest",
-                        "tests/test_service_roundtrips.py",
-                        "tests/test_phase1_integration.py",
-                        "tests/test_market_integration.py",
-                        "tests/test_execution_integration.py",
-                        "tests/test_risk_integration.py",
-                        "tests/test_research_integration.py",
-                        "tests/test_research_fx_integration.py",
+                        *(
+                            [
+                                "tests/test_phase1_integration.py",
+                                "tests/test_mfa_session_integration.py",
+                            ]
+                            if auth_only
+                            else ["tests/test_risk_integration.py"]
+                            if risk_only
+                            else ["tests/test_openrouter_integration.py"]
+                            if openrouter_only
+                            else ["tests/test_campaign_integration.py"]
+                            if campaigns_only
+                            else [
+                                "tests/test_service_roundtrips.py",
+                                "tests/test_phase1_integration.py",
+                                "tests/test_market_integration.py",
+                                "tests/test_execution_integration.py",
+                                "tests/test_risk_integration.py",
+                                "tests/test_research_integration.py",
+                                "tests/test_research_fx_integration.py",
+                                "tests/test_ai_integration.py",
+                                "tests/test_campaign_integration.py",
+                                "tests/test_openrouter_integration.py",
+                                "tests/test_mfa_session_integration.py",
+                            ]
+                        ),
                         "-m",
                         "isolated_services",
                         "-q",
@@ -258,4 +284,38 @@ if __name__ == "__main__":
         action="store_true",
         help="Run actual Playwright; requires permitted browser execution",
     )
-    raise SystemExit(main(browser=parser.parse_args().browser))
+    parser.add_argument(
+        "--campaigns-only", action="store_true", help="Focused real-service campaign suite"
+    )
+    parser.add_argument(
+        "--openrouter-only",
+        action="store_true",
+        help="Focused cloud policy/secret fixture integration",
+    )
+    parser.add_argument("--risk-only", action="store_true", help="Focused actual risk services")
+    parser.add_argument(
+        "--auth-only", action="store_true", help="Focused real identity/session services"
+    )
+    args = parser.parse_args()
+    if (
+        sum(
+            (
+                args.browser,
+                args.campaigns_only,
+                args.openrouter_only,
+                args.risk_only,
+                args.auth_only,
+            )
+        )
+        > 1
+    ):
+        parser.error("Choose one browser or focused native suite")
+    raise SystemExit(
+        main(
+            browser=args.browser,
+            campaigns_only=args.campaigns_only,
+            openrouter_only=args.openrouter_only,
+            risk_only=args.risk_only,
+            auth_only=args.auth_only,
+        )
+    )

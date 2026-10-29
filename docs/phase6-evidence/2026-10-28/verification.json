@@ -1,0 +1,982 @@
+{
+  "date": "2026-10-28",
+  "phase": 6,
+  "acceptance": "PARTIAL",
+  "safety": "SIMULATED/DENY_ALL",
+  "prior_phase_acceptance": "OWNER_REPORTED_PASS",
+  "commands": [
+    {
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "ai-trading-research-ai-worker:phase6",
+        "/app/.venv/bin/python",
+        "-c",
+        "import importlib.util, os; from packages.ai.settings import GatewaySettings; assert os.getuid()==10001; assert importlib.util.find_spec(\"apps\") is None; assert importlib.util.find_spec(\"packages.risk\") is None; assert importlib.util.find_spec(\"packages.research\") is None; assert not os.path.exists(\"/var/run/docker.sock\"); assert GatewaySettings().database_url is None; print(\"PASS: non-root AI image excludes API/risk/research code and Docker socket; no inherited database identity\")"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.738,
+      "output": "docs/phase6-evidence/2026-10-28/ai-image-boundary.txt",
+      "label": "ai-image-boundary"
+    },
+    {
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "ai-trading-research-ai-worker:phase6",
+        "/app/.venv/bin/python",
+        "-c",
+        "import importlib.util, os; from packages.ai.settings import GatewaySettings; assert os.getuid()==10001; assert importlib.util.find_spec(\"apps\") is None; assert importlib.util.find_spec(\"packages.risk\") is None; assert importlib.util.find_spec(\"packages.research\") is None; assert not os.path.exists(\"/var/run/docker.sock\"); assert GatewaySettings().database_url is None; print(\"PASS: isolated AI image; no API/risk/research code, Docker socket or inherited DB identity\")"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.766,
+      "output": "docs/phase6-evidence/2026-10-28/ai-image-final.txt",
+      "label": "ai-image-final"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.ai_setup"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.494,
+      "output": "docs/phase6-evidence/2026-10-28/ai-local-setup.txt",
+      "label": "ai-local-setup"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.ai",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.ai.yaml",
+        "--profile",
+        "ai",
+        "restart",
+        "ai-redis"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.428,
+      "output": "docs/phase6-evidence/2026-10-28/ai-queue-restart.txt",
+      "label": "ai-queue-restart"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 38.958,
+      "output": "docs/phase6-evidence/2026-10-28/ai-safety-final.txt",
+      "label": "ai-safety-final",
+      "environment_overrides": {
+        "PYTEST_ADDOPTS": "-k test_ai_"
+      }
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.ai",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.ai.yaml",
+        "--profile",
+        "ai",
+        "up",
+        "-d",
+        "--no-deps",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "ai-redis",
+        "ai-egress",
+        "ai-worker",
+        "api"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.52,
+      "output": "docs/phase6-evidence/2026-10-28/ai-services-fixed.txt",
+      "label": "ai-services-fixed"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.ai",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.ai.yaml",
+        "--profile",
+        "ai",
+        "up",
+        "-d",
+        "--build",
+        "--wait",
+        "--wait-timeout",
+        "180",
+        "ai-redis",
+        "ai-egress",
+        "ai-worker",
+        "api"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 5.544,
+      "output": "docs/phase6-evidence/2026-10-28/ai-services-retry.txt",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "label": "ai-services-retry"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.ai",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.ai.yaml",
+        "--profile",
+        "ai",
+        "up",
+        "-d",
+        "--build",
+        "--wait",
+        "--wait-timeout",
+        "180",
+        "ai-redis",
+        "ai-egress",
+        "ai-worker",
+        "api"
+      ],
+      "exit_code": 130,
+      "result": "INTERRUPTED_AFTER_STALLED_CONTAINER_CREATION",
+      "restored_existing_services": true,
+      "no_persistent_volumes_deleted": true,
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "output": "docs/phase6-evidence/2026-10-28/ai-services-start.txt",
+      "label": "ai-services-start"
+    },
+    {
+      "command": [
+        "docker",
+        "build",
+        "-f",
+        "deploy/ai/Dockerfile",
+        "-t",
+        "ai-trading-research-ai-worker:phase6",
+        "."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.854,
+      "output": "docs/phase6-evidence/2026-10-28/ai-worker-build.txt",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "label": "ai-worker-build"
+    },
+    {
+      "command": [
+        "docker",
+        "build",
+        "-f",
+        "deploy/ai/Dockerfile",
+        "-t",
+        "ai-trading-research-ai-worker:phase6",
+        "."
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.669,
+      "output": "docs/phase6-evidence/2026-10-28/ai-worker-build-final.txt",
+      "label": "ai-worker-build-final",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      }
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.939,
+      "output": "docs/phase6-evidence/2026-10-28/browser-collection.txt",
+      "label": "browser-collection"
+    },
+    {
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.724,
+      "output": "docs/phase6-evidence/2026-10-28/browser-collection-final.txt",
+      "label": "browser-collection-final"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 15.835,
+      "output": "docs/phase6-evidence/2026-10-28/check-accepted.txt",
+      "label": "check-accepted"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.33,
+      "output": "docs/phase6-evidence/2026-10-28/check-complete.txt",
+      "label": "check-complete"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.004,
+      "output": "docs/phase6-evidence/2026-10-28/check-fifth.txt",
+      "label": "check-fifth"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.815,
+      "output": "docs/phase6-evidence/2026-10-28/check-final.txt",
+      "label": "check-final"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.042,
+      "output": "docs/phase6-evidence/2026-10-28/check-first.txt",
+      "label": "check-first"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 14.652,
+      "output": "docs/phase6-evidence/2026-10-28/check-fourth.txt",
+      "label": "check-fourth"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 15.142,
+      "output": "docs/phase6-evidence/2026-10-28/check-release.txt",
+      "label": "check-release"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 17.272,
+      "output": "docs/phase6-evidence/2026-10-28/check-safety-final.txt",
+      "label": "check-safety-final"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 11.83,
+      "output": "docs/phase6-evidence/2026-10-28/check-second.txt",
+      "label": "check-second"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.07,
+      "output": "docs/phase6-evidence/2026-10-28/check-third.txt",
+      "label": "check-third"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.check_ai_deployment"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.137,
+      "output": "docs/phase6-evidence/2026-10-28/compose-accepted.txt",
+      "label": "compose-accepted"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.check_ai_deployment"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.088,
+      "output": "docs/phase6-evidence/2026-10-28/compose-boundary.txt",
+      "label": "compose-boundary"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.check_ai_deployment"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.171,
+      "output": "docs/phase6-evidence/2026-10-28/compose-isolation-final.txt",
+      "label": "compose-isolation-final"
+    },
+    {
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.185,
+      "output": "docs/phase6-evidence/2026-10-28/contracts-accepted.txt",
+      "label": "contracts-accepted"
+    },
+    {
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.841,
+      "output": "docs/phase6-evidence/2026-10-28/contracts-check.txt",
+      "label": "contracts-check"
+    },
+    {
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.849,
+      "output": "docs/phase6-evidence/2026-10-28/contracts-complete.txt",
+      "label": "contracts-complete"
+    },
+    {
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.282,
+      "output": "docs/phase6-evidence/2026-10-28/contracts-safety-final.txt",
+      "label": "contracts-safety-final"
+    },
+    {
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.728,
+      "output": "docs/phase6-evidence/2026-10-28/final-check.txt",
+      "label": "final-check"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.check_ai_runtime"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.401,
+      "output": "docs/phase6-evidence/2026-10-28/final-runtime.txt",
+      "label": "final-runtime"
+    },
+    {
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.198,
+      "output": "docs/phase6-evidence/2026-10-28/final-smoke.txt",
+      "label": "final-smoke"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--build",
+        "--no-deps",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.453,
+      "output": "docs/phase6-evidence/2026-10-28/final-web-refresh.txt",
+      "label": "final-web-refresh",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      }
+    },
+    {
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 265.843,
+      "output": "docs/phase6-evidence/2026-10-28/integration-complete.txt",
+      "label": "integration-complete"
+    },
+    {
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 278.719,
+      "output": "docs/phase6-evidence/2026-10-28/integration-final.txt",
+      "label": "integration-final"
+    },
+    {
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 274.337,
+      "output": "docs/phase6-evidence/2026-10-28/integration-safety-final.txt",
+      "label": "integration-safety-final"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 26.129,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-ai.txt",
+      "environment_overrides": {
+        "PYTEST_ADDOPTS": "-k test_ai_"
+      },
+      "label": "isolated-ai"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 30.056,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-ai-context.txt",
+      "environment_overrides": {
+        "PYTEST_ADDOPTS": "-k test_ai_"
+      },
+      "label": "isolated-ai-context"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 17.587,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-ai-expanded.txt",
+      "environment_overrides": {
+        "PYTEST_ADDOPTS": "-k test_ai_"
+      },
+      "label": "isolated-ai-expanded"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 35.886,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-ai-final.txt",
+      "environment_overrides": {
+        "PYTEST_ADDOPTS": "-k test_ai_"
+      },
+      "label": "isolated-ai-final"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 127.63,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-first.txt",
+      "label": "isolated-first"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.728,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-focused.txt",
+      "environment_overrides": {
+        "PYTEST_ADDOPTS": "-k test_registry_real_roundtrip"
+      },
+      "label": "isolated-focused"
+    },
+    {
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 283.206,
+      "output": "docs/phase6-evidence/2026-10-28/isolated-full.txt",
+      "label": "isolated-full"
+    },
+    {
+      "command": [
+        "make",
+        "migrate"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.683,
+      "output": "docs/phase6-evidence/2026-10-28/migrate-development.txt",
+      "label": "migrate-development"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.evaluate_ai"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.722,
+      "output": "docs/phase6-evidence/2026-10-28/offline-evaluation.txt",
+      "label": "offline-evaluation"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase6/probe_ollama.py"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.144,
+      "output": "docs/phase6-evidence/2026-10-28/ollama-final.txt",
+      "label": "ollama-final"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--build",
+        "--no-deps",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "api",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.354,
+      "output": "docs/phase6-evidence/2026-10-28/refresh-api-final.txt",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "label": "refresh-api-final"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--build",
+        "--wait",
+        "--wait-timeout",
+        "180",
+        "api",
+        "web",
+        "market-worker",
+        "research-worker",
+        "risk-monitor"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 33.218,
+      "output": "docs/phase6-evidence/2026-10-28/refresh-development.txt",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "label": "refresh-development"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--build",
+        "--no-deps",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "api",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.755,
+      "output": "docs/phase6-evidence/2026-10-28/refresh-final.txt",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "label": "refresh-final"
+    },
+    {
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "-d",
+        "--build",
+        "--no-deps",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "api",
+        "web"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 2.876,
+      "output": "docs/phase6-evidence/2026-10-28/refresh-safety-final.txt",
+      "environment_overrides": {
+        "BUILDX_CONFIG": ".cache/buildx"
+      },
+      "label": "refresh-safety-final"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        ".cache/phase6/check_running_ai.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.478,
+      "output": "docs/phase6-evidence/2026-10-28/running-ai-boundary.txt",
+      "label": "running-ai-boundary"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.check_ai_runtime"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.579,
+      "output": "docs/phase6-evidence/2026-10-28/runtime-after-restart.txt",
+      "label": "runtime-after-restart"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.check_ai_runtime"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.419,
+      "output": "docs/phase6-evidence/2026-10-28/runtime-boundary-final.txt",
+      "label": "runtime-boundary-final"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.976,
+      "output": "docs/phase6-evidence/2026-10-28/scans-accepted.txt",
+      "label": "scans-accepted"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.012,
+      "output": "docs/phase6-evidence/2026-10-28/scans-complete.txt",
+      "label": "scans-complete"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.959,
+      "output": "docs/phase6-evidence/2026-10-28/scans-final.txt",
+      "label": "scans-final"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.039,
+      "output": "docs/phase6-evidence/2026-10-28/scans-published.txt",
+      "label": "scans-published"
+    },
+    {
+      "command": [
+        "make",
+        "secret-scan",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.04,
+      "output": "docs/phase6-evidence/2026-10-28/scans-redacted.txt",
+      "label": "scans-redacted"
+    },
+    {
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.265,
+      "output": "docs/phase6-evidence/2026-10-28/smoke-accepted.txt",
+      "label": "smoke-accepted"
+    },
+    {
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.22,
+      "output": "docs/phase6-evidence/2026-10-28/smoke-final.txt",
+      "label": "smoke-final"
+    },
+    {
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.308,
+      "output": "docs/phase6-evidence/2026-10-28/smoke-recovered.txt",
+      "label": "smoke-recovered"
+    },
+    {
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.327,
+      "output": "docs/phase6-evidence/2026-10-28/smoke-release.txt",
+      "label": "smoke-release"
+    }
+  ],
+  "browser_execution": {
+    "status": "BLOCKED_MANAGED_LOCALHOST_ORIGIN",
+    "exit_code": null,
+    "executed": false,
+    "collected_cases": 22,
+    "alternate_browser_or_CDP_used": false,
+    "owner_focused_command": "E2E_ONLY_PROJECT=desktop E2E_ONLY_SCENARIO=ai make browser-integration",
+    "owner_full_command": "env -u E2E_ONLY_PROJECT -u E2E_ONLY_SCENARIO -u E2E_UPDATE_SNAPSHOTS make browser-integration"
+  },
+  "ollama_discovery": {
+    "command": [
+      ".venv/bin/python",
+      ".cache/phase6/probe_ollama.py"
+    ],
+    "exit_code": 2,
+    "result": {
+      "service": "Ollama",
+      "url": "http://127.0.0.1:11434",
+      "actual_inference_verified": false,
+      "models_downloaded": false,
+      "status": "BLOCKED_RUNTIME_UNAVAILABLE"
+    }
+  },
+  "deployment_initial_attempts": [
+    {
+      "command": "docker compose --env-file .env --env-file .env.ai -f compose.yaml -f compose.ai.yaml --profile ai create --no-deps ai-redis",
+      "exit_code": 1,
+      "reason": "create does not accept --no-deps; corrected command used"
+    },
+    {
+      "command": "docker compose --env-file .env --env-file .env.ai -f compose.yaml -f compose.ai.yaml --profile ai create ai-redis",
+      "exit_code": 255,
+      "reason": "interrupted after delayed create; completed later"
+    },
+    {
+      "command": "docker create --name ai-phase6-bind-check --network none --mount type=bind,source=PROJECT/.secrets/ai/ai-redis-acl,target=/tmp/ai-acl,readonly ai-trading-research-ai-worker:phase6 ...",
+      "exit_code": 130,
+      "reason": "interrupted minimal scoped bind diagnostic; no secret content displayed"
+    }
+  ],
+  "preservation": {
+    "approved_visual_references_unchanged": true,
+    "original_persistent_mounts_unchanged": true,
+    "development_service_health": {
+      "ai-egress": "RUNNING_NO_HEALTHCHECK",
+      "ai-redis": "healthy",
+      "ai-worker": "healthy",
+      "api": "healthy",
+      "market-worker": "healthy",
+      "minio": "healthy",
+      "postgres": "healthy",
+      "redis": "healthy",
+      "research-worker": "healthy",
+      "risk-monitor": "healthy",
+      "web": "healthy"
+    },
+    "changed_preexisting_files": [
+      "apps/web/src/navigation/sections.test.tsx",
+      "apps/web/src/navigation/sections.ts",
+      "IMPLEMENTATION_STATUS.md",
+      "Makefile",
+      "PHASE55_INFORMATION_ARCHITECTURE.md",
+      "README.md",
+      "apps/api/catalog.py",
+      "apps/api/health.py",
+      "apps/api/main.py",
+      "apps/api/research/routes.py",
+      "apps/web/src/App.tsx",
+      "apps/web/src/generated/api.ts",
+      "apps/web/src/management-api.ts",
+      "apps/web/src/navigation/routes.ts",
+      "apps/web/src/ui/product.css",
+      "docs/ARCHITECTURE.md",
+      "docs/FRONTEND_UX.md",
+      "docs/IMPLEMENTATION_STATUS.md",
+      "docs/ROADMAP.md",
+      "docs/THREAT_MODEL.md",
+      "docs/external-sources.md",
+      "docs/openapi.json",
+      "packages/domain/contracts.py",
+      "scripts/browser_acceptance.py",
+      "scripts/integration_services.py",
+      "scripts/provision_runtime.py",
+      "scripts/smoke_demo.py"
+    ]
+  },
+  "real_model_inference_verified": false,
+  "paid_resources_or_models_downloaded": false,
+  "phase7_started": false,
+  "evidence_redaction": {
+    "finding_count": 5,
+    "classification": "Explicit disposable test UUID idempotency keys, not service credentials",
+    "action": "Redacted literal diagnostic request-body keys; scan configuration unchanged",
+    "raw_secrets_published": false
+  },
+  "final_results": {
+    "make_check": {
+      "exit_code": 0,
+      "python_tests": 243,
+      "frontend_tests": 117
+    },
+    "make_integration": {
+      "exit_code": 0,
+      "infrastructure_tests": 1,
+      "before_restart": 86,
+      "after_restart": 86
+    },
+    "focused_ai": {
+      "exit_code": 0,
+      "before_restart": 8,
+      "after_restart": 8
+    },
+    "contracts": 0,
+    "secret_scan_after_evidence_redaction": 0,
+    "repository_check": 0,
+    "smoke_http": 200,
+    "local_ai_services_and_actual_boundaries": 0,
+    "real_model_inference": "BLOCKED_RUNTIME_UNAVAILABLE",
+    "browser_execution": "BLOCKED_MANAGED_LOCALHOST_ORIGIN",
+    "browser_collected": 22
+  },
+  "final_evidence_labels": {
+    "check": "final-check",
+    "integration": "integration-safety-final",
+    "contracts": "contracts-accepted",
+    "smoke": "final-smoke",
+    "running_boundary": "final-runtime",
+    "secret_and_repository_scan": "scans-published",
+    "browser_collection": "browser-collection-final",
+    "real_ollama_probe": "ollama-final"
+  }
+}

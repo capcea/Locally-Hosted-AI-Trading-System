@@ -47,6 +47,9 @@ def software_manifest() -> dict[str, Any]:
 
 
 def assert_current(db: Session, research: ResearchRun, plan: ExperimentInput) -> None:
+    from packages.campaigns.authority import assert_campaign_authority
+
+    assert_campaign_authority(db, research)
     snapshot = research.approval_snapshot
     source = db.get(TradingAccount, plan.source_account_id)
     control = db.get(AccountControl, plan.source_account_id)

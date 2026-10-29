@@ -1,6 +1,207 @@
 # Implementation Status
 
-## Current gate — mobile visual references (2026-10-28)
+## Current sidebar health repair — 2026-10-29
+
+Actual API/proxy overview200 payloads parse correctly and explicitly report all four stable
+infrastructure IDs HEALTHY. The shell compared a pre-request clock with a later completion time,
+repeatedly marking valid observations future/stale. Atomic completion timestamps, independent age
+updates, backend timestamp validation and response fencing correct this. Status/retry feedback
+retains the V1 design and separates infrastructure from trading/AI/broker capability.
+Native check294 Python/186 frontend, focused67, contracts and deployed API smoke pass.28 browser
+cases collect only; managed browser execution remains BLOCKED. Running nginx Web still needs the
+targeted owner-local rebuild; no Docker or persistent data was changed in this task. Public phase6 /
+Phase7 PLANNED are static coarse metadata, not evidence that the partially accepted Phase7A source
+is absent or that broader Phase7 is accepted. Read
+[the repair report](SIDEBAR_SYSTEM_HEALTH_FIX_REPORT.md) for evidence and verification commands.
+
+## Current MFA/session repair — 2026-10-29
+
+IMPLEMENTED / NATIVE PASSED / API AND WEB UPDATED / BROWSER BLOCKED. Invalid MFA401 was
+incorrectly clearing valid frontend authentication; late responses could discard a rotated session;
+and the new session row could be invisible when its cookie headers were sent. Each defect was
+reproduced before correction. In-place password/new-TOTP step-up now preserves the original form,
+atomically commits rotation before response, refreshes CSRF and fences stale responses. Genuine
+expiration still requires password login and MFA. No automatic sensitive-action replay occurs.
+
+`make check` passes294 Python/160 frontend cases; focused actual-service auth27+27 and full
+`make integration-services`117+117 pass across graceful restart. Contracts, deployed API smoke and
+secret/repository checks pass. API/Web were rebuilt and restarted alone; other containers and
+development volume identities are unchanged. All1357 pre-task source/evidence files are retained.
+The new browser scenario collects with the28-case desktop/mobile suite; execution is BLOCKED by
+managed browser policy, not claimed passed. No owner enrollment/session reset, financial logic,
+accepted visual reference, paid provider call or trading authority changed. Five-minute recent MFA,
+RBAC, CSRF, revocation, holdouts and SIMULATED/DENY_ALL remain enforced. Read
+[the repair report](MFA_SESSION_FLOW_FIX_REPORT.md) for exact evidence and owner-local acceptance.
+
+## Current risk-monitor recovery — 2026-10-28
+
+The owner's next Compose run recreated PostgreSQL while risk-monitor was polling; its uncaught
+connection-refused error exited the daemon. This is separate from the corrected campaign packaging.
+The monitor now reconnects within a finite six-failure budget, withdraws readiness on database loss,
+rechecks restricted identity before every scan and keeps non-transient refusals fatal. The original
+per-account scan, risk math, manual stops, authorization and freshness thresholds are unchanged.
+Actual restricted-role service startup is healthy; only risk-monitor was recreated and all
+persistent mount identities are unchanged. Native check290 Python/153 frontend and focused real
+risk27+27 across restart pass. A real disposable connection-termination test preserves the owner's
+STOP, refuses an order and validates audit integrity after recovery. Full `make integration` passes
+(exit0): readiness,108+108 across restart, final API/execution-denial smoke200. Contracts and secret/
+repository checks pass. See [the recovery report](RISK_MONITOR_RECOVERY_REPORT.md). No paid/model/browser/trading
+activity was introduced. Earlier current-phase entries below retain their checkpoint evidence.
+
+## Current local startup repair — 2026-10-28
+
+The owner applied migration0009 and rebuilt the stack. A campaign-container packaging defect is
+now repaired: the control Dockerfile omitted `scripts.campaign_worker.py`. It now copies the
+entrypoint and runs packaged `--help` during build. Actual non-root/no-network image smoke,
+targeted service start, fresh heartbeat, database read and AI isolation checks pass. Only the
+campaign worker was recreated; other container IDs and development volume identities are unchanged.
+`make check`283 Python/153 frontend, contracts, secret/repository scans and current API smoke pass.
+Full `make integration` now passes (exit0): development readiness,107 cases before/107 after restart
+and final API readiness200/execution-denial smoke. Earlier migration0008 failure/pending-deployment
+statements below preserve the prior implementation run. Real provider/browser/V1 visual acceptance
+remain open. No key entry, provider inference or trading activation occurred. See
+[startup evidence](OPENROUTER_INTEGRATION_REPORT.md#follow-up-campaign-container-startup-repair--2026-10-28).
+
+## Current follow-up — OpenRouter integration and AI settings (2026-10-28)
+
+IMPLEMENTED / ISOLATED NATIVE CHECKS PASSED / DEVELOPMENT UPGRADE PENDING / BROWSER BLOCKED /
+REAL PROVIDER NOT VERIFIED. Read [OPENROUTER_INTEGRATION_REPORT.md](OPENROUTER_INTEGRATION_REPORT.md)
+for the root cause, exact setup sequence and minimal-cost real-call approval gate.
+
+Read-only inspection confirms zero approved endpoints/connections/models, so the empty selectors
+primarily reflect missing configuration. Secondary registry loading, placeholder, protocol and
+verification-expiry defects are repaired. The existing compatible adapter now supports exact
+OpenRouter HTTPS behind independent operator opt-in, owner-MFA cloud consent, encrypted write-only
+keys, fixed egress/DNS/TLS checks, atomic spend reservations and explicit per-request cost approval.
+Private Ollama/private-compatible providers remain the default. No real provider request was made.
+
+Final `make check`:283 Python +153 frontend cases, strict native/build checks pass. Focused cloud
+services:7 before/7 after restart; full isolated services:107 before/107 after restart. Contracts,
+existing deployed API smoke and secret/repository checks pass. `make integration` remains FAILED
+(exit2): source schema0009 versus retained development0008. No development data, key files, operator
+configuration or running services were changed.26 browser cases collect; managed localhost policy
+still blocks execution. Real-model, cloud UX, network deployment and existing V1 manual/visual gates
+remain open. All1328 original source/evidence files are retained; accepted goldens unchanged.
+SIMULATED/DENY_ALL, MFA/RBAC/CSRF, holdouts, financial calculations and Phase7 research limits remain.
+No next phase, automatic code execution or broker orders.
+
+## Current phase — Phase7A bounded research foundation (2026-10-28)
+
+IMPLEMENTED / ISOLATED NATIVE CHECKS PASSED / DEVELOPMENT READINESS FAILED / EXTERNAL ACCEPTANCE OPEN. The owner explicitly
+authorized Phase7A and postponed V1 final visual acceptance. Earlier no-Phase7 statements below
+are historical evidence, superseded only for this bounded research foundation. Campaign creation,
+immutable authorization/lineage, finite candidate domains, durable budgets/leases, owner-reviewed
+Phase5/6 handoffs, canonical evidence evaluation and bounded training feedback are source-implemented.
+Testează → Campanii de cercetare adds guarded stable routes without changing primary navigation.
+There is no unattended session impersonation: original recent-MFA requirements remain.
+
+Synthetic campaigns reuse actual PostgreSQL/Redis/MinIO and original reviewed backtests/Risk Gateway.
+Fixture labels prohibit real candidacy and promotion. Actual AI mode refuses unavailable/unverified
+models; real-model inference is not accepted. Existing development services/data were not migrated,
+rebuilt or reset for this phase. Browser execution remains blocked by the prior explicit managed
+localhost-origin restriction;26 scenarios collect, which is not execution success. V1 visual/manual
+acceptance remains postponed. SIMULATED/DENY_ALL; no code runner, paper/live orders or Phase7B.
+
+Final checks pass263 Python +152 frontend cases; focused campaigns pass14 before/14 after restart;
+full isolated services pass100 before/100 after. Contracts, existing API smoke and secret/repository
+checks pass. The full `make integration` target fails its first development schema probe (expected0008,
+retained0007); it is not reported as passed. A prior MinIO clock-skew restart failure is preserved;
+the final fresh full isolated rerun passed without weakening clock checks. Exact commands and
+intermediate failures are retained in the report/evidence package.
+
+Read [the Phase7A report](PHASE7A_COMPLETION_REPORT.md),
+[architecture](AUTONOMOUS_RESEARCH_ARCHITECTURE.md), [lifecycle](RESEARCH_CAMPAIGN_LIFECYCLE.md),
+[evaluation](RESEARCH_EVALUATION_POLICY.md) and [security](RESEARCH_SECURITY_BOUNDARIES.md).
+
+
+Owner-local browser follow-up at16:33 reaches the Home visual assertion and fails against the
+old Phase5.5 reference (1280×1047 versus V1 1280×1684;237080 pixels). Available PNGs exactly match
+previously preserved pre-polish artifacts; current rendered fidelity and the full26-case suite
+remain unverified. No golden was replaced. Read the V1 final audit follow-up for fresh review
+capture commands and the required exact-image approval gate.
+
+## Current UI — V1 visual polish (2026-10-28)
+
+SOURCE REFINED / NATIVE CHECKS PASSED / FINAL VISUAL ACCEPTANCE OPEN. All nine source compositions,
+five primary destinations, S01–S42 and Phase6 routes remain. All11 approved reference PNGs were
+reinspected and14 handoff entries hash-verified. The designated nine-screen capture directory is
+missing. One genuine public Home before image in owner Playwright artifacts was inspected:
+UNKNOWN split mid-word, tall AI suggestions stretched the chart row, and heading focus spanned the
+header. Independent Home columns, a status-value style, compact suggestions, title-sized visible
+focus and shared header insets are corrected in source. No after/browser/mobile/dark acceptance.
+
+Fresh make check passes243 Python +149 frontend tests; integration passes one readiness case and86
+real isolated cases before and86 after restart. Contracts, strict readiness/order-refusal smoke,
+secret/repository checks pass.24 browser cases collect; no browser execution is claimed. A fresh
+managed localhost-origin denial prevents captures and focused/full browser execution. Preserved
+owner failure reports237080 changed pixels against an older UI golden, not against the V1 mockup.
+All four goldens remain unchanged; exact future public candidates need owner review. Web is refreshed
+and healthy. All12 non-web container identities/images/mounts and162 backend/infrastructure files
+are unchanged. No development data deletion, rule change, external orders or Phase7 implementation.
+Optional AI worker was already unhealthy; a UI change does not establish runtime connectivity.
+
+See [final audit and exact results](REDESIGN_V1_FINAL_VISUAL_AUDIT.md),
+[visual review package](docs/redesign-v1-evidence/2026-10-28/final-visual-review/index.html),
+[implementation history](REDESIGN_V1_IMPLEMENTATION_REPORT.md) and
+[visual fidelity ledger](REDESIGN_V1_VISUAL_FIDELITY.md). Remaining gates: genuine after/nine-screen
+captures, manual responsive/accessibility review, exact golden approval and all24 browser cases
+without snapshot rewriting. SIMULATED/DENY_ALL and all security/research boundaries remain.
+Earlier sections below preserve historical evidence, not current V1 rendered acceptance.
+
+## Current phase — Phase6 private AI gateway (2026-10-28)
+
+IMPLEMENTED / ACCEPTANCE PARTIAL. The owner explicitly authorized Phase6 and reports Phases0–5.5
+local automated acceptance passed (OWNER_REPORTED_PASS, not agent verification). Earlier sections
+below remain historical evidence; their previous no-Phase6 gate is superseded by that authorization.
+
+Private adapters, expiring model registry/role routing, bounded durable encrypted requests,
+read-only owner-scoped context, strict inert output contracts, separate worker SQL/Redis identities,
+additive Alembic0007, Romanian AI Center and isolated deployment templates are implemented.
+SIMULATED/DENY_ALL, MFA/CSRF/ownership, enforced risk and holdout boundaries remain. No generated-code
+execution, trading authority, broker credentials or Phase7 agents.
+
+The owner-local Phase6 desktop browser run now supplies an actual UI failure: the exact
+`Destinație aprobată` label did not resolve because nested option text polluted Playwright's label
+text. Eight AI dropdowns now have stable explicit accessible names matching their visible labels.
+Four new native regression cases fail before the correction and pass after it; the real-service
+registry test also checks authenticated approved-endpoint discovery. The browser test retains its
+exact locator and adds endpoint/value and actual HTTP201 creation assertions. No timeout, API,
+authorization, endpoint allowlist, model verification or safety rule changed. Current browser
+acceptance still requires a fresh owner-local run; see the
+[correction report](PHASE6_COMPLETION_REPORT.md#ai-dropdown-accessible-name-correction--2026-10-28).
+
+Latest portable checks pass243 Python and121 frontend tests; full native integration passes one
+readiness case and86 cases before and86 after restart. Earlier focused AI revalidation passed8 before
+and8 after restart, including actual SIGKILL and holdout/cached-context refusal. Contracts, smoke,
+secret/repository scans and22-case Playwright collection pass. Browser execution remains BLOCKED
+by the managed localhost-origin restriction. No real Ollama runtime/model is reachable; fixture
+transport evidence is explicitly SYNTHETIC, not AI model validation. Optional AI services now run locally; actual worker SQL/Redis/network isolation checks pass,
+including after queue restart. Initial create delays, stateless API-name conflict and Redis chown
+failure were recovered without restoring capabilities. All eight normal development services are healthy. Existing data mounts are unchanged; PostgreSQL container
+was recreated to add a private network. Read [the complete report](PHASE6_COMPLETION_REPORT.md),
+[architecture](AI_GATEWAY_ARCHITECTURE.md) and [deployment guide](AI_DEPLOYMENT_GUIDE.md).
+
+## Current follow-up — whole-interface tidy-up (2026-10-28)
+
+IMPLEMENTED; current rendered/browser/manual acceptance remains NOT COMPLETE. The owner requested
+a modest whole-interface refinement after the research-screen screenshot. Shared spacing/forms/
+tables/cards, task navigation and Settings grouping are tidied; research opens directly into one
+wizard. Safety presentation retains unknown/stale states, account scope and observation age, and
+calls out last-known stops. Every existing destination, owner/MFA/role guard, reviewed research
+configuration and backend rule remains. No backend/API/schema or Phase 6 change.
+
+make check passes 212 Python + 114 frontend tests; integration passes one readiness case and 78
+isolated cases before restart and 78 after. Contracts, strict readiness/execution-denial smoke and
+20-case browser collection pass (exit 0). The local web image is refreshed and its HTML/
+CSS/JS hashes match the production build. All seven non-web service identities/images/mounts and
+all four prior approved PNGs remain unchanged. Full actual verification is in the
+[UI tidy-up report](docs/UI_POLISH.md) and
+[completion follow-up](PHASE55B_COMPLETION_REPORT.md#whole-interface-uiux-tidy-up--2026-10-28).
+The earlier screenshot approvals apply to the previous presentation. Fresh actual captures need
+review for these intentional changes; no references were rewritten or browser success inferred.
+SIMULATED/DENY_ALL remains active. No Phase 6 or external execution.
+
+## Previous gate — mobile visual references (2026-10-28)
 
 MOBILE REFERENCES APPROVED; overall acceptance remains NOT COMPLETE. The latest owner run reports
 one mobile visual failure and one other passing case. The actual error-context identifies both
@@ -260,9 +461,10 @@ Implement allowlisted tools, evidence snapshots, dates and prompt-injection cont
 
 ### A13 — Nine research/review/orchestrator agent roles
 
-**MISSING.** Source: §9. Evidence: No agents package.
-
-Implement typed role outputs and independent review; test invalid/adversarial outputs.
+**PARTIALLY IMPLEMENTED.** Phase6 provides independently configured RESEARCH/CODING/CRITIC/LIGHTWEIGHT
+proposal roles, strict versioned untrusted outputs and measured provider capabilities. No autonomous
+agent runtime, nine-role orchestration or scheduler is implemented. Real-model and browser gates
+remain open; see PHASE6_COMPLETION_REPORT.md.
 
 ### A14 — Isolated code branches and controlled release promotion
 
@@ -458,9 +660,10 @@ No two-acknowledgement live flow, signed/expiring/revocable execution approval o
 
 ### A46 — LLM output validation and no critical monetary/order authority
 
-**MISSING.** Source: §0 invariants 2/9, §9. Evidence: No LLM gateway or agent runtime.
-
-Implement typed proposal-only interfaces and capability tests. Frontend response validation is not an LLM security boundary.
+**PARTIALLY IMPLEMENTED.** Phase6 implements independently validated versioned structured proposals,
+exact JSON authority/version types, bounded references, missing evidence, inert coding text, no tools
+or broker/risk authority, actual HTTP/TLS/adversarial/native isolation tests. Real installed-model
+behavior remains BLOCKED; schema validity never certifies financial truth. See AI_SECURITY_BOUNDARIES.md.
 
 ### A47 — Hardened hostile-code sandbox with quotas and immutable inputs
 
@@ -476,9 +679,10 @@ A broker-capable independently secured executor, separate signing identities and
 
 ### A49 — Identity, RBAC, MFA, sessions, CSRF, rates and authenticated streams
 
-**PARTIALLY IMPLEMENTED.** Source: §3–4, §10, §12 phase 1. Evidence: apps/api/identity implements owner bootstrap, Argon2id, TOTP/recovery/replay, sessions, RBAC, CSRF, rate limiting and revocation; real PostgreSQL security tests pass.
-
-Browser acceptance remains blocked by Chromium OS permission denial. Authenticated streams are not introduced; public deployment security is not accepted.
+**PARTIALLY IMPLEMENTED.** Existing owner bootstrap, Argon2id, TOTP/recovery/replay, sessions,
+CSRF/RBAC/rates remain. Phase6 adds bounded AI-only SSE/wait with rechecked revocation and released
+identity locks. Previous local automated acceptance is owner-reported; new managed browser execution
+is blocked by the localhost-origin restriction. Public deployment security is not accepted.
 
 ### A50 — Append-only audit, ordered events and causal decision replay
 
@@ -488,9 +692,10 @@ Stored research signal/decision/journal/fill replay is implemented; external anc
 
 ### A51 — Typed modular monolith, OpenAPI, generated TS and full domain models
 
-**PARTIALLY IMPLEMENTED.** Source: §3–4, §11, §15. Evidence: Typed Phase 1 identity and governance schemas, scoped repositories, PostgreSQL models/migration and generated OpenAPI/TypeScript are implemented.
-
-Dataset, execution/journal, risk/reservation and research/experiment models are implemented; AI/paper/live lifecycle models remain future scope.
+**PARTIALLY IMPLEMENTED.** Typed modular APIs, scoped repositories, immutable versions and generated
+OpenAPI/TypeScript now include Phase6 question/proposal/critique/inert-code/metadata schemas and nine
+AI lifecycle tables. Dataset, execution/journal, risk/reservation and research/experiment models remain.
+Paper/live lifecycle models and autonomous agents remain future scope.
 
 ### A52 — PostgreSQL/Alembic, Redis, MinIO and runnable local containers
 
@@ -500,9 +705,10 @@ This classification covers the runnable local stack. Fresh-machine rebuild, prod
 
 ### A53 — Durable jobs, retries, orchestration, quotas and crash recovery
 
-**PARTIALLY IMPLEMENTED.** Source: §3, §9, §12. Evidence: Fixed ingestion jobs use PostgreSQL durable outbox, Redis hints, idempotency, bounded slots, progress/cancel/backoff and tested process-kill/lease recovery.
-
-Fixed trusted research jobs now add PG leases/fencing, two slots, bounded CPU/RAM/time/rows/results, cancellation and actual SIGKILL/retry. Autonomous scheduling, GPU quotas and generated-code execution remain absent.
+**PARTIALLY IMPLEMENTED.** Fixed ingestion/research jobs retain durable claims, immutable inputs,
+cancellation and crash tests. Phase6 adds separate AI SQL/Redis identities, quotas, bounded retries,
+lease fencing and UNKNOWN after uncertain dispatch; actual worker SIGKILL does not repeat inference.
+No autonomous research graph or generated-code executor is implemented.
 
 ### A54 — Private Ollama gateway, exact model digests and provider portability
 
@@ -512,15 +718,18 @@ Implement authenticated private gateway, pinned models/prompts/runtime and schem
 
 ### A55 — GPU allocation, sequential model loading and enforceable cost budgets
 
-**MISSING.** Source: §1, §9, §13. Evidence: No GPU host, scheduler or cost telemetry.
-
-Measure VRAM/context limits and cost rates; enforce per-agent/monthly quotas before any paid continuous operation.
+**PARTIALLY IMPLEMENTED.** Phase6 enforces at most two global inference slots, context/output/time/
+byte/request quotas and optional cost estimates from actual usage plus configured rates. GPU/VRAM,
+monthly monetary enforcement, model unloading/scheduling and real GPU cost telemetry are NOT VERIFIED
+or NOT IMPLEMENTED; unknown remains unknown. No paid infrastructure was started.
 
 ### A56 — Complete Romanian dashboard, labs, execution/replay/settings and mobile UX
 
-**PARTIALLY IMPLEMENTED.** Evidence: Romanian real-API Risk Center now includes scoped profiles, exact policy verification, financial/calendar context, what-if, headrooms/decisions/reservations/incidents and STOP/CLEAR/FLATTEN; global emergency banner added.
-
-Strategy Lab now uses real stored experiments/results/replay/comparison APIs; current16-case desktop/mobile acceptance is BLOCKED by managed Chromium launch. Prior14-case local acceptance is owner-reported. AI/paper labs remain absent.
+**PARTIALLY IMPLEMENTED.** Five-destination Romanian UX preserves real research, data, broker
+observation and risk controls. Phase6 adds AI question/registry/role/status/structured result/critic/
+cancel/privacy views under Testează and Setări. Previous Phases0–5.5 automated acceptance is
+OWNER_REPORTED_PASS; current22 desktop/mobile cases collect but are not executed here. Manual
+accessibility, rendered AI and visual review remain open. Paper/live labs remain absent.
 
 ### A57 — Telegram/email incidents and authenticated emergency commands
 
@@ -530,18 +739,23 @@ Telegram/email delivery and notification credentials/receipt tests are NOT IMPLE
 
 ### A58 — JSON logs, tracing, metrics, incidents and cost observability
 
-**PARTIALLY IMPLEMENTED.** Source: §3, §9–10, §13. Evidence: Sanitized request logs/readiness, durable incident records and governance audit exist.
-
-Data job progress and synthetic native ingestion/query benchmarks are measured. No tracing/metrics pipeline, cost service, notification delivery or operational incident automation.
+**PARTIALLY IMPLEMENTED.** Sanitized logs/readiness, ordered governance audit and risk incidents
+remain. AI adds immutable events/provenance, measured latency, provider-reported usage and explicitly
+unknown cost/GPU fields. No general tracing/metrics pipeline, billing service or notification delivery.
+Real-model metrics and deployed GPU monitoring remain unverified.
 
 ### A59 — Cloud/local deployment, private channels, backups and restore
 
-**MISSING.** Source: §9, §12 phase 10, §13. Evidence: Only deploy/minio exists; docs/RUNBOOKS.md describes future work.
-
-Implement cloud/local/Windows runbooks and scripts, private TLS identities, encrypted off-host backups and measured restore/migration rehearsal.
+**PARTIALLY IMPLEMENTED.** Phase6 adds whitelist worker/proxy images, internal-network Compose
+overlay, scoped secrets/queue, private TLS/SSH portability guide and private pre-migration local backup.
+Image/configuration/native TLS and running-container/queue-restart checks pass. Initial startup
+failures were fixed; private local AI services are running with no model. Vast/remote deployment, full live firewall and off-host encrypted restore remain unverified. No paid
+host was provisioned. See AI_DEPLOYMENT_GUIDE.md.
 
 ### A60 — Release gates, property/fault/integration/E2E/security tests and documentation
 
-**PARTIALLY IMPLEMENTED.** Evidence: Phase 5 portable/frontend/contracts and real-service research/risk/execution regressions pass; exact current commands and browser failures are in PHASE5_COMPLETION_REPORT.md and its execution ledger.
-
-Current managed browser launch remains blocked; remote CI, container vulnerability/SBOM, production-load and full restore acceptance remain NOT RUN.
+**PARTIALLY IMPLEMENTED.** Phase6 portable/frontend/contracts, actual isolated service regressions,
+strict smoke, source secret scan and repository checks pass.22 Playwright cases collect; execution is
+BLOCKED by managed localhost-origin permissions. Owner-reported earlier acceptance is retained
+separately. Real Ollama, remote CI/SBOM/vulnerability/load and off-host
+restore acceptance remain open. Exact commands/exits: PHASE6_COMPLETION_REPORT.md.

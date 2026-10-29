@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-28",
+  "owner_terminal_screenshot": "16:33:22 local",
+  "owner_reported_changed_pixels": 237080,
+  "owner_reported_backend_failures": [],
+  "inspection": "Expected Phase5.5 shell versus received V1 composition. Actual also shows already-source-corrected pre-polish chart stretch and wrapped UNKNOWN.",
+  "fresh_render_verified": false,
+  "accepted_references_modified": false,
+  "artifacts": [
+    {
+      "artifact": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-actual.png",
+      "dimensions": [
+        1280,
+        1684
+      ],
+      "modified_utc": "2026-10-28T09:56:53.482816+00:00",
+      "sha256": "ef21fff9394385e5ac6a2c27a5c88fb706006944a3238c61e2a4eefec4ac6472",
+      "identical_to_preserved_pre_polish": true
+    },
+    {
+      "artifact": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-expected.png",
+      "dimensions": [
+        1280,
+        1047
+      ],
+      "modified_utc": "2026-10-28T09:56:53.481386+00:00",
+      "sha256": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+      "identical_to_preserved_pre_polish": true
+    },
+    {
+      "artifact": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-diff.png",
+      "dimensions": [
+        1280,
+        1684
+      ],
+      "modified_utc": "2026-10-28T09:56:53.482974+00:00",
+      "sha256": "7fb82c9f3c9dbb55eeec9612dbaa4f7f36a7ca97da36ea94a521cf474cd00760",
+      "identical_to_preserved_pre_polish": true
+    }
+  ]
+}

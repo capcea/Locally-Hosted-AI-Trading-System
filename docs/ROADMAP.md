@@ -35,9 +35,11 @@ item, interface or documentation exists. Phase transitions require working code 
    independent event-driven simulation with bid/ask, costs,
    lifecycle trace, gap semantics, deterministic replay and independent baselines. Include OOS,
    walk-forward, uncertainty and multiple-testing corrections; never fabricate history.
-6. **Model gateway and research graph:** private authenticated Ollama, verified exact model digests,
-   schema validation, bounded tools, cost quotas and isolated code artifacts. Prove generated code
-   cannot read secrets, contact executor services or merge governance changes.
+6. **Private model gateway — implemented/native-tested, acceptance PARTIAL:** three explicit private
+   adapter protocols, measured capabilities, independent role routing, typed untrusted outputs,
+   bounded durable requests and context, separate worker identities and Romanian AI Center.
+   Real Ollama unavailable, optional scoped bind startup stalled, managed browser acceptance blocked.
+   No generated-code execution, model tools or research agents. See ../PHASE6_COMPLETION_REPORT.md.
 7. **Autonomous research and ML:** scheduled hypotheses, baseline comparisons, leakage checks,
    sandbox tests, reproducible experiments and independent statistical/risk critique. Demonstrate a
    clearly labeled synthetic sample pipeline and reject insufficient/overfit evidence.
@@ -55,5 +57,6 @@ item, interface or documentation exists. Phase transitions require working code 
 Phase 5 current implementation supersedes the earlier planned-only description: fixed baselines,
 Arrow screening, event-journal/gateway validation, immutable experiments, walk-forward/uncertainty,
 protected final release and Strategy Lab. Acceptance still requires the actual current test evidence.
-Phase 6 is the recommended NEXT module only after Phase 5 acceptance and a separate request: a bounded
-private AI gateway with typed untrusted outputs and no execution/generated-code capability.
+The owner reports Phases0–5.5 automated acceptance and explicitly authorized Phase6. Its bounded
+gateway implementation does not close remaining real-inference/deployment/browser gates.
+Next action: close those gates and manual review. Phase7 is not started and requires separate scope.

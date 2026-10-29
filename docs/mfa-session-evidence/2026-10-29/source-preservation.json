@@ -1,0 +1,20 @@
+{
+  "original_file_count": 1357,
+  "missing_files": [],
+  "changed_existing_files": [
+    "IMPLEMENTATION_STATUS.md",
+    "apps/api/identity/dependencies.py",
+    "apps/api/identity/routes.py",
+    "apps/web/src/App.tsx",
+    "apps/web/src/Management.tsx",
+    "apps/web/src/auth/AuthProvider.tsx",
+    "apps/web/src/management-api.test.ts",
+    "apps/web/src/management-api.ts",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "scripts/browser_acceptance.py",
+    "scripts/integration_services.py"
+  ],
+  "unchanged_count": 1346,
+  "accepted_visual_references_unchanged": true,
+  "financial_risk_execution_research_campaign_ai_logic_unchanged": true
+}

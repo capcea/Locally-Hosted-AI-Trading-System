@@ -1,0 +1,154 @@
+.venv/bin/python -m ruff check .
+All checks passed!
+.venv/bin/python -m ruff format --check .
+239 files already formatted
+npm --prefix apps/web run lint
+
+> trading-research-web@0.1.0 lint
+> eslint . --max-warnings 0 && prettier --check .
+
+Checking formatting...
+All matched files use Prettier code style!
+.venv/bin/python -m mypy
+Success: no issues found in 151 source files
+npm --prefix apps/web run typecheck
+
+> trading-research-web@0.1.0 typecheck
+> tsc -b --pretty false
+
+.venv/bin/python -m pytest -m 'not infrastructure and not isolated_services'
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0
+rootdir: /Users/andy/Documents/ChatGPT/Sistem Trade Ai
+configfile: pyproject.toml
+testpaths: tests
+plugins: hypothesis-6.170.9, anyio-4.15.1, platformdirs-4.13.5
+collected 314 items / 84 deselected / 230 selected
+
+tests/test_ai_http.py ..................                                 [  7%]
+tests/test_audit_regressions.py ..F...F                                  [ 10%]
+tests/test_bootstrap.py ....                                             [ 12%]
+tests/test_bridge_tls.py .                                               [ 13%]
+tests/test_broker_contracts.py .........................                 [ 23%]
+tests/test_execution_engine.py ......................                    [ 33%]
+tests/test_health.py ..........                                          [ 37%]
+tests/test_identity_crypto.py ....                                       [ 39%]
+tests/test_identity_setup.py ..                                          [ 40%]
+tests/test_integration_guards.py ...............................         [ 53%]
+tests/test_market_time_quality.py .................                      [ 61%]
+tests/test_migrations.py ..                                              [ 62%]
+tests/test_research_math.py .............................                [ 74%]
+tests/test_risk_math.py ...............................                  [ 88%]
+tests/test_safety.py ...........................                         [100%]
+
+=================================== FAILURES ===================================
+__________________ test_smoke_fails_on_server_error_readiness __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10adf8a40>
+client = <starlette.testclient.TestClient object at 0x10ae420c0>
+
+    def test_smoke_fails_on_server_error_readiness(
+        monkeypatch: pytest.MonkeyPatch, client: TestClient
+    ) -> None:
+        overview = client.get("/api/v1/overview").json()
+    
+        def handler(request: httpx.Request) -> httpx.Response:
+            match request.url.path:
+                case "/health/live":
+                    return httpx.Response(
+                        200, json={"mode": "SIMULATED", "version": "0.1.0", "status": "ok"}
+                    )
+                case "/api/v1/safety":
+                    return httpx.Response(200, json=SafetyState().model_dump(mode="json"))
+                case "/api/v1/overview":
+                    return httpx.Response(200, json=overview)
+                case "/health/ready":
+                    return httpx.Response(500, json={"detail": "unhandled error"})
+                case _:
+                    return httpx.Response(403, json={"detail": "disabled"})
+    
+        install_http_mock(monkeypatch, handler)
+>       with pytest.raises((RuntimeError, httpx.HTTPStatusError), match="readiness|500"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'readiness|500'
+E         Actual message: 'Unexpected application; denial probes refused'
+
+tests/test_audit_regressions.py:63: AssertionError
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:30:06.387508+00:00", "request_id": "755fbaef-1703-4568-9de1-e63588be8310", "method": "GET", "status": 200, "duration_ms": 68}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:30:06.387508+00:00", "request_id": "755fbaef-1703-4568-9de1-e63588be8310", "method": "GET", "status": 200, "duration_ms": 68}
+_________________ test_smoke_accepts_honest_degraded_local_app _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ae400e0>
+client = <starlette.testclient.TestClient object at 0x10b8b3d10>
+capsys = <_pytest.capture.CaptureFixture object at 0x10b8b16d0>
+
+    def test_smoke_accepts_honest_degraded_local_app(
+        monkeypatch: pytest.MonkeyPatch, client: TestClient, capsys: pytest.CaptureFixture[str]
+    ) -> None:
+        def handler(request: httpx.Request) -> httpx.Response:
+            response = client.request(request.method, request.url.path)
+            return httpx.Response(response.status_code, json=response.json())
+    
+        install_http_mock(monkeypatch, handler)
+>       smoke("http://127.0.0.1:18000", False)
+
+tests/test_audit_regressions.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+base_url = 'http://127.0.0.1:18000', require_ready = False
+
+    def smoke(base_url: str, require_ready: bool) -> None:
+        validate_local_target(base_url)
+        with httpx.Client(
+            base_url=base_url, timeout=15, trust_env=False, follow_redirects=False
+        ) as client:
+            live = client.get("/health/live")
+            live.raise_for_status()
+            if live.json() != {"status": "ok", "mode": "SIMULATED", "version": "0.1.0"}:
+                raise RuntimeError("Unexpected application or execution environment")
+            safety_response = client.get("/api/v1/safety")
+            safety_response.raise_for_status()
+            safety_data = safety_response.json()
+            if not isinstance(safety_data, dict) or set(safety_data) != set(SafetyState.model_fields):
+                raise RuntimeError("Incomplete safety contract; no denial probes will be sent")
+            SafetyState.model_validate_json(safety_response.content, strict=True)
+            for flag in (
+                "live_trading_enabled",
+                "order_submission_enabled",
+                "generated_code_execution",
+            ):
+                if safety_data[flag] is not False:
+                    raise RuntimeError("Execution is not explicitly disabled")
+            overview = client.get("/api/v1/overview")
+            overview.raise_for_status()
+            snapshot = Overview.model_validate_json(overview.content)
+            if (
+                snapshot.phase not in {0, 1, 2, 3, 4, 5}
+                or snapshot.application != "AI Trading Research Platform"
+            ):
+>               raise RuntimeError("Unexpected application; denial probes refused")
+E               RuntimeError: Unexpected application; denial probes refused
+
+scripts/smoke_demo.py:55: RuntimeError
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:30:06.462888+00:00", "request_id": "00a145be-e36d-45a1-bdce-2354df932b7b", "method": "GET", "status": 200, "duration_ms": 22}
+{"event": "http_request", "timestamp": "2026-10-28T00:30:06.464561+00:00", "request_id": "6a68dad4-d644-4d85-9f86-896bf571c741", "method": "GET", "status": 200, "duration_ms": 0}
+{"event": "http_request", "timestamp": "2026-10-28T00:30:06.466259+00:00", "request_id": "ca179205-6052-4138-9c1a-180ef986a6de", "method": "GET", "status": 200, "duration_ms": 1}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:30:06.462888+00:00", "request_id": "00a145be-e36d-45a1-bdce-2354df932b7b", "method": "GET", "status": 200, "duration_ms": 22}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:30:06.464561+00:00", "request_id": "6a68dad4-d644-4d85-9f86-896bf571c741", "method": "GET", "status": 200, "duration_ms": 0}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:30:06.466259+00:00", "request_id": "ca179205-6052-4138-9c1a-180ef986a6de", "method": "GET", "status": 200, "duration_ms": 1}
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_audit_regressions.py::test_smoke_fails_on_server_error_readiness
+FAILED tests/test_audit_regressions.py::test_smoke_accepts_honest_degraded_local_app
+=========== 2 failed, 228 passed, 84 deselected, 1 warning in 5.99s ============
+make: *** [test] Error 1

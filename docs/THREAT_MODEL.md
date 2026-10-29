@@ -1,4 +1,12 @@
-# Threat model — Phase 1 local control plane
+# Threat model — Phase 6 follow-up
+
+Phase6 adds untrusted model content, temporary research context and private inference credentials.
+The inference worker receives only AI-scoped SQL/Redis/content-key identities and preauthorized
+minimized context. It cannot read identity/research/risk tables or execute generated code. Actual
+native grant/ACL/refusal/fencing/holdout tests pass; model semantics, deployed remote network isolation and
+browser acceptance have separate open gates. Read
+[AI_SECURITY_BOUNDARIES.md](../AI_SECURITY_BOUNDARIES.md) for controls and residual risks.
+The following existing control-plane threat assumptions continue to apply.
 
 Assets include passwords, encrypted MFA seeds, recovery/session hashes, private bootstrap/HMAC keys,
 account/policy/risk metadata, audit integrity, local service credentials and source/lock integrity.

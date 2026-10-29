@@ -159,3 +159,14 @@ where applicable; it does not close a browser or assistive-technology gate.
 10. Native/build/contract checks executed; browser and manual acceptance remain BLOCKED.
 
 Sequence reflects dependencies, not a claim that all acceptance gates have closed. No Phase6.
+
+## Approved V1 redesign preservation — 2026-10-28
+
+All S01–S42 destinations above remain reachable under the same guard/API boundaries. No old route,
+advanced action, replay section, policy/provenance view or final-release control was removed. V1
+adds the navy/light shell, Home and research/result/account/AI/platform compositions, finite aliases,
+scoped destination search, actual-library/history filters and per-screen safe empty states. Phase6
+analysis/job/registry routes remain. The new24-case collection includes all previous22 assertions
+plus two additional real-service V1 workflows; collection is not execution. U01–U24 visual/manual
+closure is not inferred. See ../REDESIGN_V1_IMPLEMENTATION_REPORT.md for files, exact native checks,
+source-only completion and the remaining managed-browser/golden/accessibility gates.

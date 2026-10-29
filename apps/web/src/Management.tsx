@@ -143,11 +143,14 @@ export function Authentication({
   const authenticate = (event: FormEvent) => {
     event.preventDefault();
     void act(async () => {
+      const password = fields.password,
+        bootstrap = fields.bootstrap_token;
+      setFields((current) => ({ ...current, password: '', bootstrap_token: '', code: '' }));
       const result = await api<unknown>(initialized ? '/auth/login' : '/auth/bootstrap', {
         method: 'POST',
         body: initialized
-          ? { username: fields.username, password: fields.password }
-          : { ...fields, code: undefined },
+          ? { username: fields.username, password }
+          : { ...fields, password, bootstrap_token: bootstrap, code: undefined },
       });
       setFields({ ...fields, password: '', bootstrap_token: '', code: '' });
       setSession(parseSession(result));
@@ -156,10 +159,12 @@ export function Authentication({
   const confirm = (recover = false) =>
     act(async () => {
       if (!session) return;
+      const code = fields.code;
+      setFields((current) => ({ ...current, code: '' }));
       if (session.state === 'ENROLLMENT') {
         const result = await api<{ session: unknown; recovery_codes: string[] }>(
           '/auth/mfa/confirm',
-          { method: 'POST', csrf: session.csrf_token, body: { code: fields.code } },
+          { method: 'POST', csrf: session.csrf_token, body: { code } },
         );
         setRecovery(result.recovery_codes);
         setPendingSession(parseSession(result.session));
@@ -168,7 +173,7 @@ export function Authentication({
         const result = await api<unknown>(recover ? '/auth/mfa/recover' : '/auth/mfa/verify', {
           method: 'POST',
           csrf: session.csrf_token,
-          body: { code: fields.code },
+          body: { code },
         });
         setSession(parseSession(result));
       }
@@ -520,7 +525,8 @@ export function Security({
       <ErrorNotice error={error} />
       {notice && <p role="status">{notice}</p>}
       <p>
-        {session.user.username} · {session.user.role} · MFA verificat
+        {session.user.username} · {session.user.role} · Sesiune autentificată în doi pași. Acțiunile
+        sensibile cer o verificare recentă.
       </p>
       {mode === 'personal' && (
         <>
@@ -529,10 +535,13 @@ export function Security({
             onSubmit={(event) => {
               event.preventDefault();
               void act(async () => {
+                const password = fields.password,
+                  code = fields.code;
+                setFields((current) => ({ ...current, password: '', code: '' }));
                 const result = await api('/auth/reauthenticate', {
                   method: 'POST',
                   csrf: session.csrf_token,
-                  body: { password: fields.password, code: fields.code },
+                  body: { password, code },
                 });
                 setFields({ ...fields, password: '', code: '' });
                 setSession(parseSession(result));
@@ -1040,7 +1049,11 @@ export default function Management({ initialSection = 'accounts' }: { initialSec
           initialSection={initialSection}
         />
       ) : (
-        <Authentication session={session} setSession={setSession} />
+        <Authentication
+          key={session?.session_id ?? 'anonymous'}
+          session={session}
+          setSession={setSession}
+        />
       )}
     </div>
   );

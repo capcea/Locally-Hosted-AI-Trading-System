@@ -1,0 +1,154 @@
+ Image ai-trading-research-web Building 
+ Image ai-trading-research-api Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.04kB done
+#1 DONE 0.0s
+
+#2 [api internal] load build definition from Dockerfile
+#2 transferring dockerfile: 897B done
+#2 DONE 0.0s
+
+#3 [web internal] load build definition from Dockerfile
+#3 transferring dockerfile: 500B done
+#3 DONE 0.0s
+
+#4 [web internal] load metadata for docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#4 ...
+
+#5 [web internal] load metadata for docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#5 DONE 0.7s
+
+#4 [web internal] load metadata for docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#4 DONE 0.7s
+
+#6 [web internal] load .dockerignore
+#6 transferring context: 108B done
+#6 DONE 0.0s
+
+#7 [web internal] load build context
+#7 DONE 0.0s
+
+#8 [api internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#8 DONE 0.8s
+
+#9 [api internal] load .dockerignore
+#9 transferring context: 293B done
+#9 DONE 0.0s
+
+#10 [api internal] load build context
+#10 DONE 0.0s
+
+#11 [api  1/13] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#11 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#11 ...
+
+#12 [web build 1/6] FROM docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#12 resolve docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f 0.4s done
+#12 DONE 0.4s
+
+#7 [web internal] load build context
+#7 transferring context: 248.95kB 0.0s done
+#7 DONE 0.0s
+
+#13 [web stage-1 1/3] FROM docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#13 resolve docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0 0.4s done
+#13 DONE 0.4s
+
+#14 [web build 6/6] RUN npm run build
+#14 CACHED
+
+#15 [web build 4/6] RUN npm ci --no-audit --no-fund
+#15 CACHED
+
+#16 [web stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#16 CACHED
+
+#17 [web build 5/6] COPY . .
+#17 CACHED
+
+#18 [web build 2/6] WORKDIR /app
+#18 CACHED
+
+#19 [web build 3/6] COPY package.json package-lock.json ./
+#19 CACHED
+
+#20 [web stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#20 CACHED
+
+#11 [api  1/13] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#11 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.4s done
+#11 DONE 0.4s
+
+#10 [api internal] load build context
+#10 transferring context: 51.16kB 0.0s done
+#10 DONE 0.0s
+
+#21 [web] exporting to image
+#21 exporting layers done
+#21 exporting manifest sha256:663b52badb51be145ef337b81cbf111c85c55983a3302419981a5cfca74b3c4a done
+#21 exporting config sha256:ad55efc58c5768a7ad5415540aed01d9dd33dc2258b01f460159f3e2b5e03fe6 done
+#21 exporting attestation manifest sha256:4912841532ce6892d7f668fd50b462c7df9ebed1c14f8ac573f743a53ce4e50b done
+#21 exporting manifest list sha256:2bad8a85b8e9506037b832199f296146e280715386c83cbdabe83e2eda649606 done
+#21 naming to docker.io/library/ai-trading-research-web:latest done
+#21 unpacking to docker.io/library/ai-trading-research-web:latest done
+#21 DONE 0.1s
+
+#22 [api  2/13] WORKDIR /app
+#22 CACHED
+
+#23 [api  3/13] RUN pip install --no-cache-dir uv==0.13.5
+#23 CACHED
+
+#24 [api  4/13] COPY pyproject.toml uv.lock ./
+#24 CACHED
+
+#25 [api  5/13] RUN uv sync --frozen --no-dev --no-cache
+#25 CACHED
+
+#26 [api  6/13] COPY apps/api apps/api
+#26 DONE 0.0s
+
+#27 [api  7/13] COPY apps/__init__.py apps/__init__.py
+#27 DONE 0.0s
+
+#28 [web] resolving provenance for metadata file
+#28 DONE 0.0s
+
+#29 [api  8/13] COPY packages packages
+#29 DONE 0.0s
+
+#30 [api  9/13] COPY workers workers
+#30 DONE 0.0s
+
+#31 [api 10/13] COPY migrations migrations
+#31 DONE 0.0s
+
+#32 [api 11/13] COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/provision_market.py scripts/market_worker.py scripts/risk_monitor.py scripts/research_worker.py scripts/
+#32 DONE 0.0s
+
+#33 [api 12/13] COPY alembic.ini ./
+#33 DONE 0.0s
+
+#34 [api 13/13] RUN useradd --uid 10001 --create-home app
+#34 DONE 0.2s
+
+#35 [api] exporting to image
+#35 exporting layers 0.1s done
+#35 exporting manifest sha256:80dc99027366cea6402c3c0b57e0226bd43208659fc986fef10a3ca0de69dd49 done
+#35 exporting config sha256:9f67653f2f98a6f0ee07b2025503d47224aaff44480351459b67edf57f5475b0 done
+#35 exporting attestation manifest sha256:1572ada664f73c224e519e0e604d802192538cfdddba18ced328aa52129eac85 done
+#35 exporting manifest list sha256:44b7239454b0d31f2e2b19148caaf84908cff2b5b98416fb65950717281c9430 done
+#35 naming to docker.io/library/ai-trading-research-api:latest done
+#35 unpacking to docker.io/library/ai-trading-research-api:latest 0.1s done
+#35 DONE 0.3s
+
+#36 [api] resolving provenance for metadata file
+#36 DONE 0.0s
+ Image ai-trading-research-api Built 
+ Image ai-trading-research-web Built 
+time="2026-10-28T02:57:46+02:00" level=warning msg="Found orphan containers (ai-trading-research-ai-redis-1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container ai-trading-research-web-1 Running 
+ Container 4e4342c75046_ai-trading-research-api-1 Recreate 
+ Container ai-trading-research-api-1 Stopping 
+ Container 4e4342c75046_ai-trading-research-api-1 Error response from daemon: Error when allocating new name: Conflict. The container name "/ai-trading-research-api-1" is already in use by container "24910cfd07d8ebeb42757d28e8a8468b755d935d3339235c616e79b7bc64722f". You have to remove (or rename) that container to be able to reuse that name. 
+Error response from daemon: Error when allocating new name: Conflict. The container name "/ai-trading-research-api-1" is already in use by container "24910cfd07d8ebeb42757d28e8a8468b755d935d3339235c616e79b7bc64722f". You have to remove (or rename) that container to be able to reuse that name.

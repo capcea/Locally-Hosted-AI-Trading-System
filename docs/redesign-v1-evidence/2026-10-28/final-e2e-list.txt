@@ -1,0 +1,30 @@
+
+> trading-research-web@0.1.0 test:e2e
+> playwright test --list
+
+Listing tests:
+  [desktop] › phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login
+  [desktop] › phase2.spec.ts:18:1 › market data imports persist, pass quality and display only available stored prices
+  [desktop] › phase3.spec.ts:17:1 › synthetic orders persist, deduplicate, reconcile uncertainty and keep external execution denied
+  [desktop] › phase4.spec.ts:5:1 › risk profiles, what-if, reservations and durable owner emergency controls use real APIs
+  [desktop] › phase5.spec.ts:5:1 › Strategy Lab persists real admitted-data experiments, risk-approved trades, replay and cancellation
+  [desktop] › phase6.spec.ts:4:1 › private AI setup, measured HTTP fixture, structured unverified analysis and safe cancellation
+  [desktop] › platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap
+  [desktop] › platform.spec.ts:38:1 › API outage is explicit and clears confidence in previous health
+  [desktop] › platform.spec.ts:50:1 › orders and activation remain refused through frontend proxy
+  [desktop] › redesign-v1.spec.ts:6:1 › approved V1 nine screens retain real setup, scoped search, navigation and responsive safety
+  [desktop] › ux-visual.spec.ts:3:1 › non-secret public Home has reviewed light/dark visual baselines and reflows
+  [desktop] › ux-workflows.spec.ts:5:1 › independent safety, reviewed setup, guarded routes, keyboard review and viewer isolation
+  [mobile] › phase1.spec.ts:18:1 › owner setup, MFA, persistent account/risk/policy management, settings, audit and login
+  [mobile] › phase2.spec.ts:18:1 › market data imports persist, pass quality and display only available stored prices
+  [mobile] › phase3.spec.ts:17:1 › synthetic orders persist, deduplicate, reconcile uncertainty and keep external execution denied
+  [mobile] › phase4.spec.ts:5:1 › risk profiles, what-if, reservations and durable owner emergency controls use real APIs
+  [mobile] › phase5.spec.ts:5:1 › Strategy Lab persists real admitted-data experiments, risk-approved trades, replay and cancellation
+  [mobile] › phase6.spec.ts:4:1 › private AI setup, measured HTTP fixture, structured unverified analysis and safe cancellation
+  [mobile] › platform.spec.ts:10:1 › browse real status, filter services, inspect governance and roadmap
+  [mobile] › platform.spec.ts:38:1 › API outage is explicit and clears confidence in previous health
+  [mobile] › platform.spec.ts:50:1 › orders and activation remain refused through frontend proxy
+  [mobile] › redesign-v1.spec.ts:6:1 › approved V1 nine screens retain real setup, scoped search, navigation and responsive safety
+  [mobile] › ux-visual.spec.ts:3:1 › non-secret public Home has reviewed light/dark visual baselines and reflows
+  [mobile] › ux-workflows.spec.ts:5:1 › independent safety, reviewed setup, guarded routes, keyboard review and viewer isolation
+Total: 24 tests in 10 files

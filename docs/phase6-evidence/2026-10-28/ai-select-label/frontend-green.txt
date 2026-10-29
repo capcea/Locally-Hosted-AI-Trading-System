@@ -1,0 +1,13 @@
+
+> trading-research-web@0.1.0 test
+> vitest run src/ai/ai.test.tsx
+
+
+ RUN  v5.0.5 /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web
+
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  10:18:52
+   Duration  173ms (import 55%, transform 32%, tests 12%, worker 2%)
+

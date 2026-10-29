@@ -1,0 +1,95 @@
+ Image ai-trading-research-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 572B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 500B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#3 DONE 0.7s
+
+#4 [internal] load metadata for docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#4 DONE 0.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 108B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [build 1/6] FROM docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#7 resolve docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#7 resolve docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f 0.4s done
+#7 DONE 0.4s
+
+#6 [internal] load build context
+#6 transferring context: 572.76kB 0.0s done
+#6 DONE 0.0s
+
+#8 [build 2/6] WORKDIR /app
+#8 CACHED
+
+#9 [build 3/6] COPY package.json package-lock.json ./
+#9 CACHED
+
+#10 [build 4/6] RUN npm ci --no-audit --no-fund
+#10 CACHED
+
+#11 [stage-1 1/3] FROM docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#11 resolve docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0 0.5s done
+#11 DONE 0.5s
+
+#12 [build 5/6] COPY . .
+#12 DONE 0.1s
+
+#13 [build 6/6] RUN npm run build
+#13 0.230 
+#13 0.230 > trading-research-web@0.1.0 build
+#13 0.230 > tsc -b && vite build
+#13 0.230 
+#13 4.504 vite v8.3.5 building client environment for production...
+#13 4.511 transforming...
+#13 4.796 ✓ 2070 modules transformed.
+#13 4.845 rendering chunks...
+#13 4.881 computing gzip size...
+#13 4.886 dist/index.html                   0.70 kB │ gzip:   0.42 kB
+#13 4.886 dist/assets/index-CyFjDCeU.css   70.49 kB │ gzip:  14.45 kB
+#13 4.886 dist/assets/index-hB54v2jk.js   557.57 kB │ gzip: 166.02 kB
+#13 4.886 
+#13 4.887 [plugin builtin:vite-reporter] 
+#13 4.887 (!) Some chunks are larger than 500 kB after minification. Consider:
+#13 4.887 - Using dynamic import() to code-split the application
+#13 4.887 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#13 4.887 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#13 4.887 ✓ built in 382ms
+#13 DONE 5.0s
+
+#14 [stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#14 CACHED
+
+#15 [stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.0s done
+#16 exporting manifest sha256:6b6d403b50d248648b9a3e96fbbaf2f788f6875cca5c09e1d66663ba782f01d7 0.0s done
+#16 exporting config sha256:44938028aad49447f7672485600d45a240a64bda98463ec7d7d89d339e351a2b done
+#16 exporting attestation manifest sha256:0590e345db8f4c34db417259d4ff5e5ff5992aecf9466880865e81751fa0673a done
+#16 exporting manifest list sha256:cb442a7156fee169100ff59a15d638f13fb1662eea8e354cc79b8252e1f803ad done
+#16 naming to docker.io/library/ai-trading-research-web:latest done
+#16 unpacking to docker.io/library/ai-trading-research-web:latest 0.0s done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image ai-trading-research-web Built 
+time="2026-10-28T11:13:51+02:00" level=warning msg="Found orphan containers (ai-trading-research-ai-redis-1, ai-trading-research-ai-worker-1, ai-trading-research-ai-egress-1) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+ Container ai-trading-research-web-1 Recreate 
+ Container ai-trading-research-web-1 Recreated 
+ Container ai-trading-research-web-1 Starting 
+ Container ai-trading-research-web-1 Started 
+ Container ai-trading-research-web-1 Waiting 
+ Container ai-trading-research-web-1 Healthy 

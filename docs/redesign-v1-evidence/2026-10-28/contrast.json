@@ -1,0 +1,77 @@
+{
+  "kind": "native opaque-token calculation, not rendered WCAG compliance",
+  "pairs": [
+    {
+      "pair": "light body",
+      "foreground": "#17233e",
+      "background": "#ffffff",
+      "ratio": 15.597,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "light secondary",
+      "foreground": "#56647e",
+      "background": "#ffffff",
+      "ratio": 5.966,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "primary action",
+      "foreground": "#ffffff",
+      "background": "#305fec",
+      "ratio": 5.285,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "sidebar selected",
+      "foreground": "#ffffff",
+      "background": "#2f5ecf",
+      "ratio": 5.796,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "positive text",
+      "foreground": "#087c43",
+      "background": "#e9f7ef",
+      "ratio": 4.784,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "caution text",
+      "foreground": "#875902",
+      "background": "#fff3e1",
+      "ratio": 5.537,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "control boundary",
+      "foreground": "#7886a1",
+      "background": "#ffffff",
+      "ratio": 3.669,
+      "target": 3,
+      "passes": true
+    },
+    {
+      "pair": "dark body",
+      "foreground": "#eef3ff",
+      "background": "#17223a",
+      "ratio": 14.249,
+      "target": 4.5,
+      "passes": true
+    },
+    {
+      "pair": "dark secondary",
+      "foreground": "#b2c0d8",
+      "background": "#17223a",
+      "ratio": 8.613,
+      "target": 4.5,
+      "passes": true
+    }
+  ]
+}

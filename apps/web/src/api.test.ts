@@ -1,56 +1,19 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { isStale, readinessSummary } from './api';
 import { getOverview } from './api';
-import type { Overview, Service } from './api';
+import type { Service } from './api';
+import { contractFixture } from './overview.fixture';
 import { parseOverview } from './schema';
-
-// Synthetic contract fixture for validation tests only; never a quote or broker response.
-function contractFixture(): Overview {
-  return {
-    application: 'AI Trading Research Platform',
-    version: '0.1.0',
-    phase: 0,
-    timestamp: '2026-10-25T12:00:00Z',
-    uptime_seconds: 1,
-    trading_data_available: false,
-    performance_data_available: false,
-    safety: {
-      mode: 'SIMULATED',
-      live_trading_enabled: false,
-      order_submission_enabled: false,
-      executor_capability: 'DENY_ALL',
-      generated_code_execution: false,
-      read_only: true,
-      reasons: ['TEST_FIXTURE'],
-    },
-    services: [
-      {
-        id: 'api',
-        name: 'Test API',
-        detail: 'SYNTHETIC_TEST_FIXTURE',
-        status: 'HEALTHY',
-        latency_ms: null,
-      },
-    ],
-    reference_profile: {
-      provenance: 'CONFIGURATION_EXAMPLE',
-      currency: 'USD',
-      equity: '25000.00',
-      risk_per_trade_pct: '0.25',
-      daily_loss_pct: '1.00',
-      total_drawdown_pct: '3.00',
-      open_risk_pct: '1.00',
-      enforced: false,
-    },
-    roadmap: [{ number: 0, title: 'Test', status: 'CURRENT', acceptance: 'Test fixture only' }],
-  };
-}
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe('untrusted API payloads', () => {
   it('accepts the explicit simulation-only contract', () => {
     expect(parseOverview(contractFixture()).safety.mode).toBe('SIMULATED');
+  });
+  it('accepts the current Phase6 contract without accepting future phases or live authority', () => {
+    expect(parseOverview({ ...contractFixture(), phase: 6 }).phase).toBe(6);
+    expect(() => parseOverview({ ...contractFixture(), phase: 7 })).toThrow();
   });
   it.each([
     'mode',
@@ -86,6 +49,20 @@ describe('untrusted API payloads', () => {
     );
     await expect(getOverview()).rejects.toThrow('Contract API invalid');
   });
+  it.each(['timestamp', 'services', 'safety'])('rejects a missing %s field', (field) => {
+    const fixture = { ...contractFixture() } as Record<string, unknown>;
+    delete fixture[field];
+    expect(() => parseOverview(fixture)).toThrow('Contract API invalid');
+  });
+  it.each(['DEGRADED', 'DOWN', 'UNKNOWN', 'healthy', null])(
+    'rejects an undocumented service enum %s instead of assuming health',
+    (status) => {
+      const fixture = contractFixture();
+      expect(() =>
+        parseOverview({ ...fixture, services: [{ ...fixture.services[0], status }] }),
+      ).toThrow('Contract API invalid');
+    },
+  );
 });
 
 describe('operational state presentation', () => {
@@ -94,6 +71,8 @@ describe('operational state presentation', () => {
     expect(isStale(1_000, 46_001)).toBe(true);
     expect(isStale(1_000, 46_000)).toBe(false);
     expect(isStale(1_000, 999)).toBe(true);
+    expect(isStale(NaN, 1_000)).toBe(true);
+    expect(isStale(1_000, NaN)).toBe(true);
   });
   it('never counts a future broker or disabled executor as a healthy dependency', () => {
     const services: Service[] = [

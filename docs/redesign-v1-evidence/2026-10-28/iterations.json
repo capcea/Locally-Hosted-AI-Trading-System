@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 1,
+    "category": "new display code contract error",
+    "errors": [
+      "DatasetView source_symbol and provenance belong to spec; corrected to data.spec.source_symbol and data.spec.provenance."
+    ]
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 1,
+    "category": "new display import error",
+    "errors": [
+      "RiskCenter Link symbol was not imported; added the existing navigation Link import."
+    ]
+  }
+]

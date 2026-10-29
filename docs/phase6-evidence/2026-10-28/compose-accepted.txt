@@ -1,0 +1,1 @@
+{"result": "PASSED_CONFIGURATION_ONLY", "worker_networks": ["ai_database", "ai_inference", "ai_proxy", "ai_queue"], "external_worker_network": false, "public_ai_ports": false, "worker_environment_names": ["AI_DATABASE_URL", "AI_DATA_KEY_FILE", "AI_EGRESS_PROXY", "AI_ENDPOINTS", "AI_GLOBAL_CONCURRENCY", "AI_REDIS_URL"], "live_firewall_and_real_provider_acceptance": "NOT_VERIFIED"}

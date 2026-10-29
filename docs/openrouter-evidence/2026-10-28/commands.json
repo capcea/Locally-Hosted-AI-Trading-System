@@ -1,0 +1,348 @@
+{
+  "date": "2026-10-28",
+  "provider_http": "SYNTHETIC_FIXTURE_ONLY",
+  "real_provider_requests": 0,
+  "browser_execution": "BLOCKED_MANAGED_ORIGIN_POLICY",
+  "commands": [
+    {
+      "label": "browser-collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.01,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/browser-collection.txt"
+    },
+    {
+      "label": "check-final-v2",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 17.929,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/check-final-v2.txt"
+    },
+    {
+      "label": "check-final-v3",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.601,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/check-final-v3.txt"
+    },
+    {
+      "label": "check-final-v4",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 16.848,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/check-final-v4.txt"
+    },
+    {
+      "label": "check-final",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 17.39,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/check-final.txt"
+    },
+    {
+      "label": "check-with-setup",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.143,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/check-with-setup.txt"
+    },
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 0.155,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/check.txt"
+    },
+    {
+      "label": "contracts-check",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.885,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/contracts-check.txt"
+    },
+    {
+      "label": "contracts-final",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.608,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/contracts-final.txt"
+    },
+    {
+      "label": "contracts-generate",
+      "command": [
+        "make",
+        "contracts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.986,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/contracts-generate.txt"
+    },
+    {
+      "label": "deployment-config",
+      "command": [
+        "make",
+        "ai-check-deployment"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.113,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/deployment-config.txt"
+    },
+    {
+      "label": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.021,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/diff-check.txt"
+    },
+    {
+      "label": "frontend-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test",
+        "--",
+        "src/ai/ai.test.tsx",
+        "src/campaigns/campaigns.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.641,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/frontend-final.txt"
+    },
+    {
+      "label": "frontend",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test",
+        "--",
+        "src/ai/ai.test.tsx",
+        "src/campaigns/campaigns.test.tsx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.657,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/frontend.txt"
+    },
+    {
+      "label": "integration-focused-v2",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--openrouter-only"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 26.162,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/integration-focused-v2.txt"
+    },
+    {
+      "label": "integration-focused-v3",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--openrouter-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 14.54,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/integration-focused-v3.txt"
+    },
+    {
+      "label": "integration-focused-v4",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--openrouter-only"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 31.151,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/integration-focused-v4.txt"
+    },
+    {
+      "label": "integration-services",
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 439.717,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/integration-services.txt"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 2.152,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/integration.txt"
+    },
+    {
+      "label": "openrouter-integration",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--openrouter-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 15.187,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/openrouter-integration.txt"
+    },
+    {
+      "label": "openrouter-unit",
+      "command": [
+        ".venv/bin/pytest",
+        "tests/test_openrouter.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.464,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/openrouter-unit.txt"
+    },
+    {
+      "label": "operator-preview",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.configure_openrouter"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.213,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/operator-preview.txt"
+    },
+    {
+      "label": "private-provider-regression",
+      "command": [
+        ".venv/bin/pytest",
+        "tests/test_ai_http.py",
+        "tests/test_ai_tls.py",
+        "tests/test_ai_egress.py",
+        "tests/test_campaigns.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.697,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/private-provider-regression.txt"
+    },
+    {
+      "label": "repository-check-final",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.123,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/repository-check-final.txt"
+    },
+    {
+      "label": "repository-check",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.283,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/repository-check.txt"
+    },
+    {
+      "label": "secret-scan-final",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.041,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/secret-scan-final.txt"
+    },
+    {
+      "label": "secret-scan",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.309,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/secret-scan.txt"
+    },
+    {
+      "label": "smoke-demo",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.254,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/smoke-demo.txt"
+    },
+    {
+      "label": "typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "typecheck"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.331,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/typecheck.txt"
+    },
+    {
+      "label": "unit-final",
+      "command": [
+        ".venv/bin/pytest",
+        "tests/test_openrouter.py",
+        "tests/test_ai_http.py",
+        "tests/test_ai_tls.py",
+        "tests/test_ai_egress.py",
+        "tests/test_campaigns.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.744,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/openrouter/unit-final.txt"
+    }
+  ]
+}

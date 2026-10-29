@@ -225,3 +225,11 @@ have mapped entry paths; aliases /conturi/siguranta, /conturi/documente, /contur
 account workspace; exact policies remain in its version list. Broker observation subsections share
 the connection workspace. Deep simulation, dataset, result and import-job IDs use owned reads.
 The full case gate is now20, including16 preserved cases and4 new viewport cases.
+
+## Phase6 additive navigation — 2026-10-28
+
+The S01–S42 mapping and five destinations are preserved. New AI analysis is a subordinate
+`/testeaza/ai` screen with reloadable owned job links `/testeaza/ai/{id}`; private model/role setup is
+`/setari/ai`. Neither AI availability nor a model response authorizes risk/trading. No old route or
+action is removed. The suite now collects22 cases (20 preserved + desktop/mobile AI). Execution of
+the new gate is blocked here; see PHASE6_COMPLETION_REPORT.md.

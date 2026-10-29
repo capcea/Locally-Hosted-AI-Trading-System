@@ -1,0 +1,53 @@
+{
+  "comparison": "Prior V1 snapshot: non-web container identities/images/mounts",
+  "checks": [
+    {
+      "name": "/ai-trading-research-risk-monitor-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-postgres-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-api-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-market-worker-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-research-worker-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-ai-redis-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-ai-worker-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-migrate-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-ai-egress-1",
+      "same": true
+    },
+    {
+      "name": "/ai-phase6-bind-check",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-redis-1",
+      "same": true
+    },
+    {
+      "name": "/ai-trading-research-minio-1",
+      "same": true
+    }
+  ]
+}

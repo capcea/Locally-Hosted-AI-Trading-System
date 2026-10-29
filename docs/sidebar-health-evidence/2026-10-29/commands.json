@@ -1,0 +1,121 @@
+[
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test",
+      "--",
+      "src/api.test.ts",
+      "src/overview-state.test.tsx",
+      "src/v1/redesign.test.tsx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.798,
+    "output": ".cache/sidebar-health-fix/focused-frontend.txt",
+    "label": "focused-frontend"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.986,
+    "output": ".cache/sidebar-health-fix/check.txt",
+    "label": "check"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 17.001,
+    "output": ".cache/sidebar-health-fix/check-final.txt",
+    "label": "check-final"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.089,
+    "output": ".cache/sidebar-health-fix/contracts.txt",
+    "label": "contracts"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.366,
+    "output": ".cache/sidebar-health-fix/smoke.txt",
+    "label": "smoke"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.857,
+    "output": ".cache/sidebar-health-fix/browser-collection.txt",
+    "label": "browser-collection"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.113,
+    "output": ".cache/sidebar-health-fix/secret-scan.txt",
+    "label": "secret-scan"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.133,
+    "output": ".cache/sidebar-health-fix/repository-check.txt",
+    "label": "repository-check"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.063,
+    "output": ".cache/sidebar-health-fix/diff-check.txt",
+    "label": "diff-check"
+  },
+  {
+    "label": "reproduce-clock",
+    "command": "Controlled prior App.tsx pre-request/completion ordering with actual valid overview; see reproduce-clock.json",
+    "exit_code": 1,
+    "classification": "EXPECTED_REPRODUCTION_FAILURE"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.176,
+    "output": ".cache/sidebar-health-fix/final-source-scan.txt",
+    "label": "final-source-scan"
+  }
+]

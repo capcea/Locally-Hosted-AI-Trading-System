@@ -1,0 +1,400 @@
+{
+  "date": "2026-10-28",
+  "task": "Whole-interface UI/UX tidy-up",
+  "implementation": "DELIVERED",
+  "browser_visual_manual_acceptance": "BLOCKED / NOT COMPLETE",
+  "owner_screenshot_inspected": true,
+  "new_rendering_inspected": false,
+  "commands": [
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 7.965,
+      "output": ".cache/ui-polish/check.txt",
+      "status": "FAILED"
+    },
+    {
+      "label": "check-final",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.121,
+      "output": ".cache/ui-polish/check-final.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "check-verified",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 12.156,
+      "output": ".cache/ui-polish/check-verified.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "check-release",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.824,
+      "output": ".cache/ui-polish/check-release.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "contracts",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.952,
+      "output": ".cache/ui-polish/contracts.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.622,
+      "output": ".cache/ui-polish/collection.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "smoke",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.272,
+      "output": ".cache/ui-polish/smoke.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "smoke-final",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.238,
+      "output": ".cache/ui-polish/smoke-final.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 240.326,
+      "output": ".cache/ui-polish/integration.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "web-build",
+      "command": [
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 0.477,
+      "output": ".cache/ui-polish/web-build.txt",
+      "status": "FAILED"
+    },
+    {
+      "label": "web-build-local",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 7.032,
+      "output": ".cache/ui-polish/web-build-local.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "web-refresh",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "60",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.054,
+      "output": ".cache/ui-polish/web-refresh.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "web-build-final",
+      "command": [
+        "env",
+        "BUILDX_CONFIG=.cache/buildx",
+        "docker",
+        "compose",
+        "build",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.807,
+      "output": ".cache/ui-polish/web-build-final.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "web-refresh-final",
+      "command": [
+        "docker",
+        "compose",
+        "up",
+        "--no-deps",
+        "--no-build",
+        "-d",
+        "--wait",
+        "--wait-timeout",
+        "60",
+        "web"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.071,
+      "output": ".cache/ui-polish/web-refresh-final.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "secret",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.955,
+      "output": ".cache/ui-polish/secret.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "secret-final",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.163,
+      "output": ".cache/ui-polish/secret-final.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "repository",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.058,
+      "output": ".cache/ui-polish/repository.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "repository-final",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.066,
+      "output": ".cache/ui-polish/repository-final.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.012,
+      "output": ".cache/ui-polish/whitespace.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "secret-evidence",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.687,
+      "output": ".cache/ui-polish/secret-evidence.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "repository-evidence",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.064,
+      "output": ".cache/ui-polish/repository-evidence.txt",
+      "status": "PASSED"
+    },
+    {
+      "label": "whitespace-evidence",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.015,
+      "output": ".cache/ui-polish/whitespace-evidence.txt",
+      "status": "PASSED"
+    }
+  ],
+  "results": {
+    "portable_python_passed": 212,
+    "portable_python_deselected": 79,
+    "frontend_passed": 114,
+    "readiness_passed": 1,
+    "isolated_before_restart_passed": 78,
+    "isolated_after_restart_passed": 78,
+    "strict_readiness_http": 200,
+    "browser_cases_collected": 20,
+    "browser_cases_executed_here": 0
+  },
+  "failures_resolved": [
+    {
+      "label": "check",
+      "exit_code": 2,
+      "cause": "Eight new navigation assertions assumed HTML attribute order",
+      "fix": "Assert the unique current anchor and its destination independently of serialization order; original regression assertions retained"
+    },
+    {
+      "label": "web-build",
+      "exit_code": 1,
+      "cause": "Buildx activity cache under restricted home Docker directory",
+      "fix": "Use writable BUILDX_CONFIG=.cache/buildx; no permission override"
+    }
+  ],
+  "source_scope": {
+    "snapshotted_existing_files": 1080,
+    "changed_existing_files": [
+      "IMPLEMENTATION_STATUS.md",
+      "PHASE55B_COMPLETION_REPORT.md",
+      "apps/web/e2e/ux-workflows.spec.ts",
+      "apps/web/src/App.tsx",
+      "apps/web/src/RiskBanner.tsx",
+      "apps/web/src/StrategyLab.tsx",
+      "apps/web/src/home/HomePage.tsx",
+      "apps/web/src/safety.test.ts",
+      "apps/web/src/ui/product.css",
+      "docs/FRONTEND_UX.md"
+    ],
+    "new_source_and_document_files_before_evidence": [
+      "apps/web/src/navigation/SectionNavigation.tsx",
+      "apps/web/src/navigation/sections.test.tsx",
+      "apps/web/src/navigation/sections.ts",
+      "docs/UI_POLISH.md"
+    ]
+  },
+  "runtime": {
+    "production_assets_match_local_build": true,
+    "asset_sha256": {
+      "/usr/share/nginx/html/index.html": "7c7d52caa2563f375b5658668a3d2e56c2d01c3df12dc5125a1816a3965bdc51",
+      "/usr/share/nginx/html/assets/index-BAetK1vM.css": "b7160120ebd14a3dcdebf0e7c90014a9e6fd9cbb57d16c9a6af6663b923e2c05",
+      "/usr/share/nginx/html/assets/index-BD6fiY9h.js": "894cfe7245bf5e56fa0025405676785c80d345bcf396fd1954824e5a45b03735"
+    },
+    "unchanged_non_web_services": {
+      "api": true,
+      "market-worker": true,
+      "minio": true,
+      "postgres": true,
+      "redis": true,
+      "research-worker": true,
+      "risk-monitor": true
+    },
+    "all_eight_services_healthy": true,
+    "web_refreshed": true,
+    "web_mounts_unchanged": true,
+    "operational_row_equality_measured": false,
+    "browser_rendering_verified": false
+  },
+  "preserved_reference_sha256": {
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png": "181f7df4fa1f7e315b0ab793694915f14129fae5dc1ebcbe22a76801a875deb9",
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-mobile-darwin.png": "4626b942a2d2b1835ec6e58f48914a927790804dca6baf2f11f66e59bcba67ea",
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-mobile-darwin.png": "96700c32f36e584a0198021077ec085f1362ff1021d125e3507d54ed7d6cc519"
+  },
+  "all_four_reference_files_unchanged": true,
+  "visual_reference_review": "Fresh genuine captures must be reviewed for intentional new styles; prior approvals remain historical",
+  "test_cleanup": [
+    {
+      "project": "phase0-test-09b4946d44da44e094f175571c403e1c",
+      "remaining_resources": {
+        "containers": 0,
+        "networks": 0,
+        "volumes": 0
+      }
+    }
+  ],
+  "browser_gates": [
+    {
+      "command": "env -u E2E_UPDATE_SNAPSHOTS E2E_ONLY_SCENARIO=ux make browser-integration",
+      "status": "BLOCKED / NOT EXECUTED",
+      "exit_code": null,
+      "reason": "Existing managed localhost-origin restriction"
+    },
+    {
+      "command": "env -u E2E_ONLY_PROJECT -u E2E_ONLY_SCENARIO -u E2E_UPDATE_SNAPSHOTS make browser-integration",
+      "status": "BLOCKED / NOT EXECUTED",
+      "exit_code": null,
+      "reason": "Existing managed localhost-origin restriction"
+    }
+  ],
+  "safety": {
+    "mode": "SIMULATED",
+    "external_execution": "DENY_ALL",
+    "backend_rules_changed": false,
+    "mfa_rbac_csrf_changed": false,
+    "financial_calculations_changed": false,
+    "policy_and_holdout_rules_changed": false,
+    "generated_code_runner_added": false,
+    "phase6_started": false,
+    "development_volumes_deleted": false,
+    "snapshots_rewritten": false
+  },
+  "warnings": [
+    "Existing Starlette TestClient httpx deprecation; passing native tests are not browser accessibility or visual acceptance"
+  ]
+}

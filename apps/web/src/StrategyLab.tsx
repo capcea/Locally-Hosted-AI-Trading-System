@@ -13,6 +13,16 @@ import AdvancedStatistics from './results/AdvancedStatistics';
 import { allRecords } from './records';
 import { readResearchDraft, writeResearchDraft } from './research-drafts';
 import { strategyLabels, jobLabels, phaseLabels, sourceLabels } from './copy/ro';
+import {
+  StrategyLibrary,
+  ExperimentStats,
+  BacktestReview,
+  ResultsOverview,
+  DistributionUnavailable,
+} from './v1/ResearchViews';
+import { filterExperiments } from './v1/data';
+import { ResultTiles, MatchedComparison } from './v1/ExperimentPreview';
+import { StatusPill } from './v1/components';
 
 type Plan = components['schemas']['packages__research__contracts__ExperimentInput'];
 type Dataset = components['schemas']['DatasetView'];
@@ -71,6 +81,10 @@ export default function StrategyLab({
   onAccountChange?: (id: string) => void;
 }) {
   const [strategies, setStrategies] = useState<Strategy[]>([]);
+  const [strategiesFailed, setStrategiesFailed] = useState(false);
+  const [historyQuery, setHistoryQuery] = useState('');
+  const [historyState, setHistoryState] = useState('');
+  const [historyPhase, setHistoryPhase] = useState('');
   const [accounts, setAccounts] = useState<RecordItem[]>([]);
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [templates, setTemplates] = useState<RunSummary[]>([]);
@@ -161,6 +175,7 @@ export default function StrategyLab({
         api<RunSummary[]>('/execution/simulations?limit=50'),
       ] as const);
       const [s, a, j, h, r] = values;
+      setStrategiesFailed(s.status !== 'fulfilled');
       if (s.status === 'fulfilled') setStrategies(s.value);
       if (a.status === 'fulfilled') setAccounts(a.value);
       setJobsFailed(j.status === 'rejected');
@@ -594,531 +609,602 @@ export default function StrategyLab({
         </p>
       )}
       {notice && <p role="status">{notice}</p>}
-      {route.section === 'index' && (
-        <section className="panel">
-          <h2>Testează pe date istorice</h2>
-          <p>
-            Alege date admise și o configurație revizuită. Nu există strategii generate de AI sau
-            ordine către brokeri.
-          </p>
-          <Link className="primary-button" href="/testeaza/nou">
-            Pregătește un test
-          </Link>
-        </section>
-      )}
       {route.section === 'strategii' && (
-        <section className="panel">
-          <h2>Strategii revizuite</h2>
-          <p>Etaloane experimentale, nu recomandări de investiții.</p>
-          {strategies.map((s) => (
-            <article key={s.id}>
-              <h3>{strategyLabels[s.id] ?? s.id}</h3>
-              <p>
-                {s.entry} · {s.exit}
-              </p>
-              <Evidence title={`${s.id} · versiune și parametri`} value={s} />
-            </article>
-          ))}
-          <Link href="/testeaza/nou">Alege strategia într-un test nou</Link>
-        </section>
+        <StrategyLibrary
+          strategies={strategiesFailed ? [] : strategies}
+          loaded={loaded && !strategiesFailed}
+          blocked={busy || Boolean(submittedPlan.current)}
+          choose={(id) => {
+            const definition = strategies.find((s) => s.id === id);
+            if (definition && !submittedPlan.current) {
+              setStrategy(definition.id);
+              setStep(1);
+              navigate('/testeaza/nou');
+            }
+          }}
+        />
       )}
       {showWizard && (
-        <form
-          ref={formRef}
-          aria-label="Configurează testul istoric"
-          onInput={(event) => {
-            const target = event.target as HTMLInputElement;
-            if (
-              target.name &&
-              target.type !== 'checkbox' &&
-              target.type !== 'file' &&
-              !['advanced', 'sweep'].includes(target.name)
-            )
-              draftValues.current[target.name] = target.value;
-          }}
-          className="panel management-panel research-wizard"
-          key={dataset}
-          onSubmit={(event) => {
-            if (step !== 5) {
-              event.preventDefault();
-              next();
-            } else void submit(event);
-          }}
-        >
-          <h2 ref={stepHeading} tabIndex={-1}>
-            Testează pe date istorice · Pasul {step} din 5
-          </h2>
-          <ol className="wizard-steps">
-            {['Piață', 'Strategie', 'Perioadă', 'Configurație revizuită', 'Revizuire'].map(
-              (label, i) => (
-                <li key={label} aria-current={step === i + 1 ? 'step' : undefined}>
-                  {i + 1}. {label}
-                </li>
-              ),
-            )}
-          </ol>
-          <fieldset data-step="1" hidden={step !== 1}>
-            <legend>Alege piața</legend>
-            <p>
-              Sunt afișate numai seturile VALID la care ai acces. Originea declarată nu devine
-              independent verificată printr-un import.
-            </p>
-            <div className="research-fields">
-              <label>
-                Contul testului
-                <select
-                  aria-label="Contul testului"
-                  required
-                  value={account}
-                  onChange={(e) => {
-                    setAccount(e.target.value);
-                    onAccountChange?.(e.target.value);
-                    setDataset('');
-                    setTemplateId('');
-                    setSetup(null);
-                    setStep(1);
-                    draftValues.current = {};
-                  }}
-                >
-                  <option value="">Alege contul…</option>
-                  {accounts.map((a) => (
-                    <option value={a.id} key={a.id}>
-                      {a.data.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Set de date principal
-                <select
-                  aria-label="Set de date principal"
-                  required
-                  value={dataset}
-                  onChange={(e) => {
-                    setDataset(e.target.value);
-                    draftValues.current = {};
-                  }}
-                >
-                  <option value="">Alege un set VALID…</option>
-                  {datasets.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.symbol} · {d.spec.timeframe} · v{d.version} · {d.record_count} observații
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            {data && (
-              <p>
-                {sourceLabels[data.spec.provenance] ?? data.spec.provenance} · {data.spec.start} →{' '}
-                {data.spec.end} · {data.record_count} observații. Nu presupunem tick-uri lipsă sau
-                cinci ani de acoperire.
+        <div className="v1-backtest-layout">
+          <form
+            ref={formRef}
+            aria-label="Configurează testul istoric"
+            onInput={(event) => {
+              const target = event.target as HTMLInputElement;
+              if (
+                target.name &&
+                target.type !== 'checkbox' &&
+                target.type !== 'file' &&
+                !['advanced', 'sweep'].includes(target.name)
+              )
+                draftValues.current[target.name] = target.value;
+            }}
+            className="panel management-panel research-wizard"
+            key={dataset}
+            onSubmit={(event) => {
+              if (step !== 5) {
+                event.preventDefault();
+                next();
+              } else void submit(event);
+            }}
+          >
+            <header className="wizard-heading">
+              <h2 ref={stepHeading} tabIndex={-1} aria-describedby="research-step-status">
+                Testează pe date istorice
+              </h2>
+              <p id="research-step-status">
+                Pasul {step} din 5 · Configurează, verifică, apoi pornește simularea.
               </p>
-            )}
-            {loaded && !accounts.length && (
+            </header>
+            <ol className="wizard-steps" aria-label="Pașii testului istoric">
+              {['Piață', 'Strategie', 'Perioadă', 'Configurație revizuită', 'Revizuire'].map(
+                (label, i) => (
+                  <li
+                    key={label}
+                    aria-current={step === i + 1 ? 'step' : undefined}
+                    data-complete={step > i + 1}
+                  >
+                    <span className="wizard-step-number">{i + 1}</span> <span>{label}</span>
+                  </li>
+                ),
+              )}
+            </ol>
+            <fieldset data-step="1" hidden={step !== 1}>
+              <legend>Alege piața</legend>
               <p>
-                Nu există conturi în lista citită.{' '}
-                <Link href="/conturi">Configurează un cont pentru simulare</Link>
-              </p>
-            )}
-            {account && !datasets.length && (
-              <p>
-                Nu există date admise în lista citită pentru această alegere sau citirea nu s-a
-                încheiat.{' '}
-                <Link href="/testeaza/date/import">Verifică ori importă date istorice</Link>
-              </p>
-            )}
-          </fieldset>
-          <fieldset data-step="2" hidden={step !== 2}>
-            <legend>Alege strategia</legend>
-            <p>Strategii fixe revizuite, fără promisiuni de profit.</p>
-            <label>
-              Strategie de referință
-              <select
-                aria-label="Strategie de referință"
-                value={strategy}
-                onChange={(e) => setStrategy(e.target.value as Plan['strategy'])}
-              >
-                {strategies.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {strategyLabels[s.id] ?? s.id} · {s.version}
-                  </option>
-                ))}
-              </select>
-            </label>
-            {currentDefinition && (
-              <details>
-                <summary>Contract, versiune și parametri</summary>
-                <pre tabIndex={0}>{json(currentDefinition)}</pre>
-              </details>
-            )}
-          </fieldset>
-          <fieldset data-step="3" hidden={step !== 3}>
-            <legend>Alege perioada și tipul evaluării</legend>
-            <p>
-              OOS este o evaluare ulterioară conform protocolului; nu este automat o perioadă
-              nevăzută. Evaluarea finală protejată are autorizare separată.
-            </p>
-            <div className="research-fields">
-              {(
-                [
-                  ['start', 'Început date', start],
-                  ['discovery', 'Sfârșit descoperire', between(0.25)],
-                  ['calibration', 'Sfârșit calibrare', between(0.5)],
-                  ['validation', 'Sfârșit validare', between(0.75)],
-                  ['end', 'Sfârșit protocol', end],
-                ] as const
-              ).map(([name, label, initial]) => (
-                <label key={name}>
-                  {label}
-                  <input name={name} defaultValue={initial} required />
-                </label>
-              ))}
-              <label>
-                Etapă cronologică
-                <select aria-label="Etapă cronologică" name="phase">
-                  <option value="DISCOVERY">Descoperire</option>
-                  <option value="CALIBRATION">Calibrare</option>
-                  <option value="VALIDATION">Validare</option>
-                </select>
-              </label>
-              <label>
-                Metodă validare
-                <select aria-label="Metodă validare" name="mode">
-                  <option value="DIRECT">Evaluare directă</option>
-                  <option value="WALK_FORWARD">
-                    Walk-forward: selecție pe train, evaluare OOS
-                  </option>
-                </select>
-              </label>
-            </div>
-          </fieldset>
-          <fieldset data-step="4" hidden={step !== 4}>
-            <legend>Alege configurația revizuită</legend>
-            <div className="research-fields">
-              <label>
-                Șablon simulator și risc
-                <select
-                  aria-label="Șablon simulator și risc"
-                  name="template"
-                  required
-                  value={templateId}
-                  onChange={(e) => setTemplateId(e.target.value)}
-                >
-                  <option value="">Alege…</option>
-                  {templates
-                    .filter((r) => r.account_id === account)
-                    .map((r) => (
-                      <option key={r.id} value={r.id}>
-                        {r.name}
-                      </option>
-                    ))}
-                </select>
-              </label>
-              <label>
-                Denumire experiment
-                <input name="name" defaultValue="Cercetare cantitativă" required maxLength={120} />
-              </label>
-            </div>
-            <p>
-              O configurație existentă nu este o aprobare automată. Verificăm contextul,
-              instrumentul și starea contului; serverul rămâne autoritatea finală.
-            </p>
-            {setupError && <p role="alert">{setupError}</p>}
-            {templateId && !setup && !setupError && (
-              <p role="status">Verificăm configurația existentă…</p>
-            )}
-            <ul>
-              <li>
-                Context monetar existent:{' '}
-                {setup?.context ? 'citit' : 'lipsește sau nu poate fi verificat'}
-              </li>
-              <li>
-                Specificație pe același instrument:{' '}
-                {setup?.run.instrument_id === data?.instrument_id && data
-                  ? 'corespunde înregistrărilor citite'
-                  : 'neconfirmată'}
-              </li>
-              <li>
-                Politică verificată care acoperă datele și permite automatizarea:{' '}
-                {verifiedPolicy
-                  ? `versiunea ${verifiedPolicy.version}`
-                  : 'neconfirmată — revizuire obligatorie'}
-              </li>
-              <li>
-                Limite configurate:{' '}
-                {setup?.profiles.some((p) => p.scope_key === 'ACCOUNT')
-                  ? 'profil ACCOUNT citit; versiuni în dovezi'
-                  : 'neconfirmate — lipsește profilul aplicat contului'}
-              </li>
-              <li>
-                Oprire persistentă:{' '}
-                {setup
-                  ? setup.status.manual_stop || setup.status.automatic_stop
-                    ? 'activă — revizuire obligatorie'
-                    : 'nicio oprire în răspunsul citit'
-                  : 'UNKNOWN'}
-              </li>
-            </ul>
-            <p>
-              <Link href={account ? `/conturi/${account}/siguranta` : '/conturi/siguranta'}>
-                Configurează limitele, politica și contextul
-              </Link>{' '}
-              ·{' '}
-              <Link href="/conturi/avansat/simulator">
-                Pregătește specificația în simulatorul avansat
-              </Link>
-              . Nu substituim o configurație fictivă.
-            </p>
-            {setup && (
-              <Evidence
-                title="Versiuni, costuri și politici citite — verifică aplicabilitatea"
-                value={setup}
-              />
-            )}
-            <details>
-              <summary>Setări avansate: parametri, costuri, portofolii și cote</summary>
-              <p>
-                Maximum 5000 observații, 24 scenarii și 300 secunde conform contractului curent;
-                limitele proprietarului se verifică pe server. Lipsa marjei, calendarului sau
-                drepturilor nu este completată automat.
+                Alege contul și datele pe care vrei să le testezi. Sunt afișate numai seturile VALID
+                la care ai acces. Importul nu verifică independent originea declarată.
               </p>
               <div className="research-fields">
                 <label>
-                  Timeframe semnal
-                  <select aria-label="Timeframe semnal" name="signalTimeframe">
-                    <option value="NATIVE">Nativ fluxului de execuție</option>
-                    {['TICK', 'M1', 'M5', 'M15', 'H1', 'H4', 'D1'].map((frame) => (
-                      <option key={frame} value={frame}>
-                        {frame} — flux SIGNAL separat obligatoriu
+                  Contul testului
+                  <select
+                    aria-label="Contul testului"
+                    required
+                    value={account}
+                    onChange={(e) => {
+                      setAccount(e.target.value);
+                      onAccountChange?.(e.target.value);
+                      setDataset('');
+                      setTemplateId('');
+                      setSetup(null);
+                      setStep(1);
+                      draftValues.current = {};
+                    }}
+                  >
+                    <option value="">Alege contul…</option>
+                    {accounts.map((a) => (
+                      <option value={a.id} key={a.id}>
+                        {a.data.name}
                       </option>
                     ))}
                   </select>
                 </label>
                 <label>
-                  Motor cercetare
-                  <select aria-label="Motor cercetare" name="engine">
-                    <option value="EVENT">Evenimente + Risk Gateway</option>
-                    <option value="SCREEN">Screening Arrow exploratoriu</option>
+                  Set de date principal
+                  <select
+                    aria-label="Set de date principal"
+                    required
+                    value={dataset}
+                    onChange={(e) => {
+                      setDataset(e.target.value);
+                      draftValues.current = {};
+                    }}
+                  >
+                    <option value="">Alege un set VALID…</option>
+                    {datasets.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.symbol} · {d.spec.timeframe} · v{d.version} · {d.record_count} observații
+                      </option>
+                    ))}
                   </select>
                 </label>
+              </div>
+              {data && (
+                <p>
+                  {sourceLabels[data.spec.provenance] ?? data.spec.provenance} · {data.spec.start} →{' '}
+                  {data.spec.end} · {data.record_count} observații. Nu presupunem tick-uri lipsă sau
+                  cinci ani de acoperire.
+                </p>
+              )}
+              {loaded && !accounts.length && (
+                <p className="notice">
+                  Ai nevoie de un cont de simulare pentru a continua.{' '}
+                  <Link href="/conturi">Configurează un cont pentru simulare</Link>
+                </p>
+              )}
+              {account && !datasets.length && (
+                <p className="notice">
+                  Nu există date admise în lista citită pentru această alegere sau citirea nu s-a
+                  încheiat.{' '}
+                  <Link href="/testeaza/date/import">Verifică ori importă date istorice</Link>
+                </p>
+              )}
+            </fieldset>
+            <fieldset data-step="2" hidden={step !== 2}>
+              <legend>Alege strategia</legend>
+              <p>Strategii fixe revizuite, fără promisiuni de profit.</p>
+              <label>
+                Strategie de referință
+                <select
+                  aria-label="Strategie de referință"
+                  value={strategy}
+                  onChange={(e) => setStrategy(e.target.value as Plan['strategy'])}
+                >
+                  {strategies.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {strategyLabels[s.id] ?? s.id} · {s.version}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {currentDefinition && (
+                <details>
+                  <summary>Contract, versiune și parametri</summary>
+                  <pre tabIndex={0}>{json(currentDefinition)}</pre>
+                </details>
+              )}
+            </fieldset>
+            <fieldset data-step="3" hidden={step !== 3}>
+              <legend>Alege perioada și tipul evaluării</legend>
+              <p>
+                OOS este o evaluare ulterioară conform protocolului; nu este automat o perioadă
+                nevăzută. Evaluarea finală protejată are autorizare separată.
+              </p>
+              <div className="research-fields">
                 {(
                   [
-                    ['fast', 'Perioadă rapidă', '5'],
-                    ['slow', 'Perioadă lentă', '20'],
-                    ['lookback', 'Fereastră indicator', '14'],
-                    ['volume', 'Volum solicitat', '0.01'],
-                    ['stop', 'Stop în tick-uri', '20'],
-                    ['reward', 'Multiplu take-profit', '2'],
-                    ['hold', 'Durată maximă (secunde)', '3600'],
-                    ['purge', 'Purge (secunde)', '3600'],
-                    ['embargo', 'Embargo (secunde)', '60'],
-                    ['folds', 'Fold-uri walk-forward', '2'],
-                    ['random', 'Semnale păstrate aleator (%)', '100'],
-                    ['seed', 'Seed reproductibil', '7'],
-                    ['costs', 'Multipli stres costuri', '1'],
-                    ['spread', 'Spread ipotetic BAR', ''],
-                    ['rows', 'Limită observații', '1000'],
-                    ['seconds', 'Limită timp (secunde)', '120'],
-                    ['bootstrap', 'Eșantioane bootstrap', '200'],
+                    ['start', 'Început date', start],
+                    ['discovery', 'Sfârșit descoperire', between(0.25)],
+                    ['calibration', 'Sfârșit calibrare', between(0.5)],
+                    ['validation', 'Sfârșit validare', between(0.75)],
+                    ['end', 'Sfârșit protocol', end],
                   ] as const
                 ).map(([name, label, initial]) => (
                   <label key={name}>
                     {label}
-                    <input name={name} defaultValue={initial} required={name !== 'spread'} />
+                    <input name={name} defaultValue={initial} required />
                   </label>
                 ))}
                 <label>
-                  Tip intrare
-                  <select aria-label="Tip intrare" name="orderType">
-                    <option value="MARKET">Market</option>
-                    <option value="LIMIT">Limit</option>
-                    <option value="STOP">Stop</option>
+                  Etapă cronologică
+                  <select aria-label="Etapă cronologică" name="phase">
+                    <option value="DISCOVERY">Descoperire</option>
+                    <option value="CALIBRATION">Calibrare</option>
+                    <option value="VALIDATION">Validare</option>
                   </select>
                 </label>
                 <label>
-                  Offset intrare (tick-uri)
-                  <input name="entryOffset" defaultValue="1" required />
-                </label>
-                <label>
-                  Expirare ordin pending (secunde)
-                  <input name="expiry" defaultValue="60" required />
-                </label>
-                <label>
-                  Direcții
-                  <select aria-label="Direcții" name="direction">
-                    <option value="LONG_SHORT">Long și short</option>
-                    <option value="LONG_ONLY">Doar long</option>
-                    <option value="SHORT_ONLY">Doar short</option>
+                  Metodă validare
+                  <select aria-label="Metodă validare" name="mode">
+                    <option value="DIRECT">Evaluare directă</option>
+                    <option value="WALK_FORWARD">
+                      Walk-forward: selecție pe train, evaluare OOS
+                    </option>
                   </select>
                 </label>
-
-                <details>
-                  <summary>Date pentru confirmare multi-timeframe și sweep-uri</summary>
-                  {datasets.map((d) => (
-                    <div key={d.id}>
-                      <label>
-                        <input type="checkbox" name="dataset" value={d.id} />
-                        {d.symbol} · {d.spec.timeframe} · v{d.version}
-                      </label>
-                      <select aria-label={`Rol ${d.id}`} name={`role-${d.id}`}>
-                        <option value="EXECUTION">Flux de execuție</option>
-                        <option value="FX">Conversie FX din tick-uri observate</option>
-                        <option value="SIGNAL">Semnal pe observații închise</option>
-                        <option value="CONFIRMATION">
-                          Confirmare disponibilă la momentul deciziei
-                        </option>
-                      </select>
-                    </div>
-                  ))}
-                  <label>
-                    Parametri pentru sweep (JSON, cel mult 16)
-                    <textarea name="sweep" maxLength={64000} />
-                  </label>
-                </details>
-                <details>
-                  <summary>Configurație avansată pentru portofolii</summary>
-                  <p>
-                    Configurație completă conform contractului API; doar strategii din registrul
-                    revizuit. Nu se acceptă sursă executabilă.
-                  </p>
-                  <label>
-                    Experiment JSON avansat
-                    <textarea name="advanced" maxLength={250000} />
-                  </label>
-                </details>
               </div>
-            </details>
-          </fieldset>
-          <fieldset data-step="5" hidden={step !== 5}>
-            <legend>Verifică testul înainte de pornire</legend>
-            <dl>
-              <dt>Piață și origine</dt>
-              <dd>
-                {data?.symbol} · {sourceLabels[data?.spec.provenance ?? ''] ?? 'neconfirmată'} ·
-                execuție simulată
-              </dd>
-              <dt>Cont și strategie</dt>
-              <dd>
-                {accounts.find((a) => a.id === account)?.data.name} ·{' '}
-                {strategyLabels[strategy] ?? strategy}
-              </dd>
-              <dt>Perioadă</dt>
-              <dd>
-                {reviewValues.start} → {reviewValues.end}
-              </dd>
-              <dt>Evaluare</dt>
-              <dd>
-                {phaseLabels[reviewValues.phase]} · {reviewValues.mode}
-              </dd>
-              <dt>Costuri și limite</dt>
-              <dd>
-                Stres {reviewValues.costs}; {reviewValues.rows} observații; {reviewValues.seconds}{' '}
-                secunde. Comisioanele și derapajul sunt cele ale configurației revizuite. Finanțarea
-                se verifică în context.
-              </dd>
-            </dl>
-            {setup && (
-              <section aria-label="Limitele și politica revizuite pentru test">
-                <h4>Limitele și politica revizuite</h4>
-                <p>
-                  Politică{' '}
-                  {verifiedPolicy?.kind === 'PROP' ? 'pentru programul acestui cont' : 'personală'}{' '}
-                  · versiunea {verifiedPolicy?.version ?? 'neconfirmată'} · valabilă până la{' '}
-                  {verifiedPolicy?.expires_at ?? 'necunoscut'}. Verificarea este pentru acest cont
-                  și perioadă, nu pentru toate conturile unei firme.
-                </p>
-                <dl>
-                  {setup.profiles.map((profile) => (
-                    <div key={profile.id}>
-                      <dt>
-                        {profile.scope_key} · versiunea {profile.version}
-                      </dt>
-                      <dd>
-                        Pe tranzacție: {profile.limits.per_trade_pct}%; pierdere zilnică:{' '}
-                        {profile.limits.daily_loss_pct}%; scădere totală:{' '}
-                        {profile.limits.total_loss_pct}%; risc agregat:{' '}
-                        {profile.limits.aggregate_risk_pct}%.
-                      </dd>
-                    </div>
-                  ))}
-                  <dt>Până la limita zilnică, conform contului sursă</dt>
-                  <dd>
-                    {setup.status.daily_headroom ?? 'UNKNOWN'} {setup.status.currency}
-                  </dd>
-                  <dt>Până la limita totală</dt>
-                  <dd>
-                    {setup.status.total_headroom ?? 'UNKNOWN'} {setup.status.currency}
-                  </dd>
-                </dl>
-                <p>
-                  Valori citite pentru contul sursă, ceas {setup.status.clock ?? 'necunoscut'}.
-                  Dimensionarea și verificarea finală aparțin Risk Gateway. Nicio cifră nu este o
-                  pierdere maximă viitoare garantată.
-                </p>
+            </fieldset>
+            <fieldset data-step="4" hidden={step !== 4}>
+              <legend>Alege configurația revizuită</legend>
+              <div className="research-fields">
+                <label>
+                  Șablon simulator și risc
+                  <select
+                    aria-label="Șablon simulator și risc"
+                    name="template"
+                    required
+                    value={templateId}
+                    onChange={(e) => setTemplateId(e.target.value)}
+                  >
+                    <option value="">Alege…</option>
+                    {templates
+                      .filter((r) => r.account_id === account)
+                      .map((r) => (
+                        <option key={r.id} value={r.id}>
+                          {r.name}
+                        </option>
+                      ))}
+                  </select>
+                </label>
+                <label>
+                  Denumire experiment
+                  <input
+                    name="name"
+                    defaultValue="Cercetare cantitativă"
+                    required
+                    maxLength={120}
+                  />
+                </label>
+              </div>
+              <p>
+                O configurație existentă nu este o aprobare automată. Verificăm contextul,
+                instrumentul și starea contului; serverul rămâne autoritatea finală.
+              </p>
+              {setupError && <p role="alert">{setupError}</p>}
+              {templateId && !setup && !setupError && (
+                <p role="status">Verificăm configurația existentă…</p>
+              )}
+              <ul>
+                <li>
+                  Context monetar existent:{' '}
+                  {setup?.context ? 'citit' : 'lipsește sau nu poate fi verificat'}
+                </li>
+                <li>
+                  Specificație pe același instrument:{' '}
+                  {setup?.run.instrument_id === data?.instrument_id && data
+                    ? 'corespunde înregistrărilor citite'
+                    : 'neconfirmată'}
+                </li>
+                <li>
+                  Politică verificată care acoperă datele și permite automatizarea:{' '}
+                  {verifiedPolicy
+                    ? `versiunea ${verifiedPolicy.version}`
+                    : 'neconfirmată — revizuire obligatorie'}
+                </li>
+                <li>
+                  Limite configurate:{' '}
+                  {setup?.profiles.some((p) => p.scope_key === 'ACCOUNT')
+                    ? 'profil ACCOUNT citit; versiuni în dovezi'
+                    : 'neconfirmate — lipsește profilul aplicat contului'}
+                </li>
+                <li>
+                  Oprire persistentă:{' '}
+                  {setup
+                    ? setup.status.manual_stop || setup.status.automatic_stop
+                      ? 'activă — revizuire obligatorie'
+                      : 'nicio oprire în răspunsul citit'
+                    : 'UNKNOWN'}
+                </li>
+              </ul>
+              <p>
+                <Link href={account ? `/conturi/${account}/siguranta` : '/conturi/siguranta'}>
+                  Configurează limitele, politica și contextul
+                </Link>{' '}
+                ·{' '}
+                <Link href="/conturi/avansat/simulator">
+                  Pregătește specificația în simulatorul avansat
+                </Link>
+                . Nu substituim o configurație fictivă.
+              </p>
+              {setup && (
                 <Evidence
-                  title="Context, surse, versiuni și costuri exacte ale configurației"
+                  title="Versiuni, costuri și politici citite — verifică aplicabilitatea"
                   value={setup}
                 />
-              </section>
-            )}
-            <p>
-              Rezultatul este istoric simulat. Nu este o promisiune, un sold real sau o aprobare de
-              tranzacționare.
-            </p>
-            <label>
-              <input type="checkbox" required />
-              Autorizez copierea politicii verificate în conturi SIMULATED izolate; contul sursă nu
-              este tranzacționat.
-            </label>
-            <label>
-              <input type="checkbox" required />
-              Accept costurile, incertitudinea intrabar și caracterul exclusiv de cercetare. Nu
-              există promisiuni de profit.
-            </label>
-          </fieldset>
-          <div className="wizard-actions">
-            <button
-              type="button"
-              className="secondary-button"
-              disabled={step === 1 || busy || Boolean(submittedPlan.current)}
-              onClick={() => setStep(step - 1)}
-            >
-              Înapoi
-            </button>
-            {step < 5 ? (
+              )}
+              <details>
+                <summary>Setări avansate: parametri, costuri, portofolii și cote</summary>
+                <p>
+                  Maximum 5000 observații, 24 scenarii și 300 secunde conform contractului curent;
+                  limitele proprietarului se verifică pe server. Lipsa marjei, calendarului sau
+                  drepturilor nu este completată automat.
+                </p>
+                <div className="research-fields">
+                  <label>
+                    Timeframe semnal
+                    <select aria-label="Timeframe semnal" name="signalTimeframe">
+                      <option value="NATIVE">Nativ fluxului de execuție</option>
+                      {['TICK', 'M1', 'M5', 'M15', 'H1', 'H4', 'D1'].map((frame) => (
+                        <option key={frame} value={frame}>
+                          {frame} — flux SIGNAL separat obligatoriu
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Motor cercetare
+                    <select aria-label="Motor cercetare" name="engine">
+                      <option value="EVENT">Evenimente + Risk Gateway</option>
+                      <option value="SCREEN">Screening Arrow exploratoriu</option>
+                    </select>
+                  </label>
+                  {(
+                    [
+                      ['fast', 'Perioadă rapidă', '5'],
+                      ['slow', 'Perioadă lentă', '20'],
+                      ['lookback', 'Fereastră indicator', '14'],
+                      ['volume', 'Volum solicitat', '0.01'],
+                      ['stop', 'Stop în tick-uri', '20'],
+                      ['reward', 'Multiplu take-profit', '2'],
+                      ['hold', 'Durată maximă (secunde)', '3600'],
+                      ['purge', 'Purge (secunde)', '3600'],
+                      ['embargo', 'Embargo (secunde)', '60'],
+                      ['folds', 'Fold-uri walk-forward', '2'],
+                      ['random', 'Semnale păstrate aleator (%)', '100'],
+                      ['seed', 'Seed reproductibil', '7'],
+                      ['costs', 'Multipli stres costuri', '1'],
+                      ['spread', 'Spread ipotetic BAR', ''],
+                      ['rows', 'Limită observații', '1000'],
+                      ['seconds', 'Limită timp (secunde)', '120'],
+                      ['bootstrap', 'Eșantioane bootstrap', '200'],
+                    ] as const
+                  ).map(([name, label, initial]) => (
+                    <label key={name}>
+                      {label}
+                      <input name={name} defaultValue={initial} required={name !== 'spread'} />
+                    </label>
+                  ))}
+                  <label>
+                    Tip intrare
+                    <select aria-label="Tip intrare" name="orderType">
+                      <option value="MARKET">Market</option>
+                      <option value="LIMIT">Limit</option>
+                      <option value="STOP">Stop</option>
+                    </select>
+                  </label>
+                  <label>
+                    Offset intrare (tick-uri)
+                    <input name="entryOffset" defaultValue="1" required />
+                  </label>
+                  <label>
+                    Expirare ordin pending (secunde)
+                    <input name="expiry" defaultValue="60" required />
+                  </label>
+                  <label>
+                    Direcții
+                    <select aria-label="Direcții" name="direction">
+                      <option value="LONG_SHORT">Long și short</option>
+                      <option value="LONG_ONLY">Doar long</option>
+                      <option value="SHORT_ONLY">Doar short</option>
+                    </select>
+                  </label>
+
+                  <details>
+                    <summary>Date pentru confirmare multi-timeframe și sweep-uri</summary>
+                    {datasets.map((d) => (
+                      <div key={d.id}>
+                        <label>
+                          <input type="checkbox" name="dataset" value={d.id} />
+                          {d.symbol} · {d.spec.timeframe} · v{d.version}
+                        </label>
+                        <select aria-label={`Rol ${d.id}`} name={`role-${d.id}`}>
+                          <option value="EXECUTION">Flux de execuție</option>
+                          <option value="FX">Conversie FX din tick-uri observate</option>
+                          <option value="SIGNAL">Semnal pe observații închise</option>
+                          <option value="CONFIRMATION">
+                            Confirmare disponibilă la momentul deciziei
+                          </option>
+                        </select>
+                      </div>
+                    ))}
+                    <label>
+                      Parametri pentru sweep (JSON, cel mult 16)
+                      <textarea name="sweep" maxLength={64000} />
+                    </label>
+                  </details>
+                  <details>
+                    <summary>Configurație avansată pentru portofolii</summary>
+                    <p>
+                      Configurație completă conform contractului API; doar strategii din registrul
+                      revizuit. Nu se acceptă sursă executabilă.
+                    </p>
+                    <label>
+                      Experiment JSON avansat
+                      <textarea name="advanced" maxLength={250000} />
+                    </label>
+                  </details>
+                </div>
+              </details>
+            </fieldset>
+            <fieldset data-step="5" hidden={step !== 5}>
+              <legend>Verifică testul înainte de pornire</legend>
+              <dl>
+                <dt>Piață și origine</dt>
+                <dd>
+                  {data?.symbol} · {sourceLabels[data?.spec.provenance ?? ''] ?? 'neconfirmată'} ·
+                  execuție simulată
+                </dd>
+                <dt>Cont și strategie</dt>
+                <dd>
+                  {accounts.find((a) => a.id === account)?.data.name} ·{' '}
+                  {strategyLabels[strategy] ?? strategy}
+                </dd>
+                <dt>Perioadă</dt>
+                <dd>
+                  {reviewValues.start} → {reviewValues.end}
+                </dd>
+                <dt>Evaluare</dt>
+                <dd>
+                  {phaseLabels[reviewValues.phase]} · {reviewValues.mode}
+                </dd>
+                <dt>Costuri și limite</dt>
+                <dd>
+                  Stres {reviewValues.costs}; {reviewValues.rows} observații; {reviewValues.seconds}{' '}
+                  secunde. Comisioanele și derapajul sunt cele ale configurației revizuite.
+                  Finanțarea se verifică în context.
+                </dd>
+              </dl>
+              {setup && (
+                <section aria-label="Limitele și politica revizuite pentru test">
+                  <h4>Limitele și politica revizuite</h4>
+                  <p>
+                    Politică{' '}
+                    {verifiedPolicy?.kind === 'PROP'
+                      ? 'pentru programul acestui cont'
+                      : 'personală'}{' '}
+                    · versiunea {verifiedPolicy?.version ?? 'neconfirmată'} · valabilă până la{' '}
+                    {verifiedPolicy?.expires_at ?? 'necunoscut'}. Verificarea este pentru acest cont
+                    și perioadă, nu pentru toate conturile unei firme.
+                  </p>
+                  <dl>
+                    {setup.profiles.map((profile) => (
+                      <div key={profile.id}>
+                        <dt>
+                          {profile.scope_key} · versiunea {profile.version}
+                        </dt>
+                        <dd>
+                          Pe tranzacție: {profile.limits.per_trade_pct}%; pierdere zilnică:{' '}
+                          {profile.limits.daily_loss_pct}%; scădere totală:{' '}
+                          {profile.limits.total_loss_pct}%; risc agregat:{' '}
+                          {profile.limits.aggregate_risk_pct}%.
+                        </dd>
+                      </div>
+                    ))}
+                    <dt>Până la limita zilnică, conform contului sursă</dt>
+                    <dd>
+                      {setup.status.daily_headroom ?? 'UNKNOWN'} {setup.status.currency}
+                    </dd>
+                    <dt>Până la limita totală</dt>
+                    <dd>
+                      {setup.status.total_headroom ?? 'UNKNOWN'} {setup.status.currency}
+                    </dd>
+                  </dl>
+                  <p>
+                    Valori citite pentru contul sursă, ceas {setup.status.clock ?? 'necunoscut'}.
+                    Dimensionarea și verificarea finală aparțin Risk Gateway. Nicio cifră nu este o
+                    pierdere maximă viitoare garantată.
+                  </p>
+                  <Evidence
+                    title="Context, surse, versiuni și costuri exacte ale configurației"
+                    value={setup}
+                  />
+                </section>
+              )}
+              <p>
+                Rezultatul este istoric simulat. Nu este o promisiune, un sold real sau o aprobare
+                de tranzacționare.
+              </p>
+              <label>
+                <input type="checkbox" required />
+                Autorizez copierea politicii verificate în conturi SIMULATED izolate; contul sursă
+                nu este tranzacționat.
+              </label>
+              <label>
+                <input type="checkbox" required />
+                Accept costurile, incertitudinea intrabar și caracterul exclusiv de cercetare. Nu
+                există promisiuni de profit.
+              </label>
+            </fieldset>
+            <div className="wizard-actions">
               <button
                 type="button"
-                onClick={next}
-                disabled={
-                  !loaded || (step === 1 && (!account || !dataset)) || (step === 4 && !readySetup)
-                }
+                className="secondary-button"
+                disabled={step === 1 || busy || Boolean(submittedPlan.current)}
+                onClick={() => setStep(step - 1)}
               >
-                Continuă
+                Înapoi
               </button>
-            ) : (
-              <button type="submit" disabled={busy || !readySetup}>
-                {submittedPlan.current
-                  ? 'Retrimite aceeași solicitare'
-                  : 'Pornește testul în simulare'}
-              </button>
+              {step < 5 ? (
+                <button
+                  type="button"
+                  onClick={next}
+                  aria-describedby={
+                    step === 1 && (!account || !dataset) ? 'research-next-reason' : undefined
+                  }
+                  disabled={
+                    !loaded || (step === 1 && (!account || !dataset)) || (step === 4 && !readySetup)
+                  }
+                >
+                  Continuă
+                </button>
+              ) : (
+                <button type="submit" disabled={busy || !readySetup}>
+                  {submittedPlan.current
+                    ? 'Retrimite aceeași solicitare'
+                    : 'Pornește testul în simulare'}
+                </button>
+              )}
+            </div>
+            {step === 1 && (!account || !dataset) && (
+              <p className="field-help" id="research-next-reason">
+                Pentru a continua, alege un cont și un set de date admis. Dacă lipsesc, folosește
+                legăturile de configurare de mai sus.
+              </p>
             )}
-          </div>
-          {submittedPlan.current && !busy && (
-            <p role="alert">
-              Răspunsul solicitării este incert. Configurația trimisă rămâne fixată. Verifică
-              Activitatea; o retrimitere folosește exact aceeași cheie și configurație, nu creează o
-              variantă nouă.
-            </p>
-          )}
-          {!loaded && <p role="status">Verificăm datele necesare…</p>}
-          {step === 4 && !readySetup && (
+            {submittedPlan.current && !busy && (
+              <p role="alert">
+                Răspunsul solicitării este incert. Configurația trimisă rămâne fixată. Verifică
+                Activitatea; o retrimitere folosește exact aceeași cheie și configurație, nu creează
+                o variantă nouă.
+              </p>
+            )}
+            {!loaded && <p role="status">Verificăm datele necesare…</p>}
+            {step === 4 && !readySetup && (
+              <p>
+                Continuarea este blocată până la o configurație compatibilă, context și limite
+                revizuite, fără oprire activă. Nu deblocăm automat contul.
+              </p>
+            )}
+          </form>
+          <BacktestReview
+            items={[
+              {
+                title: 'Cont de simulare',
+                ready: Boolean(accounts.find((a) => a.id === account)),
+                detail:
+                  accounts.find((a) => a.id === account)?.data.name ??
+                  'Selectează un cont permis identității tale.',
+                href: '/conturi',
+                action: 'Configurează contul',
+              },
+              {
+                title: 'Date istorice admise',
+                ready: Boolean(data?.manifest_sha256 && data.status === 'VALID'),
+                detail: data
+                  ? `${data.spec.source_symbol} · ${data.spec.provenance} · versiune ${data.version}`
+                  : 'Este necesară o versiune VALID, compatibilă cu instrumentul.',
+                href: '/testeaza/date',
+                action: 'Verifică datele',
+              },
+              {
+                title: 'Strategie revizuită',
+                ready: Boolean(currentDefinition && !strategiesFailed),
+                detail: currentDefinition
+                  ? `${strategyLabels[strategy] ?? strategy} · ${currentDefinition.version}`
+                  : 'Registrul strategiei trebuie citit.',
+                href: '/testeaza/strategii',
+                action: 'Vezi biblioteca',
+              },
+              {
+                title: 'Context și costuri',
+                ready: Boolean(setup?.context),
+                detail:
+                  'Specificația, moneda, costurile și ipotezele provin din configurația revizuită; nu sunt presupuse.',
+                href: '/conturi/avansat/simulator',
+                action: 'Verifică configurația simulatorului',
+              },
+              {
+                title: 'Limite și politică aplicabilă',
+                ready: readySetup,
+                detail:
+                  'Politica verificată, limitele, instrumentul și starea opririi sunt obligatorii. Nu acordă permisiune de execuție externă.',
+                href: account ? `/conturi/${account}/siguranta` : '/conturi/siguranta',
+                action: 'Revizuiește siguranța',
+              },
+            ]}
+          >
             <p>
-              Continuarea este blocată până la o configurație compatibilă, context și limite
-              revizuite, fără oprire activă. Nu deblocăm automat contul.
+              Pasul {step}/5 · {reviewValues.start ?? 'Perioadă de ales'} →{' '}
+              {reviewValues.end ?? 'sfârșit de ales'}. Etapa in-sample, OOS și evaluarea finală au
+              reguli diferite.
             </p>
-          )}
-        </form>
+          </BacktestReview>
+        </div>
+      )}
+      {route.section === 'results' && <ResultsOverview jobs={jobs} failed={jobsFailed} />}
+      {showHistory && !route.experimentId && (
+        <ExperimentStats jobs={jobs} available={loaded && !jobsFailed} />
       )}
       {showHistory && (
         <section className="panel" aria-label="Experimente persistente">
@@ -1136,65 +1222,174 @@ export default function StrategyLab({
           <button className="secondary-button" onClick={() => void load()}>
             Reîncarcă experimentele
           </button>
-          {(route.experimentId
-            ? focusedJob
-              ? [focusedJob]
-              : []
-            : jobs.filter((j) => route.section !== 'results' || j.job.state === 'SUCCEEDED')
-          ).map((job) => (
-            <article key={job.id} className="management-record">
-              <h3>
-                {job.name} · {job.job.state}
-              </h3>
-              <p>
-                {jobLabels[job.job.state] ?? 'Stare necunoscută'} · {job.job.progress}% raportat ·
-                încercări {job.job.attempts} · {phaseLabels[job.phase] ?? job.phase}
+          {!route.experimentId && (
+            <div className="v1-filter-row">
+              <label>
+                Caută un experiment
+                <input
+                  aria-label="Caută un experiment"
+                  value={historyQuery}
+                  onChange={(e) => setHistoryQuery(e.target.value)}
+                  placeholder="Nume, strategie sau identificator…"
+                />
+              </label>
+              <label>
+                Starea experimentului
+                <select
+                  aria-label="Starea experimentului"
+                  value={historyState}
+                  onChange={(e) => setHistoryState(e.target.value)}
+                >
+                  <option value="">Toate stările</option>
+                  {Object.entries(jobLabels).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                Etapa experimentului
+                <select
+                  aria-label="Etapa experimentului"
+                  value={historyPhase}
+                  onChange={(e) => setHistoryPhase(e.target.value)}
+                >
+                  <option value="">Toate etapele</option>
+                  {Object.entries(phaseLabels).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Link className="primary-button" href="/testeaza/nou">
+                Experiment nou
+              </Link>
+            </div>
+          )}
+          <div
+            className="table-scroll"
+            role="region"
+            aria-label="Istoricul experimentelor"
+            tabIndex={0}
+          >
+            <table className="v1-history-table">
+              <thead>
+                <tr>
+                  <th scope="col">Experiment și acțiuni</th>
+                  <th scope="col">Strategie</th>
+                  <th scope="col">Stare raportată</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(route.experimentId
+                  ? focusedJob
+                    ? [focusedJob]
+                    : []
+                  : filterExperiments(
+                      jobs.filter(
+                        (j) => route.section !== 'results' || j.job.state === 'SUCCEEDED',
+                      ),
+                      historyQuery,
+                      historyState,
+                      historyPhase,
+                    )
+                ).map((job) => (
+                  <tr key={job.id}>
+                    <td>
+                      <article className="management-record">
+                        <h3>
+                          {job.name} · {job.job.state}
+                        </h3>
+                        <p>
+                          {jobLabels[job.job.state] ?? 'Stare necunoscută'} · {job.job.progress}%
+                          raportat · încercări {job.job.attempts} ·{' '}
+                          {phaseLabels[job.phase] ?? job.phase}
+                        </p>
+                        {job.job.error && (
+                          <p className="notice">
+                            Testul s-a oprit. Nu publicăm rezultate incomplete. Verifică datele,
+                            configurația și diagnosticul permis.
+                          </p>
+                        )}
+                        <Evidence title="Identificator și stare tehnică" value={job} />
+                        {job.job.state === 'SUCCEEDED' ? (
+                          <Link className="primary-button" href={resultPath(job.id)}>
+                            Vezi rezultatul {job.name}
+                          </Link>
+                        ) : (
+                          <Link href={progressPath(job.id)}>Deschide progresul</Link>
+                        )}
+                        {['QUEUED', 'RUNNING', 'RETRY'].includes(job.job.state) && (
+                          <>
+                            <button
+                              className="secondary-button"
+                              disabled={
+                                cancelRequested.includes(job.id) || job.job.cancel_requested
+                              }
+                              onClick={() =>
+                                void api<Job>(`/research/experiments/${job.id}/cancel`, {
+                                  method: 'POST',
+                                  csrf: session.csrf_token,
+                                  body: {},
+                                })
+                                  .then((j) => {
+                                    setCancelRequested((old) => [...old, job.id]);
+                                    setFocusedJob(j);
+                                    return load();
+                                  })
+                                  .catch(fail)
+                              }
+                            >
+                              Solicită anularea {job.name}
+                            </button>
+                            {(cancelRequested.includes(job.id) || job.job.cancel_requested) && (
+                              <p role="status">
+                                Anularea a fost cerută. Așteptăm starea finală; finalizarea poate
+                                câștiga cursa.
+                              </p>
+                            )}
+                          </>
+                        )}
+                      </article>
+                    </td>
+                    <td>{strategyLabels[job.strategy] ?? job.strategy}</td>
+                    <td>
+                      <StatusPill>
+                        {job.job.cancel_requested &&
+                        ['QUEUED', 'RUNNING', 'RETRY'].includes(job.job.state)
+                          ? 'Anulare solicitată'
+                          : (jobLabels[job.job.state] ?? 'UNKNOWN')}
+                      </StatusPill>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {!route.experimentId &&
+            jobs.length > 0 &&
+            filterExperiments(
+              jobs.filter((j) => route.section !== 'results' || j.job.state === 'SUCCEEDED'),
+              historyQuery,
+              historyState,
+              historyPhase,
+            ).length === 0 && (
+              <p role="status">
+                Niciun experiment nu corespunde filtrelor din pagina citită.{' '}
+                <button
+                  className="text-button"
+                  onClick={() => {
+                    setHistoryQuery('');
+                    setHistoryState('');
+                    setHistoryPhase('');
+                  }}
+                >
+                  Resetează filtrele
+                </button>
               </p>
-              {job.job.error && (
-                <p className="notice">
-                  Testul s-a oprit. Nu publicăm rezultate incomplete. Verifică datele, configurația
-                  și diagnosticul permis.
-                </p>
-              )}
-              <Evidence title="Identificator și stare tehnică" value={job} />
-              {job.job.state === 'SUCCEEDED' ? (
-                <Link className="primary-button" href={resultPath(job.id)}>
-                  Vezi rezultatul {job.name}
-                </Link>
-              ) : (
-                <Link href={progressPath(job.id)}>Deschide progresul</Link>
-              )}
-              {['QUEUED', 'RUNNING', 'RETRY'].includes(job.job.state) && (
-                <>
-                  <button
-                    className="secondary-button"
-                    disabled={cancelRequested.includes(job.id) || job.job.cancel_requested}
-                    onClick={() =>
-                      void api<Job>(`/research/experiments/${job.id}/cancel`, {
-                        method: 'POST',
-                        csrf: session.csrf_token,
-                        body: {},
-                      })
-                        .then((j) => {
-                          setCancelRequested((old) => [...old, job.id]);
-                          setFocusedJob(j);
-                          return load();
-                        })
-                        .catch(fail)
-                    }
-                  >
-                    Solicită anularea {job.name}
-                  </button>
-                  {(cancelRequested.includes(job.id) || job.job.cancel_requested) && (
-                    <p role="status">
-                      Anularea a fost cerută. Așteptăm starea finală; finalizarea poate câștiga
-                      cursa.
-                    </p>
-                  )}
-                </>
-              )}
-            </article>
-          ))}
+            )}
           {!jobs.length && loaded && !jobsFailed && !route.experimentId && (
             <p>
               Nu există teste în pagina citită. Un rezultat gol nu confirmă că toate paginile
@@ -1239,22 +1434,39 @@ export default function StrategyLab({
               ))}
             </select>
           </label>
-          <ResultSummary
+          <ResultTiles
             result={result}
             trial={trial}
-            provenance={provenance}
-            inputSources={inputSources}
-          />
-          <EquityChart
-            points={points}
-            total={chartTotal}
             currency={String(
-              object(object(provenance).plan).assumptions
-                ? (object(object(object(provenance).plan).assumptions).account_currency ??
-                    'neconfirmată')
-                : 'neconfirmată',
+              object(object(object(provenance).plan).assumptions).account_currency ??
+                'monedă neconfirmată',
             )}
           />
+          <div className="v1-results-overview">
+            <div>
+              {' '}
+              <EquityChart
+                points={points}
+                total={chartTotal}
+                currency={String(
+                  object(object(provenance).plan).assumptions
+                    ? (object(object(object(provenance).plan).assumptions).account_currency ??
+                        'neconfirmată')
+                    : 'neconfirmată',
+                )}
+              />
+            </div>
+            <DistributionUnavailable />
+          </div>
+          <div className="v1-result-evidence">
+            {' '}
+            <ResultSummary
+              result={result}
+              trial={trial}
+              provenance={provenance}
+              inputSources={inputSources}
+            />
+          </div>
           <nav className="section-navigation" aria-label="Detalii rezultat">
             {[
               ['', 'Sinteză'],
@@ -1409,6 +1621,11 @@ export default function StrategyLab({
           <button>Compară rezultate stocate</button>
           {comparison !== null && (
             <>
+              <MatchedComparison
+                comparison={comparison}
+                leftProvenance={comparisonContext.left}
+                rightProvenance={comparisonContext.right}
+              />
               <div className="overview-columns">
                 <ResultSummary
                   result={object(comparison).left}

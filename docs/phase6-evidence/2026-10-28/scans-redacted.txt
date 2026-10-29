@@ -1,0 +1,7 @@
+.venv/bin/python -m scripts.scan_secrets
+Scanning 1184 Git-selected files; ignored runtime state is excluded.
+3:10AM INF scanned ~6262178 bytes (6.26 MB) in 122ms
+3:10AM INF no leaks found
+.venv/bin/python -m scripts.repository_check
+PASSED: 19 sensitive-path exclusions; 1184 regular source/evidence files.
+No files staged, no commit made, no remote created, no network request.

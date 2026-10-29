@@ -1,0 +1,2 @@
+{"result": "PASSED_ACTUAL_RUNNING_CONTAINER_BOUNDARIES", "uid": 10001, "sql_scoped": true, "redis_roundtrip": true, "redis_non_ai_denied": true, "api_all_interfaces_unreachable": true, "metadata_unreachable": true, "direct_public_tcp_denied": true, "explicit_proxy_default_denied": true, "models_configured": 0, "actual_model_inference": false}
+

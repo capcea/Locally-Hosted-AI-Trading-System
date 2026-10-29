@@ -1,0 +1,235 @@
+[
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test",
+      "--",
+      "src/management-api.test.ts"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 0.681,
+    "output": ".cache/mfa-session-fix/reproduce-client.txt",
+    "label": "reproduce-client"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 53.808,
+    "output": ".cache/mfa-session-fix/focused-auth.txt",
+    "label": "focused-auth"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 29.02,
+    "output": ".cache/mfa-session-fix/reproduce-commit.txt",
+    "label": "reproduce-commit"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 3.848,
+    "output": ".cache/mfa-session-fix/check.txt",
+    "label": "check"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 55.385,
+    "output": ".cache/mfa-session-fix/focused-auth-final.txt",
+    "label": "focused-auth-final"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 18.331,
+    "output": ".cache/mfa-session-fix/check-final.txt",
+    "label": "check-final"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.165,
+    "output": ".cache/mfa-session-fix/contracts.txt",
+    "label": "contracts"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.891,
+    "output": ".cache/mfa-session-fix/browser-collection.txt",
+    "label": "browser-collection"
+  },
+  {
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 463.21,
+    "output": ".cache/mfa-session-fix/integration-services.txt",
+    "label": "integration-services"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 7.041,
+    "output": ".cache/mfa-session-fix/image-build.txt",
+    "label": "image-build"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 22.441,
+    "output": ".cache/mfa-session-fix/service-start.txt",
+    "label": "service-start"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.256,
+    "output": ".cache/mfa-session-fix/smoke.txt",
+    "label": "smoke"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.096,
+    "output": ".cache/mfa-session-fix/secret-scan.txt",
+    "label": "secret-scan"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.063,
+    "output": ".cache/mfa-session-fix/repository-check.txt",
+    "label": "repository-check"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.132,
+    "output": ".cache/mfa-session-fix/secret-scan-final.txt",
+    "label": "secret-scan-final"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.211,
+    "output": ".cache/mfa-session-fix/repository-check-final.txt",
+    "label": "repository-check-final"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.032,
+    "output": ".cache/mfa-session-fix/diff-check.txt",
+    "label": "diff-check"
+  },
+  {
+    "label": "source-checksums",
+    "command": [
+      "python3",
+      "hashlib SHA256 verification of SOURCE_SHA256SUMS.txt"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.004,
+    "verified_files": 18
+  }
+]

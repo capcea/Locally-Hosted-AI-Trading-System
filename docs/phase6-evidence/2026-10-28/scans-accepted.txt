@@ -1,0 +1,5 @@
+.venv/bin/python -m scripts.scan_secrets
+Scanning 1184 Git-selected files; ignored runtime state is excluded.
+3:09AM INF scanned ~6261903 bytes (6.26 MB) in 120ms
+3:09AM WRN leaks found: 5
+make: *** [secret-scan] Error 1

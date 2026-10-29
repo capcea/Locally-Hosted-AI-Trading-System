@@ -1,0 +1,61 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 781B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 293B done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 DONE 0.0s
+
+#5 [ 1/10] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#5 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#5 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.4s done
+#5 DONE 0.4s
+
+#4 [internal] load build context
+#4 transferring context: 2.00kB done
+#4 DONE 0.0s
+
+#6 [ 2/10] WORKDIR /app
+#6 CACHED
+
+#7 [ 4/10] COPY pyproject.toml uv.lock ./
+#7 CACHED
+
+#8 [ 3/10] RUN pip install --no-cache-dir uv==0.13.5
+#8 CACHED
+
+#9 [ 5/10] RUN uv sync --frozen --no-dev --no-cache
+#9 CACHED
+
+#10 [ 6/10] COPY packages/__init__.py packages/__init__.py
+#10 CACHED
+
+#11 [ 7/10] COPY packages/ai packages/ai
+#11 DONE 0.1s
+
+#12 [ 8/10] COPY packages/persistence/__init__.py packages/persistence/models.py packages/persistence/store.py packages/persistence/
+#12 DONE 0.0s
+
+#13 [ 9/10] COPY scripts/__init__.py scripts/ai_worker.py scripts/
+#13 DONE 0.0s
+
+#14 [10/10] RUN useradd --uid 10001 --no-create-home ai
+#14 DONE 0.1s
+
+#15 exporting to image
+#15 exporting layers 0.0s done
+#15 exporting manifest sha256:6918dff7ff48b54c124f148805375c617c58ede8099d3d64e23751cf45e86a3a done
+#15 exporting config sha256:404fdd60077beb8e9cefbd94aec30d6f11b73170edef45045c41044dabd63492 done
+#15 exporting attestation manifest sha256:deb762163065202b640ca1d533cdd496a7d60c3b0539fa7d850c306ea660a5e0 done
+#15 exporting manifest list sha256:aa829a8fda25c26d3a905e19a5ef6b2f97f6ee6954ea7b1002e86e83f39fc2c6 done
+#15 naming to docker.io/library/ai-trading-research-ai-worker:phase6 done
+#15 unpacking to docker.io/library/ai-trading-research-ai-worker:phase6 0.0s done
+#15 DONE 0.1s

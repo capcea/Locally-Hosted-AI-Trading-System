@@ -1,0 +1,7 @@
+{
+  "uid": 10001,
+  "ready_age_seconds": 2.89,
+  "database_read": 1,
+  "schema": "0009_openrouter",
+  "risk_ledger_update_allowed": false
+}

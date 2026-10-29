@@ -128,9 +128,11 @@ function PriceChart({ rows }: { rows: MarketRow[] }) {
 export default function MarketData({
   session,
   onExpired,
+  settingsView,
 }: {
   session: Session;
   onExpired: () => void;
+  settingsView?: 'surse';
 }) {
   const route = useRoute();
   const [importStep, setImportStep] = useState(1);
@@ -139,7 +141,8 @@ export default function MarketData({
   const [cancelRequests, setCancelRequests] = useState<string[]>([]);
   const [readFailed, setReadFailed] = useState(false);
   const showImport = route.section === 'import';
-  const showSources = route.area === 'settings' && route.section === 'surse';
+  const showSources =
+    route.area === 'settings' && (route.section === 'surse' || settingsView === 'surse');
   const showInstruments = route.area === 'settings' && route.section === 'catalog';
   const showCatalog = route.area === 'research' && !showImport;
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -382,7 +385,9 @@ export default function MarketData({
   const names = (items: RecordItem[]) =>
     items.map((item) => ({ id: item.id, name: item.data.name }));
   return (
-    <section className="panel management-panel market-data">
+    <section
+      className={`panel management-panel market-data${showSources ? ' v1-platform-sources' : ''}`}
+    >
       <h2>{text.title}</h2>
       <p>{text.source}</p>
       <p>
@@ -932,7 +937,49 @@ export default function MarketData({
               </button>
             </form>
           )}
-          {showSources && (
+        </>
+      )}
+      {showInstruments && (
+        <section>
+          <h3>Instrumente înregistrate</h3>
+          <p>Metadatele nu certifică specificația sau tradabilitatea la broker.</p>
+          {instruments.map((item) => (
+            <article className="management-record" key={item.id}>
+              <h4>{item.data.name}</h4>
+              <Evidence value={item} />
+            </article>
+          ))}
+        </section>
+      )}
+      {showSources && (
+        <div className="v1-provider-columns">
+          <div className="management-cards" aria-label="Surse înregistrate">
+            <h3>Furnizori de date</h3>
+            <p>
+              Înregistrarea nu confirmă disponibilitatea, drepturile sau calitatea datelor. ECB
+              oferă cursuri de referință, nu cotații bid/ask tranzacționabile.
+            </p>
+            {!providers.length && (
+              <p>
+                {readFailed
+                  ? 'UNKNOWN · sursele nu pot fi verificate.'
+                  : 'Niciun furnizor înregistrat. Completează formularul pentru o sursă permisă.'}
+              </p>
+            )}
+            {providers.map((p) => (
+              <article className="management-record" key={p.id}>
+                <h3>{p.name}</h3>
+                <p>
+                  {p.adapter} · {p.attribution}
+                </p>
+                <p>{p.rights_reference}</p>
+                <pre tabIndex={0} className="market-json">
+                  {JSON.stringify(p.capabilities, null, 2)}
+                </pre>
+              </article>
+            ))}
+          </div>
+          {canWrite && (
             <form
               className="management-form"
               onSubmit={register}
@@ -955,34 +1002,6 @@ export default function MarketData({
               </button>
             </form>
           )}
-        </>
-      )}
-      {showInstruments && (
-        <section>
-          <h3>Instrumente înregistrate</h3>
-          <p>Metadatele nu certifică specificația sau tradabilitatea la broker.</p>
-          {instruments.map((item) => (
-            <article className="management-record" key={item.id}>
-              <h4>{item.data.name}</h4>
-              <Evidence value={item} />
-            </article>
-          ))}
-        </section>
-      )}
-      {showSources && (
-        <div className="management-cards">
-          {providers.map((p) => (
-            <article className="management-record" key={p.id}>
-              <h3>{p.name}</h3>
-              <p>
-                {p.adapter} · {p.attribution}
-              </p>
-              <p>{p.rights_reference}</p>
-              <pre tabIndex={0} className="market-json">
-                {JSON.stringify(p.capabilities, null, 2)}
-              </pre>
-            </article>
-          ))}
         </div>
       )}
     </section>

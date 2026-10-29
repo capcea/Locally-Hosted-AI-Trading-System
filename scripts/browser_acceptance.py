@@ -17,6 +17,7 @@ import socket
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 from contextlib import suppress
 from pathlib import Path
@@ -30,8 +31,10 @@ from psycopg import sql
 from sqlalchemy.engine import make_url
 
 from scripts.integration_services import IsolatedServices
+from scripts.provision_ai import provision_database, provision_queue
 from scripts.provision_market import provision_storage
 from scripts.provision_runtime import provision_runtime
+from testing.ai_fixture import Fixture
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -108,9 +111,14 @@ def main() -> int:
         "risk",
         "research",
         "ux",
+        "ai",
+        "redesign",
+        "campaigns",
+        "auth",
     }:
         raise RuntimeError(
-            "E2E_ONLY_SCENARIO must be foundation, market, broker, risk, research or ux"
+            "E2E_ONLY_SCENARIO must be foundation, market, broker, risk, research, "
+            "ux, ai, redesign, campaigns or auth"
         )
     isolated = IsolatedServices.model_validate_json(Path(config_file).read_bytes())
     npm = shutil.which("npm")
@@ -125,12 +133,25 @@ def main() -> int:
         (only_project,) if only_project else ("desktop", "mobile"),
         (only_scenario,)
         if only_scenario
-        else ("foundation", "market", "broker", "risk", "research", "ux"),
+        else (
+            "foundation",
+            "market",
+            "broker",
+            "risk",
+            "research",
+            "ux",
+            "ai",
+            "redesign",
+            "campaigns",
+            "auth",
+        ),
     ):
         database = f"p1_browser_{uuid4().hex}"
         with psycopg.connect(admin_dsn, autocommit=True) as connection:
             connection.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(database)))
         processes: list[subprocess.Popen[bytes]] = []
+        ai_fixture: Fixture | None = None
+        ai_thread: threading.Thread | None = None
         try:
             url = admin.set(database=database).render_as_string(hide_password=False)
             migration = Config(str(ROOT / "alembic.ini"))
@@ -189,6 +210,54 @@ def main() -> int:
                 "LIVE_TRADING_ENABLED": "false",
                 "WORKER_EXECUTION_ENABLED": "false",
             }
+            ai_env: dict[str, str] = {}
+            if scenario == "auth":
+                # Fixed-destination registration only: no worker, provider key or inference.
+                api_env.update(
+                    {
+                        "AI_OPENROUTER_ENABLED": "true",
+                        "AI_DATA_KEY": base64.urlsafe_b64encode(secrets.token_bytes(32)).decode(),
+                    }
+                )
+            if scenario == "ai":
+                # Real HTTP protocol fixture, never reported as a real model or benchmark.
+                ai_fixture = Fixture()
+                ai_thread = threading.Thread(target=ai_fixture.serve_forever, daemon=True)
+                ai_thread.start()
+                ai_password = hashlib.sha256(
+                    ("ai-browser:" + isolated.storage_password.get_secret_value()).encode()
+                ).hexdigest()
+                ai_database = provision_database(url, ai_password)
+                provision_queue(isolated.redis_url, "ai_api", ai_password)
+                provision_queue(isolated.redis_url, "ai_worker", ai_password)
+                ai_key = base64.urlsafe_b64encode(secrets.token_bytes(32)).decode()
+                ai_shared = {
+                    "AI_DATA_KEY": ai_key,
+                    "AI_ENDPOINTS": json.dumps(
+                        [
+                            {
+                                "id": "fixture",
+                                "label": "SYNTHETIC_HTTP_FIXTURE",
+                                "url": ai_fixture.url,
+                                "transport": "LOOPBACK",
+                                "private_only_attested": True,
+                            }
+                        ]
+                    ),
+                }
+                api_env.update(
+                    {
+                        **ai_shared,
+                        "AI_REDIS_URL": f"redis://ai_api:{ai_password}@127.0.0.1:{isolated.redis_port}/0",
+                    }
+                )
+                # Whitelist only: never inherit the API's auth/risk key or storage credentials.
+                ai_env = {
+                    **common,
+                    **ai_shared,
+                    "AI_DATABASE_URL": ai_database,
+                    "AI_REDIS_URL": f"redis://ai_worker:{ai_password}@127.0.0.1:{isolated.redis_port}/0",
+                }
             with (
                 tempfile.TemporaryDirectory(
                     prefix="phase1-browser-", dir=ROOT / ".cache"
@@ -196,6 +265,17 @@ def main() -> int:
                 open(Path(directory) / "servers.txt", "xb") as log,
             ):
                 os.chmod(log.name, 0o600)
+                if scenario == "ai":
+                    processes.append(
+                        subprocess.Popen(  # noqa: S603 -- fixed inference-only worker
+                            [sys.executable, "-m", "scripts.ai_worker"],
+                            cwd=ROOT,
+                            env=ai_env,
+                            stdout=log,
+                            stderr=subprocess.STDOUT,
+                            start_new_session=True,
+                        )
+                    )
                 processes.append(
                     subprocess.Popen(  # noqa: S603 - fixed local application command
                         [
@@ -244,6 +324,26 @@ def main() -> int:
                         start_new_session=True,
                     )
                 )
+                if scenario == "campaigns":
+                    processes.append(
+                        subprocess.Popen(  # noqa: S603 - fixed campaign metadata worker
+                            [sys.executable, "-m", "scripts.campaign_worker"],
+                            cwd=ROOT,
+                            env={
+                                k: v
+                                for k, v in api_env.items()
+                                if k
+                                not in {
+                                    "AUTH_BOOTSTRAP_TOKEN",
+                                    "AUTH_COOKIE_SECURE",
+                                    "AUTH_ORIGINS",
+                                }
+                            },
+                            stdout=log,
+                            stderr=subprocess.STDOUT,
+                            start_new_session=True,
+                        )
+                    )
                 processes.append(
                     subprocess.Popen(  # noqa: S603 - fixed independent risk monitor
                         [sys.executable, "-m", "scripts.risk_monitor"],
@@ -280,7 +380,9 @@ def main() -> int:
                     "test:e2e",
                     "--",
                     *(
-                        ["e2e/platform.spec.ts", "e2e/phase1.spec.ts"]
+                        ["e2e/auth-session.spec.ts"]
+                        if scenario == "auth"
+                        else ["e2e/platform.spec.ts", "e2e/phase1.spec.ts"]
                         if scenario == "foundation"
                         else ["e2e/phase2.spec.ts"]
                         if scenario == "market"
@@ -290,6 +392,12 @@ def main() -> int:
                         if scenario == "risk"
                         else ["e2e/phase5.spec.ts"]
                         if scenario == "research"
+                        else ["e2e/phase6.spec.ts"]
+                        if scenario == "ai"
+                        else ["e2e/phase7a.spec.ts"]
+                        if scenario == "campaigns"
+                        else ["e2e/redesign-v1.spec.ts"]
+                        if scenario == "redesign"
                         else ["e2e/ux-workflows.spec.ts", "e2e/ux-visual.spec.ts"]
                     ),
                     *(
@@ -314,6 +422,11 @@ def main() -> int:
                         "E2E_PHASE1_ISOLATED": "1",
                         "E2E_SETUP_TOKEN": setup_token,
                         "E2E_OWNER_PASSWORD": password,
+                        "PHASE0_TEST_CONFIG": str(config_file),
+                        "E2E_AUTH_DATABASE": database if scenario == "auth" else "",
+                        "E2E_V1_CAPTURES": "1"
+                        if scenario == "redesign" and os.environ.get("V1_CAPTURE_CANDIDATES") == "1"
+                        else "0",
                     },
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
@@ -351,6 +464,12 @@ def main() -> int:
                 connection.execute(
                     sql.SQL("DROP DATABASE {} WITH (FORCE)").format(sql.Identifier(database))
                 )
+            if ai_fixture:
+                ai_fixture.release.set()
+                ai_fixture.shutdown()
+                ai_fixture.server_close()
+            if ai_thread:
+                ai_thread.join(3)
     return 0
 
 

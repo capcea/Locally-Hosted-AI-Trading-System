@@ -18,6 +18,9 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from urllib3.exceptions import HTTPError as StorageHTTPError
 
+from apps.api.ai.cloud_routes import router as ai_cloud_router
+from apps.api.ai.routes import router as ai_router
+from apps.api.campaigns.routes import router as campaign_router
 from apps.api.catalog import PLANNED_SERVICES, ROADMAP
 from apps.api.config import Settings
 from apps.api.execution.limits import ExecutionLimit
@@ -29,6 +32,7 @@ from apps.api.market.limits import ImportLimit
 from apps.api.market.routes import router as market_router
 from apps.api.research.routes import router as research_router
 from apps.api.risk.routes import router as risk_router
+from packages.ai.settings import GatewaySettings
 from packages.domain.contracts import (
     Overview,
     ReferenceProfile,
@@ -47,7 +51,9 @@ if not logger.handlers:
     logger.addHandler(logging.StreamHandler())
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(
+    settings: Settings | None = None, ai_config: GatewaySettings | None = None
+) -> FastAPI:
     config = settings or Settings(
         _env_file=None if os.environ.get("APP_ENVIRONMENT") == "test" else ".env"
     )
@@ -72,12 +78,31 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.state.settings = config
     app.state.store = store
+    app.state.ai_error = None
+    try:
+        ai_settings = ai_config or GatewaySettings()
+        if (
+            (ai_settings.data_key or ai_settings.data_key_file)
+            and config.auth_encryption_key
+            and ai_settings.key_value() == config.auth_encryption_key.get_secret_value()
+        ):
+            raise ValueError("AI key reuse refused")
+        app.state.ai_config = ai_settings
+    except (ValueError, OSError):
+        # Invalid/unreadable optional AI configuration must not unmount authenticated safety.
+        # Construct trusted empty defaults without re-reading the malformed AI environment.
+        app.state.ai_config = GatewaySettings.model_construct()
+        app.state.ai_error = "AI_CONFIGURATION_INVALID"
+        logger.warning('{"event":"AI_CONFIGURATION_INVALID","action":"AI_DISABLED"}')
     app.include_router(identity_router)
     app.include_router(governance_router)
     app.include_router(market_router)
     app.include_router(execution_router)
     app.include_router(risk_router)
     app.include_router(research_router)
+    app.include_router(ai_router)
+    app.include_router(ai_cloud_router)
+    app.include_router(campaign_router)
     allowed_hosts = ["127.0.0.1", "localhost", "api", "web"]
     if config.app_environment == "test":
         allowed_hosts.append("testserver")

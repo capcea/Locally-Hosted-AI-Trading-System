@@ -1,14 +1,17 @@
-# Architecture — Phase 5
+# Architecture — Phase 6
 
 The local application remains SIMULATED with DENY_ALL. It now has authenticated, persistent
-management APIs. There is no trading executor, generated-code runner or AI service. Phase 2 imports/ECB reads remain available.
+management APIs and a proposal-only private AI gateway. There is no trading executor or generated-code
+runner. Real inference and browser acceptance remain open; local AI services/boundaries are verified; see
+[AI architecture](../AI_GATEWAY_ARCHITECTURE.md) and [evidence](../PHASE6_COMPLETION_REPORT.md).
+Phase2 imports/ECB reads remain available.
 
 ## Implemented control plane
 
 `apps/api/main.py` composes public health/safety/overview routes, `apps/api/identity` and
 `apps/api/governance`. Public status is retained for Phase 0 compatibility; management reads and
 writes require an active PostgreSQL session and completed MFA. The API version stays 0.1.0;
-overview.phase is now 5. The legacy safety.read_only flag describes trading capability, not metadata
+overview.phase is now 6. The legacy safety.read_only flag describes trading capability, not metadata
 writes. Both execution POSTs always return 403 independently of identity and configuration.
 
 Identity uses Argon2id passwords, encrypted TOTP seeds, one-use hashed recovery codes, persistent
@@ -23,7 +26,8 @@ Owner bootstrap serializes on security_state and requires a generated private to
 create OPERATOR/VIEWER identities and manage authorization; the initial owner cannot be demoted or
 disabled through the API. Each domain record belongs to one user. An owner role does not bypass
 another user's record partition. VIEWER can read its own records but cannot mutate them. There is
-no shared-account delegation or authenticated streaming API yet.
+no shared-account delegation. Phase6 adds an AI-only bounded authenticated stream and wait read,
+with session revalidation and released authentication locks. It grants no trading capability.
 
 ## Persistence and transaction boundaries
 
@@ -272,3 +276,30 @@ New owner-scoped import-job lookup and persisted cancel-request read flags are a
 financial engine, schema migration or external execution capability. See [frontend details](FRONTEND_UX.md),
 [coverage](ux-migration-coverage.md) and [acceptance report](../PHASE55B_COMPLETION_REPORT.md).
 Current browser and manual accessibility acceptance is BLOCKED, not certified from source inspection.
+
+
+## Phase 7A bounded research coordinator
+
+`packages/campaigns`, `apps/api/campaigns`, Alembic0008 and the optional `campaigns` Compose profile
+add durable research coordination. PostgreSQL locks/leases and immutable campaign/run links reuse
+existing Phase5 queue submission, simulator/Risk Gateway and canonical MinIO results. Phase6 retains
+inference, model verification, encrypted prompts and restricted context/worker identities. The
+coordinator never submits with fabricated user authority: exact owner-reviewed plans and authenticated
+model handoffs are explicit pauses. Additive Phase5 deadline/cancellation checks and the restricted
+AI boolean authority view protect child work when the coordinator is offline. Research source/code,
+account, policy, dataset and model revisions remain revocable. No new financial engine or SQL grants
+to inference workers. See [full architecture](../AUTONOMOUS_RESEARCH_ARCHITECTURE.md),
+[lifecycle](../RESEARCH_CAMPAIGN_LIFECYCLE.md), [evaluation](../RESEARCH_EVALUATION_POLICY.md) and
+[security boundaries](../RESEARCH_SECURITY_BOUNDARIES.md). Native foundation acceptance is distinct
+from browser/manual, real-model, real-historical-data and scalable-backtesting gates. No Phase7B.
+
+
+## Explicit OpenRouter integration follow-up — 2026-10-28
+
+The existing AI worker/compatible adapter now supports an exact OpenRouter destination behind
+separate operator opt-in, immutable owner cloud authorization, encrypted write-only credential,
+explicit per-request cost consent and atomic spend reservations. Migration0009 extends only AI
+storage. Private providers, MFA/context isolation, risk/backtest math and campaign budgets remain.
+The CONNECT proxy validates/pins public DNS only for the exact approved hostname; no unrestricted
+URLs or model tools are added. Public inference is disabled by default and has not been deployed or
+called here. Read [implementation, setup and acceptance limits](../OPENROUTER_INTEGRATION_REPORT.md).

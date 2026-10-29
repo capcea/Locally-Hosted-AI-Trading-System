@@ -501,3 +501,28 @@ You may simplify directories if warranted, but preserve architectural boundaries
 A successful product is not measured by claimed gains. It is measured by: a reproducible strategy research pipeline; real historical data provenance; honest backtests with realistic costs and untouched OOS validation; auditable paper trading; functional MT5/cTrader demo connectors when credentials are supplied; independently enforced broker/prop risk caps; reliable incident handling; complete secure mobile-friendly observability; and a documented reversible cloud-to-local model migration.
 
 **Build this system. Prioritize correctness, reproducibility, resilience, and risk containment over shortcuts and cosmetic completeness.**
+
+
+## Phase 7A implementation scope — 2026-10-28
+
+Owner-authorized bounded ResearchCampaign coordination is additive to Phases0–6. Campaigns pin
+reviewed strategies, owned datasets/accounts, financial/risk context, chronological method and finite
+parameter domains. Defaults are8 proposals,12 experiments,2 iterations,1 active run; actual scheduling
+uses the stricter iteration/per-run/resource limits. Fixture outputs are SYNTHETIC_FIXTURE and never
+paper/live eligible. Actual AI mode requires verified Research and Critic routes. Every Phase5/6
+submission retains the real owner/recent-MFA handoff; there is no unattended session impersonation.
+Canonical stored evidence drives conservative research decisions and immutable feedback lineage.
+Final holdout access, generated-code execution, policy mutation and promotion remain prohibited.
+See [architecture](../AUTONOMOUS_RESEARCH_ARCHITECTURE.md) and
+[verification/remaining gates](../PHASE7A_COMPLETION_REPORT.md). No Phase7B.
+
+
+## Authorized integration follow-up — OpenRouter (2026-10-28)
+
+Private AI processing remains the default. An owner-requested, separately reviewed OpenRouter-only
+public exception now requires operator destination opt-in, owner-MFA cloud/upstream/data-rights/cost
+policy, encrypted write-only credential, verified exact model and per-request processing/cost consent.
+No private approval is reinterpreted as cloud consent. Bounded research-only outputs retain all
+Phase6/7 context, holdout, resource and execution-denial boundaries. No chargeable call or real
+provider/browser acceptance has occurred in this follow-up. See
+[implementation and open gates](../OPENROUTER_INTEGRATION_REPORT.md).

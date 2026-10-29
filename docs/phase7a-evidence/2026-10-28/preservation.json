@@ -1,0 +1,34 @@
+{
+  "existing_files": 1300,
+  "missing": [],
+  "changed": [
+    "AI_GATEWAY_ARCHITECTURE.md",
+    "apps/web/src/navigation/sections.ts",
+    "apps/web/src/v1/navigation.ts",
+    "IMPLEMENTATION_STATUS.md",
+    "README.md",
+    "apps/api/config.py",
+    "apps/api/health.py",
+    "apps/api/main.py",
+    "apps/web/src/App.tsx",
+    "apps/web/src/generated/api.ts",
+    "apps/web/src/management-api.ts",
+    "apps/web/src/navigation/routes.ts",
+    "compose.yaml",
+    "docs/ARCHITECTURE.md",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "docs/PRODUCT_SPEC.md",
+    "docs/openapi.json",
+    "packages/research/approval.py",
+    "scripts/browser_acceptance.py",
+    "scripts/integration_services.py",
+    "scripts/provision_runtime.py"
+  ],
+  "goldens": [
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-desktop-darwin.png",
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-dark-mobile-darwin.png",
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-desktop-darwin.png",
+    "apps/web/e2e/ux-visual.spec.ts-snapshots/home-light-mobile-darwin.png"
+  ],
+  "goldens_unchanged": true
+}

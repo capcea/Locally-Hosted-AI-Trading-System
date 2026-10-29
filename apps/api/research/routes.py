@@ -412,6 +412,10 @@ def seal(body: SealInput, identity: FullIdentity) -> dict[str, Any]:
         or not dataset.manifest_sha256
     ):
         raise HTTPException(409, "Seal requires an admitted immutable dataset")
+    from packages.ai.lifecycle import sealing_guard
+
+    if not sealing_guard(identity.db, identity.user.id):
+        raise HTTPException(409, "AI_CONTEXT_BUSY_CANCEL_OR_WAIT_BEFORE_SEALING")
     row = HoldoutSeal(
         owner_id=identity.user.id,
         dataset_id=dataset.id,

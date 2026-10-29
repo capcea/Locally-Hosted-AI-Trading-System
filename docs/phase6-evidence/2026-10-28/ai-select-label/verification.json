@@ -1,0 +1,192 @@
+[
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.789,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.363,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/contracts.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.765,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/e2e-list.txt"
+  },
+  {
+    "command": [
+      "env",
+      "PYTEST_ADDOPTS=-k test_registry_real_roundtrip_idempotency_and_scoped_worker",
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.166,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/focused-services.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "test",
+      "--",
+      "src/ai/ai.test.tsx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.624,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/frontend-green.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "test",
+      "--",
+      "src/ai/ai.test.tsx"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 0.711,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/frontend-red.txt"
+  },
+  {
+    "command": [
+      "make",
+      "integration"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 268.442,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/integration.txt"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.098,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/repository-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.058,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/secret-scan.txt"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.261,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/smoke.txt"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=.cache/buildx",
+      "docker",
+      "compose",
+      "up",
+      "-d",
+      "--build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "120",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 17.006,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/web-refresh.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.055,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/whitespace.txt"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.13,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/secret-final.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.028,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/whitespace-final.txt"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.116,
+    "output": "docs/phase6-evidence/2026-10-28/ai-select-label/repository-final.txt"
+  },
+  {
+    "command": [
+      "env",
+      "E2E_ONLY_PROJECT=desktop",
+      "E2E_ONLY_SCENARIO=ai",
+      "make",
+      "browser-integration"
+    ],
+    "status": "BLOCKED_NOT_EXECUTED",
+    "exit_code": null,
+    "reason": "Existing managed localhost browser-origin restriction; no bypass attempted."
+  },
+  {
+    "command": [
+      "env",
+      "-u",
+      "E2E_ONLY_PROJECT",
+      "-u",
+      "E2E_ONLY_SCENARIO",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "make",
+      "browser-integration"
+    ],
+    "status": "BLOCKED_NOT_EXECUTED",
+    "exit_code": null,
+    "reason": "Existing managed localhost browser-origin restriction; no bypass attempted."
+  }
+]

@@ -134,3 +134,34 @@ until explicit review/CLEAR. Required stops, fresh inputs, monitored account sta
 are checked at submission and every actual simulated fill. What-if creates no authorization.
 STOP blocks entries; FLATTEN is separate and closes only available synthetic positions. No real broker
 credentials are required or accepted. Read the risk/incident runbooks before changing assumptions.
+
+## Phase6 private analysis
+
+The bounded private AI gateway and Romanian AI Center are implemented. Open `/testeaza/ai` or
+advanced `/setari/ai`; without a verified private model it reports unavailable. It cannot execute
+code or orders. Read [the deployment guide](AI_DEPLOYMENT_GUIDE.md),
+[security boundaries](AI_SECURITY_BOUNDARIES.md) and [actual acceptance](PHASE6_COMPLETION_REPORT.md).
+Private AI services and actual local isolation checks pass, with no model configured. Real Ollama
+remains unavailable; browser cases collect but are not executed in this managed environment. Existing development services are healthy and data retained.
+No Phase7 or external execution is enabled.
+
+
+### Phase 7A research campaigns
+
+Bounded research coordination is under Testează → Campanii de cercetare. Read
+[the Phase7A report](PHASE7A_COMPLETION_REPORT.md) before enabling its optional worker. It preserves
+owner-reviewed submissions, uses existing Phase5/6 services and cannot trade or execute generated
+code. Focused disposable verification:
+
+```sh
+.venv/bin/python -m scripts.integration_services --campaigns-only
+E2E_ONLY_SCENARIO=campaigns make browser-integration
+```
+
+The second command requires an owner-local environment authorized to launch browsers. Collection
+is not acceptance. After normal owner-reviewed schema/runtime upgrade (`make migrate`), rebuild the
+application services and enable `docker compose --profile campaigns up --build -d campaign-worker`
+when ready. This phase did not migrate or rebuild the existing development stack automatically.
+Never use `down --volumes` for development upgrades. The worker profile is a trusted metadata
+service, not a generated-code sandbox. Real model inference and meaningful historical statistical
+acceptance remain separate gates; no Phase7B or trading activation.

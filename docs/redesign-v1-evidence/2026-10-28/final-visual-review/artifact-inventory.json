@@ -1,0 +1,39 @@
+[
+  {
+    "source": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-actual.png",
+    "preserved": "docs/redesign-v1-evidence/2026-10-28/final-visual-review/before-home-light-actual.png",
+    "sha256": "ef21fff9394385e5ac6a2c27a5c88fb706006944a3238c61e2a4eefec4ac6472",
+    "dimensions": [
+      1280,
+      1684
+    ],
+    "mtime_unix": 1793181413.482816
+  },
+  {
+    "source": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-expected.png",
+    "preserved": "docs/redesign-v1-evidence/2026-10-28/final-visual-review/before-home-light-expected.png",
+    "sha256": "1da590a97f8d145e94a08efb7f218fad35f4ab1e844909fc5d564bee005bd30a",
+    "dimensions": [
+      1280,
+      1047
+    ],
+    "mtime_unix": 1793181413.481386
+  },
+  {
+    "source": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/home-light-diff.png",
+    "preserved": "docs/redesign-v1-evidence/2026-10-28/final-visual-review/before-home-light-diff.png",
+    "sha256": "7fb82c9f3c9dbb55eeec9612dbaa4f7f36a7ca97da36ea94a521cf474cd00760",
+    "dimensions": [
+      1280,
+      1684
+    ],
+    "mtime_unix": 1793181413.4829743
+  },
+  {
+    "source": "apps/web/test-results/ux-visual-non-secret-publi-ccfcc-isual-baselines-and-reflows-desktop/error-context.md",
+    "preserved": "docs/redesign-v1-evidence/2026-10-28/final-visual-review/before-error-context.md",
+    "sha256": "6317e1d604cafeee47bc6f8fb3f46ab003ea1d98e0ce051fbe1a2548d3091f06",
+    "dimensions": null,
+    "mtime_unix": 1793181413.4892735
+  }
+]

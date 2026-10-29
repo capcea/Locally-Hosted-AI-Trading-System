@@ -47,9 +47,12 @@ ROADMAP = [
     ),
     Phase(
         number=6,
-        title="Gateway AI & agenți",
-        status="PLANNED",
-        acceptance="Ollama privat, scheme validate, cote și execuție izolată.",
+        title="Analiză AI privată",
+        status="CURRENT",
+        acceptance=(
+            "Modele verificate, răspunsuri structurate și cote; "
+            "acceptarea externă rămâne necesară. Fără execuție de cod."
+        ),
     ),
     Phase(
         number=7,
@@ -92,9 +95,9 @@ PLANNED_SERVICES = [
     ),
     ServiceHealth(
         id="ollama",
-        name="Ollama · Qwen",
+        name="Inferență AI privată",
         status=ServiceStatus.NOT_CONFIGURED,
-        detail="Gateway privat planificat în faza 6. Nicio inferență activă.",
+        detail="Disponibilitatea se verifică în Centrul AI autentificat. Niciun model implicit.",
     ),
     ServiceHealth(
         id="executor",

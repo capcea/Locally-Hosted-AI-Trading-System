@@ -1,7 +1,7 @@
 # Phase 5.5B — UI/UX implementation and acceptance report
 
 Date: 2026-10-27. **Implementation delivered; overall acceptance BLOCKED / NOT COMPLETE.**
-Latest gate: 2026-10-28 — [mobile visual reference review](#mobile-visual-reference-review--2026-10-28).
+Latest follow-up: 2026-10-28 — [whole-interface tidy-up](#whole-interface-uiux-tidy-up--2026-10-28).
 The redesigned source builds and native integration passes. The managed browser denies the local
 origin, so no current rendered, desktop/mobile E2E, visual-baseline, VoiceOver or WCAG acceptance is
 claimed. Phases0–5 remain OWNER_REPORTED_PASS as the starting point; that statement does not prove
@@ -823,3 +823,74 @@ env -u E2E_ONLY_PROJECT -u E2E_ONLY_SCENARIO -u E2E_UPDATE_SNAPSHOTS make browse
 These commands were NOT EXECUTED HERE (exit code null). Require the focused mobile UX group and all
 20 desktop/mobile cases, plus outstanding manual gates. A newly generated reference is not a passing
 comparison. SIMULATED/DENY_ALL remains enforced. No Phase 6 or broker execution.
+
+
+## Whole-interface UI/UX tidy-up — 2026-10-28
+
+IMPLEMENTED; rendered/browser/manual acceptance remains NOT COMPLETE. The owner requested a modest
+whole-interface refinement after supplying an actual screenshot of /testeaza. That screenshot was
+inspected. New rendering is not inferred from source, build results or the earlier public PNGs.
+
+[UI_POLISH.md](docs/UI_POLISH.md) records changes across shell/navigation, Home, guided research,
+Settings and shared components used by accounts, risk, security, data, results and advanced tools.
+The research landing duplicate introduction/start link was removed; the same five-step form remains
+on both entry routes. Section links now identify nested task routes. Settings has three groups and
+contextual subpage navigation while retaining public diagnostic/about/roadmap links before login.
+Risk summary language no longer describes empty coverage as “0 of 0”; last-known stops remain visible,
+and unknown/stale/failed reads and mandatory per-order decisions are preserved. Authentication/risk
+loading stays independent of public overview loading. Shared spacing, control boundaries, details,
+tables, metric cards and mobile wrapping/scroll padding are refined. No new framework was installed.
+
+The S01–S42 route-to-feature mapping and all existing actions remain; no route was renamed or removed.
+App.tsx reuses existing modules. New navigation metadata/components are presentation-only. The old
+finite route resolver, account isolation, owner MFA, CSRF, RBAC, STOP/CLEAR/FLATTEN implementation,
+Risk Gateway, policy verification, final holdout restrictions, research idempotency, data validity,
+immutable storage/provenance, financial calculations and error sanitization are unchanged. No backend,
+API contract, migration, generated-code runner, AI feature or broker execution capability was added.
+SIMULATED/DENY_ALL remains mandatory. No persistent development resource was deleted or migrated.
+
+Actual commands/exits, initial failures and preservation evidence are retained in
+[verification.json](docs/phase55b-evidence/2026-10-28/ui-polish/verification.json). Raw logs and the
+protected pre-edit frontend archive remain private under .cache/ui-polish/. Existing uncommitted work
+was hashed before editing; no reset, stash, commit, push or unrelated overwrite was performed.
+
+- make check: final exit 0; 212 Python + 114 frontend tests, lint/format/types/build. The 79 deselected
+  service cases are not counted as passes. The first new navigation tests failed eight assertions
+  because they assumed HTML attribute serialization order; corrected them to assert the unique current
+  link's destination independently of attribute order. No existing security or functional assertion
+  was relaxed. Existing Starlette TestClient deprecation warning remains.
+- make contracts-check and make smoke-demo: exit 0; contracts match byte-for-byte and strict
+  readiness/external-execution denial smoke returns HTTP 200.
+- npm --prefix apps/web run test:e2e -- --list: exit 0; all 20 cases collect. ux-workflows.spec.ts adds
+  root-wizard and Settings discoverability assertions to the original owner/viewer flow, retaining
+  existing risk/authorization assertions. Collection is not browser execution.
+- The initial normal Docker web build exited 1 because Buildx tried writing its activity cache under
+  the restricted ~/.docker directory. Rebuilding with BUILDX_CONFIG=.cache/buildx succeeded, using
+  an allowed workspace cache without changing permissions or security protections. Only web was
+  refreshed with --no-deps --no-build after the build. Native SHA256 checks confirm its HTML/CSS/JS
+  match the local production build. All eight services are healthy; all seven non-web service IDs,
+  images and mounts are unchanged. Web's expected container/image refresh leaves its mounts unchanged.
+  Database row equality was not measured. Service readiness is not trading authorization or UX acceptance.
+- make integration: exit 0; one readiness case, 78 actual isolated cases before restart and 78 after,
+  then strict readiness/execution-denial smoke. PostgreSQL, Redis and MinIO use real loopback-bound
+  disposable services with TCP verification, isolated migrations and restart-persistence checks.
+  Only its own random test project is cleaned. No external provider/broker integration success is
+  inferred. Repository/secret/whitespace checks and their exact exits are recorded in the ledger.
+
+All four previously owner-approved public references retain their exact hashes. Those approvals
+remain historical evidence for the previous presentation, not approval of new captures after this
+requested UI change. Public Home geometry/styles now intentionally differ. Do not rewrite snapshots,
+increase tolerances or broaden masks to conceal the change; inspect genuine actual/diff captures and
+obtain the required owner reference approval. No authentication/recovery screenshot capture is enabled.
+
+The managed local-origin restriction still blocks agent browser execution. Focused and full commands
+below are NOT EXECUTED HERE (exit code null). Manual keyboard/screen-reader/reflow/theme acceptance and
+WCAG conformance are not claimed. On the owner's authorized local host, without snapshot rewriting:
+
+```sh
+env -u E2E_UPDATE_SNAPSHOTS E2E_ONLY_SCENARIO=ux make browser-integration
+env -u E2E_ONLY_PROJECT -u E2E_ONLY_SCENARIO -u E2E_UPDATE_SNAPSHOTS make browser-integration
+```
+
+Review intentional public PNG differences separately from genuine functional failures. Require all
+20 desktop/mobile cases plus the remaining manual gates before full Phase 5.5B acceptance. No Phase 6.

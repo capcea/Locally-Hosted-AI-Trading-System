@@ -1,0 +1,2 @@
+.venv/bin/python -m scripts.migrate_runtime
+Schema migrated and restricted runtime role granted; credentials not printed.

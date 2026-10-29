@@ -11,7 +11,17 @@ export async function getOverview(signal?: AbortSignal): Promise<Overview> {
 }
 
 export function isStale(lastSuccess: number | null, now: number): boolean {
-  return lastSuccess === null || now < lastSuccess || now - lastSuccess > 45_000;
+  return (
+    lastSuccess === null ||
+    !Number.isFinite(lastSuccess) ||
+    !Number.isFinite(now) ||
+    now < lastSuccess ||
+    now - lastSuccess > 45_000
+  );
+}
+
+export function isOverviewStale(overview: Overview | null, receivedAt: number | null, now: number) {
+  return !overview || isStale(receivedAt, now) || isStale(Date.parse(overview.timestamp), now);
 }
 
 export function readinessSummary(services: Service[]): { healthy: number; total: number } {

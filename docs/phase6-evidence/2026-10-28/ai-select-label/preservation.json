@@ -1,0 +1,9 @@
+{
+  "non_web_container_identities_images_mounts_unchanged": true,
+  "non_web_containers": 11,
+  "approved_reference_hashes_unchanged": 4,
+  "web_healthy": "healthy",
+  "served_build_html_assets_match": true,
+  "assets": 2,
+  "note": "HTTP byte comparison only; no browser rendering or interaction acceptance."
+}

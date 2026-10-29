@@ -55,12 +55,35 @@ def provision_runtime(admin_url: str, password: str) -> str:
             "research_holdout_seals",
             "research_holdout_releases",
             "research_accounts",
+            "ai_models",
+            "ai_cloud_authorizations",
+            "ai_cloud_reservations",
+            "ai_routes",
+            "ai_requests",
+            "ai_artifacts",
+            "ai_events",
+            "ai_verifications",
+            "research_campaigns",
+            "campaign_lineage",
+            "campaign_experiments",
         ):
             connection.execute(
                 sql.SQL("REVOKE UPDATE, DELETE, TRUNCATE ON {} FROM {}").format(
                     sql.Identifier(table), role
                 )
             )
+        connection.execute(
+            sql.SQL("REVOKE INSERT ON ai_artifacts, ai_verifications FROM {}").format(role)
+        )
+        connection.execute(sql.SQL("REVOKE UPDATE ON ai_jobs FROM {}").format(role))
+        connection.execute(
+            sql.SQL("GRANT UPDATE(cancel_requested,event_sequence) ON ai_jobs TO {}").format(role)
+        )
+        connection.execute(
+            sql.SQL(
+                "REVOKE DELETE, TRUNCATE ON ai_connections, ai_jobs, ai_connection_secrets FROM {}"
+            ).format(role)
+        )
         connection.execute(sql.SQL("REVOKE DELETE, TRUNCATE ON firm_policies FROM {}").format(role))
         connection.execute(
             sql.SQL("REVOKE DELETE, TRUNCATE ON market_datasets FROM {}").format(role)
@@ -69,6 +92,9 @@ def provision_runtime(admin_url: str, password: str) -> str:
             sql.SQL("REVOKE DELETE, TRUNCATE ON risk_policy_versions FROM {}").format(role)
         )
         connection.execute(sql.SQL("REVOKE DELETE, TRUNCATE ON research_jobs FROM {}").format(role))
+        connection.execute(
+            sql.SQL("REVOKE DELETE, TRUNCATE ON campaign_runtime FROM {}").format(role)
+        )
         for table in ("roles", "alembic_version", "platform_metadata"):
             connection.execute(
                 sql.SQL("REVOKE INSERT, UPDATE, DELETE ON {} FROM {}").format(

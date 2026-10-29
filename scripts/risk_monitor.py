@@ -3,10 +3,11 @@
 import argparse
 import os
 import signal
-import time
 from pathlib import Path
+from threading import Event
 
 from sqlalchemy import select, text
+from sqlalchemy.exc import DisconnectionError, OperationalError
 
 from apps.api.config import Settings
 from packages.persistence.audit import append_event
@@ -61,6 +62,68 @@ def once(store: Store, key: str) -> int:
     return checked
 
 
+def restricted_identity(store: Store) -> None:
+    with store.session() as db:
+        role = db.execute(
+            text(
+                "SELECT rolsuper,rolcreaterole,rolcreatedb FROM pg_roles WHERE rolname=current_user"
+            )
+        ).one()
+        if any(role) or db.scalar(
+            text("SELECT has_table_privilege(current_user,'risk_ledger','UPDATE')")
+        ):
+            raise RuntimeError("Risk monitor refuses privileged database identities")
+
+
+def monitor(
+    store: Store,
+    key: str,
+    stopped: Event,
+    *,
+    single: bool = False,
+    ready: Path = Path("/tmp/risk-monitor.ready"),  # noqa: S108 -- owned container tmpfs
+) -> None:
+    """Reconnect a bounded number of times; never publish health for a failed scan."""
+    failures = 0
+    if not single:
+        ready.unlink(missing_ok=True)
+    try:
+        while not stopped.is_set():
+            try:
+                # Recheck on every connection/recovery, not just the initial process startup.
+                restricted_identity(store)
+                count = once(store, key)
+            except (OperationalError, DisconnectionError) as error:
+                if not single:
+                    ready.unlink(missing_ok=True)
+                failures += 1
+                state = getattr(getattr(error, "orig", None), "sqlstate", None)
+                transient = state is None or (
+                    isinstance(state, str)
+                    and (state.startswith("08") or state in {"57P01", "57P02", "57P03", "53300"})
+                )
+                if single or not transient or failures >= 6:
+                    raise RuntimeError("RISK_MONITOR_DATABASE_UNAVAILABLE") from None
+                store.engine.dispose()
+                delay = min(2 ** (failures - 1), 8)
+                print(
+                    f"Risk monitor database unavailable; retry {failures}/6 in {delay}s. "
+                    "Readiness withheld; fresh monitoring remains required.",
+                    flush=True,
+                )
+                stopped.wait(delay)
+                continue
+            failures = 0
+            if single:
+                print(f"PASSED: fixed risk monitor checked {count} configured SIMULATED accounts.")
+                break
+            ready.touch()
+            stopped.wait(5)
+    finally:
+        if not single:
+            ready.unlink(missing_ok=True)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--once", action="store_true")
@@ -69,33 +132,15 @@ def main() -> None:
     if not settings.database_url or not settings.auth_encryption_key:
         raise RuntimeError("Restricted database identity and private risk key required")
     store = Store(settings.database_url.get_secret_value())
-    running = True
+    stopped = Event()
 
     def stop(signum: int, frame: object) -> None:
-        nonlocal running
-        running = False
+        stopped.set()
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     try:
-        with store.session() as db:
-            role = db.execute(
-                text(
-                    "SELECT rolsuper,rolcreaterole,rolcreatedb FROM pg_roles "
-                    "WHERE rolname=current_user"
-                )
-            ).one()
-            if any(role) or db.scalar(
-                text("SELECT has_table_privilege(current_user,'risk_ledger','UPDATE')")
-            ):
-                raise RuntimeError("Risk monitor refuses privileged database identities")
-        while running:
-            count = once(store, settings.auth_encryption_key.get_secret_value())
-            Path("/tmp/risk-monitor.ready").touch()  # noqa: S108 - private container tmpfs heartbeat
-            if args.once:
-                print(f"PASSED: fixed risk monitor checked {count} configured SIMULATED accounts.")
-                break
-            time.sleep(5)
+        monitor(store, settings.auth_encryption_key.get_secret_value(), stopped, single=args.once)
     finally:
         store.engine.dispose()
 

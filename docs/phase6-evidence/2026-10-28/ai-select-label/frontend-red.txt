@@ -1,0 +1,77 @@
+
+> trading-research-web@0.1.0 test
+> vitest run src/ai/ai.test.tsx
+
+
+ RUN  v5.0.5 /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web
+
+ ❯ src/ai/ai.test.tsx (7 tests | 4 failed) 16ms
+   × keeps AI registry select names independent of empty option content 8ms
+   × keeps AI registry select names independent of loaded option content 2ms
+   × keeps AI registry select names independent of revised option content 1ms
+   × keeps analysis and context selectors explicitly named before models are available 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/ai/ai.test.tsx > keeps AI registry select names independent of empty option content
+ FAIL  src/ai/ai.test.tsx > keeps AI registry select names independent of loaded option content
+ FAIL  src/ai/ai.test.tsx > keeps AI registry select names independent of revised option content
+AssertionError: expected [ undefined, undefined, …(4) ] to deeply equal [ 'Destinație aprobată', …(5) ]
+
+- Expected
++ Received
+
+  [
+-   "Destinație aprobată",
+-   "Protocol",
+-   "Conexiune",
+-   "Rol",
+-   "Model principal",
+-   "Alternativă explicită · opțional",
++   undefined,
++   undefined,
++   undefined,
++   undefined,
++   undefined,
++   undefined,
+  ]
+
+ ❯ src/ai/ai.test.tsx:48:91
+     46|     const selects = [...markup.matchAll(/<select\b([^>]*)>([\s\S]*?)<\…
+     47|     expect(selects).toHaveLength(registryLabels.length);
+     48|     expect(selects.map(([, attributes]) => /aria-label="([^"]+)"/.exec…
+       |                                                                                           ^
+     49|       registryLabels,
+     50|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/ai/ai.test.tsx > keeps analysis and context selectors explicitly named before models are available
+AssertionError: expected [ undefined, undefined ] to deeply equal [ Array(2) ]
+
+- Expected
++ Received
+
+  [
+-   "Tipul analizei",
+-   "Tip de referință",
++   undefined,
++   undefined,
+  ]
+
+ ❯ src/ai/ai.test.tsx:71:91
+     69|     );
+     70|     const selects = [...markup.matchAll(/<select\b([^>]*)>/g)];
+     71|     expect(selects.map(([, attributes]) => /aria-label="([^"]+)"/.exec…
+       |                                                                                           ^
+     72|       'Tipul analizei',
+     73|       'Tip de referință',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 3 passed (7)
+   Start at  10:18:35
+   Duration  215ms (import 52%, transform 35%, tests 11%, worker 2%)
+
