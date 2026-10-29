@@ -9,7 +9,6 @@ import { useAuth } from '../auth/AuthProvider';
 import { navigate } from '../navigation/history';
 import type { JobSummary } from '../home/HomePage';
 import { safetyLabel } from '../RiskBanner';
-import cockpitTemplate from './cockpit-template.html?raw';
 
 type AccountStatus = components['schemas']['AccountStatus'];
 type RiskState = 'UNKNOWN' | 'CHECKING' | 'ATTENTION' | 'VERIFIED';
@@ -158,7 +157,7 @@ export default function CockpitPage({
     <iframe
       ref={frame}
       title="Local AI — AI Cockpit"
-      srcDoc={cockpitTemplate}
+      src="/cockpit.html"
       sandbox="allow-scripts"
       onLoad={sendSnapshot}
       style={{
