@@ -6,3 +6,6 @@ test-results/
 playwright-report/
 .cache/
 *.tsbuildinfo
+
+# Isolated, self-contained visual reference kept byte-for-byte matching the approved mockup.
+public/cockpit.html
