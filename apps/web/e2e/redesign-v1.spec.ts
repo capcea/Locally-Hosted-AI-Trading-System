@@ -12,28 +12,16 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
   if (captures) {
     expect(process.env.E2E_PHASE1_ISOLATED).toBe('1');
     await mkdir(folder, { recursive: true });
-    // Public candidates use the project's original viewport, separate from authenticated layouts.
-    // These are review candidates only; no accepted reference is copied or rewritten.
+    // Capture the approved signed-out Cockpit, never authentication or recovery pages.
     await page.goto('/');
-    for (const theme of ['light', 'dark']) {
-      await page.evaluate((value) => localStorage.setItem('research-theme', value), theme);
-      await page.reload();
-      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      await expect(page.locator('time[data-visual-clock]')).toBeVisible();
-      await expect(
-        page.locator('input[type=password],.enrollment-secret,.recovery-codes'),
-      ).toHaveCount(0);
-      await page.evaluate(() => document.fonts.ready);
-      await page.screenshot({
-        path: resolve(
-          folder,
-          `PUBLIC-REVIEW-home-${theme}-${info.project.name}-${process.platform}.png`,
-        ),
-        fullPage: true,
-        animations: 'disabled',
-        mask: [page.locator('time[data-visual-clock]')],
-      });
-    }
+    const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+    await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED / DENY_ALL');
+    await expect(page.locator('input[type=password],.enrollment-secret,.recovery-codes')).toHaveCount(0);
+    await page.screenshot({
+      path: resolve(folder, `PUBLIC-REVIEW-cockpit-${info.project.name}-${process.platform}.png`),
+      fullPage: true,
+      animations: 'disabled',
+    });
   }
   const { account } = await seedRiskFixture(page, info.project.name === 'mobile');
   const library = await page.request.get('/api/v1/research/strategies');
@@ -59,26 +47,13 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
   await expect(page).toHaveURL(/\/testeaza\/strategii$/);
   await page.goForward();
   await expect(wizard).toBeVisible();
-  const globalSearch = page.getByRole('search', {
-    name: 'Caută pagini și instrumente',
-    exact: true,
-  });
-  await globalSearch.getByRole('textbox').focus();
-  await globalSearch.getByRole('textbox').fill('Istoric verificabil');
-  await expect(page.getByRole('list', { name: 'Pagini găsite', exact: true })).toContainText(
-    'Istoric verificabil',
-  );
-  await page
-    .getByRole('list', { name: 'Pagini găsite', exact: true })
-    .getByRole('link')
-    .first()
-    .focus();
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('list', { name: 'Pagini găsite', exact: true })).toHaveCount(0);
-  await expect(globalSearch.getByRole('textbox')).toBeFocused();
+  // The simplified Cockpit navigation replaces the legacy global search panel.
+  const mainNav = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
+  await expect(mainNav.locator('.cockpit-nav-link')).toHaveCount(5);
+  await expect(mainNav.getByRole('link', { name: 'AI & Teste', exact: true })).toBeVisible();
 
   const screens = [
-    ['home', '/', 'Acasă'],
+    ['home', '/', 'Inteligență. Fără zgomot.'],
     ['strategii', '/testeaza/strategii', 'Strategii'],
     ['backtesting', '/testeaza/nou', 'Backtesting'],
     ['experimente', '/testeaza/activitate', 'Experimente'],
@@ -101,37 +76,31 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
       for (const [name, path, title] of screens) {
         await test.step(`${theme} ${viewport.width} ${name}`, async () => {
           await page.goto(path);
-          await expect(
-            page.getByRole('heading', { name: title, exact: true, level: 1 }),
-          ).toBeVisible();
+          if (name === 'home') {
+            const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+            await expect(cockpit.getByRole('heading', { name: title, exact: true })).toBeVisible();
+            await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED / DENY_ALL');
+            await expect(cockpit.locator('.nav-list .nav-item')).toHaveCount(5);
+          } else {
+            await expect(page.getByRole('heading', { name: title, exact: true, level: 1 })).toBeVisible();
+            await expect(page.getByRole('complementary', { name: 'Siguranță risc globală', exact: true })).toBeVisible();
+            await expect(page.locator('.cockpit-simulation-notice')).toContainText('SIMULATED / DENY_ALL');
+            await expect(page.getByRole('navigation', { name: 'Navigare principală', exact: true }).locator('.cockpit-nav-link')).toHaveCount(5);
+          }
           await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-          await expect(
-            page.getByRole('complementary', { name: 'Siguranță risc globală', exact: true }),
-          ).toBeVisible();
-          await expect(page.locator('.mode-strip')).toContainText('SIMULATED / DENY_ALL');
-          expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
-            false,
-          );
+          expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
           if (name === 'ai')
             await expect(
               page.getByRole('button', { name: 'Solicită analiza', exact: true }),
             ).toBeDisabled();
           if (name === 'home' && viewport.width >= 1280) {
-            const status = page.locator('.v1-kpi-value[data-kind="status"]');
-            // UNKNOWN is a safety state, not an oversized financial metric split across lines.
-            expect(
-              await status.evaluate((element) => {
-                const line = Number.parseFloat(getComputedStyle(element).lineHeight);
-                return element.getBoundingClientRect().height <= line + 1;
-              }),
-            ).toBe(true);
-            const performance = await page.locator('.v1-home-performance').boundingBox();
-            const recent = await page.locator('.v1-home-recent').boundingBox();
-            expect(performance).not.toBeNull();
-            expect(recent).not.toBeNull();
-            // The AI card must not stretch the chart or push the recent table down its full height.
-            expect(recent!.y - performance!.y - performance!.height).toBeGreaterThanOrEqual(0);
-            expect(recent!.y - performance!.y - performance!.height).toBeLessThanOrEqual(16);
+            const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+            await expect(cockpit.locator('.hero')).toBeVisible();
+            const hero = await cockpit.locator('.hero').boundingBox();
+            const stats = await cockpit.locator('.stats').boundingBox();
+            expect(hero).not.toBeNull();
+            expect(stats).not.toBeNull();
+            expect(stats!.y).toBeGreaterThan(hero!.y);
           }
           if (name === 'conturi')
             for (const label of [
@@ -157,8 +126,7 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
               ),
               fullPage: true,
               animations: 'disabled',
-              mask: [page.locator('time[data-visual-clock]')],
-            });
+                          });
           }
         });
       }
