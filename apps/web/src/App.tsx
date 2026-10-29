@@ -202,7 +202,7 @@ function Shell() {
             )}
             <CockpitSimulationNotice />
             {full && <RiskBanner key={session.user.id} />}
-            <details className="cockpit-page-tools">
+            <details key={route.path} className="cockpit-page-tools">
               <summary>Secțiuni și instrumente avansate</summary>
               <SectionNavigation route={route} authenticated={full} />
             </details>
