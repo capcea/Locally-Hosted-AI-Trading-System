@@ -44,7 +44,7 @@ function ResponseContent({
         <strong>{typeof output.title === 'string' ? output.title : 'Răspuns AI'}</strong>
       </div>
       <p className="ai-chat-disclaimer">
-        Analiză neverificată. Nu reprezintă un semnal de tranzacționare sau autorizare de ordine.
+        Propunere AI neverificată. Nu reprezintă un semnal de tranzacționare sau autorizare de ordine.
       </p>
       {['summary', 'hypothesis'].map(
         (key) => typeof output[key] === 'string' && <p key={key}>{output[key]}</p>,
@@ -316,7 +316,7 @@ export default function AIChat({ session }: { session: Session }) {
           <p>Întreabă modelul, citește rezultatul și revizuiește dovezile într-un singur loc.</p>
         </div>
         <Link href="/setari/ai">
-          <Settings2 size={16} aria-hidden="true" /> Modele și setări
+          <Settings2 size={16} aria-hidden="true" /> Configurează modele și roluri
         </Link>
       </header>
       <div className="ai-chat-layout">
@@ -460,6 +460,7 @@ export default function AIChat({ session }: { session: Session }) {
                 onChange={(event) => {
                   setRole(event.target.value as Role);
                   setAck(false);
+                  setAllowFallback(false);
                 }}
               >
                 {roles.map((option) => (
