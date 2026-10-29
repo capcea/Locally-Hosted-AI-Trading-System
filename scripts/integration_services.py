@@ -252,7 +252,10 @@ def main(
                     timeout=600,
                 )
 
-            if not browser_only:
+            if browser_only:
+                # The focused browser runner still needs validated disposable service ports.
+                config_path.write_text(json.dumps(config))
+            else:
                 test_stage("write")
                 # Verify native-service restart persistence in the full integration mode.
                 run([*compose, "stop", "postgres", "redis", "minio"], timeout=60)
