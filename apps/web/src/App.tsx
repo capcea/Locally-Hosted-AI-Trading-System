@@ -1,15 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Home,
-  FlaskConical,
-  ChartNoAxesCombined,
-  ShieldCheck,
-  Settings,
-  Moon,
-  Sun,
-  Bell,
-  CircleHelp,
-} from 'lucide-react';
 import { AuthProvider, useAuth } from './auth/AuthProvider';
 import { AuthFeedback, MfaStepUp } from './auth/MfaStepUp';
 import { Authentication, Workspace, Security } from './Management';
@@ -18,8 +7,7 @@ import { useOverview } from './useOverview';
 import { api } from './management-api';
 import type { RecordItem } from './management-api';
 import { allRecords } from './records';
-import { primary } from './navigation/routes';
-import { areaDescriptions, settingsGroups } from './navigation/sections';
+import { settingsGroups } from './navigation/sections';
 import { SectionNavigation } from './navigation/SectionNavigation';
 import { Link, navigate, useRoute } from './navigation/history';
 import RiskBanner from './RiskBanner';
@@ -29,16 +17,13 @@ import BrokerCenter from './BrokerCenter';
 import StrategyLab from './StrategyLab';
 import AICenter from './ai/AICenter';
 import CampaignCenter from './campaigns/CampaignCenter';
-import HomePage from './home/HomePage';
 import CockpitPage from './cockpit/CockpitPage';
 import { InfrastructurePage, GovernancePage, RoadmapPage } from './LegacyPublic';
 import { Evidence } from './ui/Controls';
 import { PublicReadTime } from './ui/PublicReadTime';
-import { QuickSearch, SidebarSections, SidebarStatus } from './v1/ShellTools';
-import { pageTitles } from './v1/navigation';
 import { AccountsOverview } from './v1/AccountsOverview';
+import { CockpitNavigation, CockpitTopbar, CockpitPageHeading, CockpitSimulationNotice } from './cockpit/PlatformChrome';
 
-const icons = [Home, FlaskConical, ChartNoAxesCombined, ShieldCheck, Settings];
 function Shell() {
   const route = useRoute();
   const cockpitHome = route.screen === 'home';
@@ -54,8 +39,6 @@ function Shell() {
     overview,
     error: overviewError,
     receivedAt: lastSuccess,
-    loading: overviewLoading,
-    now,
     stale,
     refresh,
   } = useOverview();
@@ -66,9 +49,9 @@ function Shell() {
   const [contextOwner, setContextOwner] = useState('');
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem('research-theme') ?? 'light';
+      return localStorage.getItem('research-theme') ?? 'dark';
     } catch {
-      return 'light';
+      return 'dark';
     }
   });
   const [systemLight, setSystemLight] = useState(
@@ -132,7 +115,6 @@ function Shell() {
   const publicPage = ['home', 'diagnostics', 'about', 'roadmap', 'not-found'].includes(
     route.screen,
   );
-  const title = pageTitles(route);
   const tab: Tab =
     route.screen === 'audit'
       ? 'audit'
@@ -140,123 +122,24 @@ function Shell() {
         ? 'security'
         : ((route.section ?? 'accounts') as Tab);
   return (
-    <div className={cockpitHome ? 'product-shell cockpit-root' : 'product-shell'}>
+    <div className={cockpitHome ? 'product-shell cockpit-root' : 'product-shell ai-platform'}>
       <a className="skip-link" href="#main-content">
         Mergi la conținut
       </a>
-      {!cockpitHome && (
-        <aside className="product-sidebar">
-          <Link href="/" className="product-brand">
-            <ChartNoAxesCombined aria-hidden="true" />
-            <span>
-              AI Trading<small>Research Platform</small>
-            </span>
-          </Link>
-          <div className="v1-sidebar-navigation">
-            <nav className="primary-nav" aria-label="Navigare principală">
-              {primary.map((p, i) => {
-                const Icon = icons[i];
-                return (
-                  <Link
-                    key={p.path}
-                    href={p.path}
-                    aria-current={route.area === p.area ? 'page' : undefined}
-                    aria-label={p.label}
-                  >
-                    <Icon aria-hidden="true" size={20} />
-                    <span>{p.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
-            <SidebarSections route={route} />
-          </div>
-          <SidebarStatus
-            overview={overview}
-            stale={stale}
-            now={now}
-            error={overviewError}
-            loading={overviewLoading}
-            refresh={() => void refresh()}
-          />
-          <p className="sidebar-mode">
-            SIMULATED / DENY_ALL
-            <br />
-            Fără ordine către brokeri externi
-          </p>
-        </aside>
-      )}
+      {!cockpitHome && <CockpitNavigation route={route} />}
       <div className="product-main">
         {!cockpitHome && (
-          <header className="product-header">
-            <div className="v1-page-title">
-              <h1 ref={titleRef} tabIndex={-1}>
-                {title}
-              </h1>
-              <p>{areaDescriptions[route.area]}</p>
-            </div>
-            <QuickSearch key={route.path} />
-            <div className="header-controls">
-              <Link
-                className="icon-button"
-                href="/conturi/siguranta"
-                aria-label="Verifică incidentele conturilor"
-              >
-                <Bell size={20} />
-              </Link>
-              <Link
-                className="icon-button"
-                href="/setari/despre"
-                aria-label="Ajutor și limitele platformei"
-              >
-                <CircleHelp size={20} />
-              </Link>
-              <button
-                type="button"
-                className="icon-button"
-                aria-label={light ? 'Activează tema întunecată' : 'Activează tema luminoasă'}
-                onClick={() => setTheme(light ? 'dark' : 'light')}
-              >
-                {light ? <Moon /> : <Sun />}
-              </button>
-              {full ? (
-                <>
-                  <span
-                    className="v1-avatar"
-                    title={`${session.user.display_name} · ${session.user.role}`}
-                    aria-label={`${session.user.display_name} · ${session.user.role}`}
-                  >
-                    {session.user.display_name
-                      .split(/\s+/)
-                      .filter(Boolean)
-                      .slice(0, 2)
-                      .map((x) => x[0])
-                      .join('')
-                      .toLocaleUpperCase('ro-RO')}
-                  </span>
-                  <button
-                    className="text-button"
-                    onClick={() =>
-                      void api('/auth/logout', {
-                        method: 'POST',
-                        csrf: session.csrf_token,
-                        body: {},
-                      })
-                        .then(() => {
-                          setAccountId('');
-                          setSession(null);
-                        })
-                        .catch(() => refreshSession())
-                    }
-                  >
-                    Deconectare
-                  </button>
-                </>
-              ) : (
-                <Link href="/autentificare">Autentificare</Link>
-              )}
-            </div>
-          </header>
+          <CockpitTopbar
+            route={route}
+            session={session}
+            titleRef={titleRef}
+            onLogout={() => {
+              if (session?.state !== 'FULL') return;
+              void api('/auth/logout', { method: 'POST', csrf: session.csrf_token, body: {} })
+                .then(() => { setAccountId(''); setSession(null); })
+                .catch(() => refreshSession());
+            }}
+          />
         )}
         {cockpitHome ? (
           <main id="main-content" tabIndex={-1} className="cockpit-main">
@@ -264,48 +147,41 @@ function Shell() {
           </main>
         ) : (
           <main id="main-content" tabIndex={-1}>
-            <header className="page-heading">
-              {full && (
-                <label className="account-context">
-                  Contul de lucru
-                  <select
-                    aria-label="Contul de lucru"
-                    value={selectedAccount}
-                    onChange={(e) => {
-                      chooseAccount(e.target.value);
-                      if (route.area === 'accounts' && e.target.value)
-                        navigate(`/conturi/${e.target.value}/siguranta`);
-                    }}
-                  >
-                    <option value="">
-                      {accountError
-                        ? 'Lista conturilor nu este disponibilă'
-                        : accountsOwner !== ownerId
-                          ? 'Verificăm conturile…'
-                          : visibleAccounts.length
-                            ? 'Alege un cont'
-                            : 'Niciun cont în lista citită'}
-                    </option>
-                    {visibleAccounts.map((a) => (
-                      <option key={a.id} value={a.id}>
-                        {a.data.name}
-                      </option>
-                    ))}
-                  </select>
-                  {accountError && (
-                    <small>UNKNOWN · lista conturilor nu poate fi citită complet.</small>
-                  )}
-                </label>
-              )}
-            </header>
-            <div className="mode-strip">
-              <strong>
-                <ShieldCheck size={18} aria-hidden="true" /> SIMULARE · ordine externe blocate
-              </strong>
-              <span>SIMULATED / DENY_ALL</span>
-            </div>
+            <CockpitPageHeading route={route} />
+            {full && (
+              <label className="account-context cockpit-account-context">
+                Contul de lucru
+                <select
+                  aria-label="Contul de lucru"
+                  value={selectedAccount}
+                  onChange={(e) => {
+                    chooseAccount(e.target.value);
+                    if (route.area === 'accounts' && e.target.value)
+                      navigate(`/conturi/${e.target.value}/siguranta`);
+                  }}
+                >
+                  <option value="">
+                    {accountError
+                      ? 'Lista conturilor nu este disponibilă'
+                      : accountsOwner !== ownerId
+                        ? 'Verificăm conturile…'
+                        : visibleAccounts.length
+                          ? 'Alege un cont'
+                          : 'Niciun cont în lista citită'}
+                  </option>
+                  {visibleAccounts.map((a) => (
+                    <option key={a.id} value={a.id}>{a.data.name}</option>
+                  ))}
+                </select>
+                {accountError && <small>UNKNOWN · lista conturilor nu poate fi citită complet.</small>}
+              </label>
+            )}
+            <CockpitSimulationNotice />
             {full && <RiskBanner key={session.user.id} />}
-            <SectionNavigation route={route} authenticated={full} />
+            <details className="cockpit-page-tools">
+              <summary>Secțiuni și instrumente avansate</summary>
+              <SectionNavigation route={route} authenticated={full} />
+            </details>
             {unavailable && (
               <p role="alert" className="error-banner">
                 UNAVAILABLE · nu putem verifica sesiunea. Nu presupunem că accesul este confirmat.{' '}
@@ -329,15 +205,6 @@ function Shell() {
               />
             ) : (
               <>
-                {route.screen === 'home' && (
-                  <HomePage
-                    key={session?.user.id ?? 'public'}
-                    overview={overview}
-                    stale={stale}
-                    refresh={() => void refresh()}
-                    accountId={selectedAccount}
-                  />
-                )}
                 {route.screen === 'auth' && (
                   <>
                     <p>Identitatea este confirmată în doi pași.</p>
