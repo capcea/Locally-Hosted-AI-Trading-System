@@ -22,7 +22,12 @@ import { InfrastructurePage, GovernancePage, RoadmapPage } from './LegacyPublic'
 import { Evidence } from './ui/Controls';
 import { PublicReadTime } from './ui/PublicReadTime';
 import { AccountsOverview } from './v1/AccountsOverview';
-import { CockpitNavigation, CockpitTopbar, CockpitPageHeading, CockpitSimulationNotice } from './cockpit/PlatformChrome';
+import {
+  CockpitNavigation,
+  CockpitTopbar,
+  CockpitPageHeading,
+  CockpitSimulationNotice,
+} from './cockpit/PlatformChrome';
 
 function Shell() {
   const route = useRoute();
@@ -35,13 +40,7 @@ function Shell() {
     refresh: refreshSession,
     expire,
   } = useAuth();
-  const {
-    overview,
-    error: overviewError,
-    receivedAt: lastSuccess,
-    stale,
-    refresh,
-  } = useOverview();
+  const { overview, error: overviewError, receivedAt: lastSuccess, stale, refresh } = useOverview();
   const [accounts, setAccounts] = useState<RecordItem[]>([]);
   const [accountError, setAccountError] = useState(false);
   const [accountId, setAccountId] = useState('');
@@ -136,7 +135,10 @@ function Shell() {
             onLogout={() => {
               if (session?.state !== 'FULL') return;
               void api('/auth/logout', { method: 'POST', csrf: session.csrf_token, body: {} })
-                .then(() => { setAccountId(''); setSession(null); })
+                .then(() => {
+                  setAccountId('');
+                  setSession(null);
+                })
                 .catch(() => refreshSession());
             }}
           />
@@ -170,10 +172,14 @@ function Shell() {
                           : 'Niciun cont în lista citită'}
                   </option>
                   {visibleAccounts.map((a) => (
-                    <option key={a.id} value={a.id}>{a.data.name}</option>
+                    <option key={a.id} value={a.id}>
+                      {a.data.name}
+                    </option>
                   ))}
                 </select>
-                {accountError && <small>UNKNOWN · lista conturilor nu poate fi citită complet.</small>}
+                {accountError && (
+                  <small>UNKNOWN · lista conturilor nu poate fi citită complet.</small>
+                )}
               </label>
             )}
             <CockpitSimulationNotice />
