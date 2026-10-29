@@ -1,6 +1,7 @@
 import { expect, it, vi } from 'vitest';
 import { renderToStaticMarkup } from 'react-dom/server';
 import AICenter, { Registry } from './AICenter';
+import { analysisJobs } from './AIChat';
 import { active, jobLabel, stateLabels } from './api';
 import type { Job, Model } from './api';
 import type { Session } from '../management-api';
@@ -145,4 +146,13 @@ it('uses explicit OpenRouter protocol and cloud consent without exposing credent
   expect(markup).toContain('Configurează cheia OpenRouter');
   expect(markup).not.toContain('type="password"');
   expect(markup).toContain('Verifică mai întâi un model');
+});
+
+it('shows only actual inference jobs in the chat history', () => {
+  const sample = [
+    { id: 'one', kind: 'DISCOVER' },
+    { id: 'two', kind: 'PROBE' },
+    { id: 'three', kind: 'INFER' },
+  ] as Job[];
+  expect(analysisJobs(sample).map((job) => job.id)).toEqual(['three']);
 });
