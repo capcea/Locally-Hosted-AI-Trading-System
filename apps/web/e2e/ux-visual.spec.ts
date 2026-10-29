@@ -38,6 +38,20 @@ test('public AI Cockpit keeps exact dark design tokens, safe states and mobile n
   expect((await refreshed).status()).toBe(200);
 
   await page.setViewportSize({ width: 320, height: 800 });
+  const overflow = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>('body *')]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.right > innerWidth + 1;
+      })
+      .slice(0, 12)
+      .map((element) => ({
+        element: element.tagName,
+        className: typeof element.className === 'string' ? element.className.slice(0, 100) : '',
+        right: Math.round(element.getBoundingClientRect().right),
+      })),
+  );
+  expect(overflow, 'No mobile element should extend beyond the viewport').toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   const nav = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
   const primary = nav.locator('.cockpit-nav-link');
