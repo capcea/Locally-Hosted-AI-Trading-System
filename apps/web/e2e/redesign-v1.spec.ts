@@ -16,7 +16,9 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
     await page.goto('/');
     const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
     await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED / DENY_ALL');
-    await expect(page.locator('input[type=password],.enrollment-secret,.recovery-codes')).toHaveCount(0);
+    await expect(
+      page.locator('input[type=password],.enrollment-secret,.recovery-codes'),
+    ).toHaveCount(0);
     await page.screenshot({
       path: resolve(folder, `PUBLIC-REVIEW-cockpit-${info.project.name}-${process.platform}.png`),
       fullPage: true,
@@ -82,13 +84,25 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
             await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED / DENY_ALL');
             await expect(cockpit.locator('.nav-list .nav-item')).toHaveCount(5);
           } else {
-            await expect(page.getByRole('heading', { name: title, exact: true, level: 1 })).toBeVisible();
-            await expect(page.getByRole('complementary', { name: 'Siguranță risc globală', exact: true })).toBeVisible();
-            await expect(page.locator('.cockpit-simulation-notice')).toContainText('SIMULATED / DENY_ALL');
-            await expect(page.getByRole('navigation', { name: 'Navigare principală', exact: true }).locator('.cockpit-nav-link')).toHaveCount(5);
+            await expect(
+              page.getByRole('heading', { name: title, exact: true, level: 1 }),
+            ).toBeVisible();
+            await expect(
+              page.getByRole('complementary', { name: 'Siguranță risc globală', exact: true }),
+            ).toBeVisible();
+            await expect(page.locator('.cockpit-simulation-notice')).toContainText(
+              'SIMULATED / DENY_ALL',
+            );
+            await expect(
+              page
+                .getByRole('navigation', { name: 'Navigare principală', exact: true })
+                .locator('.cockpit-nav-link'),
+            ).toHaveCount(5);
           }
           await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-          expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+          expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
+            false,
+          );
           if (name === 'ai')
             await expect(
               page.getByRole('button', { name: 'Solicită analiza', exact: true }),
@@ -126,7 +140,7 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
               ),
               fullPage: true,
               animations: 'disabled',
-                          });
+            });
           }
         });
       }
