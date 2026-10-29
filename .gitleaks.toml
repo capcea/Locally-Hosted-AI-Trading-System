@@ -11,4 +11,3 @@ description = "Historical synthetic research experiment key false positive"
 condition = "AND"
 commits = ["6f99df3bf696867dc3c7f972b3ff8e9982cddf4e"]
 paths = ["^docs/phase5-evidence/2026-10-27/native-research-context\\.txt$"]
-regexes = ["synthetic"]
