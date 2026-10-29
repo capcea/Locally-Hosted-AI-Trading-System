@@ -1,3 +1,4 @@
+import './cockpit-shell.css';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { components } from '../generated/api';
 import type { Overview } from '../api';
