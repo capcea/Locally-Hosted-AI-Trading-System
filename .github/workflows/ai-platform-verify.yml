@@ -18,6 +18,15 @@ jobs:
           node-version: '24.7.0'
       - name: Install locked web dependencies
         run: npm --prefix apps/web ci --no-audit --no-fund
+      - name: Export formatted Cockpit patch
+        run: |
+          cd apps/web
+          npx prettier --write src/App.tsx src/cockpit/PlatformChrome.tsx src/cockpit/platform.css e2e/platform.spec.ts
+          node --input-type=module <<'EOF'
+          import fs from 'node:fs';
+          const files = ['src/App.tsx','src/cockpit/PlatformChrome.tsx','src/cockpit/platform.css','e2e/platform.spec.ts'];
+          console.log('COCKPIT_FIX_FORMAT=' + JSON.stringify(Object.fromEntries(files.map(p => [p, fs.readFileSync(p,'utf8')]))));
+          EOF
       - name: Lint application
         run: npm --prefix apps/web run lint
       - name: TypeScript and Vite build
