@@ -30,6 +30,7 @@ import StrategyLab from './StrategyLab';
 import AICenter from './ai/AICenter';
 import CampaignCenter from './campaigns/CampaignCenter';
 import HomePage from './home/HomePage';
+import CockpitPage from './cockpit/CockpitPage';
 import { InfrastructurePage, GovernancePage, RoadmapPage } from './LegacyPublic';
 import { Evidence } from './ui/Controls';
 import { PublicReadTime } from './ui/PublicReadTime';
@@ -40,6 +41,7 @@ import { AccountsOverview } from './v1/AccountsOverview';
 const icons = [Home, FlaskConical, ChartNoAxesCombined, ShieldCheck, Settings];
 function Shell() {
   const route = useRoute();
+  const cockpitHome = route.screen === 'home';
   const {
     session,
     setSession,
@@ -138,11 +140,11 @@ function Shell() {
         ? 'security'
         : ((route.section ?? 'accounts') as Tab);
   return (
-    <div className="product-shell">
+    <div className={cockpitHome ? "product-shell cockpit-root" : "product-shell"}>
       <a className="skip-link" href="#main-content">
         Mergi la conținut
       </a>
-      <aside className="product-sidebar">
+      {!cockpitHome && <aside className="product-sidebar">
         <Link href="/" className="product-brand">
           <ChartNoAxesCombined aria-hidden="true" />
           <span>
@@ -181,8 +183,10 @@ function Shell() {
           <br />
           Fără ordine către brokeri externi
         </p>
-      </aside>
+      </aside>}
       <div className="product-main">
+        {!cockpitHome && <header className="product-header">
+          <span>Platformă de cercetare</span>
         <header className="product-header">
           <div className="v1-page-title">
             <h1 ref={titleRef} tabIndex={-1}>
@@ -247,8 +251,8 @@ function Shell() {
               <Link href="/autentificare">Autentificare</Link>
             )}
           </div>
-        </header>
-        <main id="main-content" tabIndex={-1}>
+        </header>}
+        {cockpitHome ? <main id="main-content" tabIndex={-1} className="cockpit-main"><CockpitPage overview={overview} stale={stale} /></main> : <main id="main-content" tabIndex={-1}>
           <header className="page-heading">
             {full && (
               <label className="account-context">
@@ -314,7 +318,7 @@ function Shell() {
             />
           ) : (
             <>
-              {route.screen === 'home' && (
+              {false && route.screen === 'home' && (
                 <HomePage
                   key={session?.user.id ?? 'public'}
                   overview={overview}
@@ -535,7 +539,7 @@ function Shell() {
               'Stare publică necunoscută'
             )}
           </footer>
-        </main>
+        </main>}
       </div>
     </div>
   );
