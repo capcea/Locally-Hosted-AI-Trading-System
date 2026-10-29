@@ -185,9 +185,8 @@ function Shell() {
         </p>
       </aside>}
       <div className="product-main">
-        {!cockpitHome && <header className="product-header">
-          <span>Platformă de cercetare</span>
-        <header className="product-header">
+        {!cockpitHome && (
+          <header className="product-header">
           <div className="v1-page-title">
             <h1 ref={titleRef} tabIndex={-1}>
               {title}
@@ -251,7 +250,8 @@ function Shell() {
               <Link href="/autentificare">Autentificare</Link>
             )}
           </div>
-        </header>}
+          </header>
+        )}
         {cockpitHome ? <main id="main-content" tabIndex={-1} className="cockpit-main"><CockpitPage overview={overview} stale={stale} /></main> : <main id="main-content" tabIndex={-1}>
           <header className="page-heading">
             {full && (
