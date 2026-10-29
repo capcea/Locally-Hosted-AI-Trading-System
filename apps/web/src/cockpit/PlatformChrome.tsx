@@ -157,13 +157,23 @@ export function CockpitNavigation({
           </strong>
           <p>Modul de execuție externă este dezactivat.</p>
         </div>
-        <section className="cockpit-health" aria-label="Starea tehnică a sistemului" data-status={health.status}>
+        <section
+          className="cockpit-health"
+          aria-label="Starea tehnică a sistemului"
+          data-status={health.status}
+        >
           <details>
             <summary>
               <span>Starea serviciilor</span>
               <strong data-health={health.status}>{health.status}</strong>
             </summary>
-            <p role="status">{error ? 'UNKNOWN · date indisponibile sau invalide' : stale || !overview ? 'UNKNOWN · observație expirată sau neverificată' : 'Ultima observație tehnică verificată'}</p>
+            <p role="status">
+              {error
+                ? 'UNKNOWN · date indisponibile sau invalide'
+                : stale || !overview
+                  ? 'UNKNOWN · observație expirată sau neverificată'
+                  : 'Ultima observație tehnică verificată'}
+            </p>
             <ul>
               {health.rows.map((row) => (
                 <li key={row.id} data-service={row.id} data-status={row.status}>
@@ -172,7 +182,12 @@ export function CockpitNavigation({
                 </li>
               ))}
             </ul>
-            <button type="button" className="cockpit-health-refresh" disabled={loading} onClick={refresh}>
+            <button
+              type="button"
+              className="cockpit-health-refresh"
+              disabled={loading}
+              onClick={refresh}
+            >
               {loading ? 'Verificăm…' : 'Verifică din nou'}
             </button>
             <Link href="/setari/diagnostic">Diagnostic tehnic</Link>
