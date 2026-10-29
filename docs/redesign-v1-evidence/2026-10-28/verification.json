@@ -1,0 +1,375 @@
+[
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 17.246,
+    "output": "docs/redesign-v1-evidence/2026-10-28/acceptance-source-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.796,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.041,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-contracts.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.922,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-e2e-list.txt"
+  },
+  {
+    "command": [
+      "make",
+      "integration"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 265.235,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-integration.txt"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.13,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-repository.txt"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.228,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-secrets.txt"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.303,
+    "output": "docs/redesign-v1-evidence/2026-10-28/baseline-smoke.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.112,
+    "output": "docs/redesign-v1-evidence/2026-10-28/comparison-source-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.958,
+    "output": "docs/redesign-v1-evidence/2026-10-28/complete-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 17.163,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.14,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-contracts.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.793,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-e2e-list.txt"
+  },
+  {
+    "command": [
+      "make",
+      "integration"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 269.743,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-integration.txt"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.344,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-smoke.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.614,
+    "output": "docs/redesign-v1-evidence/2026-10-28/routing-final-check.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "typecheck"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.442,
+    "output": "docs/redesign-v1-evidence/2026-10-28/shell-typecheck.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.129,
+    "output": "docs/redesign-v1-evidence/2026-10-28/ui-check-2.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 0.046,
+    "output": "docs/redesign-v1-evidence/2026-10-28/ui-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.654,
+    "output": "docs/redesign-v1-evidence/2026-10-28/verified-final-check.txt"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=.cache/buildx",
+      "docker",
+      "compose",
+      "up",
+      "-d",
+      "--build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "120",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.81,
+    "output": "docs/redesign-v1-evidence/2026-10-28/web-accepted-source-refresh.txt"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=.cache/buildx",
+      "docker",
+      "compose",
+      "up",
+      "-d",
+      "--build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "120",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.642,
+    "output": "docs/redesign-v1-evidence/2026-10-28/web-final-refresh.txt"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=.cache/buildx",
+      "docker",
+      "compose",
+      "up",
+      "-d",
+      "--build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "120",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 18.278,
+    "output": "docs/redesign-v1-evidence/2026-10-28/web-refresh.txt"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.246,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-repository-check.txt"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=.cache/buildx",
+      "docker",
+      "compose",
+      "up",
+      "-d",
+      "--build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "120",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.671,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-web-image.txt"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.872,
+    "output": "docs/redesign-v1-evidence/2026-10-28/keyboard-final-check.txt"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.858,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-secret-scan.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.12,
+    "output": "docs/redesign-v1-evidence/2026-10-28/final-whitespace.txt"
+  },
+  {
+    "command": [
+      "env",
+      "E2E_ONLY_SCENARIO=redesign",
+      "make",
+      "browser-integration"
+    ],
+    "status": "BLOCKED_NOT_EXECUTED",
+    "exit_code": null,
+    "reason": "Existing managed localhost-origin denial respected; no browser/CLI/CDP/proxy bypass."
+  },
+  {
+    "command": [
+      "env",
+      "V1_CAPTURE_CANDIDATES=1",
+      "E2E_ONLY_SCENARIO=redesign",
+      "make",
+      "browser-integration"
+    ],
+    "status": "BLOCKED_NOT_EXECUTED",
+    "exit_code": null,
+    "reason": "Existing managed localhost-origin denial respected; no browser/CLI/CDP/proxy bypass."
+  },
+  {
+    "command": [
+      "env",
+      "-u",
+      "E2E_ONLY_PROJECT",
+      "-u",
+      "E2E_ONLY_SCENARIO",
+      "-u",
+      "E2E_UPDATE_SNAPSHOTS",
+      "make",
+      "browser-integration"
+    ],
+    "status": "BLOCKED_NOT_EXECUTED",
+    "exit_code": null,
+    "reason": "Existing managed localhost-origin denial respected; no browser/CLI/CDP/proxy bypass."
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.806,
+    "output": "docs/redesign-v1-evidence/2026-10-28/completion-secret-scan.txt"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.139,
+    "output": "docs/redesign-v1-evidence/2026-10-28/completion-repository-check.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.042,
+    "output": "docs/redesign-v1-evidence/2026-10-28/completion-whitespace.txt"
+  }
+]

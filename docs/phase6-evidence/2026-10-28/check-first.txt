@@ -1,0 +1,25 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (130 > 100)
+  --> apps/api/catalog.py:52:101
+   |
+50 |         title="Analiză AI privată",
+51 |         status="CURRENT",
+52 |         acceptance="Modele verificate, răspunsuri structurate și cote; acceptarea externă rămâne necesară. Fără execuție de cod.",
+   |                                                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+53 |     ),
+54 |     Phase(
+   |
+
+E501 Line too long (105 > 100)
+  --> scripts/ai_setup.py:52:101
+   |
+50 |                 "user default reset on nopass -@all +ping",
+51 |                 f"user ai_api reset on #{queue_hash} ~ai:* -@all +ping +get +lpush +ltrim",
+52 |                 f"user ai_worker reset on #{queue_hash} ~ai:* -@all +ping +get +set +lpush +ltrim +rpop",
+   |                                                                                                     ^^^^^
+53 |             ]
+54 |         )
+   |
+
+Found 2 errors.
+make: *** [lint] Error 1

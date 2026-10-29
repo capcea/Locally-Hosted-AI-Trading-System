@@ -1,0 +1,2 @@
+ Container ai-trading-research-ai-redis-1 Restarting 
+ Container ai-trading-research-ai-redis-1 Started 

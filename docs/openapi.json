@@ -1924,7 +1924,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ConnectionInput"
+                "$ref": "#/components/schemas/apps__api__execution__schemas__ConnectionInput"
               }
             }
           }
@@ -3860,6 +3860,1372 @@
         }
       }
     },
+    "/api/v1/ai/status": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Status",
+        "operationId": "status_api_v1_ai_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Status Api V1 Ai Status Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/endpoints": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Endpoints",
+        "operationId": "endpoints_api_v1_ai_endpoints_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Endpoints Api V1 Ai Endpoints Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/connections": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Connections",
+        "operationId": "connections_api_v1_ai_connections_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Connections Api V1 Ai Connections Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Create Connection",
+        "operationId": "create_connection_api_v1_ai_connections_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/packages__ai__contracts__ConnectionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Create Connection Api V1 Ai Connections Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/connections/{connection_id}": {
+      "patch": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Enable Connection",
+        "operationId": "enable_connection_api_v1_ai_connections__connection_id__patch",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnabledInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "boolean"
+                  },
+                  "title": "Response Enable Connection Api V1 Ai Connections  Connection Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/connections/{connection_id}/discover": {
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Discover",
+        "operationId": "discover_api_v1_ai_connections__connection_id__discover_post",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionKey"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/models": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Models",
+        "operationId": "models_api_v1_ai_models_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Models Api V1 Ai Models Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Register Model",
+        "operationId": "register_model_api_v1_ai_models_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Register Model Api V1 Ai Models Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/models/{model_id}/probe": {
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Probe",
+        "operationId": "probe_api_v1_ai_models__model_id__probe_post",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Model Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActionKey"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/routes": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Routes",
+        "operationId": "routes_api_v1_ai_routes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Routes Api V1 Ai Routes Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Route Role",
+        "operationId": "route_role_api_v1_ai_routes_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Route Role Api V1 Ai Routes Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests": {
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Submit",
+        "operationId": "submit_api_v1_ai_requests_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Requests",
+        "operationId": "requests_api_v1_ai_requests_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AIJobView"
+                  },
+                  "title": "Response Requests Api V1 Ai Requests Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/{request_id}": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Get Request",
+        "operationId": "get_request_api_v1_ai_requests__request_id__get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/{request_id}/cancel": {
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Cancel",
+        "operationId": "cancel_api_v1_ai_requests__request_id__cancel_post",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/{request_id}/content": {
+      "delete": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Erase Content",
+        "operationId": "erase_content_api_v1_ai_requests__request_id__content_delete",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/{request_id}/events": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Events",
+        "operationId": "events_api_v1_ai_requests__request_id__events_get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "After"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Events Api V1 Ai Requests  Request Id  Events Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/{request_id}/stream": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Stream",
+        "operationId": "stream_api_v1_ai_requests__request_id__stream_get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/{request_id}/wait": {
+      "get": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Wait",
+        "operationId": "wait_api_v1_ai_requests__request_id__wait_get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "seconds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 15,
+              "minimum": 0,
+              "default": 10,
+              "title": "Seconds"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AIJobView"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/cloud-policy": {
+      "get": {
+        "tags": [
+          "Explicit opt-in public AI cloud"
+        ],
+        "summary": "Policy",
+        "operationId": "policy_api_v1_ai_cloud_policy_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Policy Api V1 Ai Cloud Policy Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/endpoints/openrouter": {
+      "post": {
+        "tags": [
+          "Explicit opt-in public AI cloud"
+        ],
+        "summary": "Register",
+        "operationId": "register_api_v1_ai_endpoints_openrouter_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CloudPolicy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Register Api V1 Ai Endpoints Openrouter Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/connections/{connection_id}/credential": {
+      "post": {
+        "tags": [
+          "Explicit opt-in public AI cloud"
+        ],
+        "summary": "Credential",
+        "operationId": "credential_api_v1_ai_connections__connection_id__credential_post",
+        "parameters": [
+          {
+            "name": "connection_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Connection Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CredentialInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Credential Api V1 Ai Connections  Connection Id  Credential Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns": {
+      "post": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_v1_campaigns_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCampaign"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Create Api V1 Campaigns Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Campaigns",
+        "operationId": "campaigns_api_v1_campaigns_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Campaigns Api V1 Campaigns Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}": {
+      "get": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Get",
+        "operationId": "get_api_v1_campaigns__campaign_id__get",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Api V1 Campaigns  Campaign Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}/lineage": {
+      "get": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Lineage",
+        "operationId": "lineage_api_v1_campaigns__campaign_id__lineage_get",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Lineage Api V1 Campaigns  Campaign Id  Lineage Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}/approve": {
+      "post": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Approve",
+        "operationId": "approve_api_v1_campaigns__campaign_id__approve_post",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Approval"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Approve Api V1 Campaigns  Campaign Id  Approve Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}/control": {
+      "post": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Control",
+        "operationId": "control_api_v1_campaigns__campaign_id__control_post",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Control Api V1 Campaigns  Campaign Id  Control Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}/submit-plan": {
+      "post": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Submit Plan",
+        "operationId": "submit_plan_api_v1_campaigns__campaign_id__submit_plan_post",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanReview"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Submit Plan Api V1 Campaigns  Campaign Id  Submit Plan Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}/gateway": {
+      "post": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Gateway",
+        "operationId": "gateway_api_v1_campaigns__campaign_id__gateway_post",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GatewayAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Gateway Api V1 Campaigns  Campaign Id  Gateway Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/campaigns/{campaign_id}/gateway/accept": {
+      "post": {
+        "tags": [
+          "Bounded research campaigns \u2014 SIMULATED"
+        ],
+        "summary": "Accept Gateway",
+        "operationId": "accept_gateway_api_v1_campaigns__campaign_id__gateway_accept_post",
+        "parameters": [
+          {
+            "name": "campaign_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Campaign Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Accept Gateway Api V1 Campaigns  Campaign Id  Gateway Accept Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health/live": {
       "get": {
         "summary": "Liveness",
@@ -3975,6 +5341,147 @@
   },
   "components": {
     "schemas": {
+      "AIJobView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "QUEUED",
+              "RUNNING",
+              "RETRY",
+              "SUCCEEDED",
+              "FAILED",
+              "CANCELLED",
+              "UNKNOWN"
+            ],
+            "title": "State"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "cancel_requested": {
+            "type": "boolean",
+            "title": "Cancel Requested"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "retain_until": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Retain Until"
+          },
+          "output": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HypothesisProposal"
+              },
+              {
+                "$ref": "#/components/schemas/EvidenceSummary"
+              },
+              {
+                "$ref": "#/components/schemas/CritiqueReport"
+              },
+              {
+                "$ref": "#/components/schemas/CodeSuggestion"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ModelResponseMetadata"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          },
+          "content_expired": {
+            "type": "boolean",
+            "title": "Content Expired",
+            "default": false
+          },
+          "context_available": {
+            "type": "boolean",
+            "title": "Context Available",
+            "default": true
+          },
+          "model_output_verified_evidence": {
+            "type": "boolean",
+            "const": false,
+            "title": "Model Output Verified Evidence",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "role",
+          "state",
+          "attempts",
+          "cancel_requested",
+          "error",
+          "created_at",
+          "expires_at",
+          "retain_until"
+        ],
+        "title": "AIJobView"
+      },
       "AccountInput-Input": {
         "properties": {
           "name": {
@@ -4253,6 +5760,55 @@
           "ledger_digest"
         ],
         "title": "AccountStatus"
+      },
+      "ActionKey": {
+        "properties": {
+          "cloud_cost_acknowledged": {
+            "type": "boolean",
+            "title": "Cloud Cost Acknowledged",
+            "default": false
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 16,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "title": "ActionKey"
+      },
+      "Approval": {
+        "properties": {
+          "expected_digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Digest"
+          },
+          "acknowledged_bounded_research": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Bounded Research"
+          },
+          "acknowledged_no_promotion": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged No Promotion"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_digest",
+          "acknowledged_bounded_research",
+          "acknowledged_no_promotion"
+        ],
+        "title": "Approval"
       },
       "ApprovalInput": {
         "properties": {
@@ -5536,6 +7092,61 @@
         ],
         "title": "BrokerSymbol"
       },
+      "Budgets": {
+        "properties": {
+          "candidate_proposals": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Candidate Proposals",
+            "default": 8
+          },
+          "experiments": {
+            "type": "integer",
+            "maximum": 12.0,
+            "minimum": 1.0,
+            "title": "Experiments",
+            "default": 12
+          },
+          "iterations": {
+            "type": "integer",
+            "maximum": 2.0,
+            "minimum": 1.0,
+            "title": "Iterations",
+            "default": 2
+          },
+          "active_experiments": {
+            "type": "integer",
+            "const": 1,
+            "title": "Active Experiments",
+            "default": 1
+          },
+          "runtime_seconds": {
+            "type": "integer",
+            "maximum": 7200.0,
+            "minimum": 60.0,
+            "title": "Runtime Seconds",
+            "default": 1800
+          },
+          "artifact_bytes": {
+            "type": "integer",
+            "maximum": 201326592.0,
+            "minimum": 16777216.0,
+            "title": "Artifact Bytes",
+            "default": 201326592
+          },
+          "lineage_bytes": {
+            "type": "integer",
+            "maximum": 524288.0,
+            "minimum": 65536.0,
+            "title": "Lineage Bytes",
+            "default": 524288
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Budgets"
+      },
       "CalendarEvidence": {
         "properties": {
           "observed_at": {
@@ -5584,6 +7195,202 @@
           "source_reference"
         ],
         "title": "CalendarEvidence"
+      },
+      "CampaignAction": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "REQUEST_APPROVAL",
+              "PAUSE",
+              "RESUME",
+              "CANCEL"
+            ],
+            "title": "Action"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "title": "CampaignAction"
+      },
+      "CampaignParameters": {
+        "properties": {
+          "fast": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 2.0,
+            "title": "Fast",
+            "default": 5
+          },
+          "slow": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 3.0,
+            "title": "Slow",
+            "default": 20
+          },
+          "lookback": {
+            "type": "integer",
+            "maximum": 200.0,
+            "minimum": 2.0,
+            "title": "Lookback",
+            "default": 14
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Threshold",
+            "default": "2",
+            "gt": 0
+          },
+          "stop_ticks": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "Stop Ticks",
+            "default": 20
+          },
+          "reward_multiple": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Reward Multiple",
+            "default": "2",
+            "gt": 0
+          },
+          "volume": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Volume",
+            "default": "0.01",
+            "gt": 0
+          },
+          "cross_asset_confirmation": {
+            "type": "boolean",
+            "title": "Cross Asset Confirmation",
+            "default": false
+          },
+          "confirmation_direction": {
+            "type": "string",
+            "enum": [
+              "SAME",
+              "INVERSE"
+            ],
+            "title": "Confirmation Direction",
+            "default": "SAME"
+          },
+          "confirmation_max_age_seconds": {
+            "type": "integer",
+            "maximum": 604800.0,
+            "minimum": 1.0,
+            "title": "Confirmation Max Age Seconds",
+            "default": 86400
+          },
+          "entry_order_type": {
+            "type": "string",
+            "enum": [
+              "MARKET",
+              "LIMIT",
+              "STOP"
+            ],
+            "title": "Entry Order Type",
+            "default": "MARKET"
+          },
+          "entry_offset_ticks": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "Entry Offset Ticks",
+            "default": 1
+          },
+          "pending_expiry_seconds": {
+            "type": "integer",
+            "maximum": 86400.0,
+            "minimum": 1.0,
+            "title": "Pending Expiry Seconds",
+            "default": 60
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "LONG_ONLY",
+              "SHORT_ONLY",
+              "LONG_SHORT"
+            ],
+            "title": "Direction",
+            "default": "LONG_SHORT"
+          },
+          "session_open": {
+            "type": "integer",
+            "maximum": 1439.0,
+            "minimum": 0.0,
+            "title": "Session Open",
+            "default": 0
+          },
+          "session_close": {
+            "type": "integer",
+            "maximum": 1440.0,
+            "minimum": 1.0,
+            "title": "Session Close",
+            "default": 1440
+          },
+          "opening_minutes": {
+            "type": "integer",
+            "maximum": 240.0,
+            "minimum": 1.0,
+            "title": "Opening Minutes",
+            "default": 15
+          },
+          "session_exit_buffer_seconds": {
+            "type": "integer",
+            "maximum": 3600.0,
+            "minimum": 0.0,
+            "title": "Session Exit Buffer Seconds",
+            "default": 60
+          },
+          "flat_before_risk_reset": {
+            "type": "boolean",
+            "title": "Flat Before Risk Reset",
+            "default": true
+          },
+          "max_hold_seconds": {
+            "type": "integer",
+            "maximum": 86400.0,
+            "minimum": 1.0,
+            "title": "Max Hold Seconds",
+            "default": 3600
+          },
+          "random_keep_pct": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Random Keep Pct",
+            "default": 100
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CampaignParameters"
       },
       "ChangePassword": {
         "properties": {
@@ -5672,6 +7479,75 @@
         ],
         "title": "Chronology"
       },
+      "CloudPolicy": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "openrouter-public-v1",
+            "title": "Version",
+            "default": "openrouter-public-v1"
+          },
+          "upstream_provider": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_/-]{1,79}$",
+            "title": "Upstream Provider"
+          },
+          "input_usd_per_million": {
+            "type": "string",
+            "pattern": "^[0-9]{1,3}(\\.[0-9]{1,6})?$",
+            "title": "Input Usd Per Million",
+            "default": "1"
+          },
+          "output_usd_per_million": {
+            "type": "string",
+            "pattern": "^[0-9]{1,3}(\\.[0-9]{1,6})?$",
+            "title": "Output Usd Per Million",
+            "default": "4"
+          },
+          "request_usd": {
+            "type": "string",
+            "pattern": "^0\\.[0-9]{1,6}$",
+            "title": "Request Usd",
+            "default": "0.01"
+          },
+          "daily_usd": {
+            "type": "string",
+            "pattern": "^[0-5](\\.[0-9]{1,6})?$",
+            "title": "Daily Usd",
+            "default": "0.50"
+          },
+          "acknowledged_public_cloud": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Public Cloud"
+          },
+          "acknowledged_upstream_processing": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Upstream Processing"
+          },
+          "acknowledged_cost": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Cost"
+          },
+          "acknowledged_provider_policy_limits": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Provider Policy Limits"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "upstream_provider",
+          "acknowledged_public_cloud",
+          "acknowledged_upstream_processing",
+          "acknowledged_cost",
+          "acknowledged_provider_policy_limits"
+        ],
+        "title": "CloudPolicy"
+      },
       "Code": {
         "properties": {
           "code": {
@@ -5689,6 +7565,75 @@
           "code"
         ],
         "title": "Code"
+      },
+      "CodeSuggestion": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Summary"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "python",
+              "text"
+            ],
+            "title": "Language"
+          },
+          "candidate_source": {
+            "type": "string",
+            "maxLength": 16000,
+            "minLength": 1,
+            "title": "Candidate Source"
+          },
+          "suggested_tests": {
+            "items": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 12,
+            "minItems": 1,
+            "title": "Suggested Tests"
+          },
+          "evidence_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Evidence Refs"
+          },
+          "missing_evidence": {
+            "$ref": "#/components/schemas/MissingEvidenceReport"
+          },
+          "executable": {
+            "type": "boolean",
+            "const": false,
+            "title": "Executable"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "summary",
+          "language",
+          "candidate_source",
+          "suggested_tests",
+          "evidence_refs",
+          "missing_evidence",
+          "executable"
+        ],
+        "title": "CodeSuggestion"
       },
       "Command": {
         "properties": {
@@ -5880,78 +7825,6 @@
         ],
         "title": "Comparison"
       },
-      "ConnectionInput": {
-        "properties": {
-          "broker_connection_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Broker Connection Id"
-          },
-          "provider": {
-            "type": "string",
-            "enum": [
-              "SIMULATOR",
-              "MT5",
-              "CTRADER"
-            ],
-            "title": "Provider"
-          },
-          "mode": {
-            "type": "string",
-            "enum": [
-              "SIMULATED",
-              "DEMO_READ_ONLY"
-            ],
-            "title": "Mode"
-          },
-          "external_account": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 100,
-                "minLength": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "External Account"
-          },
-          "server": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 120,
-                "minLength": 1
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Server"
-          },
-          "public_key": {
-            "anyOf": [
-              {
-                "type": "string",
-                "pattern": "^[a-f0-9]{64}$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Public Key"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "broker_connection_id",
-          "provider",
-          "mode"
-        ],
-        "title": "ConnectionInput"
-      },
       "ConnectionView": {
         "properties": {
           "id": {
@@ -6081,6 +7954,74 @@
         ],
         "title": "ContextInput"
       },
+      "ContextReference": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "strategy",
+              "experiment",
+              "dataset",
+              "documentation",
+              "ai_artifact"
+            ],
+            "title": "Kind"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.:-]+$",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind",
+          "id"
+        ],
+        "title": "ContextReference"
+      },
+      "CreateCampaign": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 16,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Key"
+          },
+          "objective": {
+            "$ref": "#/components/schemas/ResearchObjective"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "objective"
+        ],
+        "title": "CreateCampaign"
+      },
+      "CredentialInput": {
+        "properties": {
+          "api_key": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 16,
+            "format": "password",
+            "title": "Api Key",
+            "writeOnly": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "api_key"
+        ],
+        "title": "CredentialInput"
+      },
       "Credentials": {
         "properties": {
           "username": {
@@ -6104,6 +8045,59 @@
           "password"
         ],
         "title": "Credentials"
+      },
+      "CritiqueReport": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Summary"
+          },
+          "objections": {
+            "items": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Objections"
+          },
+          "evidence_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Evidence Refs"
+          },
+          "missing_evidence": {
+            "$ref": "#/components/schemas/MissingEvidenceReport"
+          },
+          "certifies_strategy": {
+            "type": "boolean",
+            "const": false,
+            "title": "Certifies Strategy"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "summary",
+          "objections",
+          "evidence_refs",
+          "missing_evidence",
+          "certifies_strategy"
+        ],
+        "title": "CritiqueReport"
       },
       "DSRRequest": {
         "properties": {
@@ -6505,6 +8499,20 @@
         ],
         "title": "Emergency"
       },
+      "EnabledInput": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "title": "EnabledInput"
+      },
       "Enrollment": {
         "properties": {
           "secret": {
@@ -6610,6 +8618,85 @@
           "groups"
         ],
         "title": "EquityValues"
+      },
+      "EvaluationMethodology": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "campaign-evaluation-v1",
+            "title": "Version",
+            "default": "campaign-evaluation-v1"
+          },
+          "minimum_trades": {
+            "type": "integer",
+            "maximum": 10000.0,
+            "minimum": 10.0,
+            "title": "Minimum Trades",
+            "default": 30
+          },
+          "maximum_drawdown_fraction": {
+            "type": "string",
+            "pattern": "^0\\.[0-9]{1,6}$",
+            "title": "Maximum Drawdown Fraction",
+            "default": "0.03"
+          },
+          "stop_on_insufficient_evidence": {
+            "type": "boolean",
+            "const": true,
+            "title": "Stop On Insufficient Evidence",
+            "default": true
+          },
+          "independent_validation_required": {
+            "type": "boolean",
+            "const": true,
+            "title": "Independent Validation Required",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "EvaluationMethodology"
+      },
+      "EvidenceSummary": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Summary"
+          },
+          "evidence_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Evidence Refs"
+          },
+          "missing_evidence": {
+            "$ref": "#/components/schemas/MissingEvidenceReport"
+          },
+          "verified": {
+            "type": "boolean",
+            "const": false,
+            "title": "Verified"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "summary",
+          "evidence_refs",
+          "missing_evidence",
+          "verified"
+        ],
+        "title": "EvidenceSummary"
       },
       "ExperimentInput-Output": {
         "properties": {
@@ -6995,6 +9082,110 @@
         ],
         "title": "FirmInput"
       },
+      "GatewayAction": {
+        "properties": {
+          "cloud_cost_acknowledged": {
+            "type": "boolean",
+            "title": "Cloud Cost Acknowledged",
+            "default": false
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "RESEARCH",
+              "CRITIC"
+            ],
+            "title": "Role"
+          },
+          "allow_remote": {
+            "type": "boolean",
+            "title": "Allow Remote",
+            "default": false
+          },
+          "processing_acknowledged": {
+            "type": "boolean",
+            "const": true,
+            "title": "Processing Acknowledged"
+          },
+          "retain_structured_output": {
+            "type": "boolean",
+            "const": true,
+            "title": "Retain Structured Output"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "role",
+          "processing_acknowledged",
+          "retain_structured_output"
+        ],
+        "title": "GatewayAction"
+      },
+      "Generation": {
+        "properties": {
+          "context_tokens": {
+            "type": "integer",
+            "maximum": 32768.0,
+            "minimum": 1024.0,
+            "title": "Context Tokens",
+            "default": 4096
+          },
+          "output_tokens": {
+            "type": "integer",
+            "maximum": 4096.0,
+            "minimum": 64.0,
+            "title": "Output Tokens",
+            "default": 768
+          },
+          "temperature": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Temperature",
+            "default": 0
+          },
+          "top_p": {
+            "type": "number",
+            "maximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Top P",
+            "default": 1
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2147483647.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          },
+          "reasoning": {
+            "type": "string",
+            "enum": [
+              "DEFAULT",
+              "DISABLED"
+            ],
+            "title": "Reasoning",
+            "default": "DEFAULT"
+          },
+          "max_seconds": {
+            "type": "integer",
+            "maximum": 180.0,
+            "minimum": 5.0,
+            "title": "Max Seconds",
+            "default": 90
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "Generation"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -7007,6 +9198,66 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "HypothesisProposal": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "hypothesis": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Hypothesis"
+          },
+          "test_plan": {
+            "items": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 12,
+            "minItems": 1,
+            "title": "Test Plan"
+          },
+          "evidence_refs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Evidence Refs"
+          },
+          "missing_evidence": {
+            "$ref": "#/components/schemas/MissingEvidenceReport"
+          },
+          "verified": {
+            "type": "boolean",
+            "const": false,
+            "title": "Verified"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "title",
+          "hypothesis",
+          "test_plan",
+          "evidence_refs",
+          "missing_evidence",
+          "verified"
+        ],
+        "title": "HypothesisProposal"
       },
       "ImportSpec-Input": {
         "properties": {
@@ -7749,6 +10000,240 @@
         "type": "object",
         "title": "Limits"
       },
+      "MissingEvidenceReport": {
+        "properties": {
+          "items": {
+            "items": {
+              "type": "string",
+              "maxLength": 2000,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "MissingEvidenceReport"
+      },
+      "ModelInput": {
+        "properties": {
+          "connection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Connection Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_./:@+-]+$",
+            "title": "Name"
+          },
+          "context_ceiling": {
+            "type": "integer",
+            "maximum": 32768.0,
+            "minimum": 1024.0,
+            "title": "Context Ceiling",
+            "default": 4096
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "connection_id",
+          "name"
+        ],
+        "title": "ModelInput"
+      },
+      "ModelResponseMetadata": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version",
+            "default": 1
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "model_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Id"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "OLLAMA_NATIVE",
+              "OLLAMA_OPENAI",
+              "PRIVATE_OPENAI",
+              "OPENROUTER"
+            ],
+            "title": "Provider"
+          },
+          "model_name": {
+            "type": "string",
+            "title": "Model Name"
+          },
+          "model_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Digest"
+          },
+          "provider_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Version"
+          },
+          "quantization": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantization"
+          },
+          "prompt_version": {
+            "type": "string",
+            "title": "Prompt Version"
+          },
+          "input_refs": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Input Refs"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/Generation"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Completed At"
+          },
+          "latency_ms": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Latency Ms"
+          },
+          "input_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Tokens"
+          },
+          "output_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Tokens"
+          },
+          "configured_cost_estimate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Configured Cost Estimate"
+          },
+          "usage_source": {
+            "type": "string",
+            "enum": [
+              "PROVIDER_REPORTED",
+              "UNKNOWN"
+            ],
+            "title": "Usage Source"
+          },
+          "output_sha256": {
+            "type": "string",
+            "title": "Output Sha256"
+          },
+          "verified_evidence": {
+            "type": "boolean",
+            "const": false,
+            "title": "Verified Evidence",
+            "default": false
+          },
+          "trading_authority": {
+            "type": "boolean",
+            "const": false,
+            "title": "Trading Authority",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "request_id",
+          "model_id",
+          "provider",
+          "model_name",
+          "model_digest",
+          "prompt_version",
+          "input_refs",
+          "parameters",
+          "started_at",
+          "completed_at",
+          "latency_ms",
+          "usage_source",
+          "output_sha256"
+        ],
+        "title": "ModelResponseMetadata"
+      },
       "NewsEvent": {
         "properties": {
           "timestamp": {
@@ -8234,7 +10719,7 @@
           "phase": {
             "type": "integer",
             "title": "Phase",
-            "default": 5
+            "default": 6
           },
           "timestamp": {
             "type": "string",
@@ -8503,6 +10988,33 @@
           "acceptance"
         ],
         "title": "Phase"
+      },
+      "PlanReview": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Plan Id"
+          },
+          "expected_digest": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Expected Digest"
+          },
+          "acknowledged_exact_plan": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Exact Plan"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan_id",
+          "expected_digest",
+          "acknowledged_exact_plan"
+        ],
+        "title": "PlanReview"
       },
       "PolicyAttestation": {
         "properties": {
@@ -9167,6 +11679,56 @@
           "entry_price"
         ],
         "title": "Position"
+      },
+      "PrivacyPolicy": {
+        "properties": {
+          "cloud_processing_acknowledged": {
+            "type": "boolean",
+            "title": "Cloud Processing Acknowledged",
+            "default": false
+          },
+          "remote_processing": {
+            "type": "boolean",
+            "title": "Remote Processing",
+            "default": false
+          },
+          "account_context_remote": {
+            "type": "boolean",
+            "title": "Account Context Remote",
+            "default": false
+          },
+          "rights_confirmed": {
+            "type": "boolean",
+            "const": true,
+            "title": "Rights Confirmed"
+          },
+          "temporary_processing_minutes": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Temporary Processing Minutes",
+            "default": 10
+          },
+          "structured_retention_hours": {
+            "type": "integer",
+            "maximum": 24.0,
+            "minimum": 1.0,
+            "title": "Structured Retention Hours",
+            "default": 1
+          },
+          "approved_processing": {
+            "type": "boolean",
+            "const": true,
+            "title": "Approved Processing"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "rights_confirmed",
+          "approved_processing"
+        ],
+        "title": "PrivacyPolicy"
       },
       "ProfileInput": {
         "properties": {
@@ -9917,6 +12479,174 @@
         ],
         "title": "ReplayInput"
       },
+      "RequestInput": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version",
+            "default": 1
+          },
+          "question": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 3,
+            "title": "Question"
+          },
+          "cloud_cost_acknowledged": {
+            "type": "boolean",
+            "title": "Cloud Cost Acknowledged",
+            "default": false
+          },
+          "key": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 16,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Key"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "RESEARCH",
+              "CODING",
+              "CRITIC",
+              "LIGHTWEIGHT"
+            ],
+            "title": "Role"
+          },
+          "references": {
+            "items": {
+              "$ref": "#/components/schemas/ContextReference"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "title": "References"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/Generation"
+          },
+          "allow_fallback": {
+            "type": "boolean",
+            "title": "Allow Fallback",
+            "default": false
+          },
+          "allow_remote": {
+            "type": "boolean",
+            "title": "Allow Remote",
+            "default": false
+          },
+          "processing_acknowledged": {
+            "type": "boolean",
+            "const": true,
+            "title": "Processing Acknowledged"
+          },
+          "retain_structured_output": {
+            "type": "boolean",
+            "const": true,
+            "title": "Retain Structured Output"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "question",
+          "key",
+          "role",
+          "processing_acknowledged",
+          "retain_structured_output"
+        ],
+        "title": "RequestInput"
+      },
+      "ResearchObjective": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version",
+            "default": 1
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 3,
+            "title": "Title"
+          },
+          "objective": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Objective"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "SYNTHETIC_FIXTURE",
+              "AI_GATEWAY"
+            ],
+            "title": "Mode"
+          },
+          "template": {
+            "$ref": "#/components/schemas/packages__research__contracts__ExperimentInput"
+          },
+          "search_space": {
+            "items": {
+              "$ref": "#/components/schemas/CampaignParameters"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Search Space"
+          },
+          "budgets": {
+            "$ref": "#/components/schemas/Budgets"
+          },
+          "evaluation": {
+            "$ref": "#/components/schemas/EvaluationMethodology"
+          },
+          "research_role": {
+            "type": "string",
+            "const": "RESEARCH",
+            "title": "Research Role",
+            "default": "RESEARCH"
+          },
+          "critic_role": {
+            "type": "string",
+            "const": "CRITIC",
+            "title": "Critic Role",
+            "default": "CRITIC"
+          },
+          "seed": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 0.0,
+            "title": "Seed",
+            "default": 7
+          },
+          "acknowledged_owner_handoffs": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Owner Handoffs"
+          },
+          "acknowledged_no_promotion": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged No Promotion"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title",
+          "objective",
+          "mode",
+          "template",
+          "search_space",
+          "acknowledged_owner_handoffs",
+          "acknowledged_no_promotion"
+        ],
+        "title": "ResearchObjective"
+      },
       "Review": {
         "properties": {
           "decision": {
@@ -10090,6 +12820,41 @@
           "aggregate_risk_pct"
         ],
         "title": "RiskInput"
+      },
+      "RouteInput": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "RESEARCH",
+              "CODING",
+              "CRITIC",
+              "LIGHTWEIGHT"
+            ],
+            "title": "Role"
+          },
+          "model_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Model Id"
+          },
+          "fallback_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 2,
+            "title": "Fallback Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "role",
+          "model_id"
+        ],
+        "title": "RouteInput"
       },
       "Row": {
         "properties": {
@@ -11967,6 +14732,78 @@
         ],
         "title": "WhatIf"
       },
+      "apps__api__execution__schemas__ConnectionInput": {
+        "properties": {
+          "broker_connection_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Broker Connection Id"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "SIMULATOR",
+              "MT5",
+              "CTRADER"
+            ],
+            "title": "Provider"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "SIMULATED",
+              "DEMO_READ_ONLY"
+            ],
+            "title": "Mode"
+          },
+          "external_account": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Account"
+          },
+          "server": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Server"
+          },
+          "public_key": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Public Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "broker_connection_id",
+          "provider",
+          "mode"
+        ],
+        "title": "ConnectionInput"
+      },
       "apps__api__governance__schemas__ExperimentInput": {
         "properties": {
           "name": {
@@ -12152,6 +14989,43 @@
           "source_references"
         ],
         "title": "PolicyInput"
+      },
+      "packages__ai__contracts__ConnectionInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "endpoint_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{0,39}$",
+            "title": "Endpoint Id"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "OLLAMA_NATIVE",
+              "OLLAMA_OPENAI",
+              "PRIVATE_OPENAI",
+              "OPENROUTER"
+            ],
+            "title": "Provider"
+          },
+          "policy": {
+            "$ref": "#/components/schemas/PrivacyPolicy"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "endpoint_id",
+          "provider",
+          "policy"
+        ],
+        "title": "ConnectionInput"
       },
       "packages__research__contracts__ExperimentInput": {
         "properties": {

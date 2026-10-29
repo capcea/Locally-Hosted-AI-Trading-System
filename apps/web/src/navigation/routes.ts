@@ -2,6 +2,8 @@ export type Area = 'home' | 'research' | 'results' | 'accounts' | 'settings' | '
 export type Screen =
   | 'home'
   | 'research'
+  | 'ai'
+  | 'campaigns'
   | 'data'
   | 'broker'
   | 'risk'
@@ -17,6 +19,7 @@ export type Screen =
   | 'not-found';
 export type Route = {
   path: string;
+  canonicalPath?: string;
   area: Area;
   screen: Screen;
   section?: string;
@@ -24,6 +27,7 @@ export type Route = {
   experimentId?: string;
   datasetId?: string;
   jobId?: string;
+  campaignId?: string;
   runId?: string;
 };
 const uuid = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
@@ -44,7 +48,21 @@ export function resolveRoute(pathname: string): Route {
     screen,
     ...extra,
   });
+  const aliases: Record<string, string> = {
+    '/testeaza/backtesting': '/testeaza/nou',
+    '/testeaza/experimente': '/testeaza/activitate',
+    '/setari/platforma': '/setari',
+    '/setari/modele-ai': '/setari/ai',
+  };
+  if (Object.hasOwn(aliases, path))
+    return { ...resolveRoute(aliases[path]), path, canonicalPath: aliases[path] };
   if (path === '/') return route('home', 'home');
+  if (path === '/testeaza/campanii') return route('research', 'campaigns');
+  const campaign = path.match(new RegExp(`^/testeaza/campanii/(${uuid})$`));
+  if (campaign) return route('research', 'campaigns', { campaignId: campaign[1] });
+  if (path === '/testeaza/ai') return route('research', 'ai');
+  const aiJob = path.match(new RegExp(`^/testeaza/ai/(${uuid})$`));
+  if (aiJob) return route('research', 'ai', { jobId: aiJob[1] });
   if (['/autentificare', '/configurare-proprietar', '/securizare-cont'].includes(path))
     return route('auth', 'auth');
   if (/^\/testeaza(?:\/(nou|strategii|activitate|evaluare-finala))?$/.test(path))
@@ -110,6 +128,7 @@ export function resolveRoute(pathname: string): Route {
   const settings: Record<string, Screen> = {
     '': 'settings',
     aspect: 'settings',
+    ai: 'ai',
     securitate: 'security',
     utilizatori: 'security',
     istoric: 'audit',

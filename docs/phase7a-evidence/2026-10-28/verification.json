@@ -1,0 +1,460 @@
+{
+  "phase": "7A",
+  "acceptance": "PARTIAL",
+  "execution": "SIMULATED / DENY_ALL",
+  "native_check": {
+    "status": "PASSED",
+    "python": 263,
+    "frontend": 152
+  },
+  "focused_campaign_services": {
+    "status": "PASSED",
+    "before_restart": 14,
+    "after_restart": 14
+  },
+  "full_isolated_services": {
+    "status": "PASSED",
+    "before_restart": 100,
+    "after_restart": 100
+  },
+  "make_integration": {
+    "status": "FAILED",
+    "exit_code": 2,
+    "reason": "Read-only development schema probe: expected0008, retained development0007"
+  },
+  "browser": {
+    "status": "BLOCKED",
+    "collected": 26,
+    "executed": false,
+    "reason": "Recorded managed localhost-origin restriction; no workaround"
+  },
+  "actual_model_inference": "BLOCKED / NOT VERIFIED",
+  "historical_statistical_acceptance": "BLOCKED / NOT VERIFIED",
+  "unattended_submission": "NOT IMPLEMENTED; owner-MFA handoff preserved",
+  "development_installation": "NOT PERFORMED",
+  "clock_comparison": {
+    "host_utc": "2026-10-28T14:20:39Z",
+    "docker_vm_utc": "2026-10-28T14:20:39Z",
+    "mutation": "none; read-only clock comparison"
+  },
+  "commands": [
+    {
+      "label": "browser-collection",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web",
+        "run",
+        "test:e2e",
+        "--",
+        "--list"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.863,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/browser-collection.txt"
+    },
+    {
+      "label": "campaign-integration-final-v2",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 275.87,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-final-v2.txt"
+    },
+    {
+      "label": "campaign-integration-final",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 85.258,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-final.txt"
+    },
+    {
+      "label": "campaign-integration-v2",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 28.248,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-v2.txt"
+    },
+    {
+      "label": "campaign-integration-v3",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 129.728,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-v3.txt"
+    },
+    {
+      "label": "campaign-integration-v4",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 77.025,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-v4.txt"
+    },
+    {
+      "label": "campaign-integration-v5",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 75.327,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-v5.txt"
+    },
+    {
+      "label": "campaign-integration-v6",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 146.588,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration-v6.txt"
+    },
+    {
+      "label": "campaign-integration",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--campaigns-only"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 28.316,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-integration.txt"
+    },
+    {
+      "label": "campaign-unit-final",
+      "command": [
+        ".venv/bin/pytest",
+        "tests/test_campaigns.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.466,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/campaign-unit-final.txt"
+    },
+    {
+      "label": "check-final-v2",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.139,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/check-final-v2.txt"
+    },
+    {
+      "label": "check-final-v3",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 17.918,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/check-final-v3.txt"
+    },
+    {
+      "label": "check-final-v4",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 26.271,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/check-final-v4.txt"
+    },
+    {
+      "label": "check-final",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 3.734,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/check-final.txt"
+    },
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 17.975,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/check.txt"
+    },
+    {
+      "label": "contracts-check-final",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.931,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/contracts-check-final.txt"
+    },
+    {
+      "label": "contracts-check",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.266,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/contracts-check.txt"
+    },
+    {
+      "label": "contracts-generate-final",
+      "command": [
+        "make",
+        "contracts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.892,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/contracts-generate-final.txt"
+    },
+    {
+      "label": "contracts-generate",
+      "command": [
+        "make",
+        "contracts"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.276,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/contracts-generate.txt"
+    },
+    {
+      "label": "diff-check-package",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.048,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/diff-check-package.txt"
+    },
+    {
+      "label": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.028,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/diff-check.txt"
+    },
+    {
+      "label": "integration-services-final-v2",
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 503.391,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/integration-services-final-v2.txt"
+    },
+    {
+      "label": "integration-services-final-v3",
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 458.136,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/integration-services-final-v3.txt"
+    },
+    {
+      "label": "integration-services-final",
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 292.787,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/integration-services-final.txt"
+    },
+    {
+      "label": "integration-services",
+      "command": [
+        "make",
+        "integration-services"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 405.901,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/integration-services.txt"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 1.839,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/integration.txt"
+    },
+    {
+      "label": "repository-check-delivery",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.062,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/repository-check-delivery.txt"
+    },
+    {
+      "label": "repository-check-final",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.084,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/repository-check-final.txt"
+    },
+    {
+      "label": "repository-check-package",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.106,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/repository-check-package.txt"
+    },
+    {
+      "label": "repository-check",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.094,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/repository-check.txt"
+    },
+    {
+      "label": "secret-scan-delivery-v2",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.17,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/secret-scan-delivery-v2.txt"
+    },
+    {
+      "label": "secret-scan-delivery",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 2,
+      "elapsed_seconds": 1.079,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/secret-scan-delivery.txt"
+    },
+    {
+      "label": "secret-scan-final",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.357,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/secret-scan-final.txt"
+    },
+    {
+      "label": "secret-scan-package",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.265,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/secret-scan-package.txt"
+    },
+    {
+      "label": "secret-scan",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.237,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/secret-scan.txt"
+    },
+    {
+      "label": "smoke-demo",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.313,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/smoke-demo.txt"
+    },
+    {
+      "label": "source-checksums",
+      "command": [
+        ".venv/bin/python",
+        "-c",
+        "import hashlib; from pathlib import Path; rows=Path(\"docs/phase7a-evidence/2026-10-28/SOURCE_SHA256SUMS.txt\").read_text().splitlines(); assert all(hashlib.sha256(Path(row.split(\"  \",1)[1]).read_bytes()).hexdigest()==row.split(\"  \",1)[0] for row in rows); print(f\"Verified {len(rows)} source checksums\")"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.034,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/source-checksums.txt"
+    },
+    {
+      "label": "strict-smoke",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.smoke_demo",
+        "--require-ready"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.206,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/strict-smoke.txt"
+    },
+    {
+      "label": "synthetic-provenance-red",
+      "command": [
+        ".venv/bin/pytest",
+        "tests/test_campaigns.py::test_real_gateway_mode_cannot_turn_synthetic_market_evidence_into_a_research_candidate",
+        "-q"
+      ],
+      "exit_code": 1,
+      "elapsed_seconds": 1.442,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase7a/synthetic-provenance-red.txt"
+    }
+  ]
+}

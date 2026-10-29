@@ -1,0 +1,152 @@
+[
+  {
+    "record": "browser-block.json",
+    "capture_directory": "MISSING",
+    "attempt": "cua.createBrowserTab iab http://127.0.0.1:5173",
+    "status": "BLOCKED",
+    "reason": "Saved permission or managed policy denies origin access; no workaround permitted.",
+    "exit_code": null,
+    "focused_and_full_playwright": "NOT EXECUTED"
+  },
+  {
+    "record": "check.json",
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.891,
+    "output": ".cache/redesign-v1-final/check.txt"
+  },
+  {
+    "record": "collection-wrapper-failed.json",
+    "command": [
+      "python3",
+      "../../.cache/redesign-v1-final/run.py",
+      "collection",
+      "npm",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "working_directory": "apps/web",
+    "exit_code": 1,
+    "test_command_executed": false,
+    "reason": "Evidence wrapper used repository-relative log directory; corrected to script-relative absolute path."
+  },
+  {
+    "record": "collection.json",
+    "command": [
+      "npm",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.774,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/redesign-v1-final/collection.txt"
+  },
+  {
+    "record": "contracts.json",
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.517,
+    "output": ".cache/redesign-v1-final/contracts.txt"
+  },
+  {
+    "record": "integration.json",
+    "command": [
+      "make",
+      "integration"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 267.015,
+    "output": ".cache/redesign-v1-final/integration.txt"
+  },
+  {
+    "record": "refresh-web.json",
+    "command": [
+      "env",
+      "BUILDX_CONFIG=.cache/buildx",
+      "docker",
+      "compose",
+      "up",
+      "-d",
+      "--build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "120",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.944,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/redesign-v1-final/refresh-web.txt"
+  },
+  {
+    "record": "repository-final.json",
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.147,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/redesign-v1-final/repository-final.txt"
+  },
+  {
+    "record": "repository.json",
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.244,
+    "output": ".cache/redesign-v1-final/repository.txt"
+  },
+  {
+    "record": "secrets-final.json",
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.058,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/redesign-v1-final/secrets-final.txt"
+  },
+  {
+    "record": "secrets.json",
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.338,
+    "output": ".cache/redesign-v1-final/secrets.txt"
+  },
+  {
+    "record": "smoke.json",
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.458,
+    "output": ".cache/redesign-v1-final/smoke.txt"
+  },
+  {
+    "record": "whitespace.json",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.066,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/redesign-v1-final/whitespace.txt"
+  }
+]

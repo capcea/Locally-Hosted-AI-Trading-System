@@ -1,0 +1,10 @@
+{
+  "command": [
+    ".venv/bin/python",
+    "-m",
+    "scripts.evaluate_ai"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.722,
+  "output": ".cache/phase6/offline-evaluation.txt"
+}

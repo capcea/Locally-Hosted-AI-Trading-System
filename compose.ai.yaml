@@ -1,0 +1,99 @@
+# Explicit opt-in overlay: docker compose -f compose.yaml -f compose.ai.yaml --profile ai ...
+# Pin isolated subnets after checking host/VPN overlap. No inference service is downloaded or started.
+services:
+  postgres:
+    networks:
+      ai_database: {ipv4_address: 172.30.61.2}
+  api:
+    networks: [ai_api_queue]
+    environment:
+      AI_DATA_KEY_FILE: /run/secrets/ai-content-key
+      AI_REDIS_URL: ${AI_API_REDIS_URL:?Run the documented AI setup}
+      AI_ENDPOINTS: ${AI_ENDPOINTS:-[]}
+      AI_OPENROUTER_ENABLED: ${AI_OPENROUTER_ENABLED:-false}
+    secrets: [ai-content-key]
+  ai-worker:
+    profiles: [ai]
+    build: {context: ., dockerfile: deploy/ai/Dockerfile}
+    environment:
+      AI_DATABASE_URL: ${AI_WORKER_DATABASE_URL:?Run the documented AI setup}
+      AI_REDIS_URL: ${AI_WORKER_REDIS_URL:?Run the documented AI setup}
+      AI_DATA_KEY_FILE: /run/secrets/ai-content-key
+      AI_ENDPOINTS: ${AI_ENDPOINTS:-[]}
+      AI_OPENROUTER_ENABLED: ${AI_OPENROUTER_ENABLED:-false}
+      AI_EGRESS_PROXY: http://172.30.64.2:8888
+      AI_GLOBAL_CONCURRENCY: "2"
+    secrets: [ai-content-key]
+    read_only: true
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=32m"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    cpus: 1
+    pids_limit: 64
+    networks:
+      ai_database: {}
+      ai_queue: {}
+      ai_inference: {ipv4_address: 172.30.63.3}
+      ai_proxy: {}
+    depends_on:
+      ai-redis: {condition: service_healthy}
+      postgres: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, /app/.venv/bin/python, -c, "import pathlib,time; p=pathlib.Path('/tmp/ai-worker.ready'); assert p.exists() and time.time()-p.stat().st_mtime<30"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+  ai-redis:
+    profiles: [ai]
+    image: redis:7.4.11-alpine3.21@sha256:57e4255cc971b1c8d6f8a6ca283ac01bc3ecdd914273ef6bfaede87aaecd6541
+    user: "999:1000"
+    command: [redis-server, --aclfile, /run/secrets/ai-redis-acl, --save, "", --maxmemory, 32mb]
+    secrets: [ai-redis-acl]
+    read_only: true
+    tmpfs: ["/data:rw,noexec,nosuid,size=16m,uid=999,gid=1000,mode=0700"]
+    mem_limit: 128m
+    cpus: 0.25
+    pids_limit: 32
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [ai_queue, ai_api_queue]
+    healthcheck:
+      # PING has no database authority. All data access requires a scoped user.
+      test: [CMD, redis-cli, ping]
+      interval: 3s
+      timeout: 2s
+      retries: 20
+  ai-egress:
+    profiles: [ai]
+    build: {context: ., dockerfile: deploy/ai/Dockerfile.egress}
+    environment:
+      AI_EGRESS_DESTINATIONS: ${AI_EGRESS_DESTINATIONS:-[]}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 64m
+    pids_limit: 32
+    networks:
+      ai_proxy: {ipv4_address: 172.30.64.2}
+      ai_external: {}
+networks:
+  ai_database:
+    internal: true
+    ipam: {config: [{subnet: 172.30.61.0/24}]}
+  ai_queue:
+    internal: true
+    ipam: {config: [{subnet: 172.30.62.0/24}]}
+  ai_api_queue:
+    internal: true
+    ipam: {config: [{subnet: 172.30.65.0/24}]}
+  ai_inference:
+    internal: true
+    ipam: {config: [{subnet: 172.30.63.0/24}]}
+  ai_proxy:
+    internal: true
+    ipam: {config: [{subnet: 172.30.64.0/24}]}
+  ai_external: {driver: bridge}
+secrets:
+  ai-content-key: {file: .secrets/ai/ai-content-key}
+  ai-redis-acl: {file: .secrets/ai/ai-redis-acl}

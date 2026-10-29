@@ -1,0 +1,4 @@
+
+> trading-research-web@0.1.0 typecheck
+> tsc -b --pretty false
+

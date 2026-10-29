@@ -1,0 +1,274 @@
+ Image ai-trading-research-migrate Building 
+ Image ai-trading-research-minio Building 
+ Image ai-trading-research-ai-worker Building 
+ Image ai-trading-research-ai-egress Building 
+ Image ai-trading-research-api Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.55kB done
+#1 DONE 0.0s
+
+#2 [minio internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [ai-worker internal] load build definition from Dockerfile
+#3 transferring dockerfile: 781B done
+#3 DONE 0.0s
+
+#4 [ai-egress internal] load build definition from Dockerfile.egress
+#4 transferring dockerfile: 370B done
+#4 DONE 0.0s
+
+#5 [migrate internal] load build definition from Dockerfile
+#5 transferring dockerfile: 897B done
+#5 DONE 0.0s
+
+#6 [api internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#6 ...
+
+#7 [minio internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 DONE 0.8s
+
+#6 [migrate internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#6 DONE 0.8s
+
+#8 [api internal] load .dockerignore
+#8 transferring context: 293B done
+#8 DONE 0.0s
+
+#9 [ai-worker internal] load build context
+#9 DONE 0.0s
+
+#10 [api internal] load build context
+#10 DONE 0.0s
+
+#11 [ai-egress internal] load build context
+#11 transferring context: 3.88kB done
+#11 DONE 0.0s
+
+#12 [minio internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#12 DONE 0.9s
+
+#13 [minio internal] load .dockerignore
+#13 transferring context: 2B done
+#13 DONE 0.0s
+
+#14 [migrate  1/10] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#14 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#14 ...
+
+#15 [minio build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#15 DONE 0.0s
+
+#16 [minio stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#16 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#16 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.4s done
+#16 DONE 0.4s
+
+#17 [minio build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#17 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.5s done
+#17 DONE 0.5s
+
+#18 [minio build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#18 CACHED
+
+#19 [minio stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#19 CACHED
+
+#20 [minio build 2/5] WORKDIR /src
+#20 CACHED
+
+#21 [minio stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#21 CACHED
+
+#22 [minio stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#22 CACHED
+
+#23 [minio build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#23 CACHED
+
+#24 [minio build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#24 CACHED
+
+#25 [minio stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#25 CACHED
+
+#26 [minio] exporting to image
+#26 exporting layers done
+#26 exporting manifest sha256:bf8ca38f1bfecc7cbc2e062f923e9ca5acb574ca8a85808be5551c1f173aa3a1 done
+#26 exporting config sha256:02037eb65ef148f3f0de526293f08bafe26922d327e41f053b022cdb5f29441e done
+#26 exporting attestation manifest sha256:c72a56b03af5e78f56d1b9110bc076beb7a71416a0f8433b53b3343ef24e70cc 0.0s done
+#26 exporting manifest list sha256:c35e278f2cecc2beca7646267877f49faa5283138491e59eb744eff88d21cfaa done
+#26 naming to docker.io/library/ai-trading-research-minio:latest done
+#26 unpacking to docker.io/library/ai-trading-research-minio:latest done
+#26 DONE 0.1s
+
+#14 [migrate  1/10] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#14 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.8s done
+#14 DONE 0.8s
+
+#27 [minio] resolving provenance for metadata file
+#27 DONE 0.0s
+
+#28 [api  2/10] WORKDIR /app
+#28 CACHED
+
+#10 [api internal] load build context
+#10 transferring context: 847.03kB 0.1s done
+#10 DONE 0.2s
+
+#29 [ai-egress 3/4] COPY services/__init__.py services/__init__.py
+#29 DONE 0.2s
+
+#9 [ai-worker internal] load build context
+#9 transferring context: 230.96kB 0.0s done
+#9 DONE 0.2s
+
+#30 [ai-worker  4/10] COPY pyproject.toml uv.lock ./
+#30 CACHED
+
+#31 [ai-worker  8/10] COPY packages/persistence/__init__.py packages/persistence/models.py packages/persistence/store.py packages/persistence/
+#31 CACHED
+
+#32 [ai-worker  5/10] RUN uv sync --frozen --no-dev --no-cache
+#32 CACHED
+
+#33 [ai-worker  9/10] COPY scripts/__init__.py scripts/ai_worker.py scripts/
+#33 CACHED
+
+#34 [ai-worker  3/10] RUN pip install --no-cache-dir uv==0.13.5
+#34 CACHED
+
+#35 [ai-worker  6/10] COPY packages/__init__.py packages/__init__.py
+#35 CACHED
+
+#36 [ai-worker  7/10] COPY packages/ai packages/ai
+#36 CACHED
+
+#37 [ai-worker 10/10] RUN useradd --uid 10001 --no-create-home ai
+#37 CACHED
+
+#38 [migrate 11/13] COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/provision_market.py scripts/market_worker.py scripts/risk_monitor.py scripts/research_worker.py scripts/
+#38 CACHED
+
+#39 [migrate 12/13] COPY alembic.ini ./
+#39 CACHED
+
+#40 [migrate  5/13] RUN uv sync --frozen --no-dev --no-cache
+#40 CACHED
+
+#41 [migrate  9/13] COPY workers workers
+#41 CACHED
+
+#42 [migrate  4/13] COPY pyproject.toml uv.lock ./
+#42 CACHED
+
+#43 [migrate  6/13] COPY apps/api apps/api
+#43 CACHED
+
+#44 [migrate 10/13] COPY migrations migrations
+#44 CACHED
+
+#45 [migrate  7/13] COPY apps/__init__.py apps/__init__.py
+#45 CACHED
+
+#46 [migrate  8/13] COPY packages packages
+#46 CACHED
+
+#47 [migrate  3/13] RUN pip install --no-cache-dir uv==0.13.5
+#47 CACHED
+
+#48 [migrate 13/13] RUN useradd --uid 10001 --create-home app
+#48 CACHED
+
+#49 [ai-egress 4/4] COPY services/ai_egress services/ai_egress
+#49 DONE 0.1s
+
+#50 [api] exporting to image
+#50 exporting layers 0.0s done
+#50 exporting manifest sha256:ce8cbbda5dd5b3b1d0e93404a49f412d6221c4c982d20bf9a1c9ef8d29ebf562 0.0s done
+#50 exporting config sha256:afbd5ea0bd8fe6975097c8a4437dacbddd1bd0c236556dc13521915237a57688 done
+#50 exporting attestation manifest sha256:f3bcd1ee0d16a0cd64a175972e794d8b906593825f06e29744d8cd087e81e5dc
+#50 exporting attestation manifest sha256:f3bcd1ee0d16a0cd64a175972e794d8b906593825f06e29744d8cd087e81e5dc 0.1s done
+#50 exporting manifest list sha256:ea17e8d5ce0d182430eb01deb6b580896cf2de138a5d736f0a5f669bc46a78ee 0.0s done
+#50 naming to docker.io/library/ai-trading-research-api:latest
+#50 naming to docker.io/library/ai-trading-research-api:latest done
+#50 unpacking to docker.io/library/ai-trading-research-api:latest 0.0s done
+#50 DONE 0.3s
+
+#51 [migrate] exporting to image
+#51 exporting layers 0.0s done
+#51 exporting manifest sha256:a41cfd1e055cab5a218d687f5ea787f3e5260f6d58c3de9d6daa6a66e61fb22d 0.0s done
+#51 exporting config sha256:4df7299a3864130435074971529850e5c7a7560252e17c6720614e22153076a4 0.0s done
+#51 exporting attestation manifest sha256:7fd550442a5123cf845ed5979ba052fbfececaa5e1b17861f52d714f96afce3e 0.1s done
+#51 exporting manifest list sha256:b227a19cc21e8d776c6ad07491b445a85e2a32d3e7465cb1b6c7b707eafa6a36 0.0s done
+#51 naming to docker.io/library/ai-trading-research-migrate:latest done
+#51 unpacking to docker.io/library/ai-trading-research-migrate:latest 0.0s done
+#51 DONE 0.3s
+
+#52 [ai-worker] exporting to image
+#52 exporting layers 0.0s done
+#52 exporting manifest sha256:e238599b8207ab153c9c8b43104bb91805d7b86680bf304108f3eeecb389ff17 0.0s done
+#52 exporting config sha256:d5c23daa59e7ff10d9a6f3058e5022a7dbd4f55262b54eb84f51651a4183103d 0.1s done
+#52 exporting attestation manifest sha256:f7c124c55cb6308e6988c5c50d42358077023aa02381da912a6054bfedcc326a 0.0s done
+#52 exporting manifest list sha256:49a9f8071f79ef6bc258dee3520d2ddaad525c4c894261a0d1c5777d15253afd 0.0s done
+#52 naming to docker.io/library/ai-trading-research-ai-worker:latest 0.0s done
+#52 unpacking to docker.io/library/ai-trading-research-ai-worker:latest 0.0s done
+#52 DONE 0.3s
+
+#53 [ai-egress] exporting to image
+#53 exporting layers 0.3s done
+#53 exporting manifest sha256:95b729762ae5fc27ad1ca338be42986e6001ac1b7f5c68829bf10fa45cba49c2 0.0s done
+#53 exporting config sha256:473060aa14b64b68d105e02d521d518650402fe836b004c88c356ab060c22187 0.0s done
+#53 exporting attestation manifest sha256:7bfee64511150bfa0fe6f402876690fc4bcdbed57e9e722c200f6f68a497e08c 0.0s done
+#53 exporting manifest list sha256:e4c248a3b1dd926f8f06ff89ebd45cf89ac6e21fae4116503518085e306c12c4
+#53 exporting manifest list sha256:e4c248a3b1dd926f8f06ff89ebd45cf89ac6e21fae4116503518085e306c12c4 0.0s done
+#53 naming to docker.io/library/ai-trading-research-ai-egress:latest done
+#53 unpacking to docker.io/library/ai-trading-research-ai-egress:latest 0.0s done
+#53 DONE 0.5s
+
+#54 [api] resolving provenance for metadata file
+#54 DONE 0.1s
+
+#55 [ai-worker] resolving provenance for metadata file
+#55 DONE 0.0s
+
+#56 [migrate] resolving provenance for metadata file
+#56 DONE 0.0s
+
+#57 [ai-egress] resolving provenance for metadata file
+#57 DONE 0.0s
+ Image ai-trading-research-api Built 
+ Image ai-trading-research-minio Built 
+ Image ai-trading-research-migrate Built 
+ Image ai-trading-research-ai-egress Built 
+ Image ai-trading-research-ai-worker Built 
+ Container ai-trading-research-minio-1 Running 
+ Container ai-trading-research-redis-1 Running 
+ Network ai-trading-research_ai_queue Creating 
+ Network ai-trading-research_ai_proxy Creating 
+ Network ai-trading-research_ai_queue Creating 
+ Network ai-trading-research_ai_proxy Creating 
+ Network ai-trading-research_ai_external Creating 
+ Network ai-trading-research_ai_external Creating 
+ Network ai-trading-research_ai_inference Creating 
+ Network ai-trading-research_ai_inference Creating 
+ Network ai-trading-research_ai_database Creating 
+ Network ai-trading-research_ai_database Creating 
+ Network ai-trading-research_ai_external Created 
+ Network ai-trading-research_ai_external Created 
+ Network ai-trading-research_ai_queue Created 
+ Network ai-trading-research_ai_queue Created 
+ Container ai-trading-research-ai-redis-1 Creating 
+ Container ai-trading-research-api-1 Recreate 
+ Network ai-trading-research_ai_proxy Created 
+ Network ai-trading-research_ai_proxy Created 
+ Container ai-trading-research-ai-egress-1 Creating 
+ Network ai-trading-research_ai_inference Created 
+ Network ai-trading-research_ai_inference Created 
+ Network ai-trading-research_ai_database Created 
+ Network ai-trading-research_ai_database Created 
+ Container ai-trading-research-postgres-1 Recreate 
+ Container ai-trading-research-ai-egress-1 Created 
+ Container ai-trading-research-postgres-1 Recreated 
+

@@ -1,0 +1,14 @@
+.venv/bin/python -m ruff check .
+S106 Possible hardcoded password assigned to argument: "token_file"
+  --> tests/test_ai_tls.py:64:13
+   |
+62 |             transport="AUTHENTICATED_TLS",
+63 |             private_only_attested=True,
+64 |             token_file="/run/secrets/ai-token",
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+65 |             ca_file="/run/secrets/ai-ca",
+66 |         )
+   |
+
+Found 1 error.
+make: *** [lint] Error 1

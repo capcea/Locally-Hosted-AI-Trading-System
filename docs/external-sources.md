@@ -150,3 +150,38 @@ not official rules. No external broker, account, margin service or economic cale
   the input samples satisfy independence or support profitable trading.
 
 No Phase 5 external market/broker/paid service was connected. Native data is explicitly synthetic.
+
+## Phase6 private inference sources — accessed2026-10-28
+
+- [Official Ollama chat](https://docs.ollama.com/api/chat): NDJSON, format/schema and thinking controls.
+- [Official compatibility subset](https://docs.ollama.com/api/openai-compatibility): no parity assumption.
+- [Official operational FAQ](https://docs.ollama.com/faq): context configuration and GPU observation limits.
+- [Official OpenAPI source](https://github.com/ollama/ollama/blob/main/docs/openapi.yaml): show metadata;
+  the separate /api/show documentation webpage returned404.
+- [Vast SSH guide](https://docs.vast.ai/guides/instances/connect/ssh): private forwarding guidance only.
+
+These references establish documented interfaces, not installed models or deployed connectivity.
+No GPU instance, public inference port or paid resource was created.
+
+
+## OpenRouter integration — consulted 2026-10-28
+
+These official documents informed the compatible adapter and explicit cloud policy. Consultation
+is not evidence that a key, model, public TLS route or paid request has been tested.
+
+- [OpenRouter developer introduction](https://openrouter.ai/developers): compatible base URL and
+  authenticated request path.
+- [Provider selection/routing](https://openrouter.ai/docs/guides/routing/provider-selection): exact
+  upstream allowlist, no fallback, required parameters, data collection, ZDR and maximum prices.
+- [Model endpoint metadata](https://openrouter.ai/docs/api/api-reference/endpoints/list-all-endpoints-for-a-model):
+  exact model ID, endpoint tag, reported context and pricing. No model/tag is preselected as verified.
+- [Request parameters](https://openrouter.ai/docs/api_reference/parameters): bounded structured
+  completion controls; unsupported capabilities remain refused/unverified.
+- [Zero-data-retention policy description](https://openrouter.ai/blog/insights/zero-data-retention/):
+  provider claims/disclosure, not independent confidentiality or residency certification.
+- [API key limits](https://openrouter.ai/docs/api/api-reference/api-keys/create-keys): independent
+  provider-side key spending cap. This project does not create management keys or call this endpoint.
+
+Synthetic transport fixtures implement documented shapes only. Actual provider compatibility,
+provider policy compliance and billing must be separately measured/approved as described in
+[OPENROUTER_INTEGRATION_REPORT.md](../OPENROUTER_INTEGRATION_REPORT.md).

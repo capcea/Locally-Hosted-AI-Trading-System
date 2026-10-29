@@ -1,0 +1,16 @@
+{
+  "original_file_count": 1369,
+  "missing": [],
+  "changed_existing_files": [
+    "IMPLEMENTATION_STATUS.md",
+    "apps/web/e2e/platform.spec.ts",
+    "apps/web/src/App.tsx",
+    "apps/web/src/api.test.ts",
+    "apps/web/src/api.ts",
+    "apps/web/src/v1/ShellTools.tsx",
+    "docs/IMPLEMENTATION_STATUS.md"
+  ],
+  "backend_financial_security_code_unchanged": true,
+  "accepted_visual_references_unchanged": true,
+  "docker_or_persistent_resources_changed": false
+}

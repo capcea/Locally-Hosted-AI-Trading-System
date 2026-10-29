@@ -1,0 +1,33 @@
+{
+  "non_web_containers_identities_images_mounts_unchanged": 11,
+  "approved_reference_hashes_unchanged": 4,
+  "protected_backend_infrastructure_files_unchanged": 118,
+  "existing_e2e_files_helpers_unchanged": 15,
+  "existing_source_files_changed": [
+    "apps/web/src/ai/AICenter.tsx",
+    "apps/web/src/navigation/sections.ts",
+    "IMPLEMENTATION_STATUS.md",
+    "apps/web/src/App.tsx",
+    "apps/web/src/MarketData.tsx",
+    "apps/web/src/RiskCenter.tsx",
+    "apps/web/src/StrategyLab.tsx",
+    "apps/web/src/api.test.ts",
+    "apps/web/src/auth/AuthProvider.tsx",
+    "apps/web/src/home/HomePage.tsx",
+    "apps/web/src/main.tsx",
+    "apps/web/src/navigation/routes.ts",
+    "apps/web/src/results/ResultView.tsx",
+    "apps/web/src/schema.ts",
+    "apps/web/src/ui/tokens.css",
+    "docs/FRONTEND_UX.md",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "docs/ux-migration-coverage.md",
+    "scripts/browser_acceptance.py"
+  ],
+  "handoff_manifest_entries_verified": 14,
+  "web_healthy": "healthy",
+  "served_html_and_assets_match_build": true,
+  "assets_checked": 2,
+  "browser_rendering_verified": false,
+  "final_web_healthy": "healthy"
+}

@@ -1,8 +1,60 @@
-# Frontend architecture — Phase 5.5B
+# Approved V1 frontend update — 2026-10-28
+
+Current source authority: [V1 spec](design-reference/ui-v1/DESIGN_SPEC.md),
+[implementation report](../REDESIGN_V1_IMPLEMENTATION_REPORT.md),
+[fidelity ledger](../REDESIGN_V1_VISUAL_FIDELITY.md). Prior UX documentation below is retained as
+historical context. Source/native checks do not certify rendering or accessibility.
+
+Shared components live in apps/web/src/v1/: Kpi, CardTitle, EmptyState, StatusPill, QuickSearch,
+SidebarSections/Status, useOwnedRead, StrategyLibrary, BacktestReview, ExperimentStats,
+ResultsOverview, ExperimentPreview/ResultTiles, AccountsOverview/AccountSafety and AIRoles/AIQuickCard.
+The existing React/TypeScript, Lucide icons, auth provider and finite history remain; no UI framework
+or backend contract was introduced. Canonical semantic colors are in ui/tokens.css; V1 geometry is
+in v1/redesign.css after retained product compatibility styles. Never use reference PNGs as app UI.
+
+Five primary routes stay /, /testeaza, /rezultate, /conturi, /setari. All prior deep routes remain;
+finite aliases /testeaza/backtesting, /testeaza/experimente, /setari/modele-ai, /setari/platforma
+resolve to existing authorized screens. Search covers page destinations only. No private full-text
+API or unread-notification state is implied. Cmd/Ctrl+K focuses search, Enter opens its first match,
+Escape dismisses matches. Mobile keeps five primary links and section tools. Account context and
+independent safety/auth never depend on overview success.
+
+Display reads are owner/path keyed and cleared on failure; last-known stops are explicitly retained
+for unavailable safety labels. Money/metrics come from immutable backend results, not chart samples.
+Home count labels describe a bounded page, never a fictitious total or portfolio. Missing data,
+ratios, model verification, worker/GPU observation and exact trade distribution stay unavailable.
+AI question handoff is one-use owner-bound memory, cleared at logout and never an automatic submit,
+consent, code runner or financial permission. The previous eight explicit AI select labels remain.
+
+The new disposable redesign browser scenario covers nine compositions, both themes and five target
+viewports; it does not replace existing regressions. Opt-in candidate screenshots avoid auth/recovery
+fields and write only .cache/redesign-v1-captures, never golden references. Follow the report's owner
+commands for actual screenshots/acceptance. Do not adopt candidates without explicit visual review.
+
+---
+
+# Frontend architecture — Phase 6 follow-up
 
 Date: 2026-10-27. Implementation exists; browser/visual/manual acceptance remains BLOCKED by the
 managed local-origin permission. See ../PHASE55B_COMPLETION_REPORT.md and ux-migration-coverage.md.
-No Phase6, external execution, generated-code runner or new financial calculation engine.
+The owner reports prior Phases0–5.5 automated acceptance passed and authorized Phase6. New AI browser
+acceptance remains unexecuted under the managed origin restriction. No external execution,
+generated-code runner or new financial calculation engine.
+
+## Private AI area
+
+`ai/AICenter.tsx` uses actual authenticated registry/status/request/cancel/content APIs, under
+`/testeaza/ai` and reloadable `/testeaza/ai/{jobId}`. Configuration is under `/setari/ai` with owner
+recent-MFA enforcement on the server. Five primary destinations remain. No model/default GPU activity
+is invented. Discovery/probe results are measured, not inferred from a saved profile.
+Romanian structured hypothesis/critique/missing-evidence/code-text views lead with unverified status,
+unknown usage/cost where missing and immutable provenance details. Coding text is escaped, never run.
+Question/context drafts stay in memory, not browser storage. Unknown submission retries keep the same
+key and frozen body; a deliberate discard is separate. Job state is polled, cancellation remains
+requested until acknowledged, and remote GPU termination is not presumed. Partial unvalidated output
+is available in the backend stream but deliberately not shown as a final answer. Errors use an explicit
+allowlist in `ai/copy.ts`. Current rendered/mobile/keyboard/manual acceptance is still BLOCKED, not
+proved by SSR/unit tests. See [Phase6 report](../PHASE6_COMPLETION_REPORT.md).
 
 ## Runtime structure
 
@@ -102,3 +154,17 @@ Its source fix intentionally requires reviewed references for the stable slot. D
 mask larger content, freeze safety clocks or automatically rewrite references. The new actual image
 must be inspected before owner approval; no post-fix rendering or full browser pass is claimed here.
 See the visual correction section in ../PHASE55B_COMPLETION_REPORT.md and its public PNG evidence.
+
+## UI tidy-up — 2026-10-28
+
+See [UI_POLISH.md](UI_POLISH.md) for the frontend-only follow-up requested after the owner's research
+screen review. Shared navigation now lives in navigation/sections.ts and SectionNavigation.tsx;
+Settings shows task groups and contextual subpage links. Public diagnostics/about/roadmap remain
+reachable while signed out. Finite routes, authenticated mounting and all underlying modules remain.
+The root research route opens directly into the same wizard. Shared spacing, forms, tables, metric
+cards and responsive styles are refined in product.css. RiskBanner changes language/presentation,
+including a prominent last-known stop warning; it does not alter risk decisions or authorization.
+
+The four previously approved public visual references are unchanged. New styles require fresh actual
+captures and review; old baseline approval does not establish acceptance of this new presentation.
+No updated reference or current browser/manual acceptance is claimed.

@@ -16,6 +16,7 @@ export const overviewSchema = z.strictObject({
     z.literal(3),
     z.literal(4),
     z.literal(5),
+    z.literal(6),
   ]),
   timestamp: z.iso.datetime({ offset: true }),
   uptime_seconds: z.number().int().nonnegative(),

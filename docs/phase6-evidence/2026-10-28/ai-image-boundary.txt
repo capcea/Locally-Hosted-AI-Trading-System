@@ -1,0 +1,1 @@
+PASS: non-root AI image excludes API/risk/research code and Docker socket; no inherited database identity

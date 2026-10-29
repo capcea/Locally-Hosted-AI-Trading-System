@@ -141,7 +141,10 @@ export function EquityChart({
 }) {
   const [drawdown, setDrawdown] = useState(false);
   const valid = points.filter(
-    (p) => Number.isFinite(p.timestamp) && Number.isFinite(Number(p.equity)),
+    (p) =>
+      Number.isFinite(p.timestamp) &&
+      Number.isFinite(new Date(p.timestamp * 1000).getTime()) &&
+      Number.isFinite(Number(p.equity)),
   );
   if (valid.length < 2) return <p>Curba nu are suficiente observații stocate.</p>;
   let peak = -Infinity;
@@ -186,25 +189,60 @@ export function EquityChart({
           {drawdown ? 'Scăderi aproximative, fără a înlocui maximul stocat' : 'Capital simulat'} în{' '}
           {currency}, timp UTC
         </title>
+        {[0, 0.25, 0.5, 0.75, 1].map((fraction) => (
+          <g key={fraction}>
+            <line
+              x1="100"
+              x2="650"
+              y1={200 - fraction * 160}
+              y2={200 - fraction * 160}
+              stroke="var(--line)"
+            />
+            <text x="5" y={195 - fraction * 160}>
+              {(min + fraction * range).toPrecision(5)}
+            </text>
+          </g>
+        ))}
+        {[0.25, 0.5, 0.75].map((fraction) => (
+          <g key={fraction}>
+            <line
+              x1={100 + fraction * 550}
+              x2={100 + fraction * 550}
+              y1="40"
+              y2="200"
+              stroke="var(--line)"
+            />
+            <text x={100 + fraction * 550} y="245" textAnchor="middle">
+              {new Date((first + fraction * duration) * 1000)
+                .toISOString()
+                .slice(5, 16)
+                .replace('T', ' ')}
+            </text>
+          </g>
+        ))}
         <line x1="100" x2="650" y1="200" y2="200" stroke="currentColor" />
-        <text x="5" y="35">
-          {max.toPrecision(6)}
-        </text>
-        <text x="5" y="200">
-          {min.toPrecision(6)}
-        </text>
         {valid.map((p, i) => (
-          <circle
-            key={i}
-            cx={100 + ((p.timestamp - first) / duration) * 550}
-            cy={200 - ((values[i] - min) / range) * 160}
-            r="2"
-            fill="var(--accent)"
-          >
-            <title>
-              {p.at} · {drawdown ? 'aproximativ ' + values[i] : p.equity} {currency}
-            </title>
-          </circle>
+          <g key={i}>
+            <line
+              x1={100 + ((p.timestamp - first) / duration) * 550}
+              x2={100 + ((p.timestamp - first) / duration) * 550}
+              y1="200"
+              y2={200 - ((values[i] - min) / range) * 160}
+              stroke="var(--accent)"
+              strokeWidth="2"
+              opacity="0.12"
+            />
+            <circle
+              cx={100 + ((p.timestamp - first) / duration) * 550}
+              cy={200 - ((values[i] - min) / range) * 160}
+              r="2"
+              fill="var(--accent)"
+            >
+              <title>
+                {p.at} · {drawdown ? 'aproximativ ' + values[i] : p.equity} {currency}
+              </title>
+            </circle>
+          </g>
         ))}
         <text x="100" y="230">
           {valid[0].at.slice(0, 19)}

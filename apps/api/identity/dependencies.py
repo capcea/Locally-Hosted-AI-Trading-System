@@ -21,6 +21,10 @@ from packages.persistence.store import Store
 COOKIE = "research_session"
 
 
+def auth_error(status: int, detail: str, code: str) -> HTTPException:
+    return HTTPException(status, detail, headers={"X-Auth-Error": code})
+
+
 def settings(request: Request) -> Settings:
     value: Settings = request.app.state.settings
     return value
@@ -120,13 +124,13 @@ def authenticated(request: Request) -> Iterator[Principal]:
     key, store = key_for(request), store_for(request)
     raw = request.cookies.get(COOKIE, "")
     if len(raw) != 43:
-        raise HTTPException(401, "Authentication required")
+        raise auth_error(401, "Authentication required", "LOGIN_REQUIRED")
     with store.session() as db, db.begin():
         session = db.scalar(
             select(LoginSession).where(LoginSession.token_hash == token_digest(raw))
         )
         if session is None:
-            raise HTTPException(401, "Authentication required")
+            raise auth_error(401, "Authentication required", "SESSION_EXPIRED")
         user = db.execute(
             select(User).where(User.id == session.user_id).with_for_update()
         ).scalar_one()
@@ -138,12 +142,12 @@ def authenticated(request: Request) -> Iterator[Principal]:
             or session.expires_at <= now
             or session.idle_expires_at <= now
         ):
-            raise HTTPException(401, "Session expired or revoked")
+            raise auth_error(401, "Session expired or revoked", "SESSION_EXPIRED")
         if request.method not in {"GET", "HEAD", "OPTIONS"}:
             origin_guard(request)
             expected = keyed_digest(key, "csrf", raw)
             if not hmac.compare_digest(request.headers.get("x-csrf-token", ""), expected):
-                raise HTTPException(403, "CSRF validation failed")
+                raise auth_error(403, "CSRF validation failed", "CSRF_FAILED")
         session.idle_expires_at = min(
             session.expires_at, now + timedelta(seconds=settings(request).session_idle_seconds)
         )
@@ -155,7 +159,7 @@ Identity = Annotated[Principal, Depends(authenticated)]
 
 def fully_authenticated(identity: Identity) -> Principal:
     if identity.session.state != "FULL" or identity.user.mfa_secret is None:
-        raise HTTPException(403, "Complete MFA before accessing management records")
+        raise auth_error(403, "Complete MFA before accessing management records", "MFA_REQUIRED")
     return identity
 
 
@@ -164,9 +168,9 @@ FullIdentity = Annotated[Principal, Depends(fully_authenticated)]
 
 def require_owner(identity: Principal) -> None:
     if identity.user.role != "OWNER":
-        raise HTTPException(403, "Owner role required")
+        raise auth_error(403, "Owner role required", "ROLE_REQUIRED")
 
 
 def require_recent_mfa(identity: Principal) -> None:
     if identity.session.mfa_at is None or identity.session.mfa_at < utcnow() - timedelta(minutes=5):
-        raise HTTPException(403, "Recent MFA verification required")
+        raise auth_error(403, "Recent MFA verification required", "MFA_RECENT_REQUIRED")

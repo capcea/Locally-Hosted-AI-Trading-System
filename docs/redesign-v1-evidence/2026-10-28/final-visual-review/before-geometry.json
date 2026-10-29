@@ -1,0 +1,64 @@
+{
+  "image": "before-home-light-actual.png",
+  "dimensions": [
+    1280,
+    1684
+  ],
+  "method": "Full-resolution image inspection and exact #DFE5F3 vertical-border pixel runs decoded with Python standard-library PNG/zlib; rounded card corners excluded. Reference bounds are approximate visual readings, not same-viewport pixel equality.",
+  "exact_border_runs": {
+    "x276": [
+      [
+        146,
+        284
+      ],
+      [
+        331,
+        963
+      ],
+      [
+        1006,
+        1341
+      ],
+      [
+        1386,
+        1599
+      ]
+    ],
+    "x952": [
+      [
+        331,
+        963
+      ],
+      [
+        1006,
+        1341
+      ]
+    ]
+  },
+  "approximate_bounds": {
+    "sidebar_width": 256,
+    "header_height": 78,
+    "main_inset": 20,
+    "kpi_top": 132,
+    "kpi_height": 167,
+    "performance_top": 317,
+    "performance_bottom": 978,
+    "ai_top": 317,
+    "ai_bottom": 978,
+    "recent_top": 992,
+    "workflow_top": 1372
+  },
+  "approved_home_approximate_bounds": {
+    "viewport": [
+      1672,
+      941
+    ],
+    "sidebar_width": 261,
+    "header_height": 68,
+    "main_inset": 20,
+    "kpi_height": 110,
+    "performance_height": 297
+  },
+  "after_measurements": null,
+  "warning": "Do not extrapolate differences in empty/loaded content, viewport or page length into a numerical fidelity score."
+}

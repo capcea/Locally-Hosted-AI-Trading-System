@@ -1,0 +1,1 @@
+{"service": "Ollama", "url": "http://127.0.0.1:11434", "actual_inference_verified": false, "models_downloaded": false, "status": "BLOCKED_RUNTIME_UNAVAILABLE"}

@@ -1,0 +1,14 @@
+{
+  "source": "App.tsx poll sets now before await, lastSuccess after await",
+  "payload_valid": true,
+  "stable_service_ids": [
+    "api",
+    "postgres",
+    "redis",
+    "storage"
+  ],
+  "poll_clock": 1793231573203,
+  "success_clock": 1793231573223,
+  "sidebar_stale": true,
+  "same_fault_after_every_poll": true
+}

@@ -163,6 +163,30 @@ services:
       timeout: 3s
       retries: 6
 
+  campaign-worker:
+    <<: *control
+    profiles: [campaigns]
+    command: [/app/.venv/bin/python, -m, scripts.campaign_worker]
+    environment:
+      <<: *control-env
+      DATABASE_URL: postgresql+psycopg://research_app:${AUTH_DATABASE_PASSWORD:?Run make identity-setup}@postgres:5432/research
+      AUTH_ENCRYPTION_KEY: ${AUTH_ENCRYPTION_KEY:?Run make identity-setup}
+      MARKET_STORAGE_USER: ${MARKET_STORAGE_USER:?Run make market-setup}
+      MARKET_STORAGE_PASSWORD: ${MARKET_STORAGE_PASSWORD:?Run make market-setup}
+    networks: [control]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=32m"]
+    mem_limit: 384m
+    cpus: 1
+    pids_limit: 128
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      minio: { condition: service_healthy }
+    healthcheck:
+      test: [CMD, /app/.venv/bin/python, -c, "import pathlib,time; p=pathlib.Path('/tmp/campaign-worker.ready'); assert p.exists() and time.time()-p.stat().st_mtime<360"]
+      interval: 20s
+      timeout: 3s
+      retries: 6
+
   risk-monitor:
     <<: *control
     command: [/app/.venv/bin/python, -m, scripts.risk_monitor]

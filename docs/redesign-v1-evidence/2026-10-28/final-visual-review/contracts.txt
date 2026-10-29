@@ -1,0 +1,8 @@
+.venv/bin/python -m scripts.check_contracts
+
+> trading-research-web@0.1.0 generate:api
+> openapi-typescript ../../docs/openapi.json -o src/generated/api.ts
+
+✨ openapi-typescript 7.13.0
+🚀 ../../docs/openapi.json → src/generated/api.ts [170.1ms]
+PASSED: generated contracts match the source byte-for-byte.

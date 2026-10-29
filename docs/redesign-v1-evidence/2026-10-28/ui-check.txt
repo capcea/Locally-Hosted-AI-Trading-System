@@ -1,0 +1,14 @@
+.venv/bin/python -m ruff check .
+E501 Line too long (102 > 100)
+   --> scripts/browser_acceptance.py:118:101
+    |
+116 |     }:
+117 |         raise RuntimeError(
+118 |             "E2E_ONLY_SCENARIO must be foundation, market, broker, risk, research, ux, ai or redesign"
+    |                                                                                                     ^^
+119 |         )
+120 |     isolated = IsolatedServices.model_validate_json(Path(config_file).read_bytes())
+    |
+
+Found 1 error.
+make: *** [lint] Error 1

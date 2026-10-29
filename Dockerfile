@@ -9,8 +9,10 @@ COPY apps/__init__.py apps/__init__.py
 COPY packages packages
 COPY workers workers
 COPY migrations migrations
-COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/provision_market.py scripts/market_worker.py scripts/risk_monitor.py scripts/research_worker.py scripts/
+COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/provision_market.py scripts/market_worker.py scripts/risk_monitor.py scripts/research_worker.py scripts/campaign_worker.py scripts/
 COPY alembic.ini ./
+# Exercise the packaged entrypoint without configuration, network calls or worker execution.
+RUN /app/.venv/bin/python -m scripts.campaign_worker --help > /dev/null
 RUN useradd --uid 10001 --create-home app
 USER 10001:10001
 EXPOSE 8000

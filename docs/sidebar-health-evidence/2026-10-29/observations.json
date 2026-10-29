@@ -1,0 +1,96 @@
+{
+  "native_public_gets": [
+    {
+      "url": "http://127.0.0.1:18000/api/v1/overview",
+      "http": 200,
+      "phase": 6,
+      "timestamp": "2026-10-28T23:52:53.177849Z",
+      "services": [
+        {
+          "id": "api",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "postgres",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "redis",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "storage",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "mt5",
+          "status": "PENDING_IMPLEMENTATION"
+        },
+        {
+          "id": "ctrader",
+          "status": "PENDING_IMPLEMENTATION"
+        },
+        {
+          "id": "ollama",
+          "status": "NOT_CONFIGURED"
+        },
+        {
+          "id": "executor",
+          "status": "DISABLED"
+        }
+      ],
+      "raw_source": ".cache/sidebar-health-fix/overview-18000.json"
+    },
+    {
+      "url": "http://127.0.0.1:5173/api/v1/overview",
+      "http": 200,
+      "phase": 6,
+      "timestamp": "2026-10-28T23:52:53.203960Z",
+      "services": [
+        {
+          "id": "api",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "postgres",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "redis",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "storage",
+          "status": "HEALTHY"
+        },
+        {
+          "id": "mt5",
+          "status": "PENDING_IMPLEMENTATION"
+        },
+        {
+          "id": "ctrader",
+          "status": "PENDING_IMPLEMENTATION"
+        },
+        {
+          "id": "ollama",
+          "status": "NOT_CONFIGURED"
+        },
+        {
+          "id": "executor",
+          "status": "DISABLED"
+        }
+      ],
+      "raw_source": ".cache/sidebar-health-fix/overview-5173.json"
+    }
+  ],
+  "served_frontend": {
+    "http": 200,
+    "server": "nginx/1.28.0",
+    "vite_dev_client": false,
+    "asset_paths": [
+      "/assets/index-H_3nOps5.js",
+      "/assets/index-CzXXNL7w.css"
+    ]
+  },
+  "browser_execution": "BLOCKED"
+}

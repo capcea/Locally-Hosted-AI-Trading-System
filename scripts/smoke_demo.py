@@ -49,7 +49,7 @@ def smoke(base_url: str, require_ready: bool) -> None:
         overview.raise_for_status()
         snapshot = Overview.model_validate_json(overview.content)
         if (
-            snapshot.phase not in {0, 1, 2, 3, 4, 5}
+            snapshot.phase not in {0, 1, 2, 3, 4, 5, 6}
             or snapshot.application != "AI Trading Research Platform"
         ):
             raise RuntimeError("Unexpected application; denial probes refused")

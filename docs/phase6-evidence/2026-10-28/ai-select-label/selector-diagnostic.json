@@ -1,0 +1,10 @@
+{
+  "kind": "native selector algorithm diagnostic; no browser or DOM rendering",
+  "selector_version": "installed Playwright 1.64.1",
+  "label": "Destinație aprobată",
+  "option_text": "SYNTHETIC_HTTP_FIXTURE · LOOPBACK",
+  "before": "Destinație aprobatăSYNTHETIC_HTTP_FIXTURE · LOOPBACK",
+  "before_exact_match": false,
+  "after": "Destinație aprobată",
+  "after_exact_match": true
+}

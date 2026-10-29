@@ -1,0 +1,1 @@
+PASS: isolated AI image; no API/risk/research code, Docker socket or inherited DB identity

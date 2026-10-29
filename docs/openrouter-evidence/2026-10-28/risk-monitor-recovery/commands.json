@@ -1,0 +1,177 @@
+{
+  "date": "2026-10-28",
+  "commands": [
+    {
+      "label": "check",
+      "command": [
+        "make",
+        "check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 18.533,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/check.txt"
+    },
+    {
+      "label": "contracts",
+      "command": [
+        "make",
+        "contracts-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.109,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/contracts.txt"
+    },
+    {
+      "label": "focused-risk",
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "scripts.integration_services",
+        "--risk-only"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 70.741,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/focused-risk.txt"
+    },
+    {
+      "label": "image-build",
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.ai",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.ai.yaml",
+        "--profile",
+        "ai",
+        "--profile",
+        "campaigns",
+        "build",
+        "risk-monitor"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.624,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/image-build.txt",
+      "environment": {
+        "BUILDX_CONFIG": "$PWD/.cache/openrouter/startup/buildx"
+      }
+    },
+    {
+      "label": "image-smoke",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--read-only",
+        "--cap-drop",
+        "ALL",
+        "--security-opt",
+        "no-new-privileges:true",
+        "ai-trading-research-risk-monitor",
+        "/app/.venv/bin/python",
+        "-m",
+        "scripts.risk_monitor",
+        "--help"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.502,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/image-smoke.txt"
+    },
+    {
+      "label": "integration",
+      "command": [
+        "make",
+        "integration"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 452.949,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/integration.txt"
+    },
+    {
+      "label": "recovery-unit",
+      "command": [
+        ".venv/bin/pytest",
+        "tests/test_risk_monitor_recovery.py",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.608,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/recovery-unit.txt"
+    },
+    {
+      "label": "repository-check",
+      "command": [
+        "make",
+        "repository-check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.09,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/repository-check.txt"
+    },
+    {
+      "label": "secret-scan",
+      "command": [
+        "make",
+        "secret-scan"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.424,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/secret-scan.txt"
+    },
+    {
+      "label": "service-start",
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "--env-file",
+        ".env.ai",
+        "-f",
+        "compose.yaml",
+        "-f",
+        "compose.ai.yaml",
+        "--profile",
+        "ai",
+        "--profile",
+        "campaigns",
+        "up",
+        "-d",
+        "--no-deps",
+        "--no-build",
+        "--wait",
+        "--wait-timeout",
+        "90",
+        "risk-monitor"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 11.015,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/service-start.txt"
+    },
+    {
+      "label": "smoke",
+      "command": [
+        "make",
+        "smoke-demo"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.2,
+      "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/risk-monitor-recovery/smoke.txt"
+    }
+  ],
+  "provider_inference": false,
+  "browser_execution": "NOT_ATTEMPTED_MANAGED_RESTRICTION",
+  "production_database_outage_induced": false,
+  "integration_cases": {
+    "development_readiness": 1,
+    "before_restart": 108,
+    "after_restart": 108,
+    "final_api_readiness_http": 200
+  }
+}

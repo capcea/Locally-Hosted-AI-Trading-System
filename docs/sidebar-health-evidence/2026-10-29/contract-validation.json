@@ -1,0 +1,12 @@
+[
+  {
+    "port": 18000,
+    "contract_valid": true,
+    "explicit_healthy_infrastructure": true
+  },
+  {
+    "port": 5173,
+    "contract_valid": true,
+    "explicit_healthy_infrastructure": true
+  }
+]

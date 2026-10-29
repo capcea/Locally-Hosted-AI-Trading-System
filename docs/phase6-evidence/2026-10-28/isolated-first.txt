@@ -1,0 +1,407 @@
+.venv/bin/python -m scripts.integration_services
++ /usr/local/bin/docker context inspect --format '{{.Endpoints.docker.Host}}'
+unix:///Users/andy/.docker/run/docker.sock
++ /usr/local/bin/docker info --format '{{.ServerVersion}}'
+29.7.2
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' up --build -d --wait --wait-timeout 180
+#1 [internal] load local bake definitions
+#1 reading from stdin 638B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.11kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#3 ...
+
+#4 [internal] load metadata for docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#4 DONE 0.8s
+
+#3 [internal] load metadata for docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#3 DONE 0.9s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 ...
+
+#8 [build 1/5] FROM docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923
+#8 resolve docker.io/library/golang:1.24.9-alpine3.22@sha256:8f8959f38530d159bf71d0b3eb0c547dc61e7959d8225d1599cf762477384923 0.4s done
+#8 DONE 0.4s
+
+#7 [stage-1 1/5] FROM docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412
+#7 resolve docker.io/library/alpine:3.22.2@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 0.4s done
+#7 DONE 0.5s
+
+#9 [stage-1 4/5] COPY --from=build /src/LICENSE /usr/share/licenses/minio/LICENSE
+#9 CACHED
+
+#10 [build 3/5] ADD --checksum=sha256:71794c2df26aad0cc99e8421c58b7aa2dd55969f979b0e7d1e931042e9fabcd6 https://codeload.github.com/minio/minio/tar.gz/7aac2a2c5b7c882e68c1ce017d8256be2feea27f /tmp/minio.tar.gz
+#10 CACHED
+
+#11 [build 4/5] RUN tar -xzf /tmp/minio.tar.gz --strip-components=1 -C /src
+#11 CACHED
+
+#12 [build 2/5] WORKDIR /src
+#12 CACHED
+
+#13 [stage-1 3/5] COPY --from=build /out/minio /usr/local/bin/minio
+#13 CACHED
+
+#14 [stage-1 2/5] RUN addgroup -g 10002 minio && adduser -D -u 10002 -G minio minio && mkdir /data && chown minio:minio /data
+#14 CACHED
+
+#15 [build 5/5] RUN go build -mod=readonly -trimpath -o /out/minio .
+#15 CACHED
+
+#16 [stage-1 5/5] COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+#16 CACHED
+
+#17 exporting to image
+#17 exporting layers done
+#17 exporting manifest sha256:efd12e8d8ca6c245ad1318d2f955a239cdbd451bce17ac944819f871c36070b5 done
+#17 exporting config sha256:f8aaf29404f1bae8c196d276a290500553204b1ac82514a8871a89dfe1aca7cb done
+#17 exporting attestation manifest sha256:ccf757a7454553d1378834d65efe3d038d4c232a8e55e49fb95dcf9b757d6d0c done
+#17 exporting manifest list sha256:07e6b95ba7bcc6402974ceb231020e279ef4906e6287e32d19d673618431de3c done
+#17 naming to docker.io/library/phase0-test-577a93d9556d4157a39f2b025479279a-minio:latest done
+#17 unpacking to docker.io/library/phase0-test-577a93d9556d4157a39f2b025479279a-minio:latest done
+#17 DONE 0.0s
+
+#18 resolving provenance for metadata file
+#18 DONE 0.0s
+ Image phase0-test-577a93d9556d4157a39f2b025479279a-minio Building 
+ Image phase0-test-577a93d9556d4157a39f2b025479279a-minio Built 
+ Network phase0-test-577a93d9556d4157a39f2b025479279a_default Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_redis Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_postgres Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_redis Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_postgres Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_storage Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_storage Creating 
+ Network phase0-test-577a93d9556d4157a39f2b025479279a_default Creating 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_redis Created 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_redis Created 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_storage Created 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_storage Created 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_postgres Created 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_postgres Created 
+ Network phase0-test-577a93d9556d4157a39f2b025479279a_default Created 
+ Network phase0-test-577a93d9556d4157a39f2b025479279a_default Created 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Creating 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Creating 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Creating 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Created 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Created 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Created 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Starting 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Starting 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Starting 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Started 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Started 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Started 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Waiting 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Waiting 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Waiting 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Healthy 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Healthy 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Healthy 
++ /usr/local/bin/docker network inspect phase0-test-577a93d9556d4157a39f2b025479279a_default --format '{"driver":{{json .Driver}},"internal":{{json .Internal}}}'
+{"driver":"bridge","internal":false}
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q postgres
+1ca3fd06e1e2294168bac98cc9ad498510f80025c0051264dc12eee20d9da5a5
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port postgres 5432
+127.0.0.1:49432
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 1ca3fd06e1e2294168bac98cc9ad498510f80025c0051264dc12eee20d9da5a5
+{"5432/tcp":[{"HostIp":"127.0.0.1","HostPort":"49432"}]}
+PASSED: postgres 127.0.0.1:49432 -> 5432/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q redis
+51b34b1f71caceb9e47c38383c9d45428c4ea84e9121001cb7d4a8e33f98ddd8
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port redis 6379
+127.0.0.1:49430
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' 51b34b1f71caceb9e47c38383c9d45428c4ea84e9121001cb7d4a8e33f98ddd8
+{"6379/tcp":[{"HostIp":"127.0.0.1","HostPort":"49430"}]}
+PASSED: redis 127.0.0.1:49430 -> 6379/tcp; TCP connected.
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' ps -q minio
+ddc30e9f6c7fc9ddc2151b6e9b0a66c1e675fe0c9f41593279a8418356b5dbaa
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' port minio 9000
+127.0.0.1:49431
++ /usr/local/bin/docker inspect --format '{{json .NetworkSettings.Ports}}' ddc30e9f6c7fc9ddc2151b6e9b0a66c1e675fe0c9f41593279a8418356b5dbaa
+{"9000/tcp":[{"HostIp":"127.0.0.1","HostPort":"49431"}]}
+PASSED: minio 127.0.0.1:49431 -> 9000/tcp; TCP connected.
++ '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/bin/python' -m pytest tests/test_service_roundtrips.py tests/test_phase1_integration.py tests/test_market_integration.py tests/test_execution_integration.py tests/test_risk_integration.py tests/test_research_integration.py tests/test_research_fx_integration.py tests/test_ai_integration.py -m isolated_services -q
+........................................................................ [ 86%]
+......FFFFF                                                              [100%]
+=================================== FAILURES ===================================
+__________ test_registry_real_roundtrip_idempotency_and_scoped_worker __________
+
+ai = AI(owner=<test_phase1_integration.System object at 0x1446db980>, worker=<packages.ai.worker.Worker object at 0x1443d7d...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+
+    def test_registry_real_roundtrip_idempotency_and_scoped_worker(ai: AI) -> None:
+>       ai.setup()
+
+tests/test_ai_integration.py:151: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ai_integration.py:70: in setup
+    self.job(f"/connections/{connection}/discover", {"key": uuid4().hex})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = AI(owner=<test_phase1_integration.System object at 0x1446db980>, worker=<packages.ai.worker.Worker object at 0x1443d7d...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+path = '/connections/806c9b26-399f-4149-8784-b9976f4aa033/discover'
+body = {'key': '[REDACTED_TEST_IDEMPOTENCY_KEY]'}
+
+    def job(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
+        response = self.post(path, body)
+>       assert response.status_code == 202
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_ai_integration.py:48: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.184848+00:00", "request_id": "c5b9e167-4a2b-4cef-ac01-13f5ec69aa25", "method": "POST", "status": 201, "duration_ms": 139}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.190319+00:00", "request_id": "ba2dab6a-fbe5-4138-a5a9-c0532c9ea100", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.197114+00:00", "request_id": "db0dc9b8-759b-4715-a0b2-1a115c19ec4f", "method": "POST", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.202504+00:00", "request_id": "84c113d2-84ba-44d9-9dbe-c99ffc0cfdc4", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.224583+00:00", "request_id": "17b0d901-6814-4ba6-a2a6-c5b5cd3ab714", "method": "POST", "status": 200, "duration_ms": 20}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.184848+00:00", "request_id": "c5b9e167-4a2b-4cef-ac01-13f5ec69aa25", "method": "POST", "status": 201, "duration_ms": 139}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.190319+00:00", "request_id": "ba2dab6a-fbe5-4138-a5a9-c0532c9ea100", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.197114+00:00", "request_id": "db0dc9b8-759b-4715-a0b2-1a115c19ec4f", "method": "POST", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.202504+00:00", "request_id": "84c113d2-84ba-44d9-9dbe-c99ffc0cfdc4", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.224583+00:00", "request_id": "17b0d901-6814-4ba6-a2a6-c5b5cd3ab714", "method": "POST", "status": 200, "duration_ms": 20}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.239884+00:00", "request_id": "c192a810-61f3-4a5d-89ac-851a28bdbabe", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.275585+00:00", "request_id": "ae3167ad-291e-486c-881b-86868f9ccc23", "method": "POST", "status": 201, "duration_ms": 33}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.281183+00:00", "request_id": "3ae9dab6-e29a-4874-9c90-e6d4cdcb5012", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.293985+00:00", "request_id": "213401f2-c110-4680-ac27-6dda8b7c9e2f", "method": "POST", "status": 409, "duration_ms": 10}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.239884+00:00", "request_id": "c192a810-61f3-4a5d-89ac-851a28bdbabe", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.275585+00:00", "request_id": "ae3167ad-291e-486c-881b-86868f9ccc23", "method": "POST", "status": 201, "duration_ms": 33}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.281183+00:00", "request_id": "3ae9dab6-e29a-4874-9c90-e6d4cdcb5012", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.293985+00:00", "request_id": "213401f2-c110-4680-ac27-6dda8b7c9e2f", "method": "POST", "status": 409, "duration_ms": 10}
+___________ test_cancel_queued_running_and_reject_malformed_outputs ____________
+
+ai = AI(owner=<test_phase1_integration.System object at 0x144f7bdd0>, worker=<packages.ai.worker.Worker object at 0x1448123...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+
+    def test_cancel_queued_running_and_reject_malformed_outputs(ai: AI) -> None:
+>       ai.setup()
+
+tests/test_ai_integration.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ai_integration.py:70: in setup
+    self.job(f"/connections/{connection}/discover", {"key": uuid4().hex})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = AI(owner=<test_phase1_integration.System object at 0x144f7bdd0>, worker=<packages.ai.worker.Worker object at 0x1448123...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+path = '/connections/73d4c0a2-e91d-4532-b080-67672dfdbef3/discover'
+body = {'key': '[REDACTED_TEST_IDEMPOTENCY_KEY]'}
+
+    def job(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
+        response = self.post(path, body)
+>       assert response.status_code == 202
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_ai_integration.py:48: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:11.996765+00:00", "request_id": "b421cd71-8dfb-4e19-afd8-e0025f115720", "method": "POST", "status": 201, "duration_ms": 133}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.002824+00:00", "request_id": "0bcd5a71-e636-44ff-bd82-df22c3054449", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.009885+00:00", "request_id": "b10f202d-3fab-42cf-a266-4dc82fb34a23", "method": "POST", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.014581+00:00", "request_id": "033a7e84-b941-4140-b9c8-45e02c65fb7a", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.036065+00:00", "request_id": "9a4162d1-95ca-41f4-b660-e05e6428246b", "method": "POST", "status": 200, "duration_ms": 20}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:11.996765+00:00", "request_id": "b421cd71-8dfb-4e19-afd8-e0025f115720", "method": "POST", "status": 201, "duration_ms": 133}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.002824+00:00", "request_id": "0bcd5a71-e636-44ff-bd82-df22c3054449", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.009885+00:00", "request_id": "b10f202d-3fab-42cf-a266-4dc82fb34a23", "method": "POST", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.014581+00:00", "request_id": "033a7e84-b941-4140-b9c8-45e02c65fb7a", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.036065+00:00", "request_id": "9a4162d1-95ca-41f4-b660-e05e6428246b", "method": "POST", "status": 200, "duration_ms": 20}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.050886+00:00", "request_id": "e02d92c1-6eda-4dde-9d90-748043801502", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.081793+00:00", "request_id": "46362a64-3585-4a60-bd5b-41d466bfc860", "method": "POST", "status": 201, "duration_ms": 29}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.086706+00:00", "request_id": "7726821a-3954-4094-ba29-13018847516d", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.097590+00:00", "request_id": "72c3ef24-b6a6-4067-8d30-b61d29b77644", "method": "POST", "status": 409, "duration_ms": 9}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.050886+00:00", "request_id": "e02d92c1-6eda-4dde-9d90-748043801502", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.081793+00:00", "request_id": "46362a64-3585-4a60-bd5b-41d466bfc860", "method": "POST", "status": 201, "duration_ms": 29}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.086706+00:00", "request_id": "7726821a-3954-4094-ba29-13018847516d", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.097590+00:00", "request_id": "72c3ef24-b6a6-4067-8d30-b61d29b77644", "method": "POST", "status": 409, "duration_ms": 9}
+______________ test_revocation_privacy_erasure_and_lease_fencing _______________
+
+ai = AI(owner=<test_phase1_integration.System object at 0x1450df830>, worker=<packages.ai.worker.Worker object at 0x141f5d4...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+
+    def test_revocation_privacy_erasure_and_lease_fencing(ai: AI) -> None:
+>       ai.setup()
+
+tests/test_ai_integration.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ai_integration.py:70: in setup
+    self.job(f"/connections/{connection}/discover", {"key": uuid4().hex})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = AI(owner=<test_phase1_integration.System object at 0x1450df830>, worker=<packages.ai.worker.Worker object at 0x141f5d4...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+path = '/connections/08f512ca-472b-4e05-86da-1d009472240c/discover'
+body = {'key': '[REDACTED_TEST_IDEMPOTENCY_KEY]'}
+
+    def job(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
+        response = self.post(path, body)
+>       assert response.status_code == 202
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_ai_integration.py:48: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.896701+00:00", "request_id": "7dcd65b6-da4d-4d88-8d20-91e81971e1e0", "method": "POST", "status": 201, "duration_ms": 140}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.903012+00:00", "request_id": "89339702-1cf7-436b-8acc-6001c5cacbc8", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.911716+00:00", "request_id": "07e00dd2-2e6c-4afe-97c4-f1775f27b52c", "method": "POST", "status": 200, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.916808+00:00", "request_id": "85e0433d-730a-4346-94d0-ac6a4c088c17", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.938430+00:00", "request_id": "52c52a29-0426-4d6b-89f0-8dbf057f24db", "method": "POST", "status": 200, "duration_ms": 20}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.896701+00:00", "request_id": "7dcd65b6-da4d-4d88-8d20-91e81971e1e0", "method": "POST", "status": 201, "duration_ms": 140}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.903012+00:00", "request_id": "89339702-1cf7-436b-8acc-6001c5cacbc8", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.911716+00:00", "request_id": "07e00dd2-2e6c-4afe-97c4-f1775f27b52c", "method": "POST", "status": 200, "duration_ms": 6}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.916808+00:00", "request_id": "85e0433d-730a-4346-94d0-ac6a4c088c17", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.938430+00:00", "request_id": "52c52a29-0426-4d6b-89f0-8dbf057f24db", "method": "POST", "status": 200, "duration_ms": 20}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.952473+00:00", "request_id": "a580c37f-398c-4abe-9d20-cac47426d8c0", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.988663+00:00", "request_id": "d738055e-2c17-4b0f-9462-e9e4bf1a1690", "method": "POST", "status": 201, "duration_ms": 33}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:12.995449+00:00", "request_id": "fbab932f-c33a-4c47-967c-337d03b56408", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.009013+00:00", "request_id": "f77c3e6a-14e8-4e80-aee6-a83624ee8e3f", "method": "POST", "status": 409, "duration_ms": 11}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.952473+00:00", "request_id": "a580c37f-398c-4abe-9d20-cac47426d8c0", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.988663+00:00", "request_id": "d738055e-2c17-4b0f-9462-e9e4bf1a1690", "method": "POST", "status": 201, "duration_ms": 33}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:12.995449+00:00", "request_id": "fbab932f-c33a-4c47-967c-337d03b56408", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.009013+00:00", "request_id": "f77c3e6a-14e8-4e80-aee6-a83624ee8e3f", "method": "POST", "status": 409, "duration_ms": 11}
+_____________________ test_role_csrf_and_context_isolation _____________________
+
+ai = AI(owner=<test_phase1_integration.System object at 0x14532f9b0>, worker=<packages.ai.worker.Worker object at 0x1452c4d...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+
+    def test_role_csrf_and_context_isolation(ai: AI) -> None:
+>       ai.setup()
+
+tests/test_ai_integration.py:251: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ai_integration.py:70: in setup
+    self.job(f"/connections/{connection}/discover", {"key": uuid4().hex})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = AI(owner=<test_phase1_integration.System object at 0x14532f9b0>, worker=<packages.ai.worker.Worker object at 0x1452c4d...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+path = '/connections/e32ceca1-3842-448c-a98a-a86fabc16e7c/discover'
+body = {'key': '[REDACTED_TEST_IDEMPOTENCY_KEY]'}
+
+    def job(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
+        response = self.post(path, body)
+>       assert response.status_code == 202
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_ai_integration.py:48: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.790659+00:00", "request_id": "fb5a87ad-e5be-4efc-916e-3b6481ee3fea", "method": "POST", "status": 201, "duration_ms": 151}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.796097+00:00", "request_id": "cbb5ba25-205a-435a-8c0a-ae2c7fe0d99d", "method": "GET", "status": 200, "duration_ms": 4}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.803839+00:00", "request_id": "c9bd82e8-22dd-470c-8af3-3a03158628d0", "method": "POST", "status": 200, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.808769+00:00", "request_id": "8d7caad7-b640-40d6-839f-9f6f358fe833", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.830314+00:00", "request_id": "6d773a82-d185-481b-aa2c-781886fedde6", "method": "POST", "status": 200, "duration_ms": 20}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.790659+00:00", "request_id": "fb5a87ad-e5be-4efc-916e-3b6481ee3fea", "method": "POST", "status": 201, "duration_ms": 151}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.796097+00:00", "request_id": "cbb5ba25-205a-435a-8c0a-ae2c7fe0d99d", "method": "GET", "status": 200, "duration_ms": 4}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.803839+00:00", "request_id": "c9bd82e8-22dd-470c-8af3-3a03158628d0", "method": "POST", "status": 200, "duration_ms": 6}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.808769+00:00", "request_id": "8d7caad7-b640-40d6-839f-9f6f358fe833", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.830314+00:00", "request_id": "6d773a82-d185-481b-aa2c-781886fedde6", "method": "POST", "status": 200, "duration_ms": 20}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.844439+00:00", "request_id": "478a9734-59f5-48f5-874f-de7607659f36", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.874938+00:00", "request_id": "9c7ce5be-cf2e-4901-aefd-9ddd56bc257d", "method": "POST", "status": 201, "duration_ms": 28}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.879709+00:00", "request_id": "59703aa7-92ea-435f-a8c0-1f8865977fac", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:13.891635+00:00", "request_id": "a473f279-860f-459d-89c9-58e52ccbde64", "method": "POST", "status": 409, "duration_ms": 10}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.844439+00:00", "request_id": "478a9734-59f5-48f5-874f-de7607659f36", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.874938+00:00", "request_id": "9c7ce5be-cf2e-4901-aefd-9ddd56bc257d", "method": "POST", "status": 201, "duration_ms": 28}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.879709+00:00", "request_id": "59703aa7-92ea-435f-a8c0-1f8865977fac", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:13.891635+00:00", "request_id": "a473f279-860f-459d-89c9-58e52ccbde64", "method": "POST", "status": 409, "duration_ms": 10}
+______________ test_owner_quota_and_no_automatic_remote_fallback _______________
+
+ai = AI(owner=<test_phase1_integration.System object at 0x145361250>, worker=<packages.ai.worker.Worker object at 0x14532f6...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+
+    def test_owner_quota_and_no_automatic_remote_fallback(ai: AI) -> None:
+>       ai.setup()
+
+tests/test_ai_integration.py:273: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_ai_integration.py:70: in setup
+    self.job(f"/connections/{connection}/discover", {"key": uuid4().hex})
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = AI(owner=<test_phase1_integration.System object at 0x145361250>, worker=<packages.ai.worker.Worker object at 0x14532f6...cy=2, hourly_owner_limit=40, hourly_role_limit=20, metadata_limit=1000, max_input_bytes=12000, max_output_bytes=24000))
+path = '/connections/7c433f76-2a31-4a92-82bf-f7177977739a/discover'
+body = {'key': '[REDACTED_TEST_IDEMPOTENCY_KEY]'}
+
+    def job(self, path: str, body: dict[str, Any]) -> dict[str, Any]:
+        response = self.post(path, body)
+>       assert response.status_code == 202
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests/test_ai_integration.py:48: AssertionError
+---------------------------- Captured stderr setup -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.820181+00:00", "request_id": "0a4c2d67-f5ca-4ab5-8ca7-abbf31b00d33", "method": "POST", "status": 201, "duration_ms": 151}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.826887+00:00", "request_id": "d4459757-55bb-44e1-a09e-8f053864d566", "method": "GET", "status": 200, "duration_ms": 5}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.834581+00:00", "request_id": "29acd599-b5e7-4649-8329-8b57c180e6cb", "method": "POST", "status": 200, "duration_ms": 6}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.839768+00:00", "request_id": "8963cfa2-5928-4ffd-9e81-c4ffff718c95", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.861999+00:00", "request_id": "26233891-38de-4de3-a5d5-8a185f7638fa", "method": "POST", "status": 200, "duration_ms": 21}
+------------------------------ Captured log setup ------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.820181+00:00", "request_id": "0a4c2d67-f5ca-4ab5-8ca7-abbf31b00d33", "method": "POST", "status": 201, "duration_ms": 151}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.826887+00:00", "request_id": "d4459757-55bb-44e1-a09e-8f053864d566", "method": "GET", "status": 200, "duration_ms": 5}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.834581+00:00", "request_id": "29acd599-b5e7-4649-8329-8b57c180e6cb", "method": "POST", "status": 200, "duration_ms": 6}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.839768+00:00", "request_id": "8963cfa2-5928-4ffd-9e81-c4ffff718c95", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.861999+00:00", "request_id": "26233891-38de-4de3-a5d5-8a185f7638fa", "method": "POST", "status": 200, "duration_ms": 21}
+----------------------------- Captured stderr call -----------------------------
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.876653+00:00", "request_id": "d1e24268-c291-418c-8d9d-ac3034fce840", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.906666+00:00", "request_id": "9d1e364a-3559-43e6-a9e8-a233984eac23", "method": "POST", "status": 201, "duration_ms": 28}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.911697+00:00", "request_id": "df10f3c1-d744-4810-90d1-bc39d679001e", "method": "GET", "status": 200, "duration_ms": 3}
+{"event": "http_request", "timestamp": "2026-10-28T00:27:14.922283+00:00", "request_id": "31b63abd-bf0b-439c-b110-47103840bbd3", "method": "POST", "status": 409, "duration_ms": 9}
+------------------------------ Captured log call -------------------------------
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.876653+00:00", "request_id": "d1e24268-c291-418c-8d9d-ac3034fce840", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.906666+00:00", "request_id": "9d1e364a-3559-43e6-a9e8-a233984eac23", "method": "POST", "status": 201, "duration_ms": 28}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.911697+00:00", "request_id": "df10f3c1-d744-4810-90d1-bc39d679001e", "method": "GET", "status": 200, "duration_ms": 3}
+INFO     research.requests:main.py:118 {"event": "http_request", "timestamp": "2026-10-28T00:27:14.922283+00:00", "request_id": "31b63abd-bf0b-439c-b110-47103840bbd3", "method": "POST", "status": 409, "duration_ms": 9}
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_ai_integration.py::test_registry_real_roundtrip_idempotency_and_scoped_worker
+FAILED tests/test_ai_integration.py::test_cancel_queued_running_and_reject_malformed_outputs
+FAILED tests/test_ai_integration.py::test_revocation_privacy_erasure_and_lease_fencing
+FAILED tests/test_ai_integration.py::test_role_csrf_and_context_isolation - a...
+FAILED tests/test_ai_integration.py::test_owner_quota_and_no_automatic_remote_fallback
+5 failed, 78 passed, 1 warning in 119.49s (0:01:59)
+FAILED: Command exited 1; no service acceptance claimed
++ /usr/local/bin/docker compose --project-name phase0-test-577a93d9556d4157a39f2b025479279a --env-file '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/phase0-test-xep88c86/.env' -f '/Users/andy/Documents/ChatGPT/Sistem Trade Ai/compose.test.yaml' down --volumes --remove-orphans
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Stopping 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Stopping 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Stopping 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Stopped 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Removing 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Stopped 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Removing 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-minio-1 Removed 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Stopped 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Removing 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-postgres-1 Removed 
+ Container phase0-test-577a93d9556d4157a39f2b025479279a-redis-1 Removed 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_storage Removing 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_redis Removing 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_postgres Removing 
+ Network phase0-test-577a93d9556d4157a39f2b025479279a_default Removing 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_redis Removed 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_storage Removed 
+ Network phase0-test-577a93d9556d4157a39f2b025479279a_default Removed 
+ Volume phase0-test-577a93d9556d4157a39f2b025479279a_test_postgres Removed 
+make: *** [integration-services] Error 1

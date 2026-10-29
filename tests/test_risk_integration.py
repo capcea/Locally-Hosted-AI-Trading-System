@@ -40,6 +40,66 @@ pytestmark = pytest.mark.isolated_services
 D = Decimal
 
 
+def test_independent_monitor_recovers_real_connection_loss_without_clearing_stop(
+    execution: System, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Terminate only this disposable client's connection, never development PostgreSQL."""
+    from threading import Event
+
+    from packages.persistence.store import Store
+    from scripts import risk_monitor
+
+    run = make_run(execution)
+    tick(execution, run, 0)
+    report = status(execution, run)
+    post(
+        execution,
+        f"/api/v1/risk/accounts/{run['account_id']}/emergency",
+        {
+            "key": "reconnect-owner-stop",
+            "action": "STOP_NEW_ENTRIES",
+            "expected_revision": report["revision"],
+            "acknowledged_simulated_only": True,
+        },
+    )
+    store = Store(execution.runtime_url)
+    ready = tmp_path / "monitor-ready"
+    original = risk_monitor.once
+    calls = 0
+    observations: list[bool] = []
+
+    def interrupted_once(current: Store, secret: str) -> int:
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            with current.engine.connect() as connection:
+                # A real PostgreSQL connection termination raises the actual driver exception.
+                connection.scalar(text("SELECT pg_terminate_backend(pg_backend_pid())"))
+            pytest.fail("Disposable PostgreSQL did not terminate its own connection")
+        return original(current, secret)
+
+    class Observe(Event):
+        def wait(self, timeout: float | None = None) -> bool:
+            observations.append(ready.exists())
+            if calls == 3:
+                self.set()
+            assert calls <= 3, "Monitor failed to recover within the controlled fault sequence"
+            return self.is_set()
+
+    monkeypatch.setattr(risk_monitor, "once", interrupted_once)
+    try:
+        risk_monitor.monitor(store, key(execution), Observe(), ready=ready)
+        assert observations == [True, False, True]
+        assert not ready.exists(), "Shutdown must withdraw daemon readiness"
+        state = status(execution, run)
+        assert state["manual_stop"]
+        denied = raw_order(execution, run)
+        assert denied.status_code == 409 and not denied.json()["state"]["orders"]
+        assert execution.client.get("/api/v1/audit/verify").json()["valid"]
+    finally:
+        store.engine.dispose()
+
+
 def key(system: System) -> str:
     assert system.config.auth_encryption_key
     return system.config.auth_encryption_key.get_secret_value()

@@ -66,6 +66,14 @@ test('independent safety, reviewed setup, guarded routes, keyboard review and vi
   await expect(wizard.getByLabel('Contul testului', { exact: true })).toHaveValue(account.id);
   await page.reload();
   await expect(wizard).toBeVisible(); // auth survives; memory drafts do not claim durable storage
+  await page.goto('/testeaza');
+  await expect(wizard).toHaveCount(1);
+  await expect(wizard).toBeVisible();
+  await expect(
+    page
+      .getByRole('navigation', { name: 'În această secțiune', exact: true })
+      .getByRole('link', { name: 'Test nou', exact: true }),
+  ).toHaveAttribute('aria-current', 'page');
   await configureRisk(page, 'Cont risc E2E', 'Scenariu risc E2E');
   const before = await (
     await page.request.get(`/api/v1/risk/accounts/${account.id}/profiles`)
@@ -124,6 +132,15 @@ test('independent safety, reviewed setup, guarded routes, keyboard review and vi
   ).toBeVisible();
   expect((await page.request.get(`/api/v1/records/accounts/${account.id}`)).status()).toBe(404);
   await page.goto('/setari/utilizatori');
+  await expect(
+    page.getByText('Doar proprietarul poate administra identități și roluri.', { exact: false }),
+  ).toBeVisible();
+  await page.getByRole('link', { name: 'Toate setările', exact: true }).click();
+  await expect(page).toHaveURL(/\/setari$/);
+  for (const label of ['Cont și acces', 'Date și cercetare', 'Platformă'])
+    await expect(page.getByRole('region', { name: label, exact: true })).toBeVisible();
+  await page.getByRole('link', { name: 'Utilizatori și roluri', exact: false }).click();
+  await expect(page).toHaveURL(/\/setari\/utilizatori$/);
   await expect(
     page.getByText('Doar proprietarul poate administra identități și roluri.', { exact: false }),
   ).toBeVisible();

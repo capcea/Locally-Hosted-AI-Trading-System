@@ -1,5 +1,24 @@
 import { expect, test } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { parseOverview } from '../src/schema';
+import type { Overview } from '../src/api';
+
+async function assertObservedSidebar(page: Page, overview: Overview) {
+  const sidebar = page.getByRole('region', { name: 'Starea tehnică a sistemului', exact: true });
+  for (const id of ['api', 'postgres', 'redis', 'storage']) {
+    const service = overview.services.find((item) => item.id === id);
+    const expected =
+      service?.status === 'HEALTHY'
+        ? 'HEALTHY'
+        : ['UNAVAILABLE', 'DISABLED'].includes(service?.status ?? '')
+          ? 'DOWN'
+          : 'UNKNOWN';
+    await expect(sidebar.locator(`[data-service="${id}"]`)).toHaveAttribute(
+      'data-status',
+      expected,
+    );
+  }
+}
 
 test.beforeEach(async ({ request }) => {
   const response = await request.get('/api/v1/overview');
@@ -8,7 +27,9 @@ test.beforeEach(async ({ request }) => {
 });
 
 test('browse real status, filter services, inspect governance and roadmap', async ({ page }) => {
+  const observed = page.waitForResponse((r) => r.url().endsWith('/api/v1/overview') && r.ok());
   await page.goto('/');
+  await assertObservedSidebar(page, parseOverview(await (await observed).json()));
   await expect(page.getByRole('heading', { name: 'Acasă', exact: true })).toBeVisible();
   const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
   await expect(primary.getByRole('link')).toHaveCount(5);
@@ -45,6 +66,13 @@ test('API outage is explicit and clears confidence in previous health', async ({
   await page.getByRole('button', { name: 'Actualizează starea publică', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('Conexiunea cu API-ul nu este disponibilă');
   await expect(page.locator('.service-status').first()).toHaveText('Neverificat');
+  const sidebar = page.getByRole('region', { name: 'Starea tehnică a sistemului', exact: true });
+  await expect(sidebar.locator('[data-service][data-status="UNKNOWN"]')).toHaveCount(4);
+  await page.unroute('**/api/v1/overview');
+  const recovered = page.waitForResponse((r) => r.url().endsWith('/api/v1/overview') && r.ok());
+  await sidebar.getByRole('button', { name: 'Verifică din nou', exact: true }).click();
+  await assertObservedSidebar(page, parseOverview(await (await recovered).json()));
+  await expect(page.getByRole('alert')).toHaveCount(0);
 });
 
 test('orders and activation remain refused through frontend proxy', async ({ request }) => {

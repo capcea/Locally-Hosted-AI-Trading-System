@@ -7,6 +7,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    campaign_global_concurrency: int = Field(default=2, ge=1, le=2)
+    campaign_owner_concurrency: int = Field(default=1, ge=1, le=1)
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", hide_input_in_errors=True)
 
     app_environment: Literal["development", "test"] = "development"

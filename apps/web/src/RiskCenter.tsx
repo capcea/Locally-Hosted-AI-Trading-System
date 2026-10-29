@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from './navigation/history';
 import type { FormEvent, ReactNode } from 'react';
 import { api, ApiError } from './management-api';
 import EmergencyActions from './ui/EmergencyActions';
@@ -304,71 +305,105 @@ export default function RiskCenter({
               serviciilor nu acordă permisiune de tranzacționare.
             </p>
           </div>
-          {status && (
-            <section aria-label="Stare risc cont" className="management-card">
-              <h3>
-                {status.manual_stop || status.automatic_stop
-                  ? 'INTRĂRI BLOCATE'
-                  : 'Verificare obligatorie la fiecare ordin'}
-              </h3>
-              <p>
-                {status.currency} · SIMULATED · {status.reasons.join(', ') || 'Nicio oprire activă'}
-              </p>
-              <dl className="risk-metrics">
-                {Object.entries({
-                  'Sold sintetic': status.values?.balance,
-                  'Equity sintetic': status.values?.equity,
-                  'P&L realizat': status.values?.realized_pnl,
-                  'P&L flotant': status.values?.unrealized_pnl,
-                  Comisioane: status.values?.commissions,
-                  'Finanțare modelată': status.values?.funding,
-                  'Risc poziții': status.values?.open_risk,
-                  'Risc ordine în așteptare': status.values?.pending_risk,
-                  'Risc deja alocat (poate include sume afișate)': status.values?.reserved_risk,
-                  'Marjă modelată': status.values?.margin_used,
-                  'Până la limita zilnică': status.daily_headroom,
-                  'Până la limita totală': status.total_headroom,
-                }).map(([label, value]) => (
-                  <div key={label}>
-                    <dt>{label}</dt>
-                    <dd>{value == null ? 'NECUNOSCUT' : String(value)}</dd>
-                  </div>
+          <div className="v1-risk-overview">
+            <section className="panel v1-risk-account-list" aria-label="Conturi pentru siguranță">
+              <h3>Conturi configurate</h3>
+              <ul className="v1-account-list">
+                {records.accounts?.map((a) => (
+                  <li key={a.id}>
+                    <Link
+                      href={`/conturi/${a.id}/siguranta`}
+                      aria-current={a.id === accountId ? 'page' : undefined}
+                    >
+                      <span>
+                        <strong>{a.data.name}</strong>
+                        <small>SIMULATED · configurație declarată</small>
+                      </span>
+                    </Link>
+                  </li>
                 ))}
-              </dl>
+              </ul>
               <p>
-                Ceas simulare: {status.clock ?? 'neinițializat'} · Ultima verificare monitor:{' '}
-                {status.monitor_at ?? 'absentă'}
+                Lista este limitată la conturile autorizate citite. Numele unei firme nu confirmă
+                eligibilitatea.
               </p>
-              <details>
-                <summary>Expunere corelată și integritatea registrului</summary>
-                <pre tabIndex={0} className="market-json">
-                  {JSON.stringify(
-                    {
-                      groups: status.values?.groups,
-                      ledger_sequence: status.ledger_sequence,
-                      ledger_digest: status.ledger_digest,
-                    },
-                    null,
-                    2,
-                  )}
-                </pre>
-              </details>
             </section>
-          )}
-          {owner && (
-            <EmergencyActions
-              key={accountId}
-              accountId={accountId}
-              accountName={account?.data.name ?? accountId}
-              status={statusFailed ? null : status}
-              session={session}
-              onError={fail}
-              onDone={async (message) => {
-                setNotice(message);
-                await refresh();
-              }}
-            />
-          )}
+            {!status && (
+              <section className="panel">
+                <h3>UNKNOWN · stare de risc indisponibilă</h3>
+                <p>
+                  Revizia și observațiile nu pot fi confirmate. Comenzile cer o revizie curentă și
+                  validarea serverului.
+                </p>
+              </section>
+            )}
+            {status && (
+              <section aria-label="Stare risc cont" className="management-card">
+                <h3>
+                  {status.manual_stop || status.automatic_stop
+                    ? 'INTRĂRI BLOCATE'
+                    : 'Verificare obligatorie la fiecare ordin'}
+                </h3>
+                <p>
+                  {status.currency} · SIMULATED ·{' '}
+                  {status.reasons.join(', ') || 'Nicio oprire activă'}
+                </p>
+                <dl className="risk-metrics">
+                  {Object.entries({
+                    'Sold sintetic': status.values?.balance,
+                    'Equity sintetic': status.values?.equity,
+                    'P&L realizat': status.values?.realized_pnl,
+                    'P&L flotant': status.values?.unrealized_pnl,
+                    Comisioane: status.values?.commissions,
+                    'Finanțare modelată': status.values?.funding,
+                    'Risc poziții': status.values?.open_risk,
+                    'Risc ordine în așteptare': status.values?.pending_risk,
+                    'Risc deja alocat (poate include sume afișate)': status.values?.reserved_risk,
+                    'Marjă modelată': status.values?.margin_used,
+                    'Până la limita zilnică': status.daily_headroom,
+                    'Până la limita totală': status.total_headroom,
+                  }).map(([label, value]) => (
+                    <div key={label}>
+                      <dt>{label}</dt>
+                      <dd>{value == null ? 'NECUNOSCUT' : String(value)}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <p>
+                  Ceas simulare: {status.clock ?? 'neinițializat'} · Ultima verificare monitor:{' '}
+                  {status.monitor_at ?? 'absentă'}
+                </p>
+                <details>
+                  <summary>Expunere corelată și integritatea registrului</summary>
+                  <pre tabIndex={0} className="market-json">
+                    {JSON.stringify(
+                      {
+                        groups: status.values?.groups,
+                        ledger_sequence: status.ledger_sequence,
+                        ledger_digest: status.ledger_digest,
+                      },
+                      null,
+                      2,
+                    )}
+                  </pre>
+                </details>
+              </section>
+            )}
+            {owner && (
+              <EmergencyActions
+                key={accountId}
+                accountId={accountId}
+                accountName={account?.data.name ?? accountId}
+                status={statusFailed ? null : status}
+                session={session}
+                onError={fail}
+                onDone={async (message) => {
+                  setNotice(message);
+                  await refresh();
+                }}
+              />
+            )}
+          </div>
           {!owner && (
             <p>
               Doar proprietarul, cu MFA recent, poate modifica limitele și confirma

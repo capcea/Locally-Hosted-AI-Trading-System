@@ -1,5 +1,6 @@
 PYTHON ?= python3.12
 PY := .venv/bin/python
+.PHONY: ai-setup ai-check-deployment ai-check-runtime ai-evaluate-fixture
 UV := .tools/bin/uv
 export UV_CACHE_DIR := $(CURDIR)/.cache/uv
 export PRE_COMMIT_HOME := $(CURDIR)/.cache/pre-commit
@@ -59,4 +60,13 @@ repository-check:
 	$(PY) -m scripts.repository_check
 secret-scan:
 	$(PY) -m scripts.scan_secrets
+ai-setup: migrate
+	$(PY) -m scripts.ai_setup
+ai-check-deployment:
+	$(PY) -m scripts.check_ai_deployment
+ai-evaluate-fixture:
+	$(PY) -m scripts.evaluate_ai
 
+
+ai-check-runtime:
+	$(PY) -m scripts.check_ai_runtime
