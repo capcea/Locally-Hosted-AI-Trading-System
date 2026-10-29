@@ -1,0 +1,47 @@
+name: Security scan metadata triage
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/ai-cockpit-full-platform]
+    paths: ['.github/workflows/security-scan-triage.yml']
+permissions:
+  contents: read
+jobs:
+  sanitize-findings:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Generate redacted metadata report
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/gitleaks-triage"
+          set +e
+          docker run --rm -v "$PWD:/repo:ro" -v "$RUNNER_TEMP/gitleaks-triage:/reports" zricethezav/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 git /repo --redact --report-format json --report-path /reports/report.json --no-banner
+          status=$?
+          set -e
+          if [ "$status" -ne 0 ] && [ "$status" -ne 1 ]; then exit "$status"; fi
+          python3 - <<'PY'
+          import json, pathlib, subprocess, os
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"gitleaks-triage/report.json"
+          report=json.loads(p.read_text()) if p.exists() and p.stat().st_size else []
+          print("Finding count:",len(report))
+          for finding in report:
+              commit = finding.get("Commit", "")
+              where = {}
+              for reference in ("origin/main","origin/feat/ai-cockpit-visual-rework"):
+                  where[reference] = subprocess.run(
+                      ["git","merge-base","--is-ancestor",commit,reference],
+                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                  ).returncode == 0 if commit else None
+              print("SANITIZED_FINDING",json.dumps({
+                  "rule_id": finding.get("RuleID"),
+                  "file": finding.get("File"),
+                  "line": finding.get("StartLine"),
+                  "commit": commit,
+                  "on_existing_branches": where,
+              }))
+          PY
