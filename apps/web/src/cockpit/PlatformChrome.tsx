@@ -19,6 +19,8 @@ import { Link } from '../navigation/history';
 import { activeSection } from '../navigation/sections';
 import { pageTitles } from '../v1/navigation';
 import type { Session } from '../management-api';
+import type { Overview } from '../api';
+import { infrastructureHealth } from '../infrastructure-health';
 
 type MenuItem = {
   href: string;
@@ -57,7 +59,24 @@ const matches = (route: Route, href: string) =>
   route.canonicalPath === href ||
   (href !== '/' && route.path.startsWith(href + '/'));
 
-export function CockpitNavigation({ route }: { route: Route }) {
+export function CockpitNavigation({
+  route,
+  overview,
+  stale,
+  now,
+  error,
+  loading,
+  refresh,
+}: {
+  route: Route;
+  overview: Overview | null;
+  stale: boolean;
+  now: number;
+  error: boolean;
+  loading: boolean;
+  refresh: () => void;
+}) {
+  const health = infrastructureHealth(overview, stale || error, now);
   const active = activeSection(route);
   const [expanded, setExpanded] = useState<string | null>(null);
   const sections = [
@@ -138,6 +157,28 @@ export function CockpitNavigation({ route }: { route: Route }) {
           </strong>
           <p>Modul de execuție externă este dezactivat.</p>
         </div>
+        <section className="cockpit-health" aria-label="Starea tehnică a sistemului" data-status={health.status}>
+          <details>
+            <summary>
+              <span>Starea serviciilor</span>
+              <strong data-health={health.status}>{health.status}</strong>
+            </summary>
+            <p role="status">{error ? 'UNKNOWN · date indisponibile sau invalide' : stale || !overview ? 'UNKNOWN · observație expirată sau neverificată' : 'Ultima observație tehnică verificată'}</p>
+            <ul>
+              {health.rows.map((row) => (
+                <li key={row.id} data-service={row.id} data-status={row.status}>
+                  <span>{row.label}</span>
+                  <strong title={row.detail}>{row.text}</strong>
+                </li>
+              ))}
+            </ul>
+            <button type="button" className="cockpit-health-refresh" disabled={loading} onClick={refresh}>
+              {loading ? 'Verificăm…' : 'Verifică din nou'}
+            </button>
+            <Link href="/setari/diagnostic">Diagnostic tehnic</Link>
+            <small>Disponibilitatea serviciilor nu autorizează tranzacționarea.</small>
+          </details>
+        </section>
         <small className="cockpit-version">LOCAL AI · Research workspace</small>
       </div>
     </aside>
