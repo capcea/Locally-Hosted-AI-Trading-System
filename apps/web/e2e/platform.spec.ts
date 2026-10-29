@@ -41,7 +41,7 @@ test('browse Cockpit, inspect observed status, filter services, governance and r
 
   await assertObservedSidebar(page, overview);
   const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
-  await expect(primary.getByRole('link')).toHaveCount(5);
+  await expect(primary.locator('.cockpit-nav-link')).toHaveCount(5);
   await page.locator('.cockpit-page-tools summary').click();
   await page
     .getByRole('navigation', { name: 'În această secțiune' })
