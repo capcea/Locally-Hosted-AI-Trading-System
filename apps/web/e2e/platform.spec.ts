@@ -4,7 +4,6 @@ import { parseOverview } from '../src/schema';
 import type { Overview } from '../src/api';
 
 async function assertObservedSidebar(page: Page, overview: Overview) {
-  const sidebar = page.getByRole('region', { name: 'Starea tehnică a sistemului', exact: true });
   for (const id of ['api', 'postgres', 'redis', 'storage']) {
     const service = overview.services.find((item) => item.id === id);
     const expected =
