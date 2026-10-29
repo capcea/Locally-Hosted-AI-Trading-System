@@ -26,7 +26,9 @@ test.beforeEach(async ({ request }) => {
   parseOverview(await response.json());
 });
 
-test('browse Cockpit, inspect observed status, filter services, governance and roadmap', async ({ page }) => {
+test('browse Cockpit, inspect observed status, filter services, governance and roadmap', async ({
+  page,
+}) => {
   const observed = page.waitForResponse((r) => r.url().endsWith('/api/v1/overview') && r.ok());
   await page.goto('/');
   const overview = parseOverview(await (await observed).json());
