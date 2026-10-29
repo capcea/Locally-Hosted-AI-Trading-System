@@ -24,6 +24,7 @@ import MarketData from './MarketData';
 import BrokerCenter from './BrokerCenter';
 import StrategyLab from './StrategyLab';
 import HomePage from './home/HomePage';
+import CockpitPage from './cockpit/CockpitPage';
 import { InfrastructurePage, GovernancePage, RoadmapPage } from './LegacyPublic';
 import { Evidence } from './ui/Controls';
 import { PublicReadTime } from './ui/PublicReadTime';
@@ -59,6 +60,7 @@ const researchLinks = [
 ];
 function Shell() {
   const route = useRoute();
+  const cockpitHome = route.screen === 'home';
   const {
     session,
     setSession,
@@ -202,11 +204,11 @@ function Shell() {
         ? 'security'
         : ((route.section ?? 'accounts') as Tab);
   return (
-    <div className="product-shell">
+    <div className={cockpitHome ? "product-shell cockpit-root" : "product-shell"}>
       <a className="skip-link" href="#main-content">
         Mergi la conținut
       </a>
-      <aside className="product-sidebar">
+      {!cockpitHome && <aside className="product-sidebar">
         <Link href="/" className="product-brand">
           <ChartNoAxesCombined aria-hidden="true" />
           <span>
@@ -234,9 +236,9 @@ function Shell() {
           <br />
           Fără ordine către brokeri externi
         </p>
-      </aside>
+      </aside>}
       <div className="product-main">
-        <header className="product-header">
+        {!cockpitHome && <header className="product-header">
           <span>Platformă de cercetare</span>
           <div className="header-controls">
             <button
@@ -270,8 +272,8 @@ function Shell() {
               <Link href="/autentificare">Autentificare</Link>
             )}
           </div>
-        </header>
-        <main id="main-content" tabIndex={-1}>
+        </header>}
+        {cockpitHome ? <main id="main-content" tabIndex={-1} className="cockpit-main"><CockpitPage overview={overview} stale={stale} /></main> : <main id="main-content" tabIndex={-1}>
           <header className="page-heading">
             <div>
               <h1 ref={titleRef} tabIndex={-1}>
@@ -345,7 +347,7 @@ function Shell() {
             <Authentication session={session} setSession={setSession} />
           ) : (
             <>
-              {route.screen === 'home' && (
+              {false && route.screen === 'home' && (
                 <HomePage
                   key={session?.user.id ?? 'public'}
                   overview={overview}
@@ -524,7 +526,7 @@ function Shell() {
               'Stare publică necunoscută'
             )}
           </footer>
-        </main>
+        </main>}
       </div>
     </div>
   );
