@@ -1,0 +1,20 @@
+name: AI Cockpit frontend build
+on:
+  push:
+    branches: [feat/ai-cockpit-visual-rework]
+  pull_request:
+    paths:
+      - 'apps/web/**'
+permissions:
+  contents: read
+jobs:
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24.7.0'
+      - run: npm --prefix apps/web ci --no-audit --no-fund
+      - run: npm --prefix apps/web run build
