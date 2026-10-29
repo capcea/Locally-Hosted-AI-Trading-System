@@ -30,7 +30,7 @@ jobs:
       - name: Verify sandboxed cockpit renders with actual Nginx CSP
         run: |
           docker build -f apps/web/Dockerfile -t local-ai-cockpit:test apps/web
-          docker run -d --name local-ai-cockpit-test -p 127.0.0.1:5173:8080 local-ai-cockpit:test
+          docker run -d --add-host api:127.0.0.1 --name local-ai-cockpit-test -p 127.0.0.1:5173:8080 local-ai-cockpit:test
           for i in $(seq 1 30); do
             if curl -fsSI http://127.0.0.1:5173/ >/dev/null; then break; fi
             sleep 1
