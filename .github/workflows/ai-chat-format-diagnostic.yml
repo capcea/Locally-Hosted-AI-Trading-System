@@ -1,0 +1,24 @@
+name: AI Chat formatter diagnostics
+on:
+  push:
+    branches:
+      - feature/ai-center-chat-ui
+    paths:
+      - .github/workflows/ai-chat-format-diagnostic.yml
+      - apps/web/src/ai/AIChat.tsx
+      - apps/web/src/ai/AICenter.tsx
+jobs:
+  formatter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.7.0
+      - run: npm --prefix apps/web ci --no-audit --no-fund
+      - name: Print exact formatting patch
+        run: |
+          cd apps/web
+          ./node_modules/.bin/prettier --write src/ai/AICenter.tsx src/ai/AIChat.tsx
+          cd ../..
+          git diff --no-ext-diff -- apps/web/src/ai/AICenter.tsx apps/web/src/ai/AIChat.tsx
