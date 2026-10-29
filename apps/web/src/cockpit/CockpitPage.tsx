@@ -31,8 +31,13 @@ type Snapshot = {
   userName: string;
 };
 const destinations = new Set([
-  '/', '/testeaza', '/testeaza/nou', '/testeaza/activitate',
-  '/rezultate', '/conturi/siguranta', '/setari',
+  '/',
+  '/testeaza',
+  '/testeaza/nou',
+  '/testeaza/activitate',
+  '/rezultate',
+  '/conturi/siguranta',
+  '/setari',
 ]);
 
 export default function CockpitPage({
@@ -60,14 +65,16 @@ export default function CockpitPage({
         // These are actual saved research jobs, not inferred AI decisions or profits.
         const fetched = await api<JobSummary[]>('/research/experiments?limit=100');
         if (mounted) {
-          setJobs(fetched.map((job) => ({
-            id: job.id,
-            name: job.name,
-            phase: job.phase,
-            state: job.job.state,
-            progress: job.job.progress,
-            createdAt: job.created_at ?? null,
-          })));
+          setJobs(
+            fetched.map((job) => ({
+              id: job.id,
+              name: job.name,
+              phase: job.phase,
+              state: job.job.state,
+              progress: job.job.progress,
+              createdAt: job.created_at ?? null,
+            })),
+          );
           setJobsVerified(true);
         }
       } catch {
@@ -78,17 +85,19 @@ export default function CockpitPage({
       }
       try {
         const accounts = await allRecords('accounts');
-        const statuses = await Promise.all(accounts.map((account) =>
-          api<AccountStatus>(`/risk/accounts/${account.id}/status`),
-        ));
+        const statuses = await Promise.all(
+          accounts.map((account) => api<AccountStatus>(`/risk/accounts/${account.id}/status`)),
+        );
         if (mounted) {
           const now = Date.now();
           setRiskState(
             statuses.length === 0
               ? 'UNKNOWN'
-              : statuses.every((status) =>
-                  safetyLabel(status, now) === 'Verificare obligatorie la fiecare ordin simulat',
-                )
+              : statuses.every(
+                    (status) =>
+                      safetyLabel(status, now) ===
+                      'Verificare obligatorie la fiecare ordin simulat',
+                  )
                 ? 'VERIFIED'
                 : 'ATTENTION',
           );
@@ -115,16 +124,19 @@ export default function CockpitPage({
         ? 'HEALTHY'
         : 'ATTENTION';
 
-  const snapshot = useMemo<Snapshot>(() => ({
-    type: 'local-ai:snapshot',
-    jobsVerified,
-    jobs,
-    partial: jobs.length >= 100,
-    overviewVerified: !stale && Boolean(overview),
-    serviceHealth,
-    riskState,
-    userName: session?.state === 'FULL' ? session.user.display_name : '',
-  }), [jobs, jobsVerified, overview, riskState, serviceHealth, session, stale]);
+  const snapshot = useMemo<Snapshot>(
+    () => ({
+      type: 'local-ai:snapshot',
+      jobsVerified,
+      jobs,
+      partial: jobs.length >= 100,
+      overviewVerified: !stale && Boolean(overview),
+      serviceHealth,
+      riskState,
+      userName: session?.state === 'FULL' ? session.user.display_name : '',
+    }),
+    [jobs, jobsVerified, overview, riskState, serviceHealth, session, stale],
+  );
 
   const sendSnapshot = useCallback(() => {
     frame.current?.contentWindow?.postMessage(snapshot, '*');
@@ -132,7 +144,11 @@ export default function CockpitPage({
 
   useEffect(() => {
     const handler = (event: MessageEvent) => {
-      if (event.source !== frame.current?.contentWindow || !event.data || typeof event.data !== 'object')
+      if (
+        event.source !== frame.current?.contentWindow ||
+        !event.data ||
+        typeof event.data !== 'object'
+      )
         return;
       if (event.data.type === 'local-ai:ready') {
         setFrameReady(true);
@@ -141,8 +157,7 @@ export default function CockpitPage({
       if (event.data.type === 'local-ai:navigate' && typeof event.data.path === 'string') {
         const path = event.data.path;
         // Allow only known routes; result links require a UUID owned by the current user.
-        if (destinations.has(path) ||
-            /^\/rezultate\/[0-9a-f-]{36}$/i.test(path)) navigate(path);
+        if (destinations.has(path) || /^\/rezultate\/[0-9a-f-]{36}$/i.test(path)) navigate(path);
       }
     };
     window.addEventListener('message', handler);
