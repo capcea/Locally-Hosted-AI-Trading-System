@@ -11,6 +11,7 @@ import { AIRoles } from '../v1/AIWidgets';
 import { StatusPill } from '../v1/components';
 import { takeAIQuestion } from './draft';
 import { CloudSetup, CredentialEditor } from './CloudSetup';
+import AIChat from './AIChat';
 
 const object = (value: unknown): Record<string, unknown> =>
   value && typeof value === 'object' && !Array.isArray(value)
@@ -92,7 +93,7 @@ function Answer({ job, critic, busy }: { job: Job; critic: () => void; busy: boo
   );
 }
 
-export default function AICenter({
+function LegacyAICenter({
   session,
   advanced = false,
 }: {
@@ -1003,4 +1004,15 @@ export function Registry({
       <Evidence title="Versiuni imuabile ale rolurilor" value={bindings} />
     </section>
   );
+}
+
+/** The user-facing workspace is chat-first; the original registry remains under Setări. */
+export default function AICenter({
+  session,
+  advanced = false,
+}: {
+  session: Session;
+  advanced?: boolean;
+}) {
+  return advanced ? <LegacyAICenter session={session} advanced /> : <AIChat session={session} />;
 }
