@@ -1,58 +1,39 @@
 import { expect, test } from '@playwright/test';
 
-test('non-secret public Home has reviewed light/dark visual baselines and reflows', async ({
-  page,
-}) => {
-  // Capture ONLY the signed-out public page. Auth/recovery capture remains globally disabled.
-  const clock = page.locator('time[data-visual-clock]');
+test('public AI Cockpit keeps exact dark design tokens, safe states and mobile navigation', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Acasă', exact: true })).toBeVisible();
-  await expect(clock).toBeVisible();
-  await expect(page.locator('input[type=password],.enrollment-secret,.recovery-codes')).toHaveCount(
-    0,
-  );
+  const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+  await expect(cockpit.getByRole('heading', { name: 'Inteligență. Fără zgomot.' })).toBeVisible();
+  await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED / DENY_ALL');
+  await expect(page.locator('input[type=password],.enrollment-secret,.recovery-codes')).toHaveCount(0);
   for (const theme of ['light', 'dark']) {
-    await page.evaluate((value) => {
-      localStorage.setItem('research-theme', value);
-    }, theme);
+    await page.evaluate((value) => localStorage.setItem('research-theme', value), theme);
     await page.reload();
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-    await expect(clock).toBeVisible();
-    await expect(clock).toHaveText(/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/);
-    await expect(clock).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}T/);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(
-      false,
+    const bodyBackground = await cockpit.locator('body').evaluate(
+      (element) => getComputedStyle(element).backgroundColor,
     );
-    await expect(page).toHaveScreenshot(`home-${theme}.png`, {
-      fullPage: true,
-      animations: 'disabled',
-      mask: [clock],
-    });
+    expect(bodyBackground).toBe('rgb(9, 13, 20)');
+    await expect(cockpit.locator('.sidebar')).toBeVisible();
+    await expect(cockpit.locator('.hero')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   }
-  // A real public refresh changes the observed instant, never the mask's geometry.
-  const previousRead = await clock.getAttribute('datetime');
-  const previousBounds = await clock.boundingBox();
-  expect(previousBounds).not.toBeNull();
-  const refreshed = page.waitForResponse(
-    (response) =>
-      new URL(response.url()).pathname === '/api/v1/overview' &&
-      response.request().method() === 'GET',
+  // Public availability is still verifiable and manually refreshable without authentication.
+  await page.goto('/setari/diagnostic');
+  await expect(page.getByRole('heading', { name: 'Starea serviciilor', exact: true })).toBeVisible();
+  const refreshed = page.waitForResponse((response) =>
+    new URL(response.url()).pathname === '/api/v1/overview' &&
+    response.request().method() === 'GET',
   );
   await page.getByRole('button', { name: 'Actualizează starea publică', exact: true }).click();
   expect((await refreshed).status()).toBe(200);
-  await expect(clock).not.toHaveAttribute('datetime', previousRead!);
-  const refreshedBounds = await clock.boundingBox();
-  expect(refreshedBounds).not.toBeNull();
-  // The button may scroll into view; compare dimensions, not viewport-relative y coordinates.
-  expect([refreshedBounds!.width, refreshedBounds!.height]).toEqual([
-    previousBounds!.width,
-    previousBounds!.height,
-  ]);
+
   await page.setViewportSize({ width: 320, height: 800 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   const nav = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
-  await expect(nav.getByRole('link')).toHaveCount(5);
-  for (const link of await nav.getByRole('link').all()) {
+  const primary = nav.locator('.cockpit-nav-link');
+  await expect(primary).toHaveCount(5);
+  for (const link of await primary.all()) {
     const bounds = await link.boundingBox();
     expect(bounds?.height).toBeGreaterThanOrEqual(44);
   }
