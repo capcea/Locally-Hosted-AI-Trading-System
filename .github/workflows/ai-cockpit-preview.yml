@@ -1,0 +1,79 @@
+name: AI Cockpit isolated preview
+on:
+  push:
+    branches: [feat/ai-cockpit-clean-preview]
+  pull_request:
+    paths:
+      - 'apps/web/src/**'
+      - 'apps/web/public/cockpit.html'
+      - 'apps/web/nginx.conf'
+      - 'apps/web/package.json'
+permissions:
+  contents: read
+concurrency:
+  group: cockpit-preview-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24.7.0'
+      - name: Install frontend dependencies
+        run: npm --prefix apps/web ci --no-audit --no-fund
+      - name: Lint frontend
+        run: npm --prefix apps/web run lint
+      - name: Build frontend
+        run: npm --prefix apps/web run build
+      - name: Unit tests
+        run: npm --prefix apps/web test
+      - name: Verify real Nginx Cockpit rendering
+        run: |
+          docker build -f apps/web/Dockerfile -t ai-cockpit-preview:test apps/web
+          docker run -d --name cockpit-preview-nginx --add-host api:127.0.0.1 -p 127.0.0.1:5173:8080 ai-cockpit-preview:test
+          for i in $(seq 1 25); do
+            if curl -fsSI http://127.0.0.1:5173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsSI http://127.0.0.1:5173/cockpit.html
+          cd apps/web
+          npx playwright install --with-deps chromium
+          node --input-type=module <<'EOF'
+          import { chromium } from '@playwright/test';
+          const browser = await chromium.launch();
+          try {
+            for (const [path, width, height] of [
+              ['/', 1440, 900],
+              ['/testeaza/ai', 1440, 900],
+              ['/testeaza/nou', 1440, 900],
+              ['/rezultate', 1440, 900],
+              ['/conturi/siguranta', 1440, 900],
+              ['/setari', 1440, 900],
+              ['/setari', 390, 844],
+            ]) {
+              const page = await browser.newPage({viewport:{width,height}});
+              await page.goto('http://127.0.0.1:5173'+path, {waitUntil:'load'});
+              if (path === '/') {
+                const cockpit=page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+                await cockpit.locator('.sidebar').waitFor();
+                const color=await cockpit.locator('body').evaluate(e=>getComputedStyle(e).backgroundColor);
+                if (color!=='rgb(9, 13, 20)') throw new Error('Cockpit homepage CSS blocked');
+              } else {
+                await page.locator('.cockpit-sidebar').waitFor();
+                const bg=await page.locator('.ai-platform').evaluate(e=>getComputedStyle(e).backgroundColor);
+                const menu=await page.locator('.cockpit-nav-link').count();
+                if(bg!=='rgb(9, 13, 20)'||menu!==5) throw new Error(path+': invalid UI shell '+bg+' / '+menu);
+              }
+              await page.close();
+            }
+            console.log('PASS: 7 Cockpit routes and 390px mobile shell with real Nginx CSP');
+          } finally {
+            await browser.close();
+          }
+          EOF
+      - name: Stop preview container
+        if: always()
+        run: docker rm -f cockpit-preview-nginx || true
