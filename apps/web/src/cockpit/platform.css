@@ -714,3 +714,61 @@
   padding: 7px 0;
   font-size: 10px;
 }
+
+/* Narrow-phone layout: permit wrapping instead of stretching the viewport. */
+@media (max-width: 400px) {
+  .ai-platform .cockpit-topbar {
+    gap: 7px;
+    padding-inline: 10px;
+  }
+  .ai-platform .cockpit-breadcrumb {
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 5px;
+  }
+  .ai-platform .cockpit-breadcrumb h1 {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ai-platform .cockpit-top-actions {
+    flex: 0 0 auto;
+    gap: 5px;
+  }
+  .ai-platform .cockpit-mode {
+    font-size: 9px;
+    padding: 6px;
+  }
+  .ai-platform .cockpit-avatar {
+    width: 38px;
+    padding-inline: 4px;
+  }
+  .ai-platform .cockpit-page-heading {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ai-platform .cockpit-page-heading > div {
+    min-width: 0;
+    width: 100%;
+  }
+  .ai-platform .product-main main:not(.cockpit-main) {
+    padding-inline: 10px;
+  }
+  .ai-platform .panel,
+  .ai-platform .management-panel {
+    max-width: 100%;
+    min-width: 0;
+    padding-inline: 12px;
+  }
+  .ai-platform .page-intro,
+  .ai-platform .page-intro h2,
+  .ai-platform .full-service-list,
+  .ai-platform .service-row,
+  .ai-platform .service-copy {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
