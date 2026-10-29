@@ -17,15 +17,6 @@ jobs:
         with:
           node-version: '24.7.0'
       - run: npm --prefix apps/web ci --no-audit --no-fund
-      - name: Export Prettier-formatted Cockpit sources for review
-        run: |
-          cd apps/web
-          npx prettier --write src/App.tsx src/cockpit/CockpitPage.tsx src/cockpit/cockpit-shell.css
-          node --input-type=module <<'EOF'
-          import fs from 'node:fs';
-          const files = ['src/App.tsx', 'src/cockpit/CockpitPage.tsx', 'src/cockpit/cockpit-shell.css'];
-          console.log('COCKPIT_FORMAT_EXPORT=' + JSON.stringify(Object.fromEntries(files.map(p => [p, fs.readFileSync(p, 'utf8')]))));
-          EOF
       - run: npm --prefix apps/web run build
       - name: Verify sandboxed cockpit renders with actual Nginx CSP
         run: |
