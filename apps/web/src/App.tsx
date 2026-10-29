@@ -318,7 +318,7 @@ function Shell() {
             />
           ) : (
             <>
-              {false && route.screen === 'home' && (
+              {route.screen === 'home' && (
                 <HomePage
                   key={session?.user.id ?? 'public'}
                   overview={overview}
