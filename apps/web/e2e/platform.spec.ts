@@ -26,26 +26,38 @@ test.beforeEach(async ({ request }) => {
   parseOverview(await response.json());
 });
 
-test('browse real status, filter services, inspect governance and roadmap', async ({ page }) => {
+test('browse Cockpit, inspect observed status, filter services, governance and roadmap', async ({ page }) => {
   const observed = page.waitForResponse((r) => r.url().endsWith('/api/v1/overview') && r.ok());
   await page.goto('/');
-  await assertObservedSidebar(page, parseOverview(await (await observed).json()));
-  await expect(page.getByRole('heading', { name: 'Acasă', exact: true })).toBeVisible();
+  const overview = parseOverview(await (await observed).json());
+  const cockpit = page.frameLocator('iframe[title="Local AI — AI Cockpit"]');
+  await expect(cockpit.locator('.sidebar')).toBeVisible();
+  await expect(cockpit.locator('.nav-list .nav-item')).toHaveCount(5);
+  await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED');
+  await cockpit.locator('#settingsBtn').click();
+  await expect(page).toHaveURL(/\\/setari$/);
+
+  const sidebar = page.getByRole('region', { name: 'Starea tehnică a sistemului', exact: true });
+  await assertObservedSidebar(page, overview);
   const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
   await expect(primary.getByRole('link')).toHaveCount(5);
-  await expect(
-    page.getByText('Nu afișăm rezultate sau solduri presupuse.', { exact: false }),
-  ).toBeVisible();
-  await page.getByRole('link', { name: 'Vezi diagnostic', exact: true }).click();
+  await page.locator('.cockpit-page-tools summary').click();
+  await page
+    .getByRole('navigation', { name: 'În această secțiune' })
+    .getByRole('link', { name: 'Starea serviciilor', exact: true })
+    .click();
   await page.getByRole('textbox', { name: 'Caută un serviciu' }).fill('MetaTrader');
   await expect(page.getByText('MetaTrader 5', { exact: true })).toBeVisible();
   await expect(page.getByText('cTrader Open API', { exact: true })).toHaveCount(0);
+
   await primary.getByRole('link', { name: 'Setări', exact: true }).click();
+  await page.locator('.cockpit-page-tools summary').click();
   await page
     .getByRole('navigation', { name: 'În această secțiune' })
     .getByRole('link', { name: 'Capabilități și limite', exact: true })
     .click();
   await expect(page.getByText('DENY_ALL', { exact: true })).toBeVisible();
+  await page.locator('.cockpit-page-tools summary').click();
   await page
     .getByRole('navigation', { name: 'În această secțiune' })
     .getByRole('link', { name: 'Plan de dezvoltare', exact: true })
@@ -67,7 +79,9 @@ test('API outage is explicit and clears confidence in previous health', async ({
   await expect(page.getByRole('alert')).toContainText('Conexiunea cu API-ul nu este disponibilă');
   await expect(page.locator('.service-status').first()).toHaveText('Neverificat');
   const sidebar = page.getByRole('region', { name: 'Starea tehnică a sistemului', exact: true });
+  await expect(sidebar).toHaveAttribute('data-status', 'UNKNOWN');
   await expect(sidebar.locator('[data-service][data-status="UNKNOWN"]')).toHaveCount(4);
+  await sidebar.locator('summary').click();
   await page.unroute('**/api/v1/overview');
   const recovered = page.waitForResponse((r) => r.url().endsWith('/api/v1/overview') && r.ok());
   await sidebar.getByRole('button', { name: 'Verifică din nou', exact: true }).click();
