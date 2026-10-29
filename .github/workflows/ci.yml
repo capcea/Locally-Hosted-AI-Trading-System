@@ -30,7 +30,7 @@ jobs:
           npm --prefix apps/web audit --audit-level=high
           UV_CACHE_DIR=.cache/uv .tools/bin/uv run --with pip-audit==2.10.1 python -m pip_audit --progress-spinner off
       - name: Secret scan
-        run: docker run --rm -v "$PWD:/repo:ro" zricethezav/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 git /repo --redact --no-banner
+        run: docker run --rm -v "$PWD:/repo:ro" zricethezav/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 git /repo --config /repo/.gitleaks.toml --redact --no-banner
       - name: Independent read-only connector packaging (no broker connection)
         run: |
           docker build -f services/broker_bridge/Dockerfile -t readonly-bridge:ci .
