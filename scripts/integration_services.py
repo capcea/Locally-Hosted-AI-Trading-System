@@ -295,7 +295,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--browser-only",
         action="store_true",
-        help="Run real Playwright with disposable services, without repeating native integration stages",
+        help="Run disposable Playwright checks without native integration suites",
     )
     parser.add_argument(
         "--campaigns-only", action="store_true", help="Focused real-service campaign suite"
