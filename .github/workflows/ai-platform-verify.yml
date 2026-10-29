@@ -1,0 +1,35 @@
+name: AI Cockpit platform UI checks
+on:
+  push:
+    branches: [feat/ai-cockpit-full-platform]
+  pull_request:
+    paths:
+      - 'apps/web/**'
+permissions:
+  contents: read
+jobs:
+  platform-web:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24.7.0'
+      - name: Install locked web dependencies
+        run: npm --prefix apps/web ci --no-audit --no-fund
+      - name: Format cockpit changes for review
+        run: |
+          cd apps/web
+          npx prettier --write src/App.tsx src/main.tsx src/cockpit/PlatformChrome.tsx src/cockpit/platform.css
+          node --input-type=module <<'EOF'
+          import fs from 'node:fs';
+          const files = ['src/App.tsx', 'src/main.tsx', 'src/cockpit/PlatformChrome.tsx', 'src/cockpit/platform.css'];
+          console.log('PLATFORM_FORMAT_EXPORT=' + JSON.stringify(Object.fromEntries(files.map(path => [path, fs.readFileSync(path, 'utf8')]))));
+          EOF
+      - name: Lint application
+        run: npm --prefix apps/web run lint
+      - name: TypeScript and Vite build
+        run: npm --prefix apps/web run build
+      - name: Existing web unit tests
+        run: npm --prefix apps/web test
