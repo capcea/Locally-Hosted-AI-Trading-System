@@ -35,7 +35,7 @@ test('browse Cockpit, inspect observed status, filter services, governance and r
   await expect(cockpit.locator('.nav-list .nav-item')).toHaveCount(5);
   await expect(cockpit.locator('.mode-banner')).toContainText('SIMULATED');
   await cockpit.locator('#settingsBtn').click();
-  await expect(page).toHaveURL(/\\/setari$/);
+  await expect(page).toHaveURL(new RegExp('/setari$'));
 
   const sidebar = page.getByRole('region', { name: 'Starea tehnică a sistemului', exact: true });
   await assertObservedSidebar(page, overview);
