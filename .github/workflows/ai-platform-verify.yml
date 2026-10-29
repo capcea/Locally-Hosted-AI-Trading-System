@@ -18,15 +18,6 @@ jobs:
           node-version: '24.7.0'
       - name: Install locked web dependencies
         run: npm --prefix apps/web ci --no-audit --no-fund
-      - name: Format new Cockpit acceptance checks for review
-        run: |
-          cd apps/web
-          npx prettier --write e2e/redesign-v1.spec.ts e2e/ux-visual.spec.ts e2e/ux-workflows.spec.ts
-          node --input-type=module <<'EOF'
-          import fs from 'node:fs';
-          const files=['e2e/redesign-v1.spec.ts','e2e/ux-visual.spec.ts','e2e/ux-workflows.spec.ts'];
-          console.log('COCKPIT_ACCEPTANCE_FORMAT='+JSON.stringify(Object.fromEntries(files.map(p=>[p,fs.readFileSync(p,'utf8')]))));
-          EOF
       - name: Lint application
         run: npm --prefix apps/web run lint
       - name: TypeScript and Vite build
