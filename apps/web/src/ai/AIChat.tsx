@@ -20,7 +20,9 @@ function asObject(value: unknown): Record<string, unknown> {
 }
 
 function asStrings(value: unknown): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string')
+    : [];
 }
 
 /** Technical discovery/probe jobs are never treated as chat replies. */
@@ -28,13 +30,7 @@ export function analysisJobs(jobs: Job[]): Job[] {
   return jobs.filter((job) => job.kind === 'INFER');
 }
 
-function ResponseContent({
-  job,
-  onCritic,
-}: {
-  job: Job;
-  onCritic: (job: Job) => void;
-}) {
+function ResponseContent({ job, onCritic }: { job: Job; onCritic: (job: Job) => void }) {
   const output = asObject(job.output);
   const missing = asStrings(asObject(output.missing_evidence).items);
   return (
@@ -44,7 +40,8 @@ function ResponseContent({
         <strong>{typeof output.title === 'string' ? output.title : 'Răspuns AI'}</strong>
       </div>
       <p className="ai-chat-disclaimer">
-        Propunere AI neverificată. Nu reprezintă un semnal de tranzacționare sau autorizare de ordine.
+        Propunere AI neverificată. Nu reprezintă un semnal de tranzacționare sau autorizare de
+        ordine.
       </p>
       {['summary', 'hypothesis'].map(
         (key) => typeof output[key] === 'string' && <p key={key}>{output[key]}</p>,
@@ -218,15 +215,16 @@ export default function AIChat({ session }: { session: Session }) {
   const connection = connections.find((item) => item.id === model?.connection_id);
   const cloud = connection?.provider === 'OPENROUTER';
   const verifiedModel = model && verified(model);
-  const unavailable = session.user.role !== 'OWNER'
-    ? 'Numai proprietarul cu MFA recent poate solicita o analiză.'
-    : !status?.configured
-      ? 'Gateway-ul AI nu este configurat sau starea lui nu poate fi citită.'
-      : !verifiedModel
-        ? 'Rolul nu are un model verificat și atribuit.'
-        : status.worker_state !== 'OBSERVED_RECENTLY'
-          ? 'Worker-ul nu a fost observat recent.'
-          : '';
+  const unavailable =
+    session.user.role !== 'OWNER'
+      ? 'Numai proprietarul cu MFA recent poate solicita o analiză.'
+      : !status?.configured
+        ? 'Gateway-ul AI nu este configurat sau starea lui nu poate fi citită.'
+        : !verifiedModel
+          ? 'Rolul nu are un model verificat și atribuit.'
+          : status.worker_state !== 'OBSERVED_RECENTLY'
+            ? 'Worker-ul nu a fost observat recent.'
+            : '';
   const consentMissing = cloud && (!allowRemote || !cloudCost);
   const canSubmit =
     !busy && !loading && !unavailable && !consentMissing && ack && question.trim().length >= 3;
@@ -352,7 +350,9 @@ export default function AIChat({ session }: { session: Session }) {
             </ul>
           ) : (
             <p className="ai-chat-history-empty">
-              {loading ? 'Încărcăm analizele…' : 'Nicio analiză AI. Verificările de model sunt în Setări.'}
+              {loading
+                ? 'Încărcăm analizele…'
+                : 'Nicio analiză AI. Verificările de model sunt în Setări.'}
             </p>
           )}
           <div className="ai-chat-history-footer">
@@ -406,7 +406,10 @@ export default function AIChat({ session }: { session: Session }) {
                   )}
                   <details className="ai-chat-audit">
                     <summary>Detalii tehnice ale solicitării</summary>
-                    <Evidence title="Metadate verificabile" value={{ ...selected, output: undefined }} />
+                    <Evidence
+                      title="Metadate verificabile"
+                      value={{ ...selected, output: undefined }}
+                    />
                   </details>
                 </div>
               </>
