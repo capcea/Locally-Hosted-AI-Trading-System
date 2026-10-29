@@ -20,7 +20,7 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/gitleaks-triage"
           set +e
-          docker run --rm -v "$PWD:/repo:ro" -v "$RUNNER_TEMP/gitleaks-triage:/reports" zricethezav/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 git /repo --redact --report-format json --report-path /reports/report.json --no-banner
+          docker run --rm -v "$PWD:/repo:ro" -v "$RUNNER_TEMP/gitleaks-triage:/reports" zricethezav/gitleaks:v8.28.0@sha256:cdbb7c955abce02001a9f6c9f602fb195b7fadc1e812065883f695d1eeaba854 git /repo --config /repo/.gitleaks.toml --redact --report-format json --report-path /reports/report.json --no-banner
           status=$?
           set -e
           if [ "$status" -ne 0 ] && [ "$status" -ne 1 ]; then exit "$status"; fi
