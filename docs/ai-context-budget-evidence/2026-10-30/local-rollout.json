@@ -1,0 +1,34 @@
+{
+  "unchanged_non_api_web_container_ids": true,
+  "all_named_volume_mappings_unchanged": true,
+  "health/ready": {
+    "http": 200,
+    "services": [
+      {
+        "id": "postgres",
+        "status": "HEALTHY"
+      },
+      {
+        "id": "redis",
+        "status": "HEALTHY"
+      },
+      {
+        "id": "storage",
+        "status": "HEALTHY"
+      }
+    ]
+  },
+  "api/v1/safety": {
+    "http": 200,
+    "executor_capability": "DENY_ALL",
+    "generated_code_execution": false
+  },
+  "api/v1/auth/status": {
+    "http": 200,
+    "auth_mode": "PASSWORD"
+  },
+  "served_html_matches_native_build": true,
+  "deployed_budget_module_matches_source": true,
+  "unchanged_research_software_and_ai_provider_files": true,
+  "served_assets_match_native_build": true
+}

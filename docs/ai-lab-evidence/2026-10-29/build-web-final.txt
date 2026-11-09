@@ -1,0 +1,94 @@
+ Image ai-trading-research-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.97kB done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 500B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#3 ...
+
+#4 [internal] load metadata for docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#4 DONE 0.8s
+
+#3 [internal] load metadata for docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#3 DONE 0.8s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 108B done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 DONE 0.0s
+
+#7 [stage-1 1/3] FROM docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#7 resolve docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#7 ...
+
+#8 [build 1/6] FROM docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#8 resolve docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f 0.4s done
+#8 DONE 0.4s
+
+#6 [internal] load build context
+#6 transferring context: 318.29kB 0.0s done
+#6 DONE 0.0s
+
+#9 [build 2/6] WORKDIR /app
+#9 CACHED
+
+#10 [build 3/6] COPY package.json package-lock.json ./
+#10 CACHED
+
+#11 [build 4/6] RUN npm ci --no-audit --no-fund
+#11 CACHED
+
+#7 [stage-1 1/3] FROM docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#7 resolve docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0 0.5s done
+#7 DONE 0.5s
+
+#12 [build 5/6] COPY . .
+#12 DONE 0.0s
+
+#13 [build 6/6] RUN npm run build
+#13 0.167 
+#13 0.167 > trading-research-web@0.1.0 build
+#13 0.167 > tsc -b && vite build
+#13 0.167 
+#13 3.569 vite v8.3.5 building client environment for production...
+#13 3.574 transforming...
+#13 3.807 ✓ 2090 modules transformed.
+#13 3.852 rendering chunks...
+#13 3.892 computing gzip size...
+#13 3.898 dist/index.html                   0.70 kB │ gzip:   0.42 kB
+#13 3.898 dist/assets/index-D_nTxKwa.css   95.66 kB │ gzip:  19.31 kB
+#13 3.898 dist/assets/index-NYucpfPR.js   633.70 kB │ gzip: 187.87 kB
+#13 3.898 
+#13 3.899 [plugin builtin:vite-reporter] 
+#13 3.899 (!) Some chunks are larger than 500 kB after minification. Consider:
+#13 3.899 - Using dynamic import() to code-split the application
+#13 3.899 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#13 3.899 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#13 3.899 ✓ built in 329ms
+#13 DONE 3.9s
+
+#14 [stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#14 CACHED
+
+#15 [stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.0s done
+#16 exporting manifest sha256:903b28bd524e858159da40b13640edbac96503b660a36694af3e6b8461ebb52d done
+#16 exporting config sha256:9275420270d0e69fb733e7543790fef791c8a2ea2497fb575135935b09dd3b91 done
+#16 exporting attestation manifest sha256:fd730054381f2c050aef6ea9835af3d96742c995d019cba348752b1a9c7d2bd2 done
+#16 exporting manifest list sha256:8ec12e934e7f0d25e3c6219f875463a8088251e426fca917734c516b17110f28 done
+#16 naming to docker.io/library/ai-trading-research-web:latest done
+#16 unpacking to docker.io/library/ai-trading-research-web:latest done
+#16 DONE 0.1s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image ai-trading-research-web Built 

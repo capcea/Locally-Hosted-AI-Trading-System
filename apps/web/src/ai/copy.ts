@@ -1,4 +1,24 @@
 export const aiErrors: Record<string, string> = {
+  AI_STANDING_AUTHORIZATION_REQUIRED:
+    'Activează autorizarea permanentă în Setări → Modele AI. Solicitarea nu a fost autorizată.',
+  AI_STANDING_SCOPE_REFUSED:
+    'Rolul, operațiunea sau categoria de date nu intră în autorizarea permanentă. Revizuiește domeniul în Setări.',
+  AI_STANDING_SCOPE_CHANGED:
+    'Destinația sau politica cloud s-a schimbat. Revizuiește autorizarea permanentă cu MFA.',
+  AI_STANDING_CONNECTION_UNAVAILABLE: 'Conexiunea autorizată lipsește sau este dezactivată.',
+  AI_STANDING_BUDGET_INVALID:
+    'Limitele pe solicitare, zi și lună trebuie să fie pozitive și ordonate în limitele platformei.',
+  AI_STANDING_SCOPE_INVALID: 'Domeniul autorizării conține valori duplicate sau nepermise.',
+  AI_WORKER_UNAVAILABLE:
+    'Worker-ul nu are un heartbeat recent confirmat. Verifică serviciul și reîncarcă starea.',
+  AI_OWNER_REQUIRED: 'Numai proprietarul autentificat poate solicita analiza.',
+  AI_CONTEXT_BUDGET_UNVERIFIED:
+    'Capacitatea verificată a modelului nu acoperă dimensiunea solicitată.',
+  AI_REMOTE_CONTEXT_POLICY_REFUSED:
+    'Politica acestei conexiuni nu permite categoria de date la distanță. Revizuiește explicit configurația.',
+
+  AI_PROVIDER_REQUEST_REFUSED:
+    'Furnizorul a refuzat o cerere HTTP. Acest cod generic nu identifică singur cauza; consultă statusul și etapa de mai jos, dacă au fost păstrate.',
   AI_CLOUD_OPERATOR_OPT_IN_REQUIRED:
     'OpenRouter este dezactivat de operator. Configurează explicit politica cloud și proxy-ul; aprobarea privată rămâne separată.',
   AI_CLOUD_AUTHORIZATION_REQUIRED:
@@ -12,7 +32,7 @@ export const aiErrors: Record<string, string> = {
   AI_CLOUD_COST_ACKNOWLEDGEMENT_REQUIRED:
     'Această verificare sau analiză poate avea costuri. Revizuiește limita și bifează aprobarea solicitării cloud.',
   AI_CLOUD_BUDGET_EXCEEDED:
-    'Limita conservatoare pe solicitare sau pe zi a fost atinsă. Verifică rezervările; nu repetăm automat cereri cu rezultat incert.',
+    'Limita conservatoare pe solicitare, zi sau lună a fost atinsă. Verifică rezervările; nu repetăm automat cereri cu rezultat incert.',
   AI_CLOUD_FALLBACK_PROHIBITED:
     'OpenRouter necesită un singur model și furnizor aprobat, fără alternative automate.',
   AI_PROVIDER_AUTH_REFUSED:
@@ -21,6 +41,10 @@ export const aiErrors: Record<string, string> = {
     'OpenRouter a refuzat solicitarea din cauza creditului. Verifică soldul și limita cheii la furnizor; nu reîncercăm automat.',
   AI_APPROVED_UPSTREAM_UNAVAILABLE:
     'Catalogul nu confirmă furnizorul ales pentru acest model. Verifică tag-ul exact; nu schimbăm automat furnizorul.',
+  AI_APPROVED_UPSTREAM_NOT_ZDR:
+    'Modelul există, dar furnizorul aprobat nu apare în catalogul ZDR pentru el. Revizuiește explicit furnizorul autorizat; nu dezactivăm ZDR și nu alegem automat o alternativă. Nu a fost trimisă generarea din această probă.',
+  AI_APPROVED_PARAMETERS_UNAVAILABLE:
+    'Furnizorul aprobat nu declară suportul necesar pentru răspuns structurat strict și parametrii probei. Verifică un furnizor compatibil; nu eliminăm validarea și nu trimitem generarea.',
   AI_EXACT_MODEL_ID_REQUIRED:
     'Folosește un identificator exact autor/model. Routerele automate nu sunt permise.',
   AI_PROVIDER_DESTINATION_MISMATCH:
@@ -41,8 +65,16 @@ export const aiErrors: Record<string, string> = {
     'Testul nu are încă un rezultat final stocat. Așteaptă finalizarea sa.',
   AI_CONTEXT_BYTE_LIMIT:
     'Contextul este prea mare. Alege o singură referință sau un rezumat mai mic.',
+  AI_CONTEXT_TIER_UNAVAILABLE:
+    'Nivelul de context nu este activat pe server. Alege AUTO sau un nivel configurat.',
+  AI_CONTEXT_REVISION_MUST_INCREASE:
+    'Alege un plafon mai mare pentru versiunea nouă. Modelul existent nu este modificat.',
+  AI_REQUEST_BYTE_LIMIT:
+    'Cererea depășește limita JSON de64KiB. Redu întrebarea sau numărul referințelor.',
   AI_CONTEXT_BUDGET_EXCEEDED:
-    'Întrebarea și contextul depășesc bugetul aprobat. Scurtează întrebarea sau redu contextul.',
+    'Întrebarea, documentația și schema răspunsului nu încap în fereastra aprobată. Cererea nu a fost trimisă modelului. Poți edita întrebarea, alege un context mai mic sau un model cu o capacitate mai mare verificată în Setări.',
+  AI_INPUT_BYTE_LIMIT:
+    'Datele pregătite depășesc limita de intrare a platformei. Cererea nu a fost trimisă modelului; redu contextul sau întrebarea.',
   AI_REMOTE_POLICY_REQUIRED:
     'Destinația este la distanță. Proprietarul trebuie să aprobe separat politica de procesare.',
   AI_REMOTE_PROCESSING_NOT_APPROVED:

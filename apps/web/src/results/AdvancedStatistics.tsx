@@ -70,12 +70,13 @@ export default function AdvancedStatistics({
             <input type="checkbox" required />
             Confirm că acestea sunt ipoteze declarate, nu o certificare a independenței.
           </label>
-          <Link href="/setari/securitate">Reconfirmă MFA dacă este necesar</Link>
+          <Link href="/setari/securitate">Verifică securitatea sesiunii</Link>
           <button disabled={busy}>Evaluează ipotezele declarate</button>
         </form>
       ) : (
         <p>
-          Evaluarea necesită proprietar și MFA recent; drepturile nu se obțin prin modul avansat.
+          Evaluarea necesită proprietar și o sesiune validă; drepturile nu se obțin prin modul
+          avansat.
         </p>
       )}
       {error && <p role="alert">{error}</p>}

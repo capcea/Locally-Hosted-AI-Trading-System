@@ -1,0 +1,23 @@
+Original files preserved: 1513
+Deleted original files: 0
+Unchanged accepted PNG goldens: 4
+Unchanged financial/data/identity paths: 45
+
+Changed existing files:
+apps/web/e2e/product-v2.spec.ts
+apps/web/src/product/Workspace.tsx
+apps/web/src/product/workspace.css
+apps/web/src/product/workspace.test.tsx
+tests/test_password_ai_integration.py
+IMPLEMENTATION_STATUS.md
+apps/api/ai/context.py
+apps/web/src/App.tsx
+apps/web/src/StrategyLab.tsx
+apps/web/src/ai/AIChat.tsx
+apps/web/src/ai/draft.ts
+apps/web/src/campaigns/CampaignCenter.tsx
+apps/web/src/cockpit/PlatformChrome.tsx
+apps/web/src/navigation/routes.ts
+apps/web/src/navigation/sections.ts
+apps/web/src/research-drafts.ts
+docs/IMPLEMENTATION_STATUS.md

@@ -169,3 +169,12 @@ describe('identity client boundary', () => {
     expect(request).toHaveBeenCalledTimes(1);
   });
 });
+
+it('forwards cancellation to the underlying read instead of leaving a pending request stuck', async () => {
+  const controller = new AbortController();
+  const request = vi.fn().mockResolvedValue(new Response('{}', { status: 200 }));
+  vi.stubGlobal('fetch', request);
+  const options = { signal: controller.signal };
+  await api('/workspace/library', options as Parameters<typeof api>[1]);
+  expect(request.mock.calls[0][1].signal).toBe(controller.signal);
+});

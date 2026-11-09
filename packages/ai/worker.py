@@ -14,6 +14,7 @@ from sqlalchemy import or_, select, text
 from sqlalchemy.orm import Session
 
 from packages.ai.contracts import OUTPUTS, Generation, ModelResponseMetadata, Provider
+from packages.ai.diagnostics import safe_provider_diagnostic
 from packages.ai.lifecycle import CONTEXT_NAMESPACE, context_key, event
 from packages.ai.models import AIArtifact, AIConnection, AIContent, AIJob, AIRequest, AIVerification
 from packages.ai.prompts import VERSION, canonical, digest, validate_output
@@ -116,6 +117,7 @@ class Worker:
         *,
         state: str = "FAILED",
         retry: bool = False,
+        diagnostic: dict[str, Any] | None = None,
     ) -> None:
         with self.store.session() as db, db.begin():
             job = db.get(AIJob, identifier, with_for_update=True)
@@ -123,6 +125,11 @@ class Worker:
                 return
             if job.cancel_requested:
                 state, code, retry = "CANCELLED", "AI_CANCELLATION_CONFIRMED", False
+                diagnostic = None
+            details: dict[str, Any] = {"code": code}
+            safe = safe_provider_diagnostic(diagnostic)
+            if safe:
+                details["provider_diagnostic"] = safe
             request = db.get(AIRequest, identifier)
             if request and request.specification.get("cloud"):
                 retry = False
@@ -135,12 +142,12 @@ class Worker:
                 job.state = "RETRY"
                 job.lease_until = utcnow() + timedelta(seconds=2**job.attempts)
                 job.dispatched_at = None  # Only a proven refused/unconnected attempt is retried.
-                event(db, job, "RETRY_SCHEDULED", {"code": code})
+                event(db, job, "RETRY_SCHEDULED", details)
                 return
             job.state, job.error, job.completed_at = state, code, utcnow()
             job.lease_until = None
             self.clear_input(db, identifier)
-            event(db, job, state, {"code": code})
+            event(db, job, state, details)
 
     def work(self) -> bool:
         now = utcnow()
@@ -214,6 +221,7 @@ class Worker:
                     exc.code,
                     state="UNKNOWN" if exc.ambiguous else "FAILED",
                     retry=exc.retryable,
+                    diagnostic=exc.diagnostic,
                 )
             except ValueError as exc:
                 code = str(exc)

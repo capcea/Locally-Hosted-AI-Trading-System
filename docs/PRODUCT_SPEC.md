@@ -1,5 +1,13 @@
 # MASTER PROMPT PENTRU CODEX — AI Trading Research Platform
 
+
+> **Current product amendment — 2026-10-29:** The owner requested a simpler product centered on
+> Trading Dashboard, Strategy Lab and Settings. Ordinary access uses password/session authentication
+> without MFA codes by default. Read [PRODUCT_DIRECTION_V2.md](PRODUCT_DIRECTION_V2.md) and
+> [the implementation evidence](../PRODUCT_V2_IMPLEMENTATION_REPORT.md) first. The original master
+> specification below is retained as historical scope. This amendment does not activate real/demo
+> orders, a generated-code runner, model training or future live-approval capabilities.
+
 **Version:** 1.0 | **Date:** 2026-10-24 | **Language for product UI:** Romanian by default, architecture/code/documentation in English | **Project:** greenfield
 
 > Paste this entire prompt into Codex at the root of a **new, empty repository**. Treat it as the product specification and engineering contract. Do not assume that a strategy will be profitable. Do not send real orders or connect real-money credentials during implementation. Implement in phases, with working code and tests at every checkpoint.

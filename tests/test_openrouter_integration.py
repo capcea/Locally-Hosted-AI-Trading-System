@@ -28,6 +28,11 @@ def enable(
     *,
     daily: str = "0.50",
     statuses: list[int] | None = None,
+    metadata_status: int | None = None,
+    zdr_available: bool = True,
+    output_limit_key: str = "max_tokens",
+    context_length: int = 8192,
+    request_limit: str = "0.02",
 ) -> tuple[str, str, list[dict[str, Any]]]:
     app = cast(FastAPI, ai.owner.client.app)
     old = app.state.ai_config
@@ -51,12 +56,39 @@ def enable(
         if request.method == "GET":
             if request.url.path == "/api/v1/models":
                 return httpx.Response(200, json={"data": [{"id": "fixture/model"}]})
+            if request.url.path == "/api/v1/endpoints/zdr":
+                return httpx.Response(
+                    200,
+                    json={
+                        "data": [
+                            {
+                                "model_id": "fixture/model",
+                                "tag": "fixture-provider",
+                                "supported_parameters": [
+                                    "temperature",
+                                    "top_p",
+                                    "response_format",
+                                    "structured_outputs",
+                                    output_limit_key,
+                                ],
+                            }
+                        ]
+                        if zdr_available
+                        else []
+                    },
+                )
+            if metadata_status is not None:
+                return httpx.Response(
+                    metadata_status, json={"error": {"message": "PRIVATE_PROVIDER_BODY_FIXTURE"}}
+                )
             return httpx.Response(
                 200,
                 json={
                     "data": {
                         "id": "fixture/model",
-                        "endpoints": [{"tag": "fixture-provider", "context_length": 8192}],
+                        "endpoints": [
+                            {"tag": "fixture-provider", "context_length": context_length}
+                        ],
                     }
                 },
             )
@@ -102,7 +134,7 @@ def enable(
     monkeypatch.setattr("packages.ai.worker.create_provider", provider)
     policy = {
         "upstream_provider": "fixture-provider",
-        "request_usd": "0.02",
+        "request_usd": request_limit,
         "daily_usd": daily,
         "acknowledged_public_cloud": True,
         "acknowledged_upstream_processing": True,
@@ -311,6 +343,89 @@ def test_cloud_refusal_is_not_automatically_retried_and_owner_can_recover_explic
     replacement = ai.job("/requests", ai.question(allow_remote=True, cloud_cost_acknowledged=True))
     assert ai.finish(replacement)["state"] == "SUCCEEDED"
     assert len(calls) == 2
+
+
+@pytest.mark.parametrize(
+    ("metadata_status", "statuses", "operation", "http_status", "completions"),
+    [(404, None, "MODEL_METADATA", 404, 0), (None, [400], "COMPLETION", 400, 1)],
+)
+def test_provider_refusal_diagnostic_persists_in_scoped_real_api_without_replay(
+    ai: AI,
+    monkeypatch: pytest.MonkeyPatch,
+    metadata_status: int | None,
+    statuses: list[int] | None,
+    operation: str,
+    http_status: int,
+    completions: int,
+) -> None:
+    _, model, calls = enable(ai, monkeypatch, statuses=statuses, metadata_status=metadata_status)
+    job = ai.job(f"/models/{model}/probe", {"key": uuid4().hex, "cloud_cost_acknowledged": True})
+    failed = ai.finish(job)
+    assert failed["state"] == "FAILED" and failed["error"] == "AI_PROVIDER_REQUEST_REFUSED"
+    expected = {"provider_diagnostic": {"http_status": http_status, "operation": operation}}
+    assert failed["metadata"] == expected
+    assert failed["output"] is None and failed["attempts"] == 1
+    assert "PRIVATE_PROVIDER_BODY_FIXTURE" not in json.dumps(failed)
+    assert not ai.worker.once()
+    reread = ai.owner.client.get("/api/v1/ai/requests/" + job["id"])
+    assert reread.status_code == 200 and reread.json()["metadata"] == expected
+    assert len(calls) == completions
+    events = ai.owner.client.get("/api/v1/ai/requests/" + job["id"] + "/events")
+    assert events.status_code == 200 and events.json()[-1]["details"] == {
+        "code": "AI_PROVIDER_REQUEST_REFUSED",
+        **expected,
+    }
+    models = ai.owner.client.get("/api/v1/ai/models").json()
+    assert not next(row for row in models if row["id"] == model)["verification_current"]
+    peer, _ = ai.owner.peer("other-diagnostic-reader", "VIEWER")
+    assert peer.get("/api/v1/ai/requests/" + job["id"]).status_code == 404
+    assert peer.get("/api/v1/ai/requests/" + job["id"] + "/events").status_code == 404
+
+
+def test_zdr_incompatible_approved_upstream_fails_before_any_completion(
+    ai: AI, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _, model, calls = enable(ai, monkeypatch, zdr_available=False)
+    job = ai.job(f"/models/{model}/probe", {"key": uuid4().hex, "cloud_cost_acknowledged": True})
+    failed = ai.finish(job)
+    assert failed["state"] == "FAILED" and failed["error"] == "AI_APPROVED_UPSTREAM_NOT_ZDR"
+    assert not calls
+    assert not ai.worker.once()
+    models = ai.owner.client.get("/api/v1/ai/models").json()
+    assert not next(row for row in models if row["id"] == model)["verification_current"]
+
+
+def test_measured_completion_token_alias_keeps_scoped_policy_and_output_bound(
+    ai: AI, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _, model, calls = enable(ai, monkeypatch, output_limit_key="max_completion_tokens")
+    verify(ai, model)
+    assert len(calls) == 1
+    assert calls[0]["max_completion_tokens"] == 64 and "max_tokens" not in calls[0]
+    assert calls[0]["provider"]["zdr"] is True
+    assert calls[0]["provider"]["only"] == ["fixture-provider"]
+    assert calls[0]["provider"]["allow_fallbacks"] is False
+
+
+def test_cloud_authorization_readback_retains_reviewed_provider_and_exact_caps(
+    ai: AI, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _, _, calls = enable(ai, monkeypatch)
+    before = ai.owner.client.get("/api/v1/ai/cloud-policy").json()["authorization"]
+    body = {
+        **before["policy"],
+        "upstream_provider": "reviewed-fixture-provider",
+        "daily_usd": "0.375000",
+    }
+    saved = ai.post("/endpoints/openrouter", body)
+    assert saved.status_code == 201
+    reread = ai.owner.client.get("/api/v1/ai/cloud-policy").json()["authorization"]
+    assert reread["id"] == saved.json()["authorization_id"]
+    assert reread["id"] != before["id"] and reread["policy"] == body
+    again = ai.post("/endpoints/openrouter", body)
+    assert again.status_code == 201 and again.json()["authorization_id"] == reread["id"]
+    assert ai.owner.client.get("/api/v1/ai/cloud-policy").json()["authorization"] == reread
+    assert not calls  # Saving/reading a policy must never generate a provider completion.
 
 
 def test_new_cloud_authorization_revokes_old_probe_and_queued_request(

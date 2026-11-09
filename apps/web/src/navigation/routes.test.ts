@@ -74,7 +74,7 @@ describe('finite task routes', () => {
     expect(resolveRoute(path).screen).toBe('not-found');
   });
   it('resolves static routes before opaque IDs and preserves ownership identifiers', () => {
-    expect(primary).toHaveLength(5);
+    expect(primary).toHaveLength(3);
     expect(resolveRoute('/rezultate/compara').section).toBe('compare');
     expect(resolveRoute(`/rezultate/${id}/provenienta`).experimentId).toBe(id);
     expect(resolveRoute(`/conturi/${id}/avansat/simulator/${id}/ordine`).runId).toBe(id);

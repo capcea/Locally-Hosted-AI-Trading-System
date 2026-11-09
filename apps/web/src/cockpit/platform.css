@@ -585,14 +585,14 @@
     min-height: 44px;
   }
   .ai-platform .cockpit-nav-link {
-    min-height: 44px;
+    min-height: 52px;
     height: auto;
     padding: 6px 1px;
     flex-direction: column;
     justify-content: center;
     gap: 3px;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 1.2;
   }
   .ai-platform .cockpit-nav-link.is-active::before {

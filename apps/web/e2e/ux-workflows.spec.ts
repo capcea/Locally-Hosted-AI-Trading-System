@@ -69,6 +69,7 @@ test('independent safety, reviewed setup, guarded routes, keyboard review and vi
   await page.goto('/testeaza');
   await expect(wizard).toHaveCount(1);
   await expect(wizard).toBeVisible();
+  await page.getByText('Secțiuni și instrumente avansate', { exact: true }).click();
   await expect(
     page
       .getByRole('navigation', { name: 'În această secțiune', exact: true })
@@ -119,7 +120,7 @@ test('independent safety, reviewed setup, guarded routes, keyboard review and vi
   await page.getByRole('button', { name: 'Verifică MFA', exact: true }).click();
   await page.getByRole('button', { name: 'Am salvat codurile', exact: true }).click();
   await expect(
-    page.getByText('Doar proprietarul cu MFA recent poate autoriza evaluarea finală.', {
+    page.getByText('Doar proprietarul cu o sesiune validă poate autoriza evaluarea finală.', {
       exact: false,
     }),
   ).toBeVisible();

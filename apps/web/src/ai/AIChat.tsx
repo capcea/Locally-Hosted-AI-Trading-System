@@ -6,10 +6,17 @@ import type { Session } from '../management-api';
 import { Link, navigate, useRoute } from '../navigation/history';
 import { Evidence } from '../ui/Controls';
 import { active, ai, roleLabels, roles, stateLabels, verified } from './api';
-import type { Binding, Connection, Job, Model, Role, Status, Submission } from './api';
+import type { Binding, Connection, Job, Model, Role, Submission } from './api';
 import { aiErrors } from './copy';
-import { takeAIQuestion } from './draft';
+import { takeAIQuestion, takeExperimentReview } from './draft';
+import { useInferenceReadiness } from './useInferenceReadiness';
+import { inferenceUnavailable, observationFresh, workerObserved } from './readiness';
+import { verifiedContextWindow, afterSubmissionFailure } from './submission-budget';
 import './ai-chat.css';
+import { ContextBudgetControl, useContextPreview } from './ContextBudget';
+import type { ContextMode } from './ContextBudget';
+import { researchIdea } from './research-idea';
+import { offerResearchIdea } from '../research-drafts';
 
 type ReferenceKind = 'documentation' | 'dataset' | 'experiment' | 'strategy' | 'ai_artifact';
 
@@ -30,7 +37,15 @@ export function analysisJobs(jobs: Job[]): Job[] {
   return jobs.filter((job) => job.kind === 'INFER');
 }
 
-function ResponseContent({ job, onCritic }: { job: Job; onCritic: (job: Job) => void }) {
+export function ResponseContent({
+  job,
+  onCritic,
+  onTest,
+}: {
+  job: Job;
+  onCritic: (job: Job) => void;
+  onTest?: (job: Job) => void;
+}) {
   const output = asObject(job.output);
   const missing = asStrings(asObject(output.missing_evidence).items);
   return (
@@ -90,6 +105,11 @@ function ResponseContent({ job, onCritic }: { job: Job; onCritic: (job: Job) => 
         </details>
       )}
       <div className="ai-chat-response-actions">
+        {onTest && researchIdea(job) && (
+          <button type="button" className="primary-button" onClick={() => onTest(job)}>
+            Pregătește testul acestei idei
+          </button>
+        )}
         <button type="button" className="secondary-button" onClick={() => onCritic(job)}>
           Cere o critică separată
         </button>
@@ -102,9 +122,19 @@ function ResponseContent({ job, onCritic }: { job: Job; onCritic: (job: Job) => 
   );
 }
 
-export default function AIChat({ session }: { session: Session }) {
+export default function AIChat({
+  session,
+  workspace = false,
+}: {
+  session: Session;
+  workspace?: boolean;
+}) {
   const route = useRoute();
-  const [status, setStatus] = useState<Status | null>(null);
+  const analysisHome = workspace ? '/strategy-lab' : '/testeaza/ai';
+  const analysisPath = (id: string) =>
+    workspace
+      ? `/strategy-lab/analize/${encodeURIComponent(id)}`
+      : `/testeaza/ai/${encodeURIComponent(id)}`;
   const [models, setModels] = useState<Model[]>([]);
   const [bindings, setBindings] = useState<Binding[]>([]);
   const [connections, setConnections] = useState<Connection[]>([]);
@@ -117,23 +147,21 @@ export default function AIChat({ session }: { session: Session }) {
   const [role, setRole] = useState<Role>('RESEARCH');
   const [reference, setReference] = useState('');
   const [referenceKind, setReferenceKind] = useState<ReferenceKind>('documentation');
-  const [ack, setAck] = useState(false);
-  const [allowRemote, setAllowRemote] = useState(false);
-  const [cloudCost, setCloudCost] = useState(false);
   const [allowFallback, setAllowFallback] = useState(false);
+  const [contextMode, setContextMode] = useState<ContextMode>('AUTO');
   const [preview, setPreview] = useState<{ id: string; question: string } | null>(null);
   const frozen = useRef<Submission | null>(null);
+  const category = reference ? referenceKind : 'documentation';
+  const { observation, now, refreshReadiness } = useInferenceReadiness(role, category);
 
   const refresh = useCallback(async () => {
     const reads = await Promise.allSettled([
-      ai<Status>('/status'),
       ai<Model[]>('/models'),
       ai<Binding[]>('/routes'),
       ai<Job[]>('/requests'),
       ai<Connection[]>('/connections'),
     ] as const);
-    const [s, m, b, j, c] = reads;
-    setStatus(s.status === 'fulfilled' ? s.value : null);
+    const [m, b, j, c] = reads;
     setModels(m.status === 'fulfilled' ? m.value : []);
     setBindings(b.status === 'fulfilled' ? b.value : []);
     setJobs(j.status === 'fulfilled' ? j.value : []);
@@ -160,6 +188,12 @@ export default function AIChat({ session }: { session: Session }) {
     if (handoff) {
       setQuestion(handoff);
       setShowNew(true);
+      const experiment = takeExperimentReview(session.user.id);
+      if (experiment) {
+        setRole('CRITIC');
+        setReferenceKind('experiment');
+        setReference(experiment);
+      }
     }
   }, [session.user.id]);
 
@@ -211,33 +245,59 @@ export default function AIChat({ session }: { session: Session }) {
       ? undefined
       : analyses[0];
   const binding = bindings.find((item) => item.role === role);
+  const contextWindow = verifiedContextWindow(models, binding, allowFallback, now);
   const model = models.find((item) => item.id === binding?.model_id);
   const connection = connections.find((item) => item.id === model?.connection_id);
   const cloud = connection?.provider === 'OPENROUTER';
-  const verifiedModel = model && verified(model);
+  const verifiedModel =
+    model &&
+    verified(model) &&
+    observationFresh(observation, role, category, now) &&
+    observation?.value.model_verified &&
+    observation.value.model_id === model.id;
   const unavailable =
     session.user.role !== 'OWNER'
-      ? 'Numai proprietarul cu MFA recent poate solicita o analiză.'
-      : !status?.configured
-        ? 'Gateway-ul AI nu este configurat sau starea lui nu poate fi citită.'
-        : !verifiedModel
-          ? 'Rolul nu are un model verificat și atribuit.'
-          : status.worker_state !== 'OBSERVED_RECENTLY'
-            ? 'Worker-ul nu a fost observat recent.'
-            : '';
-  const consentMissing = cloud && (!allowRemote || !cloudCost);
+      ? 'Numai proprietarul autentificat poate solicita o analiză.'
+      : inferenceUnavailable(observation, role, category, now) ||
+        (contextWindow === null
+          ? 'Capacitatea verificată a modelului nu este disponibilă. Reîncarcă registrul sau verifică modelul în Setări.'
+          : null);
+  const draft: Submission = {
+    schema_version: 1,
+    key: 'preview-no-reservation',
+    question,
+    role,
+    context_mode: contextMode,
+    references: reference
+      ? [{ kind: referenceKind, id: reference }]
+      : [{ kind: 'documentation', id: workspace ? 'strategy-lab-v1' : 'research-limits-v1' }],
+    parameters: {
+      context_tokens: contextWindow ?? 1024,
+      output_tokens: 768,
+      temperature: 0,
+      top_p: 1,
+      reasoning: 'DEFAULT',
+      max_seconds: 90,
+    },
+    standing_authorization_id: observation?.value.standing_authorization_id ?? null,
+    allow_fallback: allowFallback,
+  };
+  const contextPreview = useContextPreview(
+    question.trim().length >= 3 && !unavailable ? (frozen.current ?? draft) : null,
+    session.csrf_token,
+  );
   const canSubmit =
-    !busy && !loading && !unavailable && !consentMissing && ack && question.trim().length >= 3;
+    !busy && !loading && !unavailable && question.trim().length >= 3 && question.length <= 4000;
 
   function newAnalysis() {
     setShowNew(true);
     setPreview(null);
-    navigate('/testeaza/ai');
+    navigate(analysisHome);
   }
 
   function selectAnalysis(id: string) {
     setShowNew(false);
-    navigate('/testeaza/ai/' + encodeURIComponent(id));
+    navigate(analysisPath(id));
   }
 
   function criticDraft(job: Job) {
@@ -245,9 +305,6 @@ export default function AIChat({ session }: { session: Session }) {
     setReferenceKind('ai_artifact');
     setReference(job.id);
     setQuestion('Identifică afirmațiile nesusținute și dovezile lipsă din această propunere.');
-    setAck(false);
-    setAllowRemote(false);
-    setCloudCost(false);
     frozen.current = null;
     newAnalysis();
   }
@@ -256,28 +313,7 @@ export default function AIChat({ session }: { session: Session }) {
     event.preventDefault();
     if (!canSubmit) return;
     if (!frozen.current) {
-      frozen.current = {
-        schema_version: 1,
-        key: crypto.randomUUID().replaceAll('-', ''),
-        question,
-        role,
-        references: reference
-          ? [{ kind: referenceKind, id: reference }]
-          : [{ kind: 'documentation', id: 'research-limits-v1' }],
-        parameters: {
-          context_tokens: 4096,
-          output_tokens: 768,
-          temperature: 0,
-          top_p: 1,
-          reasoning: 'DEFAULT',
-          max_seconds: 90,
-        },
-        allow_remote: allowRemote,
-        cloud_cost_acknowledged: cloudCost,
-        allow_fallback: allowFallback,
-        processing_acknowledged: true,
-        retain_structured_output: true,
-      };
+      frozen.current = { ...draft, key: crypto.randomUUID().replaceAll('-', '') };
     }
     const submission = frozen.current;
     setBusy(true);
@@ -291,26 +327,31 @@ export default function AIChat({ session }: { session: Session }) {
       setJobs((previous) => [result, ...previous.filter((job) => job.id !== result.id)]);
       setPreview({ id: result.id, question: submission.question });
       setShowNew(false);
-      navigate('/testeaza/ai/' + encodeURIComponent(result.id));
+      navigate(analysisPath(result.id));
       setQuestion('');
-      setAck(false);
-      setAllowRemote(false);
-      setCloudCost(false);
       frozen.current = null;
     } catch (reason) {
-      // Keep the same idempotency key: an unknown provider result must not be duplicated.
+      // Only deterministic pre-enqueue validation unlocks editing. Unknown outcomes keep the key.
+      frozen.current = afterSubmissionFailure(frozen.current, reason);
       setError(safeError(reason));
     } finally {
       setBusy(false);
+      refreshReadiness();
     }
   }
 
   return (
-    <div className="ai-chat" aria-label="AI Center">
+    <div
+      className={'ai-chat' + (workspace ? ' lab-assistant' : '')}
+      role="region"
+      aria-label={workspace ? 'Asistent AI Strategy Lab' : 'AI Center'}
+    >
       <header className="ai-chat-header">
         <div>
-          <span className="ai-chat-eyebrow">AI CENTER / RESEARCH WORKSPACE</span>
-          <h2>Analizează o idee cu AI</h2>
+          <span className="ai-chat-eyebrow">
+            {workspace ? 'IDEI · PLAN · CRITICĂ' : 'AI CENTER / RESEARCH WORKSPACE'}
+          </span>
+          <h2>{workspace ? 'Ce strategie vrei să cercetăm?' : 'Analizează o idee cu AI'}</h2>
           <p>Întreabă modelul, citește rezultatul și revizuiește dovezile într-un singur loc.</p>
         </div>
         <Link href="/setari/ai">
@@ -366,11 +407,22 @@ export default function AIChat({ session }: { session: Session }) {
               <strong>{verifiedModel ? model.name : 'Niciun model confirmat disponibil'}</strong>
               <small>
                 {cloud ? 'OpenRouter · procesare cloud' : 'Model privat / local'} · Worker:{' '}
-                {status?.worker_state === 'OBSERVED_RECENTLY' ? 'observat' : 'necunoscut'}
+                {workerObserved(observation, role, category, now)
+                  ? 'observat recent'
+                  : 'necunoscut'}
               </small>
             </span>
             <span className="ai-chat-safety">SIMULATED / DENY_ALL</span>
           </div>
+          {observation?.value.budget?.monthly_reserved_usd !== undefined && (
+            <p className="ai-chat-hint">
+              Rezervat conservator: {observation.value.budget.daily_reserved_usd} /{' '}
+              {observation.value.budget.daily_limit_usd} USD astăzi ·{' '}
+              {observation.value.budget.monthly_reserved_usd} /{' '}
+              {observation.value.budget.monthly_limit_usd} USD luna aceasta. Factura furnizorului
+              poate diferi; resetare UTC.
+            </p>
+          )}
           <div className="ai-chat-thread" aria-live="polite">
             {selected?.kind === 'INFER' ? (
               <>
@@ -384,7 +436,21 @@ export default function AIChat({ session }: { session: Session }) {
                 </div>
                 <div className="ai-chat-assistant-message">
                   {selected.output ? (
-                    <ResponseContent job={selected} onCritic={criticDraft} />
+                    <ResponseContent
+                      job={selected}
+                      onCritic={criticDraft}
+                      onTest={
+                        session.user.role === 'OWNER'
+                          ? (job) => {
+                              const idea = researchIdea(job);
+                              if (idea) {
+                                offerResearchIdea(session.user.id, idea);
+                                navigate('/testeaza/nou');
+                              }
+                            }
+                          : undefined
+                      }
+                    />
                   ) : (
                     <div className="ai-chat-result-state" role="status">
                       <BrainCircuit size={22} aria-hidden="true" />
@@ -462,7 +528,6 @@ export default function AIChat({ session }: { session: Session }) {
                 disabled={busy || !!frozen.current}
                 onChange={(event) => {
                   setRole(event.target.value as Role);
-                  setAck(false);
                   setAllowFallback(false);
                 }}
               >
@@ -474,6 +539,13 @@ export default function AIChat({ session }: { session: Session }) {
               </select>
             </div>
             <form onSubmit={(event) => void submit(event)}>
+              <ContextBudgetControl
+                mode={contextMode}
+                onChange={setContextMode}
+                disabled={busy || !!frozen.current}
+                ceiling={contextWindow}
+                preview={contextPreview}
+              />
               <label htmlFor="ai-chat-question" className="sr-only">
                 Întrebarea ta
               </label>
@@ -490,7 +562,7 @@ export default function AIChat({ session }: { session: Session }) {
                 onChange={(event) => setQuestion(event.target.value)}
               />
               <details className="ai-chat-options">
-                <summary>Context și permisiuni</summary>
+                <summary>Context și opțiuni</summary>
                 <div className="ai-chat-options-body">
                   <div className="ai-chat-reference">
                     <label htmlFor="ai-chat-ref-kind">Tip de referință</label>
@@ -519,24 +591,6 @@ export default function AIChat({ session }: { session: Session }) {
                   <label className="ai-chat-check">
                     <input
                       type="checkbox"
-                      checked={allowRemote}
-                      disabled={busy || !!frozen.current}
-                      onChange={(event) => setAllowRemote(event.target.checked)}
-                    />
-                    Permit procesarea pe infrastructura la distanță aprobată.
-                  </label>
-                  <label className="ai-chat-check">
-                    <input
-                      type="checkbox"
-                      checked={cloudCost}
-                      disabled={busy || !!frozen.current}
-                      onChange={(event) => setCloudCost(event.target.checked)}
-                    />
-                    Aprob costul unei solicitări OpenRouter în limita autorizată.
-                  </label>
-                  <label className="ai-chat-check">
-                    <input
-                      type="checkbox"
                       checked={allowFallback}
                       disabled={busy || !!frozen.current || cloud}
                       onChange={(event) => setAllowFallback(event.target.checked)}
@@ -546,25 +600,14 @@ export default function AIChat({ session }: { session: Session }) {
                 </div>
               </details>
               <div className="ai-chat-compose-bottom">
-                <label className="ai-chat-check ai-chat-ack">
-                  <input
-                    type="checkbox"
-                    checked={ack}
-                    disabled={busy}
-                    onChange={(event) => setAck(event.target.checked)}
-                  />
-                  Am dreptul să trimit acest context și accept procesarea temporară și păstrarea
-                  criptată, limitată, a răspunsului structurat.
-                </label>
+                <p>
+                  Autorizarea permanentă și limitele sunt verificate de server pentru fiecare
+                  solicitare.
+                </p>
                 <button type="submit" disabled={!canSubmit}>
                   <ArrowUp size={17} aria-hidden="true" /> Solicită analiza
                 </button>
               </div>
-              {cloud && consentMissing && (
-                <p className="ai-chat-hint">
-                  Pentru OpenRouter, aprobă separat procesarea la distanță și costul, din opțiuni.
-                </p>
-              )}
               {unavailable && (
                 <p className="ai-chat-hint" role="status">
                   {unavailable} <Link href="/setari/ai">Configurează modelul și rolurile</Link>.
@@ -588,7 +631,13 @@ export default function AIChat({ session }: { session: Session }) {
               {error && (
                 <p role="alert" className="ai-chat-error">
                   {error}{' '}
-                  <button type="button" onClick={() => void refresh()}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void refresh();
+                      refreshReadiness();
+                    }}
+                  >
                     Reîncarcă starea
                   </button>
                 </p>

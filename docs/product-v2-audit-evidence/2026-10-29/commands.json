@@ -1,0 +1,226 @@
+[
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_workspace_validation.py",
+      "-q"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 1.377,
+    "output": "red-workspace.txt",
+    "label": "red-workspace"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "test",
+      "--",
+      "src/management-api.test.ts"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 0.661,
+    "output": "red-client.txt",
+    "label": "red-client"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "test",
+      "--",
+      "src/product/workspace.test.tsx"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 0.792,
+    "output": "red-partial-job.txt",
+    "label": "red-partial-job"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_workspace_validation.py",
+      "-q"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.386,
+    "output": "unit-workspace.txt",
+    "label": "unit-workspace"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 20.503,
+    "output": "check-final-readers.txt",
+    "label": "check-final-readers"
+  },
+  {
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 541.538,
+    "output": "integration.txt",
+    "label": "integration"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.737,
+    "output": "contracts.txt",
+    "label": "contracts"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.314,
+    "output": "smoke.txt",
+    "label": "smoke"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.smoke_demo",
+      "--require-ready"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.277,
+    "output": "readiness.txt",
+    "label": "readiness"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-m",
+      "infrastructure",
+      "-q"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.766,
+    "output": "infrastructure.txt",
+    "label": "infrastructure"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.07,
+    "output": "repository.txt",
+    "label": "repository"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.07,
+    "output": "secrets.txt",
+    "label": "secrets"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.688,
+    "output": "collection.txt",
+    "label": "collection"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.022,
+    "output": "diff.txt",
+    "label": "diff"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 9.25,
+    "output": "build-local.txt",
+    "label": "build-local"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 22.364,
+    "output": "rollout.txt",
+    "label": "rollout"
+  }
+]

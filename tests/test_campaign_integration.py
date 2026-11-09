@@ -315,7 +315,12 @@ def test_two_real_bounded_training_iterations_retain_feedback_and_never_promote(
         assert submitted.status_code == 202, submitted.text
         research_work(market)
         for _ in range(3):
-            assert step(market)
+            assert step(market), {
+                "campaign": market.client.get(path).json(),
+                "experiment": market.client.get(
+                    "/api/v1/research/experiments/" + submitted.json()["experiment_id"]
+                ).json(),
+            }
         state = market.client.get(path).json()
         if iteration == 1:
             assert state["state"] == "READY_FOR_NEXT_ITERATION", market.client.get(
@@ -469,6 +474,17 @@ def test_campaign_cancellation_reaches_restricted_gateway_authority_without_gran
 ) -> None:
     # Measured synthetic HTTP transport, explicitly NOT a real-model acceptance test.
     ai.setup()
+    # AUTO tiers require16K for the assembled5039 bound. Freshly verify a real fixture version.
+    old = ai.owner.client.get("/api/v1/ai/models").json()[0]["id"]
+    ai.fixture.context_length = 32768
+    revised = ai.post(f"/models/{old}/context-revisions", {"context_ceiling": 32768})
+    assert revised.status_code == 201
+    model = revised.json()["id"]
+    probe = ai.finish(ai.job(f"/models/{model}/probe", {"key": uuid4().hex}))
+    assert probe["output"]["context_tokens"] == 32768
+    for role in ("RESEARCH", "CRITIC"):
+        assert ai.post("/routes", {"role": role, "model_id": model}).status_code == 201
+
     data = body(ai.owner, mode="AI_GATEWAY")
     row = create(ai.owner, data)
     authorize(ai.owner, row)

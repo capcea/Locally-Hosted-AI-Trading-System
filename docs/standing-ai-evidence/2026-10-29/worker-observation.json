@@ -1,0 +1,11 @@
+{
+  "state": "EXITED",
+  "exit_code": 1,
+  "codes": [],
+  "exception_classes": [
+    "psycopg.OperationalError",
+    "sqlalchemy.exc.OperationalError"
+  ],
+  "restarted": false,
+  "provider_requests_issued_by_agent": 0
+}

@@ -305,3 +305,52 @@ repeated restricted-identity checks; policy/financial logic is untouched. Only t
 recreated and its local health is verified. See [RISK_MONITOR_RECOVERY_REPORT.md](RISK_MONITOR_RECOVERY_REPORT.md)
 for the real connection-loss regression, exact results and preserved-volume evidence. No provider
 call or cloud-consent change was made by this repair.
+
+## Model verification button explanation — 2026-10-29
+
+The disabled OpenRouter probe is gated by separate cost consent, not automatically authorized by
+a saved API key. V1 grid ordering had separated that checkbox from the model action. The checkbox
+now accompanies each model, with a visible disabled reason and consent cleared on submission.
+The backend approval/MFA/budget checks are unchanged; no provider call was made. Native195 frontend /
+294 Python cases pass through separate type/test/build; full `make check` retains five unrelated,
+pre-existing cockpit/App formatting failures. Browser execution and static Web update remain open.
+See [the focused repair report](MODEL_PROBE_UX_FIX_REPORT.md) for evidence and limitations.
+
+## Provider refusal diagnostics — 2026-10-29
+
+The owner's generic refusal and empty selected Activity window do not establish the original
+HTTP status or stage. New failures preserve only an allowlisted numeric status and constant stage
+in durable worker events/scoped metadata, with Romanian UI guidance. No old error was rewritten,
+provider policy relaxed or paid probe replayed. Native check314 Python/203 frontend, focused40/25,
+actual disposable cloud9+9, contracts and smoke pass. Targeted API/ai-worker/Web deployment includes
+the preceding per-model consent UX; browser/real inference acceptance remains open. Read
+[the diagnostics report](OPENROUTER_DIAGNOSTICS_REPORT.md) for source and operational evidence.
+
+## Generation404 and approved ZDR provider — 2026-10-29
+
+The owner's observed COMPLETION404 is now narrowed by its confirmed upstream=openai and actual
+public ZDR metadata for gpt-4.1-mini: only azure tags are listed in that preview. The adapter checks
+this intersection before completion, preserves all privacy/price/provider constraints, and supports
+the declared max_completion_tokens alias without increasing its value. No provider was switched or
+paid probe submitted. Native324 Python/204 frontend and cloud11+11 pass. Read
+[the routing report](OPENROUTER_ZDR_ROUTING_FIX_REPORT.md); real-model acceptance still requires an
+owner-reviewed compatible provider authorization and measured generation.
+
+
+## Follow-up: truthful cloud authorization form — 2026-10-29
+
+The reported disappearing provider value was supported by a frontend display defect: saved
+provider/caps were not populated into the review form. Exact saved values, a visible authoritative
+provider summary and post-save ID/value readback confirmation are now implemented. The backend
+persistence pathway passes actual disposable-service revision/idempotency checks; no production
+authorization or key was altered. See [the form repair report](OPENROUTER_AUTHORIZATION_FORM_FIX_REPORT.md).
+
+
+## Standing scoped owner consent — 2026-10-29
+
+Per-request consent can now be replaced by an explicitly activated, persistent OWNER/MFA grant.
+It pins the reviewed OpenRouter policy/destination and retains conservative Decimal budgets,
+including monthly limits and atomic reservations. No existing cloud authorization/key is silently
+converted, and revocation cannot be bypassed with legacy inference flags. See
+[the standing-authorization report](AI_STANDING_AUTHORIZATION_REPORT.md). Current AI worker startup
+and managed browser acceptance remain separate operational gates.

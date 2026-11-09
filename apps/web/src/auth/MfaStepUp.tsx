@@ -102,5 +102,7 @@ function Challenge() {
 
 export function MfaStepUp() {
   const { session, stepUpOpen } = useAuth();
-  return stepUpOpen && session?.state === 'FULL' ? <Challenge key={session.session_id} /> : null;
+  return stepUpOpen && session?.state === 'FULL' && session.auth_mode !== 'PASSWORD' ? (
+    <Challenge key={session.session_id} />
+  ) : null;
 }

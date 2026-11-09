@@ -1,0 +1,224 @@
+{
+  "recreated": [
+    "/ai-trading-research-ai-worker-1",
+    "/ai-trading-research-web-1"
+  ],
+  "other_container_ids_unchanged": true,
+  "development_named_volume_mounts_unchanged": true,
+  "before": [
+    {
+      "name": "/ai-trading-research-ai-egress-1",
+      "id": "530b8a3d338ad55bc04c767d7a7e631b5645049f02035c623ca701788d3ca3d4",
+      "state": "running",
+      "health": null,
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-ai-redis-1",
+      "id": "7d7e1e92aac8dfef69bde7329a5707936a55589b5edc88ffe974d8f9ece7e073",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-ai-worker-1",
+      "id": "c28e61019b38f1e4086dd40927c86921725751ddbcd177f401dd02f14ce48c37",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-api-1",
+      "id": "1826eaa6b9e84aff1ed9c2b3a5c8546388a0ac574ff333fd854e2223e6db0300",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-campaign-worker-1",
+      "id": "11a54af212df37529aaa1862328638edf3176a34c74ace9a56e181ff0f15996d",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-market-worker-1",
+      "id": "68d80f059677ba7c137ca157395d67a410fbb7bbf9b4a51cc2f19b4cc9fe57ed",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-migrate-1",
+      "id": "c26ba4639a462bd3c21f8564a885fea010dc73a478bcad59853a163823afdc57",
+      "state": "exited",
+      "health": null,
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-minio-1",
+      "id": "8f0692f0549f2c3035f54132453c6de383d73c6cc73348bf452bb5d737383835",
+      "state": "running",
+      "health": "healthy",
+      "mounts": [
+        {
+          "name": "ai-trading-research_object_data",
+          "destination": "/data"
+        }
+      ]
+    },
+    {
+      "name": "/ai-trading-research-postgres-1",
+      "id": "c8069cdf945e12d5f01c1e852e05e3113ba069dd30b5530ea967a614ff489d7d",
+      "state": "running",
+      "health": "healthy",
+      "mounts": [
+        {
+          "name": "ai-trading-research_postgres_data",
+          "destination": "/var/lib/postgresql/data"
+        }
+      ]
+    },
+    {
+      "name": "/ai-trading-research-redis-1",
+      "id": "e4470e8bf2d6cfe2c7894f7f219cf6a8dc29e9753faf0ac10179d412a967937e",
+      "state": "running",
+      "health": "healthy",
+      "mounts": [
+        {
+          "name": "ai-trading-research_redis_data",
+          "destination": "/data"
+        }
+      ]
+    },
+    {
+      "name": "/ai-trading-research-research-worker-1",
+      "id": "c9320d68f06a3256f466a990aae3cf8b52d824c3bf9fd315f72a65ceda64e071",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-risk-monitor-1",
+      "id": "c2371912606b1811656e4023c4b30bcb61083cd34519310a9f5396afd1fdb717",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-web-1",
+      "id": "267ff7898d75af433db06c9ae2cc9593e66bb5a86dea84c524b4054dff49789c",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    }
+  ],
+  "after": [
+    {
+      "name": "/ai-trading-research-ai-egress-1",
+      "id": "530b8a3d338ad55bc04c767d7a7e631b5645049f02035c623ca701788d3ca3d4",
+      "state": "running",
+      "health": null,
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-ai-redis-1",
+      "id": "7d7e1e92aac8dfef69bde7329a5707936a55589b5edc88ffe974d8f9ece7e073",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-ai-worker-1",
+      "id": "ec10c098f1b35e8310c66514cf0cb3d9397accf8579e94ed6389fe8867457bd5",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-api-1",
+      "id": "1826eaa6b9e84aff1ed9c2b3a5c8546388a0ac574ff333fd854e2223e6db0300",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-campaign-worker-1",
+      "id": "11a54af212df37529aaa1862328638edf3176a34c74ace9a56e181ff0f15996d",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-market-worker-1",
+      "id": "68d80f059677ba7c137ca157395d67a410fbb7bbf9b4a51cc2f19b4cc9fe57ed",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-migrate-1",
+      "id": "c26ba4639a462bd3c21f8564a885fea010dc73a478bcad59853a163823afdc57",
+      "state": "exited",
+      "health": null,
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-minio-1",
+      "id": "8f0692f0549f2c3035f54132453c6de383d73c6cc73348bf452bb5d737383835",
+      "state": "running",
+      "health": "healthy",
+      "mounts": [
+        {
+          "name": "ai-trading-research_object_data",
+          "destination": "/data"
+        }
+      ]
+    },
+    {
+      "name": "/ai-trading-research-postgres-1",
+      "id": "c8069cdf945e12d5f01c1e852e05e3113ba069dd30b5530ea967a614ff489d7d",
+      "state": "running",
+      "health": "healthy",
+      "mounts": [
+        {
+          "name": "ai-trading-research_postgres_data",
+          "destination": "/var/lib/postgresql/data"
+        }
+      ]
+    },
+    {
+      "name": "/ai-trading-research-redis-1",
+      "id": "e4470e8bf2d6cfe2c7894f7f219cf6a8dc29e9753faf0ac10179d412a967937e",
+      "state": "running",
+      "health": "healthy",
+      "mounts": [
+        {
+          "name": "ai-trading-research_redis_data",
+          "destination": "/data"
+        }
+      ]
+    },
+    {
+      "name": "/ai-trading-research-research-worker-1",
+      "id": "c9320d68f06a3256f466a990aae3cf8b52d824c3bf9fd315f72a65ceda64e071",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-risk-monitor-1",
+      "id": "c2371912606b1811656e4023c4b30bcb61083cd34519310a9f5396afd1fdb717",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    },
+    {
+      "name": "/ai-trading-research-web-1",
+      "id": "f7278499a9ffeedabc8d4dc18542306d4d744b0a8bf5ec1418f5317b705b98f0",
+      "state": "running",
+      "health": "healthy",
+      "mounts": []
+    }
+  ]
+}

@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     auth_encryption_key: SecretStr | None = None
     auth_database_password: SecretStr | None = None
     auth_bootstrap_token: SecretStr | None = None
+    auth_mode: Literal["PASSWORD", "TOTP"] = "PASSWORD"
     auth_cookie_secure: bool = True
     auth_origins: list[str] = ["http://127.0.0.1:5173", "http://localhost:5173"]
     session_lifetime_seconds: int = Field(default=28800, ge=60, le=86400)

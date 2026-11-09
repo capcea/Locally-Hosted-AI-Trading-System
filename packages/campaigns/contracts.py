@@ -204,11 +204,12 @@ class CampaignAction(CampaignContract):
 
 
 class GatewayAction(CampaignContract):
+    standing_authorization_id: UUID | None = None
     cloud_cost_acknowledged: bool = Field(default=False, strict=True)
     role: Literal["RESEARCH", "CRITIC"]
     allow_remote: bool = False
-    processing_acknowledged: Literal[True]
-    retain_structured_output: Literal[True]
+    processing_acknowledged: bool = Field(default=False, strict=True)
+    retain_structured_output: bool = Field(default=False, strict=True)
 
 
 class PlanReview(CampaignContract):

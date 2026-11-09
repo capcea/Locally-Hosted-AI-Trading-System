@@ -1,0 +1,20 @@
+Pre-edit inventory: 1488 files
+Missing original files: 0
+Unchanged accepted PNG goldens: 4
+Unchanged risk/execution/market/research/identity source paths: 45
+
+Modified existing files:
+apps/api/workspace/routes.py
+apps/web/src/product/Workspace.tsx
+apps/web/src/product/workspace.test.tsx
+tests/test_workspace_integration.py
+IMPLEMENTATION_STATUS.md
+apps/web/src/StrategyLab.tsx
+apps/web/src/cockpit/CockpitPage.tsx
+apps/web/src/home/HomePage.tsx
+apps/web/src/management-api.test.ts
+apps/web/src/management-api.ts
+apps/web/src/v1/ResearchViews.tsx
+apps/web/src/v1/data.ts
+apps/web/src/v1/redesign.test.tsx
+docs/IMPLEMENTATION_STATUS.md

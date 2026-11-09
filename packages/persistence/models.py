@@ -58,6 +58,7 @@ class User(Base):
 class LoginSession(Base):
     __tablename__ = "login_sessions"
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    auth_policy: Mapped[str] = mapped_column(String(16), default="PASSWORD")
     token_hash: Mapped[str] = mapped_column(String(64), unique=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
     state: Mapped[str] = mapped_column(String(16))

@@ -28,6 +28,11 @@ class ContextScope:
 
 
 DOCUMENTS = {
+    "strategy-lab-v1": (
+        "Propose testable hypotheses for the reviewed baselines. Explain rules, costs, "
+        "missing evidence and limits. New logic is not executable; choosing a baseline "
+        "does not implement a new idea. Never invent data or permissions."
+    ),
     "research-limits-v1": (
         "Stored historical simulation results describe only their pinned data, costs and protocol. "
         "In-sample, subsequent OOS and the separately protected final holdout are different. "
@@ -115,6 +120,14 @@ def assemble(
             if reference.id not in DOCUMENTS:
                 raise HTTPException(404, "AI_CONTEXT_NOT_AVAILABLE")
             item.update({"source": "REVIEWED_DOCUMENTATION", "summary": DOCUMENTS[reference.id]})
+            if reference.id == "strategy-lab-v1":
+                # Discovery needs IDs/versions, not eight long hashes and duplicate rule prose.
+                # Pin the complete current registry so the compact context still changes with it.
+                definitions = [definition(name) for name in NAMES]
+                item["reviewed_baselines"] = [
+                    {k: current[k] for k in ("id", "version")} for current in definitions
+                ]
+                item["registry_sha256"] = digest(definitions)
         else:
             try:
                 identifier = UUID(reference.id)

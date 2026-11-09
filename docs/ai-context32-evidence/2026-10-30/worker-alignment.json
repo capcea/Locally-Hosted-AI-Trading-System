@@ -1,0 +1,10 @@
+{
+  "running_worker_matches_pretask_manifest": true,
+  "running_worker_matches_current_source": false,
+  "changed_current_manifest_paths": [
+    "packages/ai/contracts.py",
+    "packages/ai/models.py",
+    "packages/ai/providers.py",
+    "packages/ai/settings.py"
+  ]
+}

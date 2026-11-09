@@ -9,33 +9,11 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
   test.setTimeout(240000);
   const captures = process.env.E2E_V1_CAPTURES === '1';
   const folder = resolve(process.cwd(), '../../.cache/redesign-v1-captures');
+  const { account } = await seedRiskFixture(page, info.project.name === 'mobile');
   if (captures) {
     expect(process.env.E2E_PHASE1_ISOLATED).toBe('1');
     await mkdir(folder, { recursive: true });
-    // Public candidates use the project's original viewport, separate from authenticated layouts.
-    // These are review candidates only; no accepted reference is copied or rewritten.
-    await page.goto('/');
-    for (const theme of ['light', 'dark']) {
-      await page.evaluate((value) => localStorage.setItem('research-theme', value), theme);
-      await page.reload();
-      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-      await expect(page.locator('time[data-visual-clock]')).toBeVisible();
-      await expect(
-        page.locator('input[type=password],.enrollment-secret,.recovery-codes'),
-      ).toHaveCount(0);
-      await page.evaluate(() => document.fonts.ready);
-      await page.screenshot({
-        path: resolve(
-          folder,
-          `PUBLIC-REVIEW-home-${theme}-${info.project.name}-${process.platform}.png`,
-        ),
-        fullPage: true,
-        animations: 'disabled',
-        mask: [page.locator('time[data-visual-clock]')],
-      });
-    }
   }
-  const { account } = await seedRiskFixture(page, info.project.name === 'mobile');
   const library = await page.request.get('/api/v1/research/strategies');
   expect(library.status()).toBe(200);
   const definitions: { id: string }[] = await library.json();
@@ -78,7 +56,7 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
   await expect(globalSearch.getByRole('textbox')).toBeFocused();
 
   const screens = [
-    ['home', '/', 'Acasă'],
+    ['home', '/', 'Trading Dashboard'],
     ['strategii', '/testeaza/strategii', 'Strategii'],
     ['backtesting', '/testeaza/nou', 'Backtesting'],
     ['experimente', '/testeaza/activitate', 'Experimente'],
@@ -116,22 +94,25 @@ test('approved V1 nine screens retain real setup, scoped search, navigation and 
             await expect(
               page.getByRole('button', { name: 'Solicită analiza', exact: true }),
             ).toBeDisabled();
-          if (name === 'home' && viewport.width >= 1280) {
-            const status = page.locator('.v1-kpi-value[data-kind="status"]');
-            // UNKNOWN is a safety state, not an oversized financial metric split across lines.
-            expect(
-              await status.evaluate((element) => {
-                const line = Number.parseFloat(getComputedStyle(element).lineHeight);
-                return element.getBoundingClientRect().height <= line + 1;
-              }),
-            ).toBe(true);
-            const performance = await page.locator('.v1-home-performance').boundingBox();
-            const recent = await page.locator('.v1-home-recent').boundingBox();
-            expect(performance).not.toBeNull();
-            expect(recent).not.toBeNull();
-            // The AI card must not stretch the chart or push the recent table down its full height.
-            expect(recent!.y - performance!.y - performance!.height).toBeGreaterThanOrEqual(0);
-            expect(recent!.y - performance!.y - performance!.height).toBeLessThanOrEqual(16);
+          if (name === 'home') {
+            // Product V2 replaces the old decorative Home grid with account-specific statistics.
+            await page
+              .getByLabel('Contul pentru trading', { exact: true })
+              .selectOption(account.id);
+            const metrics = page.getByRole('region', {
+              name: 'Statistici ale contului simulat',
+              exact: true,
+            });
+            await expect(metrics.locator('.panel')).toHaveCount(4);
+            await expect(
+              page.getByRole('region', { name: 'Ce face AI-ul acum', exact: true }),
+            ).toBeVisible();
+            await expect(page.getByLabel('Contul pentru trading', { exact: true })).toHaveValue(
+              account.id,
+            );
+            await expect(
+              page.getByRole('button', { name: 'Pornește simularea istorică', exact: true }),
+            ).toBeDisabled();
           }
           if (name === 'conturi')
             for (const label of [

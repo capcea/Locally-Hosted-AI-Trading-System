@@ -186,21 +186,22 @@ export function ExperimentStats({ jobs, available }: { jobs: ResearchJob[]; avai
         },
         {
           label: 'În lucru',
-          value: jobs.filter((j) => ['RUNNING', 'RETRY'].includes(j.job.state)).length,
+          value: jobs.filter((j) => ['RUNNING', 'RETRY'].includes(j.job?.state ?? 'UNKNOWN'))
+            .length,
           help: 'Stare raportată de server',
           icon: Clock,
           tone: 'violet' as const,
         },
         {
           label: 'În așteptare',
-          value: jobs.filter((j) => j.job.state === 'QUEUED').length,
+          value: jobs.filter((j) => j.job?.state === 'QUEUED').length,
           help: 'Fără timp de finalizare estimat',
           icon: Clock,
           tone: 'amber' as const,
         },
         {
           label: 'Finalizate',
-          value: jobs.filter((j) => j.job.state === 'SUCCEEDED').length,
+          value: jobs.filter((j) => j.job?.state === 'SUCCEEDED').length,
           help: 'Anularea cerută nu înseamnă anulare confirmată',
           icon: ShieldCheck,
           tone: 'green' as const,
@@ -262,7 +263,7 @@ export function BacktestReview({
 
 export function ResultsOverview({ jobs, failed }: { jobs: ResearchJob[]; failed: boolean }) {
   const [chosen, setChosen] = useState('');
-  const complete = jobs.filter((j) => j.job.state === 'SUCCEEDED');
+  const complete = jobs.filter((j) => j.job?.state === 'SUCCEEDED');
   const selected = complete.find((j) => j.id === chosen) ?? complete[0];
   return (
     <section className="panel v1-results-landing" aria-label="Rezultate stocate selectate">

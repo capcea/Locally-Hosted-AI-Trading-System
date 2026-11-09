@@ -19,7 +19,9 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from urllib3.exceptions import HTTPError as StorageHTTPError
 
 from apps.api.ai.cloud_routes import router as ai_cloud_router
+from apps.api.ai.limits import AIJSONLimit
 from apps.api.ai.routes import router as ai_router
+from apps.api.ai.standing_routes import router as ai_standing_router
 from apps.api.campaigns.routes import router as campaign_router
 from apps.api.catalog import PLANNED_SERVICES, ROADMAP
 from apps.api.config import Settings
@@ -32,6 +34,7 @@ from apps.api.market.limits import ImportLimit
 from apps.api.market.routes import router as market_router
 from apps.api.research.routes import router as research_router
 from apps.api.risk.routes import router as risk_router
+from apps.api.workspace.routes import router as workspace_router
 from packages.ai.settings import GatewaySettings
 from packages.domain.contracts import (
     Overview,
@@ -102,6 +105,8 @@ def create_app(
     app.include_router(research_router)
     app.include_router(ai_router)
     app.include_router(ai_cloud_router)
+    app.include_router(ai_standing_router)
+    app.include_router(workspace_router)
     app.include_router(campaign_router)
     allowed_hosts = ["127.0.0.1", "localhost", "api", "web"]
     if config.app_environment == "test":
@@ -109,6 +114,7 @@ def create_app(
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts, www_redirect=False)
     app.add_middleware(ImportLimit, max_bytes=config.market_upload_bytes + 250000)
     app.add_middleware(ExecutionLimit)
+    app.add_middleware(AIJSONLimit)
 
     @app.middleware("http")
     async def secure_response(

@@ -4,12 +4,40 @@ export type SectionItem = { href: string; label: string; description?: string };
 
 export const settingsGroups = [
   {
+    title: 'Conturi și tranzacționare',
+    items: [
+      {
+        href: '/conturi',
+        label: 'Conturile mele',
+        description:
+          'Adaugă și verifică fiecare cont. Capitalul introdus este de simulare, nu un sold broker verificat.',
+      },
+      {
+        href: '/conturi/siguranta',
+        label: 'Limite și oprire',
+        description:
+          'Configurează limitele aplicate și oprește intrările simulate. Închiderea pozițiilor este o acțiune separată.',
+      },
+      {
+        href: '/conturi/conexiuni',
+        label: 'Conexiuni broker',
+        description:
+          'Configurează adaptorul și citește observațiile disponibile. Ordinele externe rămân blocate.',
+      },
+      {
+        href: '/conturi/documente',
+        label: 'Regulile conturilor',
+        description: 'Documente și verificări pentru programul exact al fiecărui cont.',
+      },
+    ],
+  },
+  {
     title: 'Cont și acces',
     items: [
       {
         href: '/setari/securitate',
-        label: 'Securitate și MFA',
-        description: 'Parolă, autentificare în doi pași și sesiuni.',
+        label: 'Parolă și sesiuni',
+        description: 'Schimbă parola și gestionează sesiunile. Codurile MFA nu sunt necesare.',
       },
       {
         href: '/setari/utilizatori',
@@ -102,6 +130,7 @@ export const sectionItems: Partial<Record<Area, SectionItem[]>> = {
 
 /** Visual location only; authorization remains in the authenticated modules and API. */
 export function activeSection(route: Route): string | undefined {
+  if (route.screen === 'lab') return '/strategy-lab';
   if (route.canonicalPath)
     return activeSection({ ...route, path: route.canonicalPath, canonicalPath: undefined });
   if (route.screen === 'ai') return route.area === 'settings' ? '/setari/ai' : '/testeaza/ai';
@@ -137,5 +166,5 @@ export const areaDescriptions: Record<Area, string> = {
   results: 'Înțelege rezultatele simulate și limitele lor.',
   accounts: 'Conturi de simulare, limite și verificări de siguranță.',
   settings: 'Configurează accesul, sursele de date și platforma.',
-  auth: 'Acces protejat prin parolă și autentificare în doi pași.',
+  auth: 'Acces protejat prin parolă și sesiune.',
 };

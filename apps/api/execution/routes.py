@@ -1,4 +1,4 @@
-"""Synthetic commands never dispatch to external adapters. Owner MFA scopes every operation."""
+"""Synthetic-only commands; owner session authorization scopes every operation."""
 
 from datetime import timedelta
 from typing import Any
@@ -22,7 +22,7 @@ from apps.api.identity.dependencies import (
     FullIdentity,
     Principal,
     require_owner,
-    require_recent_mfa,
+    require_sensitive_session,
 )
 from apps.api.market.query_slots import QuerySlot
 from apps.api.market.routes import dataset_for, object_store
@@ -100,7 +100,7 @@ def connection_view(runtime: BrokerRuntime, metadata: BrokerConnection) -> Conne
 def configure_connection(body: ConnectionInput, identity: FullIdentity) -> ConnectionView:
     writable(identity)
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     metadata = owned(identity, BrokerConnection, body.broker_connection_id)
     if not isinstance(metadata, BrokerConnection):
         raise HTTPException(404, "Broker metadata missing")
@@ -154,7 +154,7 @@ def observe(
 ) -> dict[str, object]:
     writable(identity)
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     runtime, metadata = connection_for(identity, connection_id)
     snapshot = body.snapshot
     if (

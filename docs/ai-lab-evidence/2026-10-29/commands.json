@@ -1,0 +1,216 @@
+[
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 17.801,
+    "output": "final-check.txt",
+    "label": "final-check"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 73.636,
+    "output": "services.txt",
+    "label": "services"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.386,
+    "output": "contracts.txt",
+    "label": "contracts"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.209,
+    "output": "smoke.txt",
+    "label": "smoke"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.685,
+    "output": "collection.txt",
+    "label": "collection"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.995,
+    "output": "build-local.txt",
+    "label": "build-local"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 22.337,
+    "output": "rollout.txt",
+    "label": "rollout"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.03,
+    "output": "build-web-final.txt",
+    "label": "build-web-final"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.201,
+    "output": "rollout-web-final.txt",
+    "label": "rollout-web-final"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.smoke_demo",
+      "--require-ready"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.28,
+    "output": "readiness.txt",
+    "label": "readiness"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.85,
+    "output": "secrets.txt",
+    "label": "secrets"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.07,
+    "output": "repository.txt",
+    "label": "repository"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.029,
+    "output": "diff.txt",
+    "label": "diff"
+  }
+]

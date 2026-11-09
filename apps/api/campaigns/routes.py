@@ -488,17 +488,14 @@ def gateway(
             key=f"campaign-{row.id.hex}-{runtime.iteration}-{body.role}",
             question=question,
             role=body.role,
-            parameters=Generation(
-                context_tokens=min(
-                    8192,
-                    approval["gateway_roles"][body.role]["model"]["capabilities"]["context_tokens"],
-                )
-            ),
+            context_mode="AUTO",
+            parameters=Generation(),
             references=refs,
             allow_remote=body.allow_remote,
             cloud_cost_acknowledged=body.cloud_cost_acknowledged,
-            processing_acknowledged=True,
-            retain_structured_output=True,
+            standing_authorization_id=body.standing_authorization_id,
+            processing_acknowledged=body.processing_acknowledged,
+            retain_structured_output=body.retain_structured_output,
         ),
         identity,
         request,

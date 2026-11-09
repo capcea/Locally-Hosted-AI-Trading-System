@@ -2,7 +2,15 @@ import { api } from '../management-api';
 import type { components } from '../generated/api';
 
 export type Job = components['schemas']['AIJobView'];
-export type Submission = components['schemas']['RequestInput'];
+type RequestContract = components['schemas']['RequestInput'];
+type LegacyConsent =
+  | 'cloud_cost_acknowledged'
+  | 'allow_remote'
+  | 'processing_acknowledged'
+  | 'retain_structured_output';
+// OpenAPI's generator marks fields with defaults as non-nullable; these four are optional on input.
+export type Submission = Omit<RequestContract, LegacyConsent> &
+  Partial<Pick<RequestContract, LegacyConsent>>;
 export type Role = Submission['role'];
 export type Model = {
   id: string;
@@ -29,6 +37,7 @@ export type Connection = {
   enabled: boolean;
   name: string;
   provider?: string;
+  endpoint_id?: string;
   credential_configured?: boolean;
 };
 export const roles: Role[] = ['RESEARCH', 'CODING', 'CRITIC', 'LIGHTWEIGHT'];

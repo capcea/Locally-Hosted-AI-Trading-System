@@ -1,0 +1,151 @@
+{
+  "changed_containers": [
+    "api",
+    "web"
+  ],
+  "named_volumes_unchanged": true,
+  "database_container_unchanged": true,
+  "worker_containers_unchanged": true,
+  "services": {
+    "web": {
+      "id": "35e450791fc5fec4f6036111388d5bb264509e939966a57d0cdcbafcfe80581a",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "api": {
+      "id": "acc5f0ae6559a6b66f3685d020fad3d59489c1540d3c8e1407d3c10ae0314ea3",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "market-worker": {
+      "id": "bb9709b5fdb62a914a6946644429f2b75b2a2494a4561b9a8a63b3b3c10a6fc0",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "research-worker": {
+      "id": "ec1d84b3493b624886554047bb9b740c31f7ea461fb7a7216fe6b60e69c94bf1",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "postgres": {
+      "id": "59efdfee6f0f7a6834a632f55018db2155749566e2258033d748c249cdf2a9e2",
+      "state": "running",
+      "health": "healthy",
+      "volumes": [
+        "ai-trading-research_postgres_data"
+      ]
+    },
+    "ai-worker": {
+      "id": "61b526c717160c0da281c24481141f6b5d4d2273a61443aa7f277cb52f36cfa9",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "ai-egress": {
+      "id": "a8489d3b8ec2479102f1d6205effd7be0fac83b6bd6cb4579a5e5107974abe58",
+      "state": "running",
+      "health": null,
+      "volumes": []
+    },
+    "migrate": {
+      "id": "6d3f47349a2626207da39cc71b32a2a5dccd225b38b011ae069a74954573efcf",
+      "state": "exited",
+      "health": null,
+      "volumes": []
+    },
+    "campaign-worker": {
+      "id": "11a54af212df37529aaa1862328638edf3176a34c74ace9a56e181ff0f15996d",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "risk-monitor": {
+      "id": "c2371912606b1811656e4023c4b30bcb61083cd34519310a9f5396afd1fdb717",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "ai-redis": {
+      "id": "7d7e1e92aac8dfef69bde7329a5707936a55589b5edc88ffe974d8f9ece7e073",
+      "state": "running",
+      "health": "healthy",
+      "volumes": []
+    },
+    "redis": {
+      "id": "e4470e8bf2d6cfe2c7894f7f219cf6a8dc29e9753faf0ac10179d412a967937e",
+      "state": "running",
+      "health": "healthy",
+      "volumes": [
+        "ai-trading-research_redis_data"
+      ]
+    },
+    "minio": {
+      "id": "8f0692f0549f2c3035f54132453c6de383d73c6cc73348bf452bb5d737383835",
+      "state": "running",
+      "health": "healthy",
+      "volumes": [
+        "ai-trading-research_object_data"
+      ]
+    }
+  },
+  "checks": {
+    "/health/ready": {
+      "status": 200,
+      "payload": [
+        {
+          "id": "postgres",
+          "name": "PostgreSQL",
+          "status": "HEALTHY",
+          "detail": "Verificare direct\u0103 reu\u0219it\u0103.",
+          "latency_ms": 16
+        },
+        {
+          "id": "redis",
+          "name": "Redis",
+          "status": "HEALTHY",
+          "detail": "Verificare direct\u0103 reu\u0219it\u0103.",
+          "latency_ms": 17
+        },
+        {
+          "id": "storage",
+          "name": "Stocare obiecte",
+          "status": "HEALTHY",
+          "detail": "Verificare direct\u0103 reu\u0219it\u0103.",
+          "latency_ms": 18
+        }
+      ]
+    },
+    "/api/v1/auth/status": {
+      "status": 200,
+      "payload": {
+        "auth_mode": "PASSWORD",
+        "initialized": true,
+        "setup_available": false
+      }
+    },
+    "/api/v1/safety": {
+      "status": 200,
+      "payload": {
+        "mode": "SIMULATED",
+        "live_trading_enabled": false,
+        "order_submission_enabled": false,
+        "executor_capability": "DENY_ALL",
+        "generated_code_execution": false,
+        "read_only": true,
+        "reasons": [
+          "LIVE_EXECUTION_NOT_IMPLEMENTED",
+          "LIVE_APPROVAL_NOT_IMPLEMENTED",
+          "BROKER_ADAPTERS_NOT_CONNECTED",
+          "POLICY_PACKS_UNVERIFIED"
+        ]
+      }
+    }
+  },
+  "served_html_matches_native_build": true,
+  "web_status": 200,
+  "browser_execution": false
+}

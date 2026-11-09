@@ -1,0 +1,25 @@
+{
+  "changed_containers": [
+    "api",
+    "web"
+  ],
+  "named_volumes_unchanged": true,
+  "workers_and_data_containers_unchanged": true,
+  "html_matches_native_build": true,
+  "web_status": 200,
+  "safety": {
+    "mode": "SIMULATED",
+    "live_trading_enabled": false,
+    "order_submission_enabled": false,
+    "executor_capability": "DENY_ALL",
+    "generated_code_execution": false,
+    "read_only": true,
+    "reasons": [
+      "LIVE_EXECUTION_NOT_IMPLEMENTED",
+      "LIVE_APPROVAL_NOT_IMPLEMENTED",
+      "BROKER_ADAPTERS_NOT_CONNECTED",
+      "POLICY_PACKS_UNVERIFIED"
+    ]
+  },
+  "browser_rendered_inspection": false
+}

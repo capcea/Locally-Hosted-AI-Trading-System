@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api } from '../management-api';
 import { useAuth } from '../auth/AuthProvider';
+import { readWithDeadline } from './read-deadline';
 
 /** Read-only, same-origin, owner-bound display state. A failed refresh never leaves a green stale value. */
 export function useOwnedRead<T>(path: string | null, pollMs = 0) {
@@ -17,11 +17,13 @@ export function useOwnedRead<T>(path: string | null, pollMs = 0) {
     if (!owner || !path) return;
     let alive = true,
       pending = false;
+    let controller: AbortController | undefined;
     const load = async () => {
       if (pending) return;
       pending = true;
+      controller = new AbortController();
       try {
-        const data = await api<T>(path);
+        const data = await readWithDeadline<T>(path, controller.signal);
         if (alive) setState({ key, data, lastKnown: data, failed: false });
       } catch {
         if (alive)
@@ -43,6 +45,7 @@ export function useOwnedRead<T>(path: string | null, pollMs = 0) {
     window.addEventListener('research-display-refresh', refresh);
     return () => {
       alive = false;
+      controller?.abort();
       clearInterval(timer);
       window.removeEventListener('research-display-refresh', refresh);
     };
@@ -69,7 +72,7 @@ export type ResearchJob = {
     attempts: number;
     error: string | null;
     cancel_requested?: boolean;
-  };
+  } | null;
   result: unknown;
 };
 export type ReviewedStrategy = {
@@ -113,7 +116,7 @@ export function filterExperiments(
   return jobs.filter(
     (j) =>
       (!q || `${j.name} ${j.id} ${j.strategy}`.toLocaleLowerCase('ro-RO').includes(q)) &&
-      (!state || j.job.state === state) &&
+      (!state || (j.job?.state ?? 'UNKNOWN') === state) &&
       (!phase || j.phase === phase),
   );
 }

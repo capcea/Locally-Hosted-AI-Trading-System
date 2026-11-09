@@ -1,0 +1,521 @@
+[
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 15.123,
+    "label": "check-first",
+    "result_lines": [
+      "All checks passed!",
+      "=========== 1 failed, 345 passed, 150 deselected, 1 warning in 7.07s ==========="
+    ],
+    "note": "Migration succeeded but readiness still expected0012; corrected to0013. Failure traceback not copied."
+  },
+  {
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 298.096,
+    "label": "integration",
+    "result_lines": [
+      "PASSED: postgres 127.0.0.1:61208 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:61207 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:61206 -> 9000/tcp; TCP connected.",
+      "1 failed, 150 passed, 1 warning in 287.59s (0:04:47)"
+    ],
+    "note": "Correct safety refusal in old8K campaign fixture: required5039; no allowed AUTO tier fits. Fresh32K fixture setup now verified; cancellation assertions preserved. Failure traceback not copied."
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 96.081,
+    "label": "auth-final",
+    "result_lines": [
+      "PASSED: postgres 127.0.0.1:60139 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:60141 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:60140 -> 9000/tcp; TCP connected.",
+      "43 passed, 1 warning in 43.17s",
+      "PASSED: postgres 127.0.0.1:60693 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:60692 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:60691 -> 9000/tcp; TCP connected.",
+      "43 passed, 1 warning in 39.79s",
+      "PASSED: isolated migrations, round trips and graceful-restart persistence."
+    ]
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--campaigns-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 161.014,
+    "label": "campaigns",
+    "result_lines": [
+      "PASSED: postgres 127.0.0.1:63775 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:63777 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:63776 -> 9000/tcp; TCP connected.",
+      "14 passed, 1 warning in 74.90s (0:01:14)",
+      "PASSED: postgres 127.0.0.1:64267 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:64266 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:64268 -> 9000/tcp; TCP connected.",
+      "14 passed, 1 warning in 72.87s (0:01:12)",
+      "PASSED: isolated migrations, round trips and graceful-restart persistence."
+    ]
+  },
+  {
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 573.588,
+    "label": "integration-final",
+    "result_lines": [
+      "PASSED: postgres 127.0.0.1:64723 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:64722 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:64721 -> 9000/tcp; TCP connected.",
+      "151 passed, 1 warning in 287.81s (0:04:47)",
+      "PASSED: postgres 127.0.0.1:50801 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:50802 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:50803 -> 9000/tcp; TCP connected.",
+      "151 passed, 1 warning in 268.67s (0:04:28)",
+      "PASSED: isolated migrations, round trips and graceful-restart persistence."
+    ]
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 20.008,
+    "label": "native-final-allocation",
+    "result_lines": [
+      "All checks passed!",
+      "================ 350 passed, 152 deselected, 1 warning in 6.56s ================",
+      " Test Files  21 passed (21)",
+      "      Tests  251 passed (251)"
+    ]
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 94.403,
+    "label": "auth-provenance",
+    "result_lines": [
+      "PASSED: postgres 127.0.0.1:53239 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:53237 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:53238 -> 9000/tcp; TCP connected.",
+      "43 passed, 1 warning in 41.29s",
+      "PASSED: postgres 127.0.0.1:53790 -> 5432/tcp; TCP connected.",
+      "PASSED: redis 127.0.0.1:53791 -> 6379/tcp; TCP connected.",
+      "PASSED: minio 127.0.0.1:53789 -> 9000/tcp; TCP connected.",
+      "43 passed, 1 warning in 39.91s",
+      "PASSED: isolated migrations, round trips and graceful-restart persistence."
+    ]
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 21.358,
+    "label": "native-provenance",
+    "result_lines": [
+      "All checks passed!",
+      "================ 350 passed, 152 deselected, 1 warning in 7.64s ================",
+      " Test Files  21 passed (21)",
+      "      Tests  251 passed (251)"
+    ]
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.382,
+    "label": "contracts-acceptance",
+    "result_lines": [
+      "PASSED: generated contracts match the source byte-for-byte."
+    ]
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.872,
+    "label": "collection",
+    "result_lines": [
+      "Total: 30 tests in 13 files"
+    ]
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 10.743,
+    "label": "build-local",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "run",
+      "--rm",
+      "--no-deps",
+      "migrate",
+      "/app/.venv/bin/python",
+      "-m",
+      "scripts.migrate_ai_context"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.205,
+    "label": "migrate-local",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 9.359,
+    "label": "build-web-final",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 22.836,
+    "label": "deploy-local",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 12.055,
+    "label": "deploy-config-final",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 8.262,
+    "label": "build-correction",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 22.83,
+    "label": "deploy-correction",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.036,
+    "label": "build-provenance",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "research-worker",
+      "campaign-worker"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.329,
+    "label": "build-workers",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web",
+      "research-worker",
+      "campaign-worker"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 21.448,
+    "label": "deploy-aligned",
+    "result_lines": []
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.34,
+    "label": "smoke-aligned",
+    "result_lines": [
+      "API + execution-denial smoke: PASS. Infrastructure readiness: 200."
+    ]
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.smoke_demo",
+      "--require-ready"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.225,
+    "label": "readiness-aligned",
+    "result_lines": [
+      "API + execution-denial smoke: PASS. Infrastructure readiness: 200."
+    ]
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.247,
+    "label": "secrets",
+    "result_lines": [
+      ".venv/bin/python -m scripts.scan_secrets",
+      "Scanning 1585 Git-selected files; ignored runtime state is excluded.",
+      "5:44PM INF scanned ~8245564 bytes (8.25 MB) in 173ms",
+      "5:44PM INF no leaks found"
+    ]
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.077,
+    "label": "repository",
+    "result_lines": [
+      ".venv/bin/python -m scripts.repository_check",
+      "PASSED: 19 sensitive-path exclusions; 1585 regular source/evidence files.",
+      "No files staged, no commit made, no remote created, no network request."
+    ]
+  }
+]

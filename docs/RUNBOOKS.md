@@ -1,5 +1,13 @@
 # Development runbooks
 
+> **Product V2 authentication update (2026-10-29):** Ordinary application access and owner setup
+> now use password/session authentication (`PASSWORD`) without TOTP prompts. Do not enroll/reset an
+> authenticator to complete ordinary AI configuration. Existing enrollment/recovery data is preserved.
+> Historical MFA instructions below apply only to explicit legacy `TOTP` compatibility mode.
+> Cloud consent, standing-authorization bounds, session expiry/revocation, CSRF, model verification,
+> worker availability and budgets still apply. See the current `PRODUCT_V2_IMPLEMENTATION_REPORT.md`.
+
+
 ## Local setup and owner enrollment
 
 Run `make setup`, `make identity-setup`, then `make dev`. Identity setup validates the private existing

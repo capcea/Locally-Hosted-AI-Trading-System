@@ -1,0 +1,89 @@
+{
+  "changed_containers": [
+    "api",
+    "web"
+  ],
+  "named_volume_mounts_unchanged": true,
+  "identity_recovery_and_record_counts_unchanged": true,
+  "database": {
+    "schema": "0012_workspace_selections",
+    "users": 1,
+    "enrolled_users": 1,
+    "recovery_codes": 10,
+    "accounts": 0,
+    "research_runs": 0,
+    "datasets": 0,
+    "connections": 1,
+    "queued_ai_jobs": 0
+  },
+  "checks": {
+    "/health/ready": {
+      "status": 200,
+      "payload": [
+        {
+          "id": "postgres",
+          "name": "PostgreSQL",
+          "status": "HEALTHY",
+          "detail": "Verificare direct\u0103 reu\u0219it\u0103.",
+          "latency_ms": 31
+        },
+        {
+          "id": "redis",
+          "name": "Redis",
+          "status": "HEALTHY",
+          "detail": "Verificare direct\u0103 reu\u0219it\u0103.",
+          "latency_ms": 32
+        },
+        {
+          "id": "storage",
+          "name": "Stocare obiecte",
+          "status": "HEALTHY",
+          "detail": "Verificare direct\u0103 reu\u0219it\u0103.",
+          "latency_ms": 33
+        }
+      ]
+    },
+    "/api/v1/safety": {
+      "status": 200,
+      "payload": {
+        "mode": "SIMULATED",
+        "live_trading_enabled": false,
+        "order_submission_enabled": false,
+        "executor_capability": "DENY_ALL",
+        "generated_code_execution": false,
+        "read_only": true,
+        "reasons": [
+          "LIVE_EXECUTION_NOT_IMPLEMENTED",
+          "LIVE_APPROVAL_NOT_IMPLEMENTED",
+          "BROKER_ADAPTERS_NOT_CONNECTED",
+          "POLICY_PACKS_UNVERIFIED"
+        ]
+      }
+    },
+    "/api/v1/auth/status": {
+      "status": 200,
+      "payload": {
+        "auth_mode": "PASSWORD",
+        "initialized": true,
+        "setup_available": false
+      }
+    },
+    "web/": {
+      "status": 200,
+      "html_bytes": 703
+    },
+    "web/strategy-lab": {
+      "status": 200,
+      "html_bytes": 703
+    },
+    "web/strategy-lab/biblioteca": {
+      "status": 200,
+      "html_bytes": 703
+    },
+    "web/setari": {
+      "status": 200,
+      "html_bytes": 703
+    }
+  },
+  "browser_rendering_verified": false
+}

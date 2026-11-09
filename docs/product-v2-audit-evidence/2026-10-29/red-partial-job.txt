@@ -1,0 +1,38 @@
+
+> trading-research-web@0.1.0 test
+> vitest run src/product/workspace.test.tsx
+
+
+ RUN  v5.0.5 /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web
+
+ ❯ src/product/workspace.test.tsx (5 tests | 1 failed) 13ms
+   × keeps the Lab and account safety reachable when a persisted experiment has no job record 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/product/workspace.test.tsx > keeps the Lab and account safety reachable when a persisted experiment has no job record
+TypeError: Cannot read properties of null (reading 'state')
+ ❯ src/product/Workspace.tsx:99:44
+     97|                 <div className="workspace-row" key={job.id}>
+     98|                   <Link href={`/rezultate/${job.id}`}>{job.name}</Link>
+     99|                   <span>{jobLabels[job.job.state] ?? job.job.state}</s…
+       |                                            ^
+    100|                 </div>
+    101|               ))}
+ ❯ LabOverview src/product/Workspace.tsx:96:38
+ ❯ Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:10371:18
+ ❯ renderWithHooks node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5361:19
+ ❯ renderElement node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:5796:23
+ ❯ retryNode node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6783:21
+ ❯ renderNodeDestructive node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6717:11
+ ❯ renderElement node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6390:15
+ ❯ retryNode node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js:6783:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  20:21:05
+   Duration  229ms (import 67%, transform 23%, tests 8%, worker 1%)
+

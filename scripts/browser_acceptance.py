@@ -115,10 +115,11 @@ def main() -> int:
         "redesign",
         "campaigns",
         "auth",
+        "product",
     }:
         raise RuntimeError(
             "E2E_ONLY_SCENARIO must be foundation, market, broker, risk, research, "
-            "ux, ai, redesign, campaigns or auth"
+            "ux, ai, redesign, campaigns, auth or product"
         )
     isolated = IsolatedServices.model_validate_json(Path(config_file).read_bytes())
     npm = shutil.which("npm")
@@ -144,6 +145,7 @@ def main() -> int:
             "redesign",
             "campaigns",
             "auth",
+            "product",
         ),
     ):
         database = f"p1_browser_{uuid4().hex}"
@@ -195,6 +197,7 @@ def main() -> int:
             api_env = {
                 **common,
                 "APP_ENVIRONMENT": "test",
+                "AUTH_MODE": "PASSWORD" if scenario == "product" else "TOTP",
                 "DATABASE_URL": runtime,
                 "REDIS_URL": isolated.redis_url,
                 "OBJECT_STORE_URL": f"http://{isolated.storage_endpoint}",
@@ -222,6 +225,9 @@ def main() -> int:
             if scenario == "ai":
                 # Real HTTP protocol fixture, never reported as a real model or benchmark.
                 ai_fixture = Fixture()
+                ai_fixture.context_length = (
+                    32768  # Explicit synthetic metadata; no real model claim.
+                )
                 ai_thread = threading.Thread(target=ai_fixture.serve_forever, daemon=True)
                 ai_thread.start()
                 ai_password = hashlib.sha256(
@@ -380,7 +386,9 @@ def main() -> int:
                     "test:e2e",
                     "--",
                     *(
-                        ["e2e/auth-session.spec.ts"]
+                        ["e2e/product-v2.spec.ts"]
+                        if scenario == "product"
+                        else ["e2e/auth-session.spec.ts"]
                         if scenario == "auth"
                         else ["e2e/platform.spec.ts", "e2e/phase1.spec.ts"]
                         if scenario == "foundation"

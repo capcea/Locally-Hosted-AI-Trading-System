@@ -1,6 +1,8 @@
 export type Area = 'home' | 'research' | 'results' | 'accounts' | 'settings' | 'auth';
 export type Screen =
   | 'home'
+  | 'lab'
+  | 'library'
   | 'research'
   | 'ai'
   | 'campaigns'
@@ -32,12 +34,17 @@ export type Route = {
 };
 const uuid = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
 export const primary = [
-  { area: 'home', path: '/', label: 'Acasă' },
-  { area: 'research', path: '/testeaza', label: 'Testează' },
-  { area: 'results', path: '/rezultate', label: 'Rezultate' },
-  { area: 'accounts', path: '/conturi', label: 'Conturi și siguranță' },
-  { area: 'settings', path: '/setari', label: 'Setări' },
+  { area: 'home', path: '/', label: 'Trading Dashboard' },
+  { area: 'research', path: '/strategy-lab', label: 'Strategy Lab' },
+  { area: 'settings', path: '/setari', label: 'Settings' },
 ] as const;
+export function primaryArea(route: Route): 'home' | 'research' | 'settings' {
+  return route.area === 'home'
+    ? 'home'
+    : ['research', 'results'].includes(route.area)
+      ? 'research'
+      : 'settings';
+}
 
 /** Finite allowlist: never use arbitrary URL/query input as an auth return destination. */
 export function resolveRoute(pathname: string): Route {
@@ -50,6 +57,14 @@ export function resolveRoute(pathname: string): Route {
   });
   const aliases: Record<string, string> = {
     '/testeaza/backtesting': '/testeaza/nou',
+    '/strategy-lab/idei': '/testeaza/ai',
+    '/strategy-lab/testeaza': '/testeaza/nou',
+    '/strategy-lab/rezultate': '/rezultate',
+    '/strategy-lab/compara': '/rezultate/compara',
+    '/strategy-lab/date': '/testeaza/date',
+    '/setari/conturi': '/conturi',
+    '/setari/siguranta': '/conturi/siguranta',
+    '/setari/conexiuni': '/conturi/conexiuni',
     '/testeaza/experimente': '/testeaza/activitate',
     '/setari/platforma': '/setari',
     '/setari/modele-ai': '/setari/ai',
@@ -57,6 +72,10 @@ export function resolveRoute(pathname: string): Route {
   if (Object.hasOwn(aliases, path))
     return { ...resolveRoute(aliases[path]), path, canonicalPath: aliases[path] };
   if (path === '/') return route('home', 'home');
+  if (path === '/strategy-lab') return route('research', 'lab');
+  const labAnalysis = path.match(new RegExp(`^/strategy-lab/analize/(${uuid})$`));
+  if (labAnalysis) return route('research', 'lab', { jobId: labAnalysis[1] });
+  if (path === '/strategy-lab/biblioteca') return route('research', 'library');
   if (path === '/testeaza/campanii') return route('research', 'campaigns');
   const campaign = path.match(new RegExp(`^/testeaza/campanii/(${uuid})$`));
   if (campaign) return route('research', 'campaigns', { campaignId: campaign[1] });

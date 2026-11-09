@@ -111,6 +111,25 @@ def fixture(request: httpx.Request) -> httpx.Response:
     assert request.url.scheme == "https" and request.url.host == "openrouter.ai"
     assert request.headers["authorization"].startswith("Bearer ")
     if request.method == "GET":
+        if request.url.path == "/api/v1/endpoints/zdr":
+            return httpx.Response(
+                200,
+                json={
+                    "data": [
+                        {
+                            "model_id": "fixture/model",
+                            "tag": "fixture-provider",
+                            "supported_parameters": [
+                                "temperature",
+                                "top_p",
+                                "response_format",
+                                "structured_outputs",
+                                "max_tokens",
+                            ],
+                        }
+                    ]
+                },
+            )
         return httpx.Response(
             200,
             json={

@@ -1,0 +1,11 @@
+{
+  "origin": "http://127.0.0.1:5173",
+  "asset": "/assets/index-wrnuWVlb.js",
+  "checks": {
+    "Furnizor aprobat pe server:": true,
+    "Salvare confirmată de server. Furnizor autorizat:": true,
+    "Reconfirmarea MFA nu salvează automat formularul.": true
+  },
+  "http_status": 200,
+  "evidence_kind": "HTTP asset delivery only; not browser execution"
+}

@@ -1,0 +1,18 @@
+{
+  "original_files": 1404,
+  "missing": [],
+  "changed_existing_files": [
+    "IMPLEMENTATION_STATUS.md",
+    "OPENROUTER_INTEGRATION_REPORT.md",
+    "apps/web/src/ai/ProviderError.test.tsx",
+    "apps/web/src/ai/copy.ts",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "packages/ai/providers.py",
+    "tests/test_openrouter.py",
+    "tests/test_openrouter_integration.py"
+  ],
+  "cloud_policy_and_billing_math_unchanged": true,
+  "identity_financial_campaign_and_golden_sources_unchanged": true,
+  "real_generation_requests_submitted_by_agent": 0,
+  "owner_provider_authorization_modified": false
+}

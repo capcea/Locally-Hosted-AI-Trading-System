@@ -1,0 +1,433 @@
+{
+  "focused-services-release-final": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 80.051,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/focused-services-release-final.txt"
+  },
+  "frontend-build": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "build"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.929,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/frontend-build.txt"
+  },
+  "focused-services-release": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 81.562,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/focused-services-release.txt"
+  },
+  "service-start": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 22.844,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/service-start.txt"
+  },
+  "image-build-release": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.276,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/image-build-release.txt"
+  },
+  "frontend-final": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.049,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/frontend-final.txt"
+  },
+  "check-final": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 16.863,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/check-final.txt"
+  },
+  "image-build": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 9.738,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/image-build.txt"
+  },
+  "focused-persistence": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 80.511,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/focused-persistence.txt"
+  },
+  "frontend": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.282,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/frontend.txt"
+  },
+  "contracts-release": {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.151,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/contracts-release.txt"
+  },
+  "check-release": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 19.108,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/check-release.txt"
+  },
+  "full-services": {
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 552.659,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/full-services.txt"
+  },
+  "migrate": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "run",
+      "--rm",
+      "--no-deps",
+      "migrate",
+      "/app/.venv/bin/python",
+      "-c",
+      "from alembic import command; from alembic.config import Config; from apps.api.config import Settings; s=Settings(); c=Config(\"alembic.ini\"); c.attributes[\"database_url\"]=(s.migration_database_url or s.database_url).get_secret_value(); command.upgrade(c,\"head\")"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.55,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/migrate.txt"
+  },
+  "image-build-final": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.522,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/image-build-final.txt"
+  },
+  "focused-services": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 44.05,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/focused-services.txt"
+  },
+  "check": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 0.151,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/check.txt"
+  },
+  "check-final3": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 20.662,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/check-final3.txt"
+  },
+  "contracts": {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.833,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/contracts.txt"
+  },
+  "frontend-lint": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "lint"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.47,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/frontend-lint.txt"
+  },
+  "secret-scan": {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.204,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/secret-scan.txt"
+  },
+  "repository-check": {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.187,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/repository-check.txt"
+  },
+  "web-label-build": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.28,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/web-label-build.txt"
+  },
+  "check-final2": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 18.993,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/check-final2.txt"
+  },
+  "focused-services-latest": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 86.095,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/focused-services-latest.txt"
+  },
+  "smoke": {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.182,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/smoke.txt"
+  },
+  "web-label-start": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.176,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/web-label-start.txt"
+  },
+  "diff-check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.035,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/diff-check.txt"
+  },
+  "browser-collection": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.67,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/browser-collection.txt"
+  },
+  "focused-services-final": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 98.119,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/focused-services-final.txt"
+  },
+  "check-final4": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 18.191,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/standing-ai/check-final4.txt"
+  }
+}

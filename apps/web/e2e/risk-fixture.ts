@@ -37,9 +37,12 @@ export async function seedRiskFixture(page: Page, mobile: boolean) {
     throw new Error('Use the disposable risk browser harness.');
   await page.goto('/');
   const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
-  await expect(primary.getByRole('link')).toHaveCount(5);
-  if (mobile) await expect(primary.getByRole('link', { name: 'Acasă', exact: true })).toBeVisible();
-  await primary.getByRole('link', { name: 'Conturi și siguranță', exact: true }).click();
+  await expect(primary.locator('.cockpit-nav-link')).toHaveCount(3);
+  if (mobile)
+    await expect(
+      primary.getByRole('link', { name: 'Trading Dashboard', exact: true }),
+    ).toBeVisible();
+  await primary.getByRole('link', { name: 'Settings', exact: true }).click();
   await page.getByLabel('Nume utilizator', { exact: true }).fill('risk-owner');
   await page.getByLabel('Parolă', { exact: true }).fill(process.env.E2E_OWNER_PASSWORD);
   await page.getByLabel('Nume afișat', { exact: true }).fill('Proprietar risc sintetic');

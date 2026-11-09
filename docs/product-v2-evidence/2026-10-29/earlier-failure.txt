@@ -1,0 +1,6 @@
+make integration-services: exit 2; 141 passed before restart; 140 passed / 1 failed after restart.
+Failure: tests/test_campaign_integration.py::test_two_real_bounded_training_iterations_retain_feedback_and_never_promote at assert step(market).
+Original failure lacks state diagnostics; exact cause not proven.
+Added sanitized assertion diagnostics without changing transitions, budgets or assertions.
+Focused campaigns rerun: exit 0, 14+14. Complete final rerun: exit 0, 143+143.
+Earlier password error mapping and navigation/copy/formatting failures were corrected before these final runs.

@@ -1,0 +1,28 @@
+{
+  "models": [
+    {
+      "configured_ceiling": 4096,
+      "recorded_verified_ceiling": 4096,
+      "proof_unexpired": true,
+      "cloud_pricing_limits": {
+        "input_usd_per_million": "1",
+        "output_usd_per_million": "4",
+        "request_usd": "0.01",
+        "daily_usd": "0.50"
+      },
+      "standing_caps": {
+        "request_usd": "0.01",
+        "daily_usd": "0.50",
+        "monthly_usd": "120"
+      },
+      "standing_active": true
+    }
+  ],
+  "schema": "0013_ai_context_capacity",
+  "context_tiers": [
+    4096,
+    16384,
+    32768
+  ],
+  "max_input_bytes": 65536
+}

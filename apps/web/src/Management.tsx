@@ -97,6 +97,8 @@ export function Authentication({
   session: Session | null;
   setSession: (session: Session | null) => void;
 }) {
+  const [authMode, setAuthMode] = useState(session?.auth_mode ?? 'PASSWORD');
+  if (authMode === 'PASSWORD' && session?.state !== 'FULL') session = null;
   const [initialized, setInitialized] = useState<boolean | null>(null);
   const [available, setAvailable] = useState(false);
   const [fields, setFields] = useState({
@@ -115,10 +117,13 @@ export function Authentication({
   const [busy, setBusy] = useState(false);
   useEffect(() => {
     let live = true;
-    api<{ initialized: boolean; setup_available: boolean }>('/auth/status')
+    api<{ initialized: boolean; setup_available: boolean; auth_mode: 'PASSWORD' | 'TOTP' }>(
+      '/auth/status',
+    )
       .then((value) => {
         if (live) {
           setInitialized(value.initialized);
+          setAuthMode(value.auth_mode);
           setAvailable(value.setup_available);
         }
       })
@@ -248,7 +253,11 @@ export function Authentication({
             className="secondary-button"
             disabled={busy || initialized === null || (!initialized && !available)}
           >
-            {initialized ? 'Continuă cu parola' : 'Creează proprietarul'}
+            {initialized
+              ? authMode === 'PASSWORD'
+                ? 'Autentificare'
+                : 'Continuă cu parola'
+              : 'Creează proprietarul'}
           </button>
           {initialized === false && !available && (
             <p>
@@ -525,46 +534,50 @@ export function Security({
       <ErrorNotice error={error} />
       {notice && <p role="status">{notice}</p>}
       <p>
-        {session.user.username} · {session.user.role} · Sesiune autentificată în doi pași. Acțiunile
-        sensibile cer o verificare recentă.
+        {session.user.username} · {session.user.role} ·{' '}
+        {session.auth_mode === 'PASSWORD'
+          ? 'Acces cu parolă și sesiune protejată. Nu sunt necesare coduri MFA.'
+          : 'Sesiune autentificată în doi pași. Acțiunile sensibile cer o verificare recentă.'}
       </p>
       {mode === 'personal' && (
         <>
-          <form
-            className="management-form"
-            onSubmit={(event) => {
-              event.preventDefault();
-              void act(async () => {
-                const password = fields.password,
-                  code = fields.code;
-                setFields((current) => ({ ...current, password: '', code: '' }));
-                const result = await api('/auth/reauthenticate', {
-                  method: 'POST',
-                  csrf: session.csrf_token,
-                  body: { password, code },
+          {session.auth_mode !== 'PASSWORD' && (
+            <form
+              className="management-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void act(async () => {
+                  const password = fields.password,
+                    code = fields.code;
+                  setFields((current) => ({ ...current, password: '', code: '' }));
+                  const result = await api('/auth/reauthenticate', {
+                    method: 'POST',
+                    csrf: session.csrf_token,
+                    body: { password, code },
+                  });
+                  setFields({ ...fields, password: '', code: '' });
+                  setSession(parseSession(result));
+                  setNotice('MFA reconfirmat.');
                 });
-                setFields({ ...fields, password: '', code: '' });
-                setSession(parseSession(result));
-                setNotice('MFA reconfirmat.');
-              });
-            }}
-          >
-            <h3>Reconfirmă MFA pentru acțiuni sensibile</h3>
-            <Field
-              name="password"
-              label="Parola curentă"
-              type="password"
-              value={fields.password}
-              onChange={(password) => setFields({ ...fields, password })}
-            />
-            <Field
-              name="code"
-              label={t.code}
-              value={fields.code}
-              onChange={(code) => setFields({ ...fields, code })}
-            />
-            <button className="secondary-button">Reconfirmă</button>
-          </form>
+              }}
+            >
+              <h3>Reconfirmă MFA pentru acțiuni sensibile</h3>
+              <Field
+                name="password"
+                label="Parola curentă"
+                type="password"
+                value={fields.password}
+                onChange={(password) => setFields({ ...fields, password })}
+              />
+              <Field
+                name="code"
+                label={t.code}
+                value={fields.code}
+                onChange={(code) => setFields({ ...fields, code })}
+              />
+              <button className="secondary-button">Reconfirmă</button>
+            </form>
+          )}
           <form
             className="management-form"
             onSubmit={(event) => {
@@ -640,7 +653,9 @@ export function Security({
                 setFields({ ...fields, new_password: '', username: '', display_name: '' });
                 await load();
                 setNotice(
-                  'Utilizator creat. Acesta trebuie să configureze MFA la prima autentificare.',
+                  session.auth_mode === 'PASSWORD'
+                    ? 'Utilizator creat. Se poate autentifica folosind parola.'
+                    : 'Utilizator creat. Acesta trebuie să configureze MFA la prima autentificare.',
                 );
               });
             }}
@@ -747,8 +762,8 @@ export function Security({
           >
             <label className="management-check">
               <input type="checkbox" required />
-              Confirm identitatea, persoana și consecințele afișate. Serverul verifică rolul și MFA
-              recent.
+              Confirm identitatea, persoana și consecințele afișate. Serverul verifică rolul și
+              sesiunea.
             </label>
             <button disabled={reviewBusy}>Confirmă modificarea</button>
           </form>

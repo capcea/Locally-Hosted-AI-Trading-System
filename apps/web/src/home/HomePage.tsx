@@ -40,10 +40,11 @@ export default function HomePage({
   const jobs = useOwnedRead<ResearchJob[]>('/research/experiments?limit=100', 5000);
   const strategies = useOwnedRead<ReviewedStrategy[]>('/research/strategies');
   const [chosen, setChosen] = useState('');
-  const complete = jobs.data?.filter((j) => j.job.state === 'SUCCEEDED') ?? [];
+  const complete = jobs.data?.filter((j) => j.job?.state === 'SUCCEEDED') ?? [];
   const active =
-    jobs.data?.filter((j) => ['QUEUED', 'RUNNING', 'RETRY'].includes(j.job.state)) ?? [];
-  const failed = jobs.data?.filter((j) => j.job.state === 'FAILED') ?? [];
+    jobs.data?.filter((j) => ['QUEUED', 'RUNNING', 'RETRY'].includes(j.job?.state ?? 'UNKNOWN')) ??
+    [];
+  const failed = jobs.data?.filter((j) => j.job?.state === 'FAILED') ?? [];
   const selected = complete.find((j) => j.id === chosen) ?? complete[0];
   const readiness = overview ? readinessSummary(overview.services) : null;
   const full = session?.state === 'FULL';
@@ -198,7 +199,7 @@ export default function HomePage({
                           <td>
                             <Link
                               href={
-                                j.job.state === 'SUCCEEDED' ? resultPath(j.id) : progressPath(j.id)
+                                j.job?.state === 'SUCCEEDED' ? resultPath(j.id) : progressPath(j.id)
                               }
                             >
                               {j.name}
@@ -207,10 +208,10 @@ export default function HomePage({
                           <td>{strategyLabels[j.strategy] ?? j.strategy}</td>
                           <td>
                             <StatusPill>
-                              {j.job.cancel_requested &&
-                              ['QUEUED', 'RUNNING', 'RETRY'].includes(j.job.state)
+                              {j.job?.cancel_requested &&
+                              ['QUEUED', 'RUNNING', 'RETRY'].includes(j.job?.state ?? 'UNKNOWN')
                                 ? 'Anulare solicitată'
-                                : (jobLabels[j.job.state] ?? 'UNKNOWN')}
+                                : (jobLabels[j.job?.state ?? 'UNKNOWN'] ?? 'UNKNOWN')}
                             </StatusPill>
                           </td>
                         </tr>
@@ -226,7 +227,7 @@ export default function HomePage({
                   După primul test, istoricul și rezultatele sale apar aici.{' '}
                   {full
                     ? 'Nu rulează teste în înregistrările citite.'
-                    : 'Sunt necesare parola și MFA pentru datele tale.'}
+                    : 'Autentifică-te cu parola pentru datele tale.'}
                 </EmptyState>
               )}
               {active.length > 0 && (

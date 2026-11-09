@@ -1,0 +1,18 @@
+{
+  "original_files": 1393,
+  "missing": [],
+  "changed_existing_files": [
+    "IMPLEMENTATION_STATUS.md",
+    "MODEL_PROBE_UX_FIX_REPORT.md",
+    "OPENROUTER_INTEGRATION_REPORT.md",
+    "apps/api/ai/routes.py",
+    "apps/web/src/ai/AICenter.tsx",
+    "apps/web/src/ai/copy.ts",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "packages/ai/providers.py",
+    "packages/ai/worker.py",
+    "tests/test_openrouter_integration.py"
+  ],
+  "financial_identity_campaign_logic_and_goldens_unchanged": true,
+  "paid_requests_submitted_by_agent": 0
+}

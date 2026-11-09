@@ -12,7 +12,7 @@ from apps.api.identity.dependencies import (
     FullIdentity,
     Principal,
     require_owner,
-    require_recent_mfa,
+    require_sensitive_session,
 )
 from apps.api.risk.schemas import (
     AccountStatus,
@@ -60,7 +60,7 @@ router = APIRouter(prefix="/api/v1/risk", tags=["Simulated risk gateway"])
 
 def owner(identity: Principal) -> None:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
 
 
 def account_for(identity: Principal, account_id: UUID) -> TradingAccount:

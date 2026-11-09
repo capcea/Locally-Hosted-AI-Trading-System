@@ -1,0 +1,34 @@
+{
+  "before": {
+    "schema": "0009_openrouter",
+    "users": 1,
+    "cloud_authorizations": 2,
+    "connections": 1,
+    "credentials": 1,
+    "models": 1,
+    "requests": 14,
+    "risk_profiles": 0,
+    "research_runs": 0
+  },
+  "after": {
+    "schema": "0010_ai_standing",
+    "users": 1,
+    "cloud_authorizations": 2,
+    "connections": 1,
+    "credentials": 1,
+    "models": 1,
+    "requests": 14,
+    "risk_profiles": 0,
+    "research_runs": 0
+  },
+  "existing_record_counts_preserved": {
+    "users": true,
+    "cloud_authorizations": true,
+    "connections": true,
+    "credentials": true,
+    "models": true,
+    "requests": true,
+    "risk_profiles": true,
+    "research_runs": true
+  }
+}

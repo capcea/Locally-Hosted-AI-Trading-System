@@ -25,7 +25,7 @@ it.each([
 it('keeps every grouped destination on the finite route allowlist', () => {
   for (const item of Object.values(sectionItems).flat())
     expect(resolveRoute(item.href).screen).not.toBe('not-found');
-  expect(settingsGroups.flatMap((g) => g.items)).toHaveLength(10);
+  expect(settingsGroups.flatMap((g) => g.items)).toHaveLength(14);
   expect(resolveRoute('/testeaza/ai').screen).toBe('ai');
   expect(resolveRoute('/setari/ai').screen).toBe('ai');
 });

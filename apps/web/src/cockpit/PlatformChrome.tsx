@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { RefObject } from 'react';
 import {
   BrainCircuit,
-  ChartNoAxesCombined,
   ChevronDown,
   ChevronRight,
   FlaskConical,
@@ -14,6 +13,7 @@ import {
   Sparkles,
   TriangleAlert,
 } from 'lucide-react';
+import { primaryArea } from '../navigation/routes';
 import type { Route } from '../navigation/routes';
 import { Link } from '../navigation/history';
 import { activeSection } from '../navigation/sections';
@@ -27,33 +27,18 @@ type MenuItem = {
   label: string;
 };
 const research: MenuItem[] = [
-  { href: '/testeaza/ai', label: 'AI Center' },
-  { href: '/testeaza/strategii', label: 'Strategii' },
-  { href: '/testeaza/nou', label: 'Backtesting' },
-  { href: '/testeaza/activitate', label: 'Experimente' },
-  { href: '/testeaza/campanii', label: 'Campanii' },
-  { href: '/testeaza/date', label: 'Date istorice' },
-];
-const results: MenuItem[] = [
-  { href: '/rezultate', label: 'Toate rezultatele' },
-  { href: '/rezultate/compara', label: 'Compară teste' },
-  { href: '/rezultate/simulari', label: 'Jurnale simulare' },
-];
-const safety: MenuItem[] = [
-  { href: '/conturi/siguranta', label: 'Centru de risc' },
-  { href: '/conturi', label: 'Conturi' },
-  { href: '/conturi/documente', label: 'Politici și documente' },
-  { href: '/conturi/conexiuni', label: 'Conexiuni broker' },
+  { href: '/strategy-lab', label: 'Asistent AI' },
+  { href: '/testeaza/activitate', label: 'Teste și rezultate' },
+  { href: '/strategy-lab/biblioteca', label: 'Biblioteca validată' },
 ];
 const settings: MenuItem[] = [
-  { href: '/setari/ai', label: 'Modele AI' },
-  { href: '/setari/surse', label: 'Surse de date' },
-  { href: '/setari/securitate', label: 'Securitate și MFA' },
-  { href: '/setari/utilizatori', label: 'Utilizatori' },
-  { href: '/setari/diagnostic', label: 'Diagnostic' },
   { href: '/setari', label: 'Toate setările' },
+  { href: '/setari/conturi', label: 'Conturi' },
+  { href: '/setari/ai', label: 'Modelul și autorizarea AI' },
+  { href: '/setari/siguranta', label: 'Limite și oprire' },
+  { href: '/setari/securitate', label: 'Parolă și sesiuni' },
 ];
-const submenus = { research, results, accounts: safety, settings };
+const submenus = { research, settings };
 const matches = (route: Route, href: string) =>
   route.path === href ||
   route.canonicalPath === href ||
@@ -80,11 +65,9 @@ export function CockpitNavigation({
   const active = activeSection(route);
   const [expanded, setExpanded] = useState<string | null>(null);
   const sections = [
-    { id: 'home', title: 'Cockpit', href: '/', icon: LayoutDashboard },
-    { id: 'research', title: 'AI & Teste', href: '/testeaza', icon: BrainCircuit },
-    { id: 'results', title: 'Rezultate', href: '/rezultate', icon: ChartNoAxesCombined },
-    { id: 'accounts', title: 'Siguranță', href: '/conturi/siguranta', icon: ShieldCheck },
-    { id: 'settings', title: 'Setări', href: '/setari', icon: Settings2 },
+    { id: 'home', title: 'Trading Dashboard', href: '/', icon: LayoutDashboard },
+    { id: 'research', title: 'Strategy Lab', href: '/strategy-lab', icon: BrainCircuit },
+    { id: 'settings', title: 'Settings', href: '/setari', icon: Settings2 },
   ] as const;
   return (
     <aside className="cockpit-sidebar" aria-label="Navigare AI Cockpit">
@@ -100,7 +83,7 @@ export function CockpitNavigation({
       <div className="cockpit-nav-label">WORKSPACE</div>
       <nav className="cockpit-nav" aria-label="Navigare principală">
         {sections.map(({ id, title, href, icon: Icon }) => {
-          const selected = route.area === id || (id === 'home' && route.screen === 'home');
+          const selected = primaryArea(route) === id;
           const children = submenus[id as keyof typeof submenus];
           const opened = expanded === id || (expanded === null && selected && id !== 'home');
           return (
@@ -144,7 +127,6 @@ export function CockpitNavigation({
                   ))}
                 </div>
               )}
-              {id === 'accounts' && <div className="cockpit-nav-divider" />}
             </div>
           );
         })}
@@ -273,7 +255,7 @@ export function CockpitPageHeading({ route }: { route: Route }) {
           {route.area === 'settings'
             ? 'CONFIGURATION'
             : route.area === 'accounts'
-              ? 'RISK CONTROL'
+              ? 'CONFIGURATION'
               : route.area === 'results'
                 ? 'ANALYTICS'
                 : 'RESEARCH'}

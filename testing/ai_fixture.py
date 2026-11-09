@@ -54,6 +54,7 @@ class Fixture(ThreadingHTTPServer):
     daemon_threads = True
     behavior = "normal"
     seen = 0
+    context_length = 8192
     expected_authorization: str | None = None
     entered: threading.Event
     release: threading.Event
@@ -92,7 +93,12 @@ class Handler(BaseHTTPRequestHandler):
         ):
             self.reply({}, 401)
             return
-        metadata = {"name": NAME, "id": NAME, "digest": DIGEST, "max_model_len": 8192}
+        metadata = {
+            "name": NAME,
+            "id": NAME,
+            "digest": DIGEST,
+            "max_model_len": self.server.context_length,
+        }
         if self.path in {"/api/tags", "/v1/models"}:
             self.reply({"models" if self.path == "/api/tags" else "data": [metadata]})
         elif self.path == "/api/version":
@@ -109,7 +115,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/api/show":
             self.reply(
                 {
-                    "model_info": {"fixture.context_length": 8192},
+                    "model_info": {"fixture.context_length": self.server.context_length},
                     "capabilities": ["completion", "tools", "thinking"],
                 }
             )

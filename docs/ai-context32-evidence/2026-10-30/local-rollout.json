@@ -1,0 +1,54 @@
+{
+  "other_container_ids_unchanged": true,
+  "all_volume_mounts_unchanged": true,
+  "service_states": {
+    "api": "running",
+    "research-worker": "running",
+    "campaign-worker": "running",
+    "web": "running",
+    "market-worker": "running",
+    "postgres": "running",
+    "ai-worker": "running",
+    "ai-egress": "running",
+    "migrate": "exited",
+    "risk-monitor": "running",
+    "ai-redis": "running",
+    "redis": "running",
+    "minio": "running"
+  },
+  "health/ready": {
+    "http": 200,
+    "value": [
+      {
+        "id": "postgres",
+        "status": "HEALTHY"
+      },
+      {
+        "id": "redis",
+        "status": "HEALTHY"
+      },
+      {
+        "id": "storage",
+        "status": "HEALTHY"
+      }
+    ]
+  },
+  "api/v1/safety": {
+    "http": 200,
+    "value": {
+      "executor_capability": "DENY_ALL",
+      "generated_code_execution": false,
+      "live_trading_enabled": false,
+      "order_submission_enabled": false
+    }
+  },
+  "api/v1/auth/status": {
+    "http": 200,
+    "value": {
+      "auth_mode": "PASSWORD"
+    }
+  },
+  "served_html_matches_build": true,
+  "served_assets_match_build": true,
+  "financial_auth_risk_market_sources_unchanged": true
+}

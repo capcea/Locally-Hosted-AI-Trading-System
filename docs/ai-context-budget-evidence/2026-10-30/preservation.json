@@ -1,0 +1,20 @@
+{
+  "pre_task_files": 1534,
+  "pre_existing_modified_paths": [
+    "STRATEGY_LAB_AI_WORKFLOW_REPORT.md",
+    "tests/test_password_ai_integration.py",
+    "IMPLEMENTATION_STATUS.md",
+    "apps/api/ai/context.py",
+    "apps/api/ai/routes.py",
+    "apps/web/e2e/phase6.spec.ts",
+    "apps/web/src/ai/AICenter.tsx",
+    "apps/web/src/ai/AIChat.tsx",
+    "apps/web/src/ai/copy.ts",
+    "apps/web/src/management-api.ts",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "scripts/integration_services.py"
+  ],
+  "all_research_software_and_provider_files_unchanged": true,
+  "archive_location": ".cache/context-budget/before.tar.gz",
+  "git_metadata_not_written": true
+}

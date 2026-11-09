@@ -64,7 +64,7 @@ export default function CampaignCenter() {
   const [title, setTitle] = useState('');
   const [question, setQuestion] = useState('');
   const [templateId, setTemplateId] = useState('');
-  const [mode, setMode] = useState<'SYNTHETIC_FIXTURE' | 'AI_GATEWAY'>('SYNTHETIC_FIXTURE');
+  const [mode, setMode] = useState<'SYNTHETIC_FIXTURE' | 'AI_GATEWAY'>('AI_GATEWAY');
   const [phase, setPhase] = useState('DISCOVERY');
   const [domain, setDomain] = useState('');
   const [iterations, setIterations] = useState(2);
@@ -120,7 +120,7 @@ export default function CampaignCenter() {
         <CardTitle title="Cercetare cu limite clare" icon={FlaskConical} />
         <p>
           Pregătește ipoteze, testează numai strategii revizuite și urmărește dovezile. Fiecare
-          trimitere de test sau analiză AI necesită revizuirea proprietarului și MFA recentă.
+          trimitere de test sau analiză AI necesită revizuirea proprietarului și o sesiune validă.
         </p>
         <p>
           <strong>
@@ -329,8 +329,8 @@ export default function CampaignCenter() {
             </details>
             <label>
               <input type="checkbox" checked={ack} onChange={(e) => setAck(e.target.checked)} />
-              Accept doar cercetare limitată, revizuire și MFA la trimiteri, fără promovare sau
-              execuție externă.
+              Accept doar cercetare limitată, revizuire și autorizare la trimiteri, fără promovare
+              sau execuție externă.
             </label>
             <button disabled={disabled || !ack || !templateId}>Creează ciorna campaniei</button>
           </form>
@@ -445,7 +445,7 @@ export default function CampaignCenter() {
                   <div className="management-form">
                     <p>
                       Revizuiește contul, datele, parametrii, costurile și limitele de mai sus.
-                      Autorizarea nu elimină MFA de la trimiteri.
+                      Fiecare trimitere respectă sesiunea, domeniul autorizat și limitele.
                     </p>
                     <label>
                       <input
@@ -473,7 +473,7 @@ export default function CampaignCenter() {
                   <div>
                     <p>
                       Revizuiește PLAN în istoric. Trimiterea folosește exact acel plan prin
-                      verificările Phase 5 și MFA recentă.
+                      verificările Phase 5 și o sesiune validă.
                     </p>
                     <label>
                       <input

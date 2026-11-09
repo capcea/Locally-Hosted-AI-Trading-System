@@ -124,8 +124,21 @@ class GatewaySettings(BaseSettings):
     hourly_owner_limit: int = Field(default=40, ge=1, le=100)
     hourly_role_limit: int = Field(default=20, ge=1, le=40)
     metadata_limit: int = Field(default=1000, ge=1, le=10000)
-    max_input_bytes: int = Field(default=12000, ge=1024, le=24000)
+    context_tiers: list[int] = Field(default_factory=lambda: [4096, 16384, 32768])
+    max_input_bytes: int = Field(default=65536, ge=1024, le=262144)
     max_output_bytes: int = Field(default=24000, ge=1024, le=32000)
+
+    @field_validator("context_tiers")
+    @classmethod
+    def bounded_tiers(cls, value: list[int]) -> list[int]:
+        if (
+            not value
+            or len(value) > 8
+            or value != sorted(set(value))
+            or any(type(v) is not int or not 1024 <= v <= 131072 for v in value)
+        ):
+            raise ValueError("AI_CONTEXT_TIERS_INVALID")
+        return value
 
     @field_validator("data_key")
     @classmethod

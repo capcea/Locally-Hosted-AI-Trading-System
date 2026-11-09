@@ -1,5 +1,21 @@
 # AI deployment guide — private default and explicit OpenRouter exception
 
+> **Current context update —2026-10-30:** use the [dynamic context report](AI_32K_DYNAMIC_CONTEXT_REPORT.md)
+> for AUTO/4K/16K/32K, immutable model context revisions, Alembic0013 and deployment. Current assembled
+> input defaults to64KiB; output defaults remain24000 bytes. A configured/verified4K model stays4K
+> until its new context version is separately verified. New registration never launches a paid probe.
+> Existing monetary caps are unchanged and can refuse a32K probe or request even when the code
+> supports that tier. Permanent consent does not authorize exceeding those caps. Future128K is
+> operator-configured and still requires model/worker verification; it is not enabled by this update.
+
+> **Product V2 authentication update (2026-10-29):** Ordinary application access and owner setup
+> now use password/session authentication (`PASSWORD`) without TOTP prompts. Do not enroll/reset an
+> authenticator to complete ordinary AI configuration. Existing enrollment/recovery data is preserved.
+> Historical MFA instructions below apply only to explicit legacy `TOTP` compatibility mode.
+> Cloud consent, standing-authorization bounds, session expiry/revocation, CSRF, model verification,
+> worker availability and budgets still apply. See the current `PRODUCT_V2_IMPLEMENTATION_REPORT.md`.
+
+
 Updated 2026-10-28. No GPU has been rented, account connected, model downloaded or broker credential
 introduced. SIMULATED/DENY_ALL remains unconditional. Current blockers and evidence are in
 [PHASE6_COMPLETION_REPORT.md](PHASE6_COMPLETION_REPORT.md).
@@ -199,3 +215,15 @@ Off-host backup/restore, paid cost accounting, actual GPU quotas and production 
 
 Accessed during Phase6 implementation on2026-10-28. `/api/show`'s separate web-doc page returned404;
 the official OpenAPI source was used. These references do not establish any real deployment result.
+
+
+## Standing inference consent (schema0010)
+
+Use **Setări → Modele AI → Autorizări permanente** for one-time, recent-MFA OWNER authorization
+of approved connections, categories, roles, operations and request/day/month caps. Existing cloud
+consent does not auto-activate this grant. A grant does not keep a login or model verification
+alive indefinitely, authorize trading or start a worker. Cloud policy/destination changes require
+explicit review. Revocation preserves audit history and invalidates queued work.
+
+See [AI_STANDING_AUTHORIZATION_REPORT.md](AI_STANDING_AUTHORIZATION_REPORT.md) for migration,
+activation, reservations versus billing, actual native/service validation and browser/worker gates.

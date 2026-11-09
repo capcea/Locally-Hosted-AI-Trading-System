@@ -406,7 +406,7 @@ export default function RiskCenter({
           </div>
           {!owner && (
             <p>
-              Doar proprietarul, cu MFA recent, poate modifica limitele și confirma
+              Doar proprietarul, autentificat, poate modifica limitele și confirma
               oprirea/deblocarea sau închiderea simulată.
             </p>
           )}

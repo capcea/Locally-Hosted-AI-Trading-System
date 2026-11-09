@@ -42,7 +42,7 @@ class AIModel(Base):
         UniqueConstraint("id", "owner_id"),
         scoped_fk("connection_id", "ai_connections"),
         UniqueConstraint("connection_id", "name", "context_ceiling"),
-        CheckConstraint("context_ceiling>=1024 AND context_ceiling<=32768"),
+        CheckConstraint("context_ceiling>=1024 AND context_ceiling<=131072"),
     )
 
 
@@ -172,3 +172,14 @@ class AICloudReservation(Base):
         scoped_fk("authorization_id", "ai_cloud_authorizations"),
         CheckConstraint("amount>=0"),
     )
+
+
+class AIStandingAuthorization(Base):
+    __tablename__ = "ai_standing_authorizations"
+    id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
+    owner_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), index=True)
+    revision: Mapped[int]
+    active: Mapped[bool]
+    policy: Mapped[dict[str, Any]] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    __table_args__ = (UniqueConstraint("id", "owner_id"), UniqueConstraint("owner_id", "revision"))

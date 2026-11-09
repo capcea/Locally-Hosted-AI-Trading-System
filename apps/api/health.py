@@ -11,7 +11,7 @@ from sqlalchemy import create_engine, text
 from apps.api.config import Settings
 from packages.domain.contracts import ServiceHealth, ServiceStatus
 
-SCHEMA_REVISION = "0009_openrouter"
+SCHEMA_REVISION = "0013_ai_context_capacity"
 
 
 def probe_database(url: str) -> None:

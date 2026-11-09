@@ -4157,6 +4157,61 @@
         }
       }
     },
+    "/api/v1/ai/models/{model_id}/context-revisions": {
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Context Revision",
+        "operationId": "context_revision_api_v1_ai_models__model_id__context_revisions_post",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Model Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContextRevisionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Context Revision Api V1 Ai Models  Model Id  Context Revisions Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/ai/models/{model_id}/probe": {
       "post": {
         "tags": [
@@ -4260,6 +4315,50 @@
                   "additionalProperties": true,
                   "type": "object",
                   "title": "Response Route Role Api V1 Ai Routes Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/requests/preview": {
+      "post": {
+        "tags": [
+          "Private AI \u2014 untrusted analysis, no execution"
+        ],
+        "summary": "Preview",
+        "description": "Same assembly/authorization/capacity gate, with no provider call, job or reservation.",
+        "operationId": "preview_api_v1_ai_requests_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Preview Api V1 Ai Requests Preview Post"
                 }
               }
             }
@@ -4748,6 +4847,408 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Credential Api V1 Ai Connections  Connection Id  Credential Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/standing-authorization": {
+      "get": {
+        "tags": [
+          "Standing inference consent; no execution authority"
+        ],
+        "summary": "Read",
+        "operationId": "read_api_v1_ai_standing_authorization_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Read Api V1 Ai Standing Authorization Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Standing inference consent; no execution authority"
+        ],
+        "summary": "Activate",
+        "operationId": "activate_api_v1_ai_standing_authorization_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StandingInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Activate Api V1 Ai Standing Authorization Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/standing-authorization/revoke": {
+      "post": {
+        "tags": [
+          "Standing inference consent; no execution authority"
+        ],
+        "summary": "Revoke",
+        "operationId": "revoke_api_v1_ai_standing_authorization_revoke_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Revoke Api V1 Ai Standing Authorization Revoke Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/ai/inference-readiness": {
+      "get": {
+        "tags": [
+          "Standing inference consent; no execution authority"
+        ],
+        "summary": "Readiness",
+        "operationId": "readiness_api_v1_ai_inference_readiness_get",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(RESEARCH|CODING|CRITIC|LIGHTWEIGHT)$",
+              "default": "RESEARCH",
+              "title": "Role"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "strategy",
+                "experiment",
+                "dataset",
+                "documentation",
+                "ai_artifact"
+              ],
+              "type": "string",
+              "default": "documentation",
+              "title": "Category"
+            }
+          },
+          {
+            "name": "context_tokens",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 131072,
+              "minimum": 1024,
+              "default": 4096,
+              "title": "Context Tokens"
+            }
+          },
+          {
+            "name": "output_tokens",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 4096,
+              "minimum": 64,
+              "default": 768,
+              "title": "Output Tokens"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Readiness Api V1 Ai Inference Readiness Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspace/library": {
+      "get": {
+        "tags": [
+          "Simple trading research workspace \u2014 SIMULATED"
+        ],
+        "summary": "Library",
+        "operationId": "library_api_v1_workspace_library_get",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "account_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Account Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Library Api V1 Workspace Library Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspace/accounts/{account_id}/strategy": {
+      "get": {
+        "tags": [
+          "Simple trading research workspace \u2014 SIMULATED"
+        ],
+        "summary": "Selection",
+        "operationId": "selection_api_v1_workspace_accounts__account_id__strategy_get",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Account Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Selection Api V1 Workspace Accounts  Account Id  Strategy Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Simple trading research workspace \u2014 SIMULATED"
+        ],
+        "summary": "Select Strategy",
+        "operationId": "select_strategy_api_v1_workspace_accounts__account_id__strategy_post",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Account Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SelectionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Select Strategy Api V1 Workspace Accounts  Account Id  Strategy Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/workspace/accounts/{account_id}/simulate": {
+      "post": {
+        "tags": [
+          "Simple trading research workspace \u2014 SIMULATED"
+        ],
+        "summary": "Simulate",
+        "operationId": "simulate_api_v1_workspace_accounts__account_id__simulate_post",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Account Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulationInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Simulate Api V1 Workspace Accounts  Account Id  Simulate Post"
                 }
               }
             }
@@ -5763,6 +6264,18 @@
       },
       "ActionKey": {
         "properties": {
+          "standing_authorization_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standing Authorization Id"
+          },
           "cloud_cost_acknowledged": {
             "type": "boolean",
             "title": "Cloud Cost Acknowledged",
@@ -6156,6 +6669,15 @@
       },
       "BootstrapStatus": {
         "properties": {
+          "auth_mode": {
+            "type": "string",
+            "enum": [
+              "PASSWORD",
+              "TOTP"
+            ],
+            "title": "Auth Mode",
+            "default": "PASSWORD"
+          },
           "initialized": {
             "type": "boolean",
             "title": "Initialized"
@@ -7983,6 +8505,22 @@
         ],
         "title": "ContextReference"
       },
+      "ContextRevisionInput": {
+        "properties": {
+          "context_ceiling": {
+            "type": "integer",
+            "maximum": 131072.0,
+            "minimum": 1024.0,
+            "title": "Context Ceiling"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "context_ceiling"
+        ],
+        "title": "ContextRevisionInput"
+      },
       "CreateCampaign": {
         "properties": {
           "key": {
@@ -9084,6 +9622,18 @@
       },
       "GatewayAction": {
         "properties": {
+          "standing_authorization_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standing Authorization Id"
+          },
           "cloud_cost_acknowledged": {
             "type": "boolean",
             "title": "Cloud Cost Acknowledged",
@@ -9104,21 +9654,19 @@
           },
           "processing_acknowledged": {
             "type": "boolean",
-            "const": true,
-            "title": "Processing Acknowledged"
+            "title": "Processing Acknowledged",
+            "default": false
           },
           "retain_structured_output": {
             "type": "boolean",
-            "const": true,
-            "title": "Retain Structured Output"
+            "title": "Retain Structured Output",
+            "default": false
           }
         },
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "role",
-          "processing_acknowledged",
-          "retain_structured_output"
+          "role"
         ],
         "title": "GatewayAction"
       },
@@ -9126,7 +9674,7 @@
         "properties": {
           "context_tokens": {
             "type": "integer",
-            "maximum": 32768.0,
+            "maximum": 131072.0,
             "minimum": 1024.0,
             "title": "Context Tokens",
             "default": 4096
@@ -10037,7 +10585,7 @@
           },
           "context_ceiling": {
             "type": "integer",
-            "maximum": 32768.0,
+            "maximum": 131072.0,
             "minimum": 1024.0,
             "title": "Context Ceiling",
             "default": 4096
@@ -12154,12 +12702,19 @@
       "Reauthenticate": {
         "properties": {
           "code": {
-            "type": "string",
-            "maxLength": 80,
-            "minLength": 6,
-            "format": "password",
-            "title": "Code",
-            "writeOnly": true
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80,
+                "minLength": 6,
+                "format": "password",
+                "writeOnly": true
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
           },
           "password": {
             "type": "string",
@@ -12173,7 +12728,6 @@
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "code",
           "password"
         ],
         "title": "Reauthenticate"
@@ -12493,6 +13047,35 @@
             "minLength": 3,
             "title": "Question"
           },
+          "context_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "AUTO",
+                  "RAPID",
+                  "STANDARD",
+                  "COMPLEX"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Context Mode"
+          },
+          "standing_authorization_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standing Authorization Id"
+          },
           "cloud_cost_acknowledged": {
             "type": "boolean",
             "title": "Cloud Cost Acknowledged",
@@ -12538,13 +13121,13 @@
           },
           "processing_acknowledged": {
             "type": "boolean",
-            "const": true,
-            "title": "Processing Acknowledged"
+            "title": "Processing Acknowledged",
+            "default": false
           },
           "retain_structured_output": {
             "type": "boolean",
-            "const": true,
-            "title": "Retain Structured Output"
+            "title": "Retain Structured Output",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -12552,9 +13135,7 @@
         "required": [
           "question",
           "key",
-          "role",
-          "processing_acknowledged",
-          "retain_structured_output"
+          "role"
         ],
         "title": "RequestInput"
       },
@@ -13409,6 +13990,21 @@
         ],
         "title": "SealInput"
       },
+      "SelectionInput": {
+        "properties": {
+          "decision_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Decision Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "decision_id"
+        ],
+        "title": "SelectionInput"
+      },
       "ServiceHealth": {
         "properties": {
           "id": {
@@ -13521,6 +14117,15 @@
       },
       "SessionView": {
         "properties": {
+          "auth_mode": {
+            "type": "string",
+            "enum": [
+              "PASSWORD",
+              "TOTP"
+            ],
+            "title": "Auth Mode",
+            "default": "TOTP"
+          },
           "user": {
             "$ref": "#/components/schemas/UserView"
           },
@@ -13829,6 +14434,29 @@
         ],
         "title": "SimState"
       },
+      "SimulationInput": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 16,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Key"
+          },
+          "acknowledged_historical_simulation": {
+            "type": "boolean",
+            "const": true,
+            "title": "Acknowledged Historical Simulation"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "acknowledged_historical_simulation"
+        ],
+        "title": "SimulationInput"
+      },
       "SimulationModel-Input": {
         "properties": {
           "assumption_source": {
@@ -14024,6 +14652,98 @@
           "account_currency"
         ],
         "title": "SimulationModel"
+      },
+      "StandingInput": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "const": "ai-standing-v1",
+            "title": "Version",
+            "default": "ai-standing-v1"
+          },
+          "connection_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Connection Ids"
+          },
+          "roles": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "RESEARCH",
+                "CODING",
+                "CRITIC",
+                "LIGHTWEIGHT"
+              ]
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Roles"
+          },
+          "data_categories": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "strategy",
+                "experiment",
+                "dataset",
+                "documentation",
+                "ai_artifact"
+              ]
+            },
+            "type": "array",
+            "maxItems": 5,
+            "minItems": 1,
+            "title": "Data Categories"
+          },
+          "operations": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "INFER",
+                "PROBE",
+                "DISCOVER"
+              ]
+            },
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Operations"
+          },
+          "request_usd": {
+            "type": "string",
+            "pattern": "^0\\.[0-9]{1,6}$",
+            "title": "Request Usd"
+          },
+          "daily_usd": {
+            "type": "string",
+            "pattern": "^[0-5](\\.[0-9]{1,6})?$",
+            "title": "Daily Usd"
+          },
+          "monthly_usd": {
+            "type": "string",
+            "pattern": "^[0-9]{1,3}(\\.[0-9]{1,6})?$",
+            "title": "Monthly Usd"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "connection_ids",
+          "roles",
+          "data_categories",
+          "operations",
+          "request_usd",
+          "daily_usd",
+          "monthly_usd"
+        ],
+        "title": "StandingInput"
       },
       "StrategyInput": {
         "properties": {

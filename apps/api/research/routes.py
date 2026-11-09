@@ -1,4 +1,4 @@
-"""Owner-MFA research orchestration; immutable results and separate one-use holdout release."""
+"""Owner-authorized research; immutable results and separate one-use holdout release."""
 
 import json
 from datetime import timedelta
@@ -14,7 +14,7 @@ from apps.api.identity.dependencies import (
     FullIdentity,
     Principal,
     require_owner,
-    require_recent_mfa,
+    require_sensitive_session,
 )
 from apps.api.market.routes import object_store
 from packages.execution.journal import digest
@@ -39,7 +39,7 @@ router = APIRouter(prefix="/api/v1/research", tags=["Quantitative research — S
 
 def privileged(identity: Principal) -> None:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
 
 
 def run_for(identity: Principal, run_id: UUID) -> ResearchRun:

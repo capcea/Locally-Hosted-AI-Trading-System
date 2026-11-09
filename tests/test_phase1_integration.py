@@ -159,6 +159,7 @@ def create_system(database: str, *, create: bool = True) -> System:
     settings = Settings(
         _env_file=None,
         app_environment="test",
+        auth_mode="TOTP",
         database_url=SecretStr(runtime_url),
         auth_encryption_key=SecretStr(encryption),
         auth_bootstrap_token=isolated.storage_password,

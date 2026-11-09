@@ -1,0 +1,20 @@
+{
+  "original_files": 1387,
+  "missing": [],
+  "changed_existing_files": [
+    "IMPLEMENTATION_STATUS.md",
+    "OPENROUTER_INTEGRATION_REPORT.md",
+    "apps/web/src/ai/AICenter.tsx",
+    "docs/IMPLEMENTATION_STATUS.md"
+  ],
+  "existing_check_failures_unchanged": [
+    "apps/web/src/App.tsx",
+    "apps/web/src/cockpit/cockpit-shell.css",
+    "apps/web/src/cockpit/cockpit-template.html",
+    "apps/web/src/cockpit/CockpitPage.tsx",
+    "apps/web/src/cockpit/vite-raw.d.ts"
+  ],
+  "backend_security_financial_code_unchanged": true,
+  "provider_requests_made": 0,
+  "docker_operations": 0
+}

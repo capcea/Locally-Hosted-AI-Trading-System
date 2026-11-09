@@ -1,0 +1,307 @@
+[
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 18.858,
+    "output": "check-final-accepted.txt",
+    "label": "check-final-accepted"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--auth-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 112.928,
+    "output": "auth-final.txt",
+    "label": "auth-final"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--campaigns-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 193.996,
+    "output": "campaigns.txt",
+    "label": "campaigns"
+  },
+  {
+    "command": [
+      "make",
+      "integration-services"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 625.449,
+    "output": "integration-final.txt",
+    "label": "integration-final"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.436,
+    "output": "contracts-final.txt",
+    "label": "contracts-final"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-m",
+      "infrastructure",
+      "-q"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.031,
+    "output": "infrastructure.txt",
+    "label": "infrastructure"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.427,
+    "output": "smoke-final.txt",
+    "label": "smoke-final"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.smoke_demo",
+      "--require-ready"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.269,
+    "output": "readiness.txt",
+    "label": "readiness"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.118,
+    "output": "repository.txt",
+    "label": "repository"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.705,
+    "output": "collect-final.txt",
+    "label": "collect-final"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "api",
+      "web",
+      "migrate"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.758,
+    "output": "build-local.txt",
+    "label": "build-local"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "run",
+      "--rm",
+      "--no-deps",
+      "-T",
+      "migrate",
+      "/app/.venv/bin/python",
+      "-c",
+      "from alembic import command; from alembic.config import Config; from apps.api.config import Settings; s=Settings(); c=Config(\"alembic.ini\"); c.attributes[\"database_url\"]=(s.migration_database_url or s.database_url).get_secret_value(); command.upgrade(c,\"head\")"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.777,
+    "output": "migrate-local.txt",
+    "label": "migrate-local"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "api",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 25.914,
+    "output": "rollout-local.txt",
+    "label": "rollout-local"
+  },
+  {
+    "command": [
+      "env",
+      "BUILDX_CONFIG=/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/buildx",
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "web",
+      "market-worker",
+      "research-worker"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.631,
+    "output": "build-product-final.txt",
+    "label": "build-product-final"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "web",
+      "market-worker",
+      "research-worker"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 21.195,
+    "output": "product-services-final.txt",
+    "label": "product-services-final"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.908,
+    "output": "secrets.txt",
+    "label": "secrets"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.11,
+    "output": "secret-final.txt",
+    "label": "secret-final"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.114,
+    "output": "repository-final.txt",
+    "label": "repository-final"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.049,
+    "output": "diff.txt",
+    "label": "diff"
+  }
+]

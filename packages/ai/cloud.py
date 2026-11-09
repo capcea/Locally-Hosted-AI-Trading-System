@@ -49,20 +49,9 @@ def unchanged(db: Session, owner: UUID, connection: UUID, saved: dict[str, Any])
     )
 
 
-def reserve(
-    db: Session,
-    owner: UUID,
-    identifier: UUID,
-    saved: dict[str, Any],
-    kind: str,
-    context: int,
-    output: int,
-    acknowledged: bool,
-) -> None:
-    if kind != "DISCOVER" and acknowledged is not True:
-        raise ValueError("AI_CLOUD_COST_ACKNOWLEDGEMENT_REQUIRED")
+def reservation_amount(saved: dict[str, Any], kind: str, context: int, output: int) -> Decimal:
     policy = CloudPolicy.model_validate(saved["policy"])
-    amount = (
+    return (
         Decimal(0)
         if kind == "DISCOVER"
         else (
@@ -73,18 +62,79 @@ def reserve(
             / Decimal(1000000)
         ).quantize(Decimal("0.00000001"), rounding=ROUND_CEILING)
     )
-    db.execute(text("SELECT pg_advisory_xact_lock(70703,0)"))
+
+
+def budget_state(
+    db: Session,
+    owner: UUID,
+    saved: dict[str, Any],
+    amount: Decimal,
+    standing: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    policy = CloudPolicy.model_validate(saved["policy"])
     midnight = utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-    base = select(func.coalesce(func.sum(AICloudReservation.amount), 0)).where(
+    month = midnight.replace(day=1)
+    daily = select(func.coalesce(func.sum(AICloudReservation.amount), 0)).where(
         AICloudReservation.created_at >= midnight
     )
-    total = db.scalar(base) or Decimal(0)
-    owned = db.scalar(base.where(AICloudReservation.owner_id == owner)) or Decimal(0)
-    if (
-        amount > Decimal(policy.request_usd)
-        or owned + amount > Decimal(policy.daily_usd)
-        or total + amount > Decimal("50")
-    ):
+    total = db.scalar(daily) or Decimal(0)
+    owned = db.scalar(daily.where(AICloudReservation.owner_id == owner)) or Decimal(0)
+    monthly = db.scalar(
+        select(func.coalesce(func.sum(AICloudReservation.amount), 0)).where(
+            AICloudReservation.owner_id == owner, AICloudReservation.created_at >= month
+        )
+    ) or Decimal(0)
+    request_limit = (
+        min(Decimal(policy.request_usd), Decimal(standing["request_usd"]))
+        if standing
+        else Decimal(policy.request_usd)
+    )
+    day_limit = (
+        min(Decimal(policy.daily_usd), Decimal(standing["daily_usd"]))
+        if standing
+        else Decimal(policy.daily_usd)
+    )
+    month_limit = Decimal(standing["monthly_usd"]) if standing else None
+    return {
+        "available": amount <= request_limit
+        and owned + amount <= day_limit
+        and total + amount <= Decimal("50")
+        and (month_limit is None or monthly + amount <= month_limit),
+        "reservation_usd": str(amount),
+        "daily_reserved_usd": str(owned),
+        "monthly_reserved_usd": str(monthly),
+        "request_limit_usd": str(request_limit),
+        "daily_limit_usd": str(day_limit),
+        "monthly_limit_usd": str(month_limit) if month_limit is not None else None,
+        "basis": "CONSERVATIVE_RESERVATIONS_NOT_PROVIDER_BILLING",
+        "reset_timezone": "UTC",
+    }
+
+
+def reserve(
+    db: Session,
+    owner: UUID,
+    identifier: UUID,
+    saved: dict[str, Any],
+    kind: str,
+    context: int,
+    output: int,
+    acknowledged: bool,
+    standing: dict[str, Any] | None = None,
+) -> None:
+    if kind != "DISCOVER" and acknowledged is not True and standing is None:
+        raise ValueError("AI_CLOUD_COST_ACKNOWLEDGEMENT_REQUIRED")
+    effective = standing
+    if effective is None:
+        from packages.ai.standing import latest
+
+        active_policy = latest(db, owner)
+        if active_policy is not None and active_policy.active:
+            effective = active_policy.policy
+    amount = reservation_amount(saved, kind, context, output)
+    # One lock covers legacy and standing requests, owners, authorizations, day and month totals.
+    db.execute(text("SELECT pg_advisory_xact_lock(70703,0)"))
+    if not budget_state(db, owner, saved, amount, effective)["available"]:
         raise ValueError("AI_CLOUD_BUDGET_EXCEEDED")
     db.add(
         AICloudReservation(

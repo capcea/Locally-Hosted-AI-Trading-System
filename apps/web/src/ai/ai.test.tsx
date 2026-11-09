@@ -48,7 +48,12 @@ it.each(['empty', 'loaded', 'revised'] as const)(
         mutate={async () => undefined}
       />,
     );
-    const selects = [...markup.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/g)];
+    const allSelects = [...markup.matchAll(/<select\b([^>]*)>([\s\S]*?)<\/select>/g)];
+    const selects = allSelects.filter(([, attributes]) =>
+      registryLabels.includes(/aria-label="([^"]+)"/.exec(attributes)?.[1] ?? ''),
+    );
+    expect(allSelects).toHaveLength(registryLabels.length + (populated ? 2 : 0));
+    if (populated) expect(markup).toContain('Pregătește versiunea cu context extins');
     expect(selects).toHaveLength(registryLabels.length);
     expect(selects.map(([, attributes]) => /aria-label="([^"]+)"/.exec(attributes)?.[1])).toEqual(
       registryLabels,
@@ -77,6 +82,7 @@ it('keeps analysis and context selectors explicitly named before models are avai
     const selects = [...markup.matchAll(/<select\b([^>]*)>/g)];
     expect(selects.map(([, attributes]) => /aria-label="([^"]+)"/.exec(attributes)?.[1])).toEqual([
       'Tipul analizei',
+      'Context AI',
       'Tip de referință',
     ]);
   } finally {
@@ -84,9 +90,9 @@ it('keeps analysis and context selectors explicitly named before models are avai
   }
 });
 
-it('preserves five destinations, guarded AI setup and reloadable job routes', () => {
+it('preserves three destinations, guarded AI setup and reloadable job routes', () => {
   const id = '11111111-1111-4111-8111-111111111111';
-  expect(primary).toHaveLength(5);
+  expect(primary).toHaveLength(3);
   const route = resolveRoute(`/testeaza/ai/${id}`);
   expect(route).toMatchObject({ screen: 'ai', area: 'research', jobId: id });
   expect(activeSection(route)).toBe('/testeaza/ai');

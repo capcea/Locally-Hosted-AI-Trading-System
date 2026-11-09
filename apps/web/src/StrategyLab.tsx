@@ -11,7 +11,8 @@ import { Evidence } from './ui/Controls';
 import FinalEvaluation from './FinalEvaluation';
 import AdvancedStatistics from './results/AdvancedStatistics';
 import { allRecords } from './records';
-import { readResearchDraft, writeResearchDraft } from './research-drafts';
+import { readResearchDraft, writeResearchDraft, takeResearchIdea } from './research-drafts';
+import { offerExperimentReview } from './ai/draft';
 import { strategyLabels, jobLabels, phaseLabels, sourceLabels } from './copy/ro';
 import {
   StrategyLibrary,
@@ -50,7 +51,7 @@ type Job = {
     attempts: number;
     error: string | null;
     cancel_requested?: boolean;
-  };
+  } | null;
   result: unknown;
 };
 type Seal = { id: string; dataset_id: string; prior_exposure: string };
@@ -94,6 +95,23 @@ export default function StrategyLab({
   const savedDraft = readResearchDraft(session.user.id);
   const safeDraft =
     !initialAccount || initialAccount === savedDraft?.account ? savedDraft : undefined;
+  const [aiIdea, setAIIdea] = useState(safeDraft?.aiIdea);
+  useEffect(() => {
+    const idea = takeResearchIdea(session.user.id);
+    if (idea) {
+      setAIIdea(idea);
+      setStep(1);
+    }
+  }, [session.user.id]);
+  useEffect(() => {
+    if (!aiIdea) return;
+    const remaining = Date.parse(aiIdea.retainUntil) - Date.now();
+    const timer = setTimeout(
+      () => setAIIdea(undefined),
+      Math.max(0, Math.min(remaining || 0, 2147483647)),
+    );
+    return () => clearTimeout(timer);
+  }, [aiIdea]);
   const [step, setStep] = useState(safeDraft?.step ?? 1);
   const [account, setAccount] = useState(safeDraft?.account ?? initialAccount);
   const [templateId, setTemplateId] = useState(safeDraft?.templateId ?? '');
@@ -526,8 +544,9 @@ export default function StrategyLab({
       requestKey: requestKey.current,
       values: draftValues.current,
       review: reviewValues,
+      aiIdea,
     });
-  }, [session.user.id, account, dataset, templateId, strategy, step, reviewValues]);
+  }, [session.user.id, account, dataset, templateId, strategy, step, reviewValues, aiIdea]);
   useEffect(() => {
     if (!showWizard || !formRef.current) return;
     for (const control of formRef.current.querySelectorAll<HTMLInputElement | HTMLSelectElement>(
@@ -656,6 +675,35 @@ export default function StrategyLab({
                 Pasul {step} din 5 · Configurează, verifică, apoi pornește simularea.
               </p>
             </header>
+            {aiIdea && (
+              <aside className="lab-idea" aria-label="Ideea AI de pornire">
+                <strong>Ideea de pornire: {aiIdea.title}</strong>
+                <p>{aiIdea.hypothesis}</p>
+                <p>
+                  AI a propus direcția; alegi mai jos strategia disponibilă, datele și limitele.
+                  Dacă ideea cere logică nouă, nu o putem testa încă.
+                </p>
+                <details>
+                  <summary>Planul sugerat și sursa</summary>
+                  <ul>
+                    {aiIdea.tests.map((text, i) => (
+                      <li key={i}>{text}</li>
+                    ))}
+                  </ul>
+                  <Link href={`/strategy-lab/analize/${aiIdea.requestId}`}>
+                    Revizuiește analiza AI
+                  </Link>
+                  <p>
+                    Context temporar al formularului: se pierde la reîncărcare sau la expirarea
+                    analizei. Nu modifică proveniența imuabilă a experimentului și nu confirmă că
+                    strategia aleasă implementează ideea.
+                  </p>
+                </details>
+                <button type="button" onClick={() => setAIIdea(undefined)}>
+                  Continuă fără această idee
+                </button>
+              </aside>
+            )}
             <ol className="wizard-steps" aria-label="Pașii testului istoric">
               {['Piață', 'Strategie', 'Perioadă', 'Configurație revizuită', 'Revizuire'].map(
                 (label, i) => (
@@ -1289,7 +1337,7 @@ export default function StrategyLab({
                     : []
                   : filterExperiments(
                       jobs.filter(
-                        (j) => route.section !== 'results' || j.job.state === 'SUCCEEDED',
+                        (j) => route.section !== 'results' || j.job?.state === 'SUCCEEDED',
                       ),
                       historyQuery,
                       historyState,
@@ -1300,33 +1348,39 @@ export default function StrategyLab({
                     <td>
                       <article className="management-record">
                         <h3>
-                          {job.name} · {job.job.state}
+                          {job.name} · {job.job?.state ?? 'UNKNOWN'}
                         </h3>
                         <p>
-                          {jobLabels[job.job.state] ?? 'Stare necunoscută'} · {job.job.progress}%
-                          raportat · încercări {job.job.attempts} ·{' '}
-                          {phaseLabels[job.phase] ?? job.phase}
+                          {job.job ? (
+                            <>
+                              {jobLabels[job.job.state] ?? 'Stare necunoscută'} · {job.job.progress}
+                              % raportat · încercări {job.job.attempts}
+                            </>
+                          ) : (
+                            'Procesare neconfirmată; progresul și numărul de încercări sunt necunoscute.'
+                          )}{' '}
+                          · {phaseLabels[job.phase] ?? job.phase}
                         </p>
-                        {job.job.error && (
+                        {job.job?.error && (
                           <p className="notice">
                             Testul s-a oprit. Nu publicăm rezultate incomplete. Verifică datele,
                             configurația și diagnosticul permis.
                           </p>
                         )}
                         <Evidence title="Identificator și stare tehnică" value={job} />
-                        {job.job.state === 'SUCCEEDED' ? (
+                        {job.job?.state === 'SUCCEEDED' ? (
                           <Link className="primary-button" href={resultPath(job.id)}>
                             Vezi rezultatul {job.name}
                           </Link>
                         ) : (
                           <Link href={progressPath(job.id)}>Deschide progresul</Link>
                         )}
-                        {['QUEUED', 'RUNNING', 'RETRY'].includes(job.job.state) && (
+                        {['QUEUED', 'RUNNING', 'RETRY'].includes(job.job?.state ?? 'UNKNOWN') && (
                           <>
                             <button
                               className="secondary-button"
                               disabled={
-                                cancelRequested.includes(job.id) || job.job.cancel_requested
+                                cancelRequested.includes(job.id) || job.job?.cancel_requested
                               }
                               onClick={() =>
                                 void api<Job>(`/research/experiments/${job.id}/cancel`, {
@@ -1344,7 +1398,7 @@ export default function StrategyLab({
                             >
                               Solicită anularea {job.name}
                             </button>
-                            {(cancelRequested.includes(job.id) || job.job.cancel_requested) && (
+                            {(cancelRequested.includes(job.id) || job.job?.cancel_requested) && (
                               <p role="status">
                                 Anularea a fost cerută. Așteptăm starea finală; finalizarea poate
                                 câștiga cursa.
@@ -1357,10 +1411,10 @@ export default function StrategyLab({
                     <td>{strategyLabels[job.strategy] ?? job.strategy}</td>
                     <td>
                       <StatusPill>
-                        {job.job.cancel_requested &&
-                        ['QUEUED', 'RUNNING', 'RETRY'].includes(job.job.state)
+                        {job.job?.cancel_requested &&
+                        ['QUEUED', 'RUNNING', 'RETRY'].includes(job.job?.state ?? 'UNKNOWN')
                           ? 'Anulare solicitată'
-                          : (jobLabels[job.job.state] ?? 'UNKNOWN')}
+                          : (jobLabels[job.job?.state ?? 'UNKNOWN'] ?? 'UNKNOWN')}
                       </StatusPill>
                     </td>
                   </tr>
@@ -1371,7 +1425,7 @@ export default function StrategyLab({
           {!route.experimentId &&
             jobs.length > 0 &&
             filterExperiments(
-              jobs.filter((j) => route.section !== 'results' || j.job.state === 'SUCCEEDED'),
+              jobs.filter((j) => route.section !== 'results' || j.job?.state === 'SUCCEEDED'),
               historyQuery,
               historyState,
               historyPhase,
@@ -1420,6 +1474,18 @@ export default function StrategyLab({
       {showResults && result && (
         <section className="panel" aria-label="Rezultate experiment">
           <h2>Rezultatul testului</h2>
+          {focusedJob?.job?.state === 'SUCCEEDED' && focusedJob.phase !== 'FINAL_HOLDOUT' && (
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => {
+                offerExperimentReview(session.user.id, focusedJob.id);
+                navigate('/strategy-lab');
+              }}
+            >
+              Cere AI-ului să analizeze acest rezultat
+            </button>
+          )}
           <label>
             Scenariu rezultat
             <select
@@ -1609,7 +1675,7 @@ export default function StrategyLab({
               >
                 <option value="">Alege…</option>
                 {jobs
-                  .filter((j) => j.job.state === 'SUCCEEDED')
+                  .filter((j) => j.job?.state === 'SUCCEEDED')
                   .map((j) => (
                     <option value={j.id} key={j.id}>
                       {j.name} · {j.id}
@@ -1660,8 +1726,8 @@ export default function StrategyLab({
       )}
       {showFinal && session.user.role !== 'OWNER' && (
         <p>
-          Doar proprietarul cu MFA recent poate autoriza evaluarea finală. Nu afișăm conținutul
-          perioadei protejate.
+          Doar proprietarul cu o sesiune validă poate autoriza evaluarea finală. Nu afișăm
+          conținutul perioadei protejate.
         </p>
       )}
     </section>

@@ -17,7 +17,7 @@ type JobView = {
   name: string;
   phase: string;
   state: string;
-  progress: number;
+  progress: number | null;
   createdAt: string | null;
 };
 type Snapshot = {
@@ -70,12 +70,12 @@ export default function CockpitPage({
               id: job.id,
               name: job.name,
               phase: job.phase,
-              state: job.job.state,
-              progress: job.job.progress,
+              state: job.job?.state ?? 'UNKNOWN',
+              progress: job.job?.progress ?? null,
               createdAt: job.created_at ?? null,
             })),
           );
-          setJobsVerified(true);
+          setJobsVerified(fetched.every((job) => job.job !== null));
         }
       } catch {
         if (mounted) {

@@ -6,7 +6,8 @@ export const MFA_MESSAGE =
   'Pentru această acțiune trebuie să reconfirmi autentificarea în doi pași.';
 
 export const authMessages: Record<string, string> = {
-  LOGIN_REQUIRED: 'Autentifică-te și verifică autentificarea în doi pași pentru a continua.',
+  LOGIN_REQUIRED: 'Autentifică-te pentru a continua.',
+  REAUTH_INVALID: 'Parola curentă este incorectă. Sesiunea rămâne deschisă.',
   SESSION_EXPIRED: 'Sesiunea a expirat sau a fost revocată. Autentifică-te din nou.',
   LOGIN_INVALID: 'Numele de utilizator sau parola nu sunt corecte.',
   MFA_INVALID:

@@ -15,7 +15,9 @@ export const platformLinks = [
   { href: '/setari', label: 'Platformă' },
 ];
 export const pageTitles = (route: Route): string => {
-  if (route.screen === 'home') return 'Acasă';
+  if (route.screen === 'home') return 'Trading Dashboard';
+  if (route.screen === 'lab') return 'Strategy Lab';
+  if (route.screen === 'library') return 'Biblioteca validată';
   if (route.screen === 'campaigns') return 'Campanii de cercetare';
   if (route.screen === 'ai') return route.area === 'settings' ? 'Setări · Modele AI' : 'AI Center';
   if (route.screen === 'research') {
@@ -37,7 +39,7 @@ export const pageTitles = (route: Route): string => {
   if (route.screen === 'data')
     return route.section === 'import' ? 'Adaugă date istorice' : 'Date și piață';
   if (route.screen === 'security')
-    return route.section === 'utilizatori' ? 'Utilizatori și acces' : 'Securitate și MFA';
+    return route.section === 'utilizatori' ? 'Utilizatori și acces' : 'Parolă și sesiuni';
   if (route.screen === 'audit') return 'Istoric verificabil';
   if (route.screen === 'not-found') return 'Pagina nu există';
   // Retained diagnostic modules own their detailed h2 heading, avoiding duplicate exact landmarks.

@@ -57,6 +57,8 @@ def provision_runtime(admin_url: str, password: str) -> str:
             "research_accounts",
             "ai_models",
             "ai_cloud_authorizations",
+            "ai_standing_authorizations",
+            "workspace_strategy_selections",
             "ai_cloud_reservations",
             "ai_routes",
             "ai_requests",

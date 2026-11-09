@@ -7,8 +7,8 @@ import CampaignCenter from './CampaignCenter';
 import { campaignErrors, campaignStates, decisions } from './copy';
 
 describe('bounded campaign navigation and honest states', () => {
-  it('retains five destinations and stable guarded campaign deep links', () => {
-    expect(primary).toHaveLength(5);
+  it('retains three destinations and stable guarded campaign deep links', () => {
+    expect(primary).toHaveLength(3);
     const route = resolveRoute('/testeaza/campanii/11111111-1111-4111-8111-111111111111');
     expect(route.screen).toBe('campaigns');
     expect(route.campaignId).toBe('11111111-1111-4111-8111-111111111111');
@@ -30,7 +30,7 @@ describe('bounded campaign navigation and honest states', () => {
       );
       expect(html).toContain('SIMULATED / DENY_ALL');
       expect(html).toContain('SYNTHETIC_FIXTURE');
-      expect(html).toContain('MFA recentă');
+      expect(html).toContain('o sesiune validă');
       expect(html).toContain('disabled=""');
       expect(html).not.toContain('AI online');
       expect(html).not.toContain('3 idei');

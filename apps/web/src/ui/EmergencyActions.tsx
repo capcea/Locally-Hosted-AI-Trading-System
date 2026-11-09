@@ -47,10 +47,10 @@ export default function EmergencyActions({
     <section aria-label="Comenzi distincte de siguranță">
       <h3>Controlul intrărilor și al pozițiilor simulate</h3>
       <p>
-        Cont: <strong>{accountName}</strong>. Fiecare acțiune necesită confirmare explicită și MFA
-        recent verificat de server.
+        Cont: <strong>{accountName}</strong>. Fiecare acțiune necesită confirmare explicită și o
+        sesiune de proprietar verificată de server.
       </p>
-      <Link href="/setari/securitate">Reconfirmă identitatea înaintea unei acțiuni sensibile</Link>
+      <Link href="/setari/securitate">Vezi securitatea sesiunii</Link>
       <div className="emergency-actions">
         {actions.map((a) => (
           <article key={a.action}>

@@ -332,7 +332,8 @@ export default function BrokerCenter({
                   <Input name="public_key" label="Cheie publică Ed25519 a conectorului privat" />
                   <p>
                     Parolele MT5 și tokenurile OAuth rămân pe serviciul privat. Acest formular nu le
-                    primește. Schimbarea identității necesită o conexiune nouă și MFA recent.
+                    primește. Schimbarea identității necesită o conexiune nouă și autorizarea
+                    proprietarului.
                   </p>
                 </>
               )}

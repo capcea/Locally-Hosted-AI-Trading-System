@@ -1,29 +1,105 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ai } from './api';
 import { Evidence } from '../ui/Controls';
+import { safeError } from '../management-api';
+import { CloudAuthorizationForm } from './CloudAuthorizationForm';
+import { cloudSaveConfirmed, cloudStatusSchema, cloudSubmission } from './cloud-policy';
+import type { CloudStatus } from './cloud-policy';
+export type { CloudStatus } from './cloud-policy';
 
-export type CloudStatus = {
-  operator_enabled: boolean;
-  authorization: { id: string; policy: Record<string, unknown> } | null;
-  billing_reservations: unknown[];
-};
 type Mutate = (path: string, body: unknown, method?: string) => Promise<unknown>;
 
-export function CloudSetup({ busy, mutate }: { busy: boolean; mutate: Mutate }) {
+export function CloudPolicySummary({ state }: { state: CloudStatus }) {
+  return (
+    <p role="status">
+      Furnizor aprobat pe server:{' '}
+      <strong>
+        {state.authorization?.policy.upstream_provider ?? 'Nicio autorizare cloud salvată'}
+      </strong>
+    </p>
+  );
+}
+
+export function CloudSetup({
+  busy,
+  mutate,
+  passwordAuth = false,
+}: {
+  busy: boolean;
+  mutate: Mutate;
+  passwordAuth?: boolean;
+}) {
   const [state, setState] = useState<CloudStatus | null>(null);
   const [failed, setFailed] = useState(false);
-  async function load() {
+  const [reading, setReading] = useState(false);
+  const [notice, setNotice] = useState('');
+  const reads = useRef({ mounted: true, sequence: 0 });
+  const submitting = useRef(false);
+  const load = useCallback(async () => {
+    const lifecycle = reads.current;
+    if (!lifecycle.mounted) return null;
+    const current = ++lifecycle.sequence;
+    setReading(true);
     try {
-      setState(await ai<CloudStatus>('/cloud-policy'));
+      const value = cloudStatusSchema.parse(await ai<unknown>('/cloud-policy'));
+      if (!lifecycle.mounted || current !== lifecycle.sequence) return null;
+      setState(value);
       setFailed(false);
+      return value;
     } catch {
-      setState(null);
-      setFailed(true);
+      if (lifecycle.mounted && current === lifecycle.sequence) {
+        setFailed(true);
+        setState(null);
+      }
+      return null;
+    } finally {
+      if (lifecycle.mounted && current === lifecycle.sequence) setReading(false);
+    }
+  }, []);
+  useEffect(() => {
+    const lifecycle = reads.current;
+    lifecycle.mounted = true;
+    void load();
+    return () => {
+      lifecycle.mounted = false;
+      lifecycle.sequence++;
+    };
+  }, [load]);
+  async function save(data: FormData) {
+    if (busy || reading || submitting.current) return false;
+    submitting.current = true;
+    setNotice('');
+    try {
+      const body = cloudSubmission(data);
+      const result = await mutate('/endpoints/openrouter', body);
+      if (!reads.current.mounted) return false;
+      if (!result) {
+        setNotice(
+          passwordAuth
+            ? 'Salvarea nu este confirmată. Verifică sesiunea și valorile înainte de o nouă înregistrare.'
+            : 'Salvarea nu este confirmată. Dacă ai reconfirmat MFA, revizuiește formularul și apasă din nou „Înregistrează autorizarea cloud”.',
+        );
+        return false;
+      }
+      const saved = await load();
+      if (!reads.current.mounted) return false;
+      if (!saved || !saved.authorization || !cloudSaveConfirmed(result, saved, body)) {
+        setNotice(
+          'Solicitarea a fost acceptată, dar nu putem confirma valorile salvate. Verifică autorizarea de pe server înainte de o nouă înregistrare.',
+        );
+        return false;
+      }
+      setNotice(
+        `Salvare confirmată de server. Furnizor autorizat: ${saved.authorization.policy.upstream_provider}.`,
+      );
+      return true;
+    } catch (failure) {
+      if (reads.current.mounted) setNotice(safeError(failure));
+      return false;
+    } finally {
+      submitting.current = false;
     }
   }
-  useEffect(() => {
-    void load();
-  }, []);
   return (
     <section id="ai-destinations" aria-label="Destinație OpenRouter">
       <h4>0. Alege unde se procesează datele</h4>
@@ -31,10 +107,11 @@ export function CloudSetup({ busy, mutate }: { busy: boolean; mutate: Mutate }) 
         Furnizorii privați rămân opțiunea implicită. OpenRouter folosește cloud public și un
         furnizor din amonte; aprobarea privată nu este consimțământ pentru cloud.
       </p>
+      {notice && <p role="status">{notice}</p>}
       {failed ? (
         <p role="alert">
           Nu putem citi politica cloud.{' '}
-          <button type="button" onClick={() => void load()}>
+          <button type="button" disabled={busy || reading} onClick={() => void load()}>
             Reîncearcă citirea politicii
           </button>
         </p>
@@ -47,86 +124,32 @@ export function CloudSetup({ busy, mutate }: { busy: boolean; mutate: Mutate }) 
           configurate pe API și worker. Nu există acces automat la internet.
         </p>
       ) : (
-        <details>
-          <summary>
-            {state.authorization
-              ? 'Revizuiește autorizarea OpenRouter'
-              : 'Înregistrează destinația OpenRouter'}
-          </summary>
-          <p>
-            Destinație fixă: https://openrouter.ai/api/v1 · protocol OpenAI compatibil. Cerem ZDR și
-            fără antrenare, dar nu certificăm independent politica furnizorilor. Nu trimite secrete
-            sau date fără drept de utilizare. Salvarea nu trimite nicio cerere cu plată.
-          </p>
-          <form
-            aria-label="Autorizare OpenRouter"
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const data = new FormData(e.currentTarget);
-              const result = await mutate('/endpoints/openrouter', {
-                upstream_provider: String(data.get('upstream')),
-                input_usd_per_million: String(data.get('input_price')),
-                output_usd_per_million: String(data.get('output_price')),
-                request_usd: String(data.get('request_budget')),
-                daily_usd: String(data.get('daily_budget')),
-                acknowledged_public_cloud: data.has('cloud'),
-                acknowledged_upstream_processing: data.has('upstream_ack'),
-                acknowledged_cost: data.has('cost'),
-                acknowledged_provider_policy_limits: data.has('limits'),
-              });
-              if (result) await load();
-            }}
-          >
-            <label>
-              Identificatorul exact al furnizorului din amonte
-              <input
-                name="upstream"
-                required
-                pattern="[a-z0-9][a-z0-9_/-]{1,79}"
-                placeholder="Tag-ul verificat din catalogul OpenRouter"
-              />
-            </label>
-            <label>
-              Preț maxim intrare · USD / milion tokenuri
-              <input name="input_price" required defaultValue="1" inputMode="decimal" />
-            </label>
-            <label>
-              Preț maxim ieșire · USD / milion tokenuri
-              <input name="output_price" required defaultValue="4" inputMode="decimal" />
-            </label>
-            <label>
-              Rezervare maximă / solicitare · USD
-              <input name="request_budget" required defaultValue="0.01" inputMode="decimal" />
-            </label>
-            <label>
-              Rezervări maxime / zi UTC · USD
-              <input name="daily_budget" required defaultValue="0.50" inputMode="decimal" />
-            </label>
+        <>
+          <CloudPolicySummary state={state} />
+          <button type="button" disabled={busy || reading} onClick={() => void load()}>
+            {reading ? 'Citim autorizarea salvată…' : 'Verifică autorizarea salvată'}
+          </button>
+          <details>
+            <summary>
+              {state.authorization
+                ? 'Revizuiește autorizarea OpenRouter'
+                : 'Înregistrează destinația OpenRouter'}
+            </summary>
             <p>
-              Rezervările conservatoare includ și solicitările eșuate sau incerte; nu reprezintă
-              factura. Configurează separat o limită mică pe cheia din OpenRouter. Fără furnizori
-              alternativi automați.
+              Destinație fixă: https://openrouter.ai/api/v1 · protocol OpenAI compatibil. Cerem ZDR
+              și fără antrenare, dar nu certificăm independent politica furnizorilor. Nu trimite
+              secrete sau date fără drept de utilizare. Salvarea nu trimite nicio cerere cu plată.
             </p>
-            <label>
-              <input type="checkbox" name="cloud" required />
-              Aprob explicit procesarea în cloud public OpenRouter.
-            </label>
-            <label>
-              <input type="checkbox" name="upstream_ack" required />
-              Aprob furnizorul din amonte ales și am verificat drepturile asupra datelor.
-            </label>
-            <label>
-              <input type="checkbox" name="cost" required />
-              Am revizuit tarifele, limitele și eventualele costuri.
-            </label>
-            <label>
-              <input type="checkbox" name="limits" required />
-              Înțeleg limitele garanțiilor ZDR și de confidențialitate declarate.
-            </label>
-            <button disabled={busy}>Înregistrează autorizarea cloud</button>
-          </form>
-          <Evidence title="Autorizare și rezervări cloud · fără chei" value={state} />
-        </details>
+            <CloudAuthorizationForm
+              key={state.authorization?.id ?? 'new'}
+              policy={state.authorization?.policy ?? null}
+              passwordAuth={passwordAuth}
+              busy={busy || reading}
+              save={save}
+            />
+            <Evidence title="Autorizare și rezervări cloud · fără chei" value={state} />
+          </details>
+        </>
       )}
     </section>
   );

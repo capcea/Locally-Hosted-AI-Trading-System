@@ -126,7 +126,10 @@ export function GovernancePage({ data }: { data: Overview }) {
           <br />
           <span>o proprietate a sistemului.</span>
         </h2>
-        <p>Administrarea necesită autentificare și MFA. Nu există un flux de activare live.</p>
+        <p>
+          Administrarea necesită autentificare și o sesiune validă. Nu există un flux de activare
+          live.
+        </p>
       </div>
       <div className="governance-grid">
         {[
@@ -140,7 +143,7 @@ export function GovernancePage({ data }: { data: Overview }) {
             icon: Fingerprint,
             name: 'Aprobări umane',
             value: 'IDENTITATE & MFA · FAZA 1',
-            text: 'Conturile și configurările sunt protejate prin autentificare, roluri și MFA. Aprobările pentru execuție live nu sunt implementate.',
+            text: 'Conturile și configurările sunt protejate prin autentificare, roluri și izolare pe proprietar. Aprobările pentru execuție live nu sunt implementate.',
           },
           {
             icon: LockKeyhole,

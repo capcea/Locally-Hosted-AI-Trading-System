@@ -98,6 +98,7 @@ class Principal:
     token: str
     key: str
     correlation_id: UUID
+    auth_mode: str = "TOTP"
 
     def audit(
         self,
@@ -112,7 +113,7 @@ class Principal:
             self.key,
             event,
             actor=self.user,
-            mfa=self.session.state == "FULL",
+            mfa=self.session.mfa_at is not None,
             entity_id=entity_id,
             correlation_id=self.correlation_id,
             before=before,
@@ -141,6 +142,7 @@ def authenticated(request: Request) -> Iterator[Principal]:
             or session.revoked_at is not None
             or session.expires_at <= now
             or session.idle_expires_at <= now
+            or session.auth_policy != settings(request).auth_mode
         ):
             raise auth_error(401, "Session expired or revoked", "SESSION_EXPIRED")
         if request.method not in {"GET", "HEAD", "OPTIONS"}:
@@ -151,14 +153,20 @@ def authenticated(request: Request) -> Iterator[Principal]:
         session.idle_expires_at = min(
             session.expires_at, now + timedelta(seconds=settings(request).session_idle_seconds)
         )
-        yield Principal(db, user, session, raw, key, request.state.correlation_id)
+        yield Principal(
+            db, user, session, raw, key, request.state.correlation_id, settings(request).auth_mode
+        )
 
 
 Identity = Annotated[Principal, Depends(authenticated)]
 
 
 def fully_authenticated(identity: Identity) -> Principal:
-    if identity.session.state != "FULL" or identity.user.mfa_secret is None:
+    if identity.session.state != "FULL":
+        raise auth_error(
+            403, "Complete authentication before accessing management records", "MFA_REQUIRED"
+        )
+    if identity.auth_mode == "TOTP" and identity.user.mfa_secret is None:
         raise auth_error(403, "Complete MFA before accessing management records", "MFA_REQUIRED")
     return identity
 
@@ -171,6 +179,14 @@ def require_owner(identity: Principal) -> None:
         raise auth_error(403, "Owner role required", "ROLE_REQUIRED")
 
 
-def require_recent_mfa(identity: Principal) -> None:
+def require_sensitive_session(identity: Principal) -> None:
+    if identity.auth_mode == "PASSWORD":
+        if identity.session.state != "FULL":
+            raise auth_error(403, "Authentication required", "LOGIN_REQUIRED")
+        return
     if identity.session.mfa_at is None or identity.session.mfa_at < utcnow() - timedelta(minutes=5):
         raise auth_error(403, "Recent MFA verification required", "MFA_RECENT_REQUIRED")
+
+
+# Compatibility for reviewed legacy clients; live execution has independent DENY_ALL gates.
+require_recent_mfa = require_sensitive_session

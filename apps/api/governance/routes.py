@@ -21,7 +21,7 @@ from apps.api.identity.dependencies import (
     FullIdentity,
     Principal,
     require_owner,
-    require_recent_mfa,
+    require_sensitive_session,
 )
 from packages.persistence.audit import verify_chain
 from packages.persistence.models import (
@@ -253,7 +253,7 @@ def update_record(
 @router.post("/policies/{record_id}/verify", response_model=RecordView)
 def verify_policy(record_id: UUID, body: PolicyVerification, identity: FullIdentity) -> RecordView:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     policy = owned(identity, FirmPolicy, record_id)
     if not isinstance(policy, FirmPolicy) or policy.revision != body.expected_revision:
         raise HTTPException(409, "Revision conflict")
@@ -320,7 +320,7 @@ def policy_eligibility(account_id: UUID, identity: FullIdentity) -> Eligibility:
 @router.post("/approvals/{record_id}/review", response_model=RecordView)
 def review_approval(record_id: UUID, body: Review, identity: FullIdentity) -> RecordView:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     record = owned(identity, ApprovalRequest, record_id)
     if (
         not isinstance(record, ApprovalRequest)

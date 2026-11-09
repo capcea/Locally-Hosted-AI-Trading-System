@@ -46,6 +46,7 @@ class UserView(Input):
 
 
 class SessionView(Input):
+    auth_mode: Literal["PASSWORD", "TOTP"] = "TOTP"
     user: UserView
     state: Literal["ENROLLMENT", "MFA", "FULL"]
     csrf_token: str
@@ -57,7 +58,8 @@ class Code(Input):
     code: Annotated[SecretStr, Field(min_length=6, max_length=80)]
 
 
-class Reauthenticate(Code):
+class Reauthenticate(Input):
+    code: Annotated[SecretStr | None, Field(min_length=6, max_length=80)] = None
     password: Annotated[SecretStr, Field(min_length=1, max_length=128)]
 
 
@@ -77,5 +79,6 @@ class RecoveryResult(Input):
 
 
 class BootstrapStatus(Input):
+    auth_mode: Literal["PASSWORD", "TOTP"] = "PASSWORD"
     initialized: bool
     setup_available: bool

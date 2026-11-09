@@ -59,7 +59,7 @@ export default function FinalEvaluation({
         proprietar. Expunerea anterioară este necunoscută: nu certificăm că datele sunt nevăzute.
         Este permisă o singură evaluare cu configurația înghețată.
       </p>
-      <Link href="/setari/securitate">Reconfirmă MFA înainte de autorizare</Link>
+      <Link href="/setari/securitate">Verifică securitatea sesiunii</Link>
       {error && (
         <p role="alert" className="error-banner">
           {error}

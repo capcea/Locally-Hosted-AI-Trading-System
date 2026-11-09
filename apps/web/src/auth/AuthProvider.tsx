@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [setSession, expire]);
   const requestMfa = useCallback(() => {
-    if (current.current?.state === 'FULL') {
+    if (current.current?.state === 'FULL' && current.current.auth_mode !== 'PASSWORD') {
       setMfaRequired(true);
       setStepUpOpen(true);
     }

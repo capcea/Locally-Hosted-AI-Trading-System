@@ -1,0 +1,158 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_malformed_evidence_returns_bounded_refusal_instead_of_crashing_library[payload0] _
+
+payload = {}
+
+    @pytest.mark.parametrize("payload", [{}, {"experiment_id": "not-a-uuid"}])
+    def test_malformed_evidence_returns_bounded_refusal_instead_of_crashing_library(
+        payload: dict[str, Any],
+    ) -> None:
+        identity, request, row = lineage(payload)
+        with pytest.raises(HTTPException) as refused:
+>           routes.candidate_for(row.id, identity, request)
+
+tests/test_workspace_validation.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+identifier = UUID('0bbe14ea-c3b8-4b26-bf7d-bbc2a9d8f5f0')
+identity = namespace(db=<Mock id='4611425680'>, user=namespace(id=UUID('5c319a11-94bf-4bfe-b4d6-64ea91946442')))
+request = <Mock spec='Request' id='4611425728'>
+
+    def candidate_for(
+        identifier: UUID, identity: Principal, request: Request
+    ) -> tuple[dict[str, Any], ExperimentInput]:
+        row = identity.db.get(CampaignLineage, identifier)
+        if row is None or row.owner_id != identity.user.id:
+            raise HTTPException(404, "WORKSPACE_CANDIDATE_NOT_FOUND")
+        if (
+            row.kind != "EVALUATION"
+            or row.source != "AI_GATEWAY"
+            or row.payload.get("decision") != "RESEARCH_CANDIDATE"
+        ):
+            raise HTTPException(409, "WORKSPACE_RESEARCH_EVIDENCE_REQUIRED")
+        campaign = identity.db.get(ResearchCampaign, row.campaign_id)
+        runtime = identity.db.get(CampaignRuntime, row.campaign_id)
+        critique = identity.db.scalar(
+            select(CampaignLineage).where(
+                CampaignLineage.owner_id == identity.user.id,
+                CampaignLineage.campaign_id == row.campaign_id,
+                CampaignLineage.parent_id == row.id,
+                CampaignLineage.kind == "CRITIQUE",
+                CampaignLineage.source == "AI_GATEWAY",
+            )
+        )
+        if (
+            runtime is None
+            or runtime.owner_id != identity.user.id
+            or runtime.state != "COMPLETED"
+            or critique is None
+        ):
+            raise HTTPException(409, "WORKSPACE_COMPLETED_REVIEW_REQUIRED")
+        evidence = identity.db.get(CampaignLineage, row.parent_id)
+        if (
+            not campaign
+            or campaign.owner_id != identity.user.id
+            or not evidence
+            or evidence.owner_id != identity.user.id
+            or evidence.campaign_id != row.campaign_id
+            or evidence.kind != "EVIDENCE"
+            or row.payload.get("evidence_id") != str(evidence.id)
+        ):
+            raise HTTPException(409, "WORKSPACE_LINEAGE_INVALID")
+>       run = run_for(identity, UUID(evidence.payload["experiment_id"]))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'experiment_id'
+
+apps/api/workspace/routes.py:84: KeyError
+_ test_malformed_evidence_returns_bounded_refusal_instead_of_crashing_library[payload1] _
+
+payload = {'experiment_id': 'not-a-uuid'}
+
+    @pytest.mark.parametrize("payload", [{}, {"experiment_id": "not-a-uuid"}])
+    def test_malformed_evidence_returns_bounded_refusal_instead_of_crashing_library(
+        payload: dict[str, Any],
+    ) -> None:
+        identity, request, row = lineage(payload)
+        with pytest.raises(HTTPException) as refused:
+>           routes.candidate_for(row.id, identity, request)
+
+tests/test_workspace_validation.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+apps/api/workspace/routes.py:84: in candidate_for
+    run = run_for(identity, UUID(evidence.payload["experiment_id"]))
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <[AttributeError("'UUID' object has no attribute 'int'") raised in repr()] UUID object at 0x11292a2d0>
+hex = 'notauuid', bytes = None, bytes_le = None, fields = None, int = None
+version = None, is_safe = <SafeUUID.unknown: None>
+
+    def __init__(self, hex=None, bytes=None, bytes_le=None, fields=None,
+                       int=None, version=None,
+                       *, is_safe=SafeUUID.unknown):
+        r"""Create a UUID from either a string of 32 hexadecimal digits,
+        a string of 16 bytes as the 'bytes' argument, a string of 16 bytes
+        in little-endian order as the 'bytes_le' argument, a tuple of six
+        integers (32-bit time_low, 16-bit time_mid, 16-bit time_hi_version,
+        8-bit clock_seq_hi_variant, 8-bit clock_seq_low, 48-bit node) as
+        the 'fields' argument, or a single 128-bit integer as the 'int'
+        argument.  When a string of hex digits is given, curly braces,
+        hyphens, and a URN prefix are all optional.  For example, these
+        expressions all yield the same UUID:
+    
+        UUID('{12345678-1234-5678-1234-567812345678}')
+        UUID('12345678123456781234567812345678')
+        UUID('urn:uuid:12345678-1234-5678-1234-567812345678')
+        UUID(bytes='\x12\x34\x56\x78'*4)
+        UUID(bytes_le='\x78\x56\x34\x12\x34\x12\x78\x56' +
+                      '\x12\x34\x56\x78\x12\x34\x56\x78')
+        UUID(fields=(0x12345678, 0x1234, 0x5678, 0x12, 0x34, 0x567812345678))
+        UUID(int=0x12345678123456781234567812345678)
+    
+        Exactly one of 'hex', 'bytes', 'bytes_le', 'fields', or 'int' must
+        be given.  The 'version' argument is optional; if given, the resulting
+        UUID will have its variant and version set according to RFC 4122,
+        overriding the given 'hex', 'bytes', 'bytes_le', 'fields', or 'int'.
+    
+        is_safe is an enum exposed as an attribute on the instance.  It
+        indicates whether the UUID has been generated in a way that is safe
+        for multiprocessing applications, via uuid_generate_time_safe(3).
+        """
+    
+        if [hex, bytes, bytes_le, fields, int].count(None) != 4:
+            raise TypeError('one of the hex, bytes, bytes_le, fields, '
+                            'or int arguments must be given')
+        if hex is not None:
+            hex = hex.replace('urn:', '').replace('uuid:', '')
+            hex = hex.strip('{}').replace('-', '')
+            if len(hex) != 32:
+>               raise ValueError('badly formed hexadecimal UUID string')
+E               ValueError: badly formed hexadecimal UUID string
+
+../../../.cache/codex-runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/uuid.py:178: ValueError
+_______ test_persisted_cross_account_selection_is_not_shown_as_available _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x112dcff80>
+
+    def test_persisted_cross_account_selection_is_not_shown_as_available(monkeypatch: Any) -> None:
+        account = uuid4()
+        selected = SimpleNamespace(id=uuid4(), decision_id=uuid4(), revision=1)
+        monkeypatch.setattr(routes, "selection_for", lambda *args: selected)
+        monkeypatch.setattr(routes, "candidate_for", lambda *args: ({"account_id": str(uuid4())}, None))
+        result = routes.selection(account, Mock(), Mock())
+>       assert result["selection"]["available"] is False
+E       assert True is False
+
+tests/test_workspace_validation.py:64: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/andy/Documents/ChatGPT/Sistem Trade Ai/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_workspace_validation.py::test_malformed_evidence_returns_bounded_refusal_instead_of_crashing_library[payload0]
+FAILED tests/test_workspace_validation.py::test_malformed_evidence_returns_bounded_refusal_instead_of_crashing_library[payload1]
+FAILED tests/test_workspace_validation.py::test_persisted_cross_account_selection_is_not_shown_as_available
+3 failed, 1 warning in 0.12s

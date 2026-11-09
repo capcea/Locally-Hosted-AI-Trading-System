@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { researchErrors } from './copy/ro';
 import { aiErrors } from './ai/copy';
+import { parseBudgetDiagnostics, budgetExplanation } from './ai/budget-diagnostics';
+import type { BudgetDiagnostics } from './ai/budget-diagnostics';
 import { campaignErrors } from './campaigns/copy';
 import type { components } from './generated/api';
 import {
@@ -19,6 +21,7 @@ export type AuditEvent = components['schemas']['AuditView'];
 export type User = components['schemas']['UserView'];
 
 const sessionSchema = z.object({
+  auth_mode: z.enum(['PASSWORD', 'TOTP']).default('TOTP'),
   user: z.object({
     id: z.uuid(),
     username: z.string(),
@@ -37,6 +40,7 @@ export class ApiError extends Error {
     public status: number,
     message: string,
     public code = '',
+    public budget?: BudgetDiagnostics,
   ) {
     super(message);
   }
@@ -44,7 +48,7 @@ export class ApiError extends Error {
 
 export async function api<T>(
   path: string,
-  options: { method?: string; body?: unknown; csrf?: string } = {},
+  options: { method?: string; body?: unknown; csrf?: string; signal?: AbortSignal } = {},
 ): Promise<T> {
   let revision = authRevision();
   const obsolete = () => new ApiError(409, authMessages.AUTH_STATE_CHANGED, 'AUTH_STATE_CHANGED');
@@ -52,6 +56,7 @@ export async function api<T>(
     method: options.method ?? 'GET',
     credentials: 'same-origin',
     cache: 'no-store',
+    ...(options.signal ? { signal: options.signal } : {}),
     headers: {
       ...(options.body === undefined ? {} : { 'Content-Type': 'application/json' }),
       ...(options.csrf ? { 'X-CSRF-Token': options.csrf } : {}),
@@ -62,7 +67,7 @@ export async function api<T>(
   if (!response.ok) {
     const labels: Record<number, string> = {
       401: 'Sesiune expirată sau date de autentificare incorecte.',
-      403: 'Acces refuzat. Verifică rolul, sesiunea MFA și protecția cererii.',
+      403: 'Acces refuzat. Verifică rolul, sesiunea și protecția cererii.',
       404: 'Înregistrarea nu există sau nu îți aparține.',
       409: 'Conflict: reîncarcă datele și verifică versiunea sau condițiile acțiunii.',
       422: 'Date invalide. Verifică toate câmpurile și folosește valori zecimale exacte.',
@@ -76,12 +81,29 @@ export async function api<T>(
     if (revision !== authRevision()) throw obsolete();
     const code =
       authCode(response.headers.get('X-Auth-Error'), detail?.detail) ||
+      (path.startsWith('/ai/') &&
+      typeof detail?.detail === 'string' &&
+      [
+        'AI_CONTEXT_BUDGET_EXCEEDED',
+        'AI_CONTEXT_BUDGET_UNVERIFIED',
+        'AI_INPUT_BYTE_LIMIT',
+        'AI_CONTEXT_TIER_UNAVAILABLE',
+        'AI_REQUEST_BYTE_LIMIT',
+      ].includes(detail.detail)
+        ? detail.detail
+        : '') ||
       (response.status === 401
         ? path === '/auth/login'
           ? 'LOGIN_INVALID'
           : 'SESSION_EXPIRED'
         : '');
     let detailCode = '';
+    // Only the explicitly classified capacity/size failures replace the generic 422 heading.
+    const aiMessage = Object.hasOwn(aiErrors, code) ? aiErrors[code] : '';
+    const budget =
+      code.startsWith('AI_CONTEXT_BUDGET_') || code === 'AI_CONTEXT_TIER_UNAVAILABLE'
+        ? parseBudgetDiagnostics(response.headers.get('X-AI-Context-Budget'))
+        : undefined;
     const messages = path.startsWith('/campaigns')
       ? campaignErrors
       : path.startsWith('/ai/')
@@ -89,7 +111,7 @@ export async function api<T>(
         : researchErrors;
     if (path.startsWith('/research/') || path.startsWith('/ai/') || path.startsWith('/campaigns')) {
       if (typeof detail?.detail === 'string' && Object.hasOwn(messages, detail.detail))
-        detailCode = ' ' + messages[detail.detail] + ' [' + detail.detail + ']';
+        detailCode = (aiMessage ? '' : ' ' + messages[detail.detail]) + ' [' + detail.detail + ']';
     }
     if (typeof window !== 'undefined') {
       const event =
@@ -106,9 +128,13 @@ export async function api<T>(
       response.status,
       (code === 'MFA_INVALID' && path === '/auth/reauthenticate'
         ? 'Parola sau codul MFA nu sunt valide. Dacă ai folosit deja codul, așteaptă următorul cod din autentificator.'
-        : (authMessages[code] ?? labels[response.status] ?? 'Cererea nu a putut fi finalizată.')) +
-        detailCode,
+        : (authMessages[code] ??
+          (aiMessage || labels[response.status]) ??
+          'Cererea nu a putut fi finalizată.')) +
+        detailCode +
+        (budget ? budgetExplanation(budget) : ''),
       code,
+      budget,
     );
   }
   if (options.method === 'POST' && rotatesSession(path)) revision = advanceAuthRevision();

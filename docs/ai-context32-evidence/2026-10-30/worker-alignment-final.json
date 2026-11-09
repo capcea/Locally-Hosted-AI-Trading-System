@@ -1,0 +1,9 @@
+{
+  "owner_approved": true,
+  "queues_empty_before_refresh": true,
+  "current_manifest_matches": {
+    "research-worker": true,
+    "campaign-worker": true
+  },
+  "ai_worker_not_recreated": true
+}

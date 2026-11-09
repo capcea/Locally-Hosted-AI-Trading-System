@@ -221,24 +221,36 @@ def main(
                         *(
                             [
                                 "tests/test_phase1_integration.py",
+                                "tests/test_password_auth_integration.py",
+                                "tests/test_password_ai_integration.py",
+                                "tests/test_ai_context_budget_integration.py",
+                                "tests/test_workspace_integration.py",
                                 "tests/test_mfa_session_integration.py",
                             ]
                             if auth_only
                             else ["tests/test_risk_integration.py"]
                             if risk_only
-                            else ["tests/test_openrouter_integration.py"]
+                            else [
+                                "tests/test_openrouter_integration.py",
+                                "tests/test_ai_standing_integration.py",
+                            ]
                             if openrouter_only
                             else ["tests/test_campaign_integration.py"]
                             if campaigns_only
                             else [
                                 "tests/test_service_roundtrips.py",
                                 "tests/test_phase1_integration.py",
+                                "tests/test_password_auth_integration.py",
+                                "tests/test_password_ai_integration.py",
+                                "tests/test_ai_context_budget_integration.py",
+                                "tests/test_workspace_integration.py",
                                 "tests/test_market_integration.py",
                                 "tests/test_execution_integration.py",
                                 "tests/test_risk_integration.py",
                                 "tests/test_research_integration.py",
                                 "tests/test_research_fx_integration.py",
                                 "tests/test_ai_integration.py",
+                                "tests/test_ai_standing_integration.py",
                                 "tests/test_campaign_integration.py",
                                 "tests/test_openrouter_integration.py",
                                 "tests/test_mfa_session_integration.py",

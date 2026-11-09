@@ -1,4 +1,4 @@
-"""Persistent owner bootstrap, mandatory MFA and revocable opaque sessions."""
+"""Password/session authentication with retained, explicit legacy TOTP compatibility."""
 
 import hmac
 import secrets
@@ -30,7 +30,7 @@ from apps.api.identity.dependencies import (
     auth_attempt,
     key_for,
     require_owner,
-    require_recent_mfa,
+    require_sensitive_session,
     settings,
     store_for,
 )
@@ -65,6 +65,7 @@ def session_view(user: User, session: LoginSession, raw: str, key: str) -> Sessi
     return SessionView.model_validate(
         {
             "user": UserView.model_validate(user),
+            "auth_mode": session.auth_policy,
             "state": session.state,
             "csrf_token": keyed_digest(key, "csrf", raw),
             "expires_at": session.expires_at,
@@ -84,7 +85,8 @@ def new_session(
         state=state,
         expires_at=now + timedelta(seconds=lifetime),
         idle_expires_at=now + timedelta(seconds=min(lifetime, config.session_idle_seconds)),
-        mfa_at=now if state == "FULL" else None,
+        auth_policy=config.auth_mode,
+        mfa_at=now if state == "FULL" and config.auth_mode == "TOTP" else None,
     )
     db.add(session)
     db.flush()
@@ -134,6 +136,7 @@ def status(request: Request) -> BootstrapStatus:
         initialized = state is not None and state.bootstrapped
         return BootstrapStatus(
             initialized=initialized,
+            auth_mode=settings(request).auth_mode,
             setup_available=not initialized and settings(request).auth_bootstrap_token is not None,
         )
 
@@ -172,7 +175,13 @@ def bootstrap(body: Bootstrap, request: Request, response: Response) -> SessionV
             correlation_id=request.state.correlation_id,
             after={"role": "OWNER"},
         )
-        return new_session(db, user, "ENROLLMENT", request, response)
+        return new_session(
+            db,
+            user,
+            "FULL" if settings(request).auth_mode == "PASSWORD" else "ENROLLMENT",
+            request,
+            response,
+        )
 
 
 @router.post("/login", response_model=SessionView)
@@ -188,7 +197,13 @@ def login(body: Credentials, request: Request, response: Response) -> SessionVie
             if PASSWORDS.check_needs_rehash(user.password_hash):
                 user.password_hash = hash_password(body.password.get_secret_value())
             result = new_session(
-                db, user, "MFA" if user.mfa_secret else "ENROLLMENT", request, response
+                db,
+                user,
+                "FULL"
+                if settings(request).auth_mode == "PASSWORD"
+                else ("MFA" if user.mfa_secret else "ENROLLMENT"),
+                request,
+                response,
             )
         append_event(
             db,
@@ -223,6 +238,8 @@ def revoke_sessions(identity: FullIdentity, response: Response) -> None:
 
 @router.post("/mfa/enroll", response_model=Enrollment)
 def enroll(identity: Identity) -> Enrollment:
+    if identity.auth_mode == "PASSWORD":
+        raise HTTPException(409, "TOTP is not required by the current authentication policy")
     if identity.session.state != "ENROLLMENT" or identity.user.mfa_secret:
         raise HTTPException(409, "MFA enrollment not available")
     secret = pyotp.random_base32()
@@ -259,6 +276,8 @@ def mfa_failure(identity: Principal) -> NoReturn:
 
 @router.post("/mfa/confirm", response_model=RecoveryResult)
 def confirm(body: Code, request: Request, response: Response, identity: Identity) -> RecoveryResult:
+    if identity.auth_mode == "PASSWORD":
+        raise HTTPException(409, "TOTP is not required by the current authentication policy")
     auth_attempt(request, str(identity.user.id))
     user = identity.user
     if (
@@ -284,6 +303,8 @@ def confirm(body: Code, request: Request, response: Response, identity: Identity
 
 @router.post("/mfa/verify", response_model=SessionView)
 def verify(body: Code, request: Request, response: Response, identity: Identity) -> SessionView:
+    if identity.auth_mode == "PASSWORD":
+        raise HTTPException(409, "TOTP is not required by the current authentication policy")
     auth_attempt(request, str(identity.user.id))
     user = identity.user
     if identity.session.state != "MFA" or not user.mfa_secret:
@@ -296,6 +317,8 @@ def verify(body: Code, request: Request, response: Response, identity: Identity)
 
 @router.post("/mfa/recover", response_model=SessionView)
 def recover(body: Code, request: Request, response: Response, identity: Identity) -> SessionView:
+    if identity.auth_mode == "PASSWORD":
+        raise HTTPException(409, "TOTP is not required by the current authentication policy")
     auth_attempt(request, str(identity.user.id))
     if identity.session.state != "MFA":
         raise HTTPException(409, "Password-authenticated MFA challenge required")
@@ -320,16 +343,28 @@ def recover(body: Code, request: Request, response: Response, identity: Identity
     return rotate(identity, "ENROLLMENT", request, response)
 
 
+def password_failure(identity: Principal) -> NoReturn:
+    identity.audit("password.verification_failed", entity_id=identity.user.id)
+    identity.db.commit()
+    raise HTTPException(401, "Invalid current password", headers={"X-Auth-Error": "REAUTH_INVALID"})
+
+
 @router.post("/reauthenticate", response_model=SessionView)
 def reauthenticate(
     body: Reauthenticate, request: Request, response: Response, identity: FullIdentity
 ) -> SessionView:
     auth_attempt(request, str(identity.user.id))
     encrypted = identity.user.mfa_secret
-    if (
-        not password_matches(identity.user.password_hash, body.password.get_secret_value())
-        or encrypted is None
-        or not consume_totp(identity, body.code.get_secret_value(), encrypted)
+    valid_password = password_matches(identity.user.password_hash, body.password.get_secret_value())
+    if not valid_password and settings(request).auth_mode == "PASSWORD":
+        password_failure(identity)
+    if not valid_password or (
+        settings(request).auth_mode == "TOTP"
+        and (
+            encrypted is None
+            or body.code is None
+            or not consume_totp(identity, body.code.get_secret_value(), encrypted)
+        )
     ):
         mfa_failure(identity)
     identity.audit("session.reauthenticated", entity_id=identity.user.id)
@@ -340,9 +375,11 @@ def reauthenticate(
 def change_password(
     body: ChangePassword, request: Request, response: Response, identity: FullIdentity
 ) -> None:
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     auth_attempt(request, str(identity.user.id))
     if not password_matches(identity.user.password_hash, body.current_password.get_secret_value()):
+        if settings(request).auth_mode == "PASSWORD":
+            password_failure(identity)
         mfa_failure(identity)
     identity.user.password_hash = hash_password(body.new_password.get_secret_value())
     revoke_all(identity.db, identity.user)
@@ -366,7 +403,7 @@ def users(
 @router.post("/users", response_model=UserView, status_code=201)
 def create_user(body: UserCreate, identity: FullIdentity) -> UserView:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     user = User(
         username=body.username,
         display_name=body.display_name,
@@ -382,7 +419,7 @@ def create_user(body: UserCreate, identity: FullIdentity) -> UserView:
 @router.patch("/users/{user_id}", response_model=UserView)
 def change_user(user_id: UUID, body: UserUpdate, identity: FullIdentity) -> UserView:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
     user = identity.db.scalar(select(User).where(User.id == user_id).with_for_update())
     if user is None:
         raise HTTPException(404, "User not found")

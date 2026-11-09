@@ -11,6 +11,8 @@ services:
       AI_REDIS_URL: ${AI_API_REDIS_URL:?Run the documented AI setup}
       AI_ENDPOINTS: ${AI_ENDPOINTS:-[]}
       AI_OPENROUTER_ENABLED: ${AI_OPENROUTER_ENABLED:-false}
+      AI_CONTEXT_TIERS: ${AI_CONTEXT_TIERS:-[4096,16384,32768]}
+      AI_MAX_INPUT_BYTES: ${AI_MAX_INPUT_BYTES:-65536}
     secrets: [ai-content-key]
   ai-worker:
     profiles: [ai]

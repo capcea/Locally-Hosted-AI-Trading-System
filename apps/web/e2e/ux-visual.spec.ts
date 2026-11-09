@@ -1,12 +1,15 @@
 import { expect, test } from '@playwright/test';
+import { seedRiskFixture } from './risk-fixture';
 
-test('non-secret public Home has reviewed light/dark visual baselines and reflows', async ({
+test('non-secret dashboard retains visual review gates and responsive navigation', async ({
   page,
-}) => {
-  // Capture ONLY the signed-out public page. Auth/recovery capture remains globally disabled.
+}, info) => {
+  // Only disposable non-secret fixture state is captured, after authentication is complete.
+  // Existing golden files remain untouched and require explicit Product V2 owner review.
+  await seedRiskFixture(page, info.project.name === 'mobile');
   const clock = page.locator('time[data-visual-clock]');
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Acasă', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Trading Dashboard', exact: true })).toBeVisible();
   await expect(clock).toBeVisible();
   await expect(page.locator('input[type=password],.enrollment-secret,.recovery-codes')).toHaveCount(
     0,
@@ -51,8 +54,8 @@ test('non-secret public Home has reviewed light/dark visual baselines and reflow
   await page.setViewportSize({ width: 320, height: 800 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   const nav = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
-  await expect(nav.getByRole('link')).toHaveCount(5);
-  for (const link of await nav.getByRole('link').all()) {
+  await expect(nav.locator('.cockpit-nav-link')).toHaveCount(3);
+  for (const link of await nav.locator('.cockpit-nav-link').all()) {
     const bounds = await link.boundingBox();
     expect(bounds?.height).toBeGreaterThanOrEqual(44);
   }

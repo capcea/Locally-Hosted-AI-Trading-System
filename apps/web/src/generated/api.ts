@@ -1208,6 +1208,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/ai/models/{model_id}/context-revisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Context Revision */
+        post: operations["context_revision_api_v1_ai_models__model_id__context_revisions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/ai/models/{model_id}/probe": {
         parameters: {
             query?: never;
@@ -1237,6 +1254,26 @@ export interface paths {
         put?: never;
         /** Route Role */
         post: operations["route_role_api_v1_ai_routes_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ai/requests/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Preview
+         * @description Same assembly/authorization/capacity gate, with no provider call, job or reservation.
+         */
+        post: operations["preview_api_v1_ai_requests_preview_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1408,6 +1445,110 @@ export interface paths {
         put?: never;
         /** Credential */
         post: operations["credential_api_v1_ai_connections__connection_id__credential_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ai/standing-authorization": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read */
+        get: operations["read_api_v1_ai_standing_authorization_get"];
+        put?: never;
+        /** Activate */
+        post: operations["activate_api_v1_ai_standing_authorization_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ai/standing-authorization/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke */
+        post: operations["revoke_api_v1_ai_standing_authorization_revoke_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/ai/inference-readiness": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Readiness */
+        get: operations["readiness_api_v1_ai_inference_readiness_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workspace/library": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Library */
+        get: operations["library_api_v1_workspace_library_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workspace/accounts/{account_id}/strategy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Selection */
+        get: operations["selection_api_v1_workspace_accounts__account_id__strategy_get"];
+        put?: never;
+        /** Select Strategy */
+        post: operations["select_strategy_api_v1_workspace_accounts__account_id__strategy_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/workspace/accounts/{account_id}/simulate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Simulate */
+        post: operations["simulate_api_v1_workspace_accounts__account_id__simulate_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1838,6 +1979,8 @@ export interface components {
         };
         /** ActionKey */
         ActionKey: {
+            /** Standing Authorization Id */
+            standing_authorization_id?: string | null;
             /**
              * Cloud Cost Acknowledged
              * @default false
@@ -2012,6 +2155,12 @@ export interface components {
         };
         /** BootstrapStatus */
         BootstrapStatus: {
+            /**
+             * Auth Mode
+             * @default PASSWORD
+             * @enum {string}
+             */
+            auth_mode: "PASSWORD" | "TOTP";
             /** Initialized */
             initialized: boolean;
             /** Setup Available */
@@ -2737,6 +2886,11 @@ export interface components {
             /** Id */
             id: string;
         };
+        /** ContextRevisionInput */
+        ContextRevisionInput: {
+            /** Context Ceiling */
+            context_ceiling: number;
+        };
         /** CreateCampaign */
         CreateCampaign: {
             /** Key */
@@ -3221,6 +3375,8 @@ export interface components {
         };
         /** GatewayAction */
         GatewayAction: {
+            /** Standing Authorization Id */
+            standing_authorization_id?: string | null;
             /**
              * Cloud Cost Acknowledged
              * @default false
@@ -3238,14 +3394,14 @@ export interface components {
             allow_remote: boolean;
             /**
              * Processing Acknowledged
-             * @constant
+             * @default false
              */
-            processing_acknowledged: true;
+            processing_acknowledged: boolean;
             /**
              * Retain Structured Output
-             * @constant
+             * @default false
              */
-            retain_structured_output: true;
+            retain_structured_output: boolean;
         };
         /** Generation */
         Generation: {
@@ -4553,11 +4709,8 @@ export interface components {
         };
         /** Reauthenticate */
         Reauthenticate: {
-            /**
-             * Code
-             * Format: password
-             */
-            code: string;
+            /** Code */
+            code?: string | null;
             /**
              * Password
              * Format: password
@@ -4706,6 +4859,10 @@ export interface components {
             schema_version: 1;
             /** Question */
             question: string;
+            /** Context Mode */
+            context_mode?: ("AUTO" | "RAPID" | "STANDARD" | "COMPLEX") | null;
+            /** Standing Authorization Id */
+            standing_authorization_id?: string | null;
             /**
              * Cloud Cost Acknowledged
              * @default false
@@ -4733,14 +4890,14 @@ export interface components {
             allow_remote: boolean;
             /**
              * Processing Acknowledged
-             * @constant
+             * @default false
              */
-            processing_acknowledged: true;
+            processing_acknowledged: boolean;
             /**
              * Retain Structured Output
-             * @constant
+             * @default false
              */
-            retain_structured_output: true;
+            retain_structured_output: boolean;
         };
         /** ResearchObjective */
         ResearchObjective: {
@@ -5135,6 +5292,14 @@ export interface components {
              */
             acknowledged_prior_exposure_unknown: true;
         };
+        /** SelectionInput */
+        SelectionInput: {
+            /**
+             * Decision Id
+             * Format: uuid
+             */
+            decision_id: string;
+        };
         /** ServiceHealth */
         ServiceHealth: {
             /** Id */
@@ -5183,6 +5348,12 @@ export interface components {
         };
         /** SessionView */
         SessionView: {
+            /**
+             * Auth Mode
+             * @default TOTP
+             * @enum {string}
+             */
+            auth_mode: "PASSWORD" | "TOTP";
             user: components["schemas"]["UserView"];
             /**
              * State
@@ -5327,6 +5498,16 @@ export interface components {
             /** Swap Through */
             swap_through?: string | null;
         };
+        /** SimulationInput */
+        SimulationInput: {
+            /** Key */
+            key: string;
+            /**
+             * Acknowledged Historical Simulation
+             * @constant
+             */
+            acknowledged_historical_simulation: true;
+        };
         /** SimulationModel */
         "SimulationModel-Input": {
             /** Assumption Source */
@@ -5406,6 +5587,29 @@ export interface components {
              * @default 0
              */
             seed: number;
+        };
+        /** StandingInput */
+        StandingInput: {
+            /**
+             * Version
+             * @default ai-standing-v1
+             * @constant
+             */
+            version: "ai-standing-v1";
+            /** Connection Ids */
+            connection_ids: string[];
+            /** Roles */
+            roles: ("RESEARCH" | "CODING" | "CRITIC" | "LIGHTWEIGHT")[];
+            /** Data Categories */
+            data_categories: ("strategy" | "experiment" | "dataset" | "documentation" | "ai_artifact")[];
+            /** Operations */
+            operations: ("INFER" | "PROBE" | "DISCOVER")[];
+            /** Request Usd */
+            request_usd: string;
+            /** Daily Usd */
+            daily_usd: string;
+            /** Monthly Usd */
+            monthly_usd: string;
         };
         /** StrategyInput */
         StrategyInput: {
@@ -8562,6 +8766,43 @@ export interface operations {
             };
         };
     };
+    context_revision_api_v1_ai_models__model_id__context_revisions_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContextRevisionInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     probe_api_v1_ai_models__model_id__probe_post: {
         parameters: {
             query?: never;
@@ -8634,6 +8875,41 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_api_v1_ai_requests_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RequestInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -8982,6 +9258,263 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    read_api_v1_ai_standing_authorization_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    activate_api_v1_ai_standing_authorization_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StandingInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    revoke_api_v1_ai_standing_authorization_revoke_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    readiness_api_v1_ai_inference_readiness_get: {
+        parameters: {
+            query?: {
+                role?: string;
+                category?: "strategy" | "experiment" | "dataset" | "documentation" | "ai_artifact";
+                context_tokens?: number;
+                output_tokens?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    library_api_v1_workspace_library_get: {
+        parameters: {
+            query?: {
+                offset?: number;
+                limit?: number;
+                account_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    selection_api_v1_workspace_accounts__account_id__strategy_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    select_strategy_api_v1_workspace_accounts__account_id__strategy_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SelectionInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulate_api_v1_workspace_accounts__account_id__simulate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SimulationInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
                 headers: {
                     [name: string]: unknown;
                 };

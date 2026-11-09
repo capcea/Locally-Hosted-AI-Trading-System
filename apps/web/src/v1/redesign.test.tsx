@@ -28,7 +28,7 @@ const strategy: ReviewedStrategy = {
 };
 describe('approved V1 routes and independent safety', () => {
   it.each([
-    ['/', 'Acasă'],
+    ['/', 'Trading Dashboard'],
     ['/testeaza/strategii', 'Strategii'],
     ['/testeaza/nou', 'Backtesting'],
     ['/testeaza/activitate', 'Experimente'],
@@ -129,7 +129,7 @@ describe('real data or explicit empty compositions', () => {
     ] as ResearchJob[];
     expect(filterExperiments(jobs, ' EMA_ ', 'RUNNING', 'VALIDATION')).toEqual([jobs[0]]);
     expect(filterExperiments(jobs, '', 'CANCELLED', '')).toEqual([]);
-    expect(jobs[0].job.state).toBe('RUNNING');
+    expect(jobs[0].job?.state).toBe('RUNNING');
   });
   it('results without a stored experiment have no fabricated metric or graph', () => {
     const html = renderToStaticMarkup(<ResultsOverview jobs={[]} failed={false} />);

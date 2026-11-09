@@ -1,0 +1,195 @@
+[
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_openrouter_readiness.py",
+      "tests/test_openrouter.py",
+      "tests/test_provider_diagnostics.py",
+      "-q"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.032,
+    "output": ".cache/openrouter-routing-fix/focused-unit.txt",
+    "label": "focused-unit"
+  },
+  {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test",
+      "--",
+      "src/ai/ProviderError.test.tsx",
+      "src/ai/ModelProbe.test.tsx",
+      "src/ai/ai.test.tsx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.059,
+    "output": ".cache/openrouter-routing-fix/focused-frontend.txt",
+    "label": "focused-frontend"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 44.323,
+    "output": ".cache/openrouter-routing-fix/focused-services.txt",
+    "label": "focused-services"
+  },
+  {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 43.518,
+    "output": ".cache/openrouter-routing-fix/focused-services-final.txt",
+    "label": "focused-services-final"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 0.215,
+    "output": ".cache/openrouter-routing-fix/check.txt",
+    "label": "check"
+  },
+  {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 17.173,
+    "output": ".cache/openrouter-routing-fix/check-final.txt",
+    "label": "check-final"
+  },
+  {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.243,
+    "output": ".cache/openrouter-routing-fix/contracts.txt",
+    "label": "contracts"
+  },
+  {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.385,
+    "output": ".cache/openrouter-routing-fix/smoke.txt",
+    "label": "smoke"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "ai-worker",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 7.404,
+    "output": ".cache/openrouter-routing-fix/image-build.txt",
+    "label": "image-build"
+  },
+  {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "ai-worker",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.959,
+    "output": ".cache/openrouter-routing-fix/service-start.txt",
+    "label": "service-start"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.925,
+    "output": ".cache/openrouter-routing-fix/secret-scan.txt",
+    "label": "secret-scan"
+  },
+  {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.134,
+    "output": ".cache/openrouter-routing-fix/repository-check.txt",
+    "label": "repository-check"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.03,
+    "output": ".cache/openrouter-routing-fix/diff-check.txt",
+    "label": "diff-check"
+  },
+  {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.155,
+    "output": ".cache/openrouter-routing-fix/secret-scan-final.txt",
+    "label": "secret-scan-final"
+  }
+]

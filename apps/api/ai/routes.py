@@ -1,10 +1,13 @@
 """AI request orchestration. No provider credentials/HTTP calls or model execution tools here."""
 
 import json
+import logging
 import re
 import time
 from collections.abc import Iterator
-from datetime import timedelta
+from dataclasses import dataclass
+from datetime import UTC, datetime, timedelta
+from decimal import Decimal
 from typing import Any, cast
 from uuid import UUID, uuid4
 
@@ -15,24 +18,29 @@ from redis.exceptions import RedisError
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
+from apps.api.ai.budget import allocate, measure
 from apps.api.ai.context import ContextScope, assemble
 from apps.api.identity.dependencies import (
     FullIdentity,
     Principal,
     require_owner,
-    require_recent_mfa,
+    require_sensitive_session,
 )
 from packages.ai.contracts import (
+    OUTPUTS,
     ActionKey,
     AIJobView,
     ConnectionInput,
     ContextReference,
+    ContextRevisionInput,
     EnabledInput,
+    Generation,
     ModelInput,
     RequestInput,
     RouteInput,
     State,
 )
+from packages.ai.diagnostics import safe_provider_diagnostic
 from packages.ai.lifecycle import event
 from packages.ai.models import (
     AIArtifact,
@@ -43,6 +51,7 @@ from packages.ai.models import (
     AIModel,
     AIRequest,
     AIRoute,
+    AIStandingAuthorization,
 )
 from packages.ai.prompts import VERSION, canonical, digest, messages, validate_output
 from packages.ai.registry import latest_verification, snapshot
@@ -60,7 +69,7 @@ def configured(request: Request) -> GatewaySettings:
 
 def privileged(identity: Principal) -> None:
     require_owner(identity)
-    require_recent_mfa(identity)
+    require_sensitive_session(identity)
 
 
 def scoped(identity: Principal, row_type: type[Any], identifier: UUID) -> Any:
@@ -104,6 +113,19 @@ def job_view(db: Session, row: AIRequest, config: GatewaySettings) -> AIJobView:
                 )
         except Exception as exc:
             raise HTTPException(409, "AI_ARTIFACT_UNAVAILABLE_OR_INVALID") from exc
+    metadata = artifact.artifact_metadata if artifact else None
+    if metadata is None and job.error and job.state in {"FAILED", "UNKNOWN"}:
+        details = db.scalar(
+            select(AIEvent.details).where(
+                AIEvent.request_id == row.id,
+                AIEvent.sequence == job.event_sequence,
+                AIEvent.kind == job.state,
+            )
+        )
+        if isinstance(details, dict) and details.get("code") == job.error:
+            safe = safe_provider_diagnostic(details.get("provider_diagnostic"))
+            if safe:
+                metadata = {"provider_diagnostic": safe}
     return AIJobView(
         id=row.id,
         kind=row.kind,
@@ -116,41 +138,13 @@ def job_view(db: Session, row: AIRequest, config: GatewaySettings) -> AIJobView:
         expires_at=row.expires_at,
         retain_until=row.retain_until,
         output=output,
-        metadata=artifact.artifact_metadata if artifact else None,
+        metadata=metadata,
         content_expired=expired,
         context_available=context_available,
     )
 
 
-def enqueue(
-    identity: Principal,
-    request: Request,
-    *,
-    key: str,
-    kind: str,
-    role: str,
-    fingerprint: str,
-    spec: dict[str, Any],
-    content: dict[str, Any],
-    processing_minutes: int,
-    retention_hours: int,
-    cloud_acknowledged: bool = False,
-) -> AIJobView:
-    config = configured(request)
-    previous = identity.db.scalar(
-        select(AIRequest).where(AIRequest.owner_id == identity.user.id, AIRequest.key == key)
-    )
-    if previous:
-        if previous.digest != fingerprint:
-            raise HTTPException(409, "AI_IDEMPOTENCY_CONFLICT")
-        return job_view(identity.db, previous, config)
-    try:
-        cipher = config.cipher()
-    except (ValueError, OSError) as exc:
-        raise HTTPException(503, "AI_NOT_CONFIGURED") from exc
-    if len(canonical(content).encode()) > config.max_input_bytes:
-        raise HTTPException(422, "AI_INPUT_BYTE_LIMIT")
-    # FullIdentity already serializes this owner's mutations on the existing user row.
+def quota_available(identity: Principal, config: GatewaySettings, role: str) -> bool:
     now = utcnow()
     total = (
         identity.db.scalar(
@@ -193,18 +187,57 @@ def enqueue(
         )
         or 0
     )
-    if (
+    return not (
         total >= config.metadata_limit
         or hourly >= config.hourly_owner_limit
         or hourly_role >= config.hourly_role_limit
         or pending >= 8
-    ):
+    )
+
+
+def enqueue(
+    identity: Principal,
+    request: Request,
+    *,
+    key: str,
+    kind: str,
+    role: str,
+    fingerprint: str,
+    spec: dict[str, Any],
+    content: dict[str, Any],
+    processing_minutes: int,
+    retention_hours: int,
+    cloud_acknowledged: bool = False,
+    standing: AIStandingAuthorization | None = None,
+) -> AIJobView:
+    config = configured(request)
+    previous = identity.db.scalar(
+        select(AIRequest).where(AIRequest.owner_id == identity.user.id, AIRequest.key == key)
+    )
+    if previous:
+        if previous.digest != fingerprint:
+            raise HTTPException(409, "AI_IDEMPOTENCY_CONFLICT")
+        return job_view(identity.db, previous, config)
+    try:
+        cipher = config.cipher()
+    except (ValueError, OSError) as exc:
+        raise HTTPException(503, "AI_NOT_CONFIGURED") from exc
+    if len(canonical(content).encode()) > config.max_input_bytes:
+        raise HTTPException(422, "AI_INPUT_BYTE_LIMIT")
+    # FullIdentity already serializes this owner's mutations on the existing user row.
+    now = utcnow()
+    if not quota_available(identity, config, role):
         raise HTTPException(429, "AI_QUOTA_REACHED")
-    if identity.session.mfa_at is None:
+    if identity.session.auth_policy == "TOTP" and identity.session.mfa_at is None:
         raise HTTPException(403, "AI_RECENT_MFA_REQUIRED")
     selected = spec.get("models", [spec])[0]
     if selected.get("cloud"):
         spec = {**spec, "cloud": selected["cloud"]}
+    deadline = now + timedelta(minutes=processing_minutes)
+    if standing is None and identity.session.auth_policy == "TOTP":
+        if identity.session.mfa_at is None:
+            raise HTTPException(403, "AI_RECENT_MFA_REQUIRED")
+        deadline = min(deadline, identity.session.mfa_at + timedelta(minutes=5))
     row = AIRequest(
         id=uuid4(),
         owner_id=identity.user.id,
@@ -215,12 +248,11 @@ def enqueue(
         specification={
             **spec,
             "session_id": str(identity.session.id),
+            "auth_policy": identity.session.auth_policy,
+            **({"standing_authorization_id": str(standing.id)} if standing else {}),
             "input_digest": digest(content),
         },
-        expires_at=min(
-            now + timedelta(minutes=processing_minutes),
-            identity.session.mfa_at + timedelta(minutes=5),
-        ),
+        expires_at=deadline,
         retain_until=now + timedelta(hours=retention_hours),
     )
     job = AIJob(request_id=row.id, owner_id=identity.user.id)
@@ -242,6 +274,7 @@ def enqueue(
                 parameters.get("context_tokens", selected.get("context_ceiling", 4096)),
                 parameters.get("output_tokens", 64),
                 cloud_acknowledged,
+                standing.policy if standing else None,
             )
         except ValueError as exc:
             raise HTTPException(409, str(exc)) from exc
@@ -295,6 +328,7 @@ def status(identity: FullIdentity, request: Request) -> dict[str, Any]:
         or 0
     )
     worker_state = "UNKNOWN"
+    worker_expires_at = None
     if config.redis_url:
         try:
             with Redis.from_url(
@@ -303,6 +337,7 @@ def status(identity: FullIdentity, request: Request) -> dict[str, Any]:
                 stamp = queue.get("ai:worker-heartbeat")
                 if stamp and 0 <= time.time() - float(stamp) < 20:
                     worker_state = "OBSERVED_RECENTLY"
+                    worker_expires_at = datetime.fromtimestamp(float(stamp) + 20, UTC).isoformat()
         except (RedisError, ValueError):
             pass
     return {
@@ -310,6 +345,7 @@ def status(identity: FullIdentity, request: Request) -> dict[str, Any]:
         "configuration_error": request.app.state.ai_error,
         "model_count": count,
         "worker_state": worker_state,
+        "worker_expires_at": worker_expires_at,
         "gpu_availability": "UNKNOWN",
         "external_execution": "DENY_ALL",
         "generated_code_execution": False,
@@ -424,11 +460,40 @@ def enable_connection(
     return {"enabled": row.enabled}
 
 
+def action_authorization(
+    identity: Principal,
+    config: GatewaySettings,
+    body: ActionKey,
+    kind: str,
+    connections: list[UUID],
+) -> AIStandingAuthorization | None:
+    if body.standing_authorization_id is None:
+        return None
+    from packages.ai.standing import require
+
+    try:
+        return require(
+            identity.db,
+            identity.user.id,
+            body.standing_authorization_id,
+            config,
+            kind=kind,
+            role="LIGHTWEIGHT",
+            categories=[],
+            connections=connections,
+        )
+    except ValueError as exc:
+        raise HTTPException(409, str(exc)) from exc
+
+
 @router.post("/connections/{connection_id}/discover", response_model=AIJobView, status_code=202)
 def discover(
     connection_id: UUID, body: ActionKey, identity: FullIdentity, request: Request
 ) -> AIJobView:
-    privileged(identity)
+    if body.standing_authorization_id is None:
+        privileged(identity)
+    else:
+        require_owner(identity)
     row = scoped(identity, AIConnection, connection_id)
     profile = ConnectionInput.model_validate(row.specification)
     if not row.enabled:
@@ -452,10 +517,12 @@ def discover(
             spec["cloud"] = cloud_snapshot(identity.db, identity.user.id, row.id, config)
         except ValueError as exc:
             raise HTTPException(409, str(exc)) from exc
+    standing = action_authorization(identity, config, body, "DISCOVER", [row.id])
     return enqueue(
         identity,
         request,
         key=body.key,
+        standing=standing,
         kind="DISCOVER",
         role="LIGHTWEIGHT",
         fingerprint=digest({"discover": str(row.id), "key": body.key}),
@@ -497,8 +564,10 @@ def models(identity: FullIdentity, request: Request) -> list[dict[str, Any]]:
 
 
 @router.post("/models", status_code=201)
-def register_model(body: ModelInput, identity: FullIdentity) -> dict[str, str]:
+def register_model(body: ModelInput, identity: FullIdentity, request: Request) -> dict[str, str]:
     privileged(identity)
+    if body.context_ceiling > max(configured(request).context_tiers):
+        raise HTTPException(422, "AI_CONTEXT_TIER_UNAVAILABLE")
     connection = scoped(identity, AIConnection, body.connection_id)
     if connection.specification.get("provider") == "OPENROUTER" and (
         not re.fullmatch(r"[A-Za-z0-9_-]+/[A-Za-z0-9][A-Za-z0-9_.:+-]{0,119}", body.name)
@@ -527,19 +596,68 @@ def register_model(body: ModelInput, identity: FullIdentity) -> dict[str, str]:
     return {"id": str(row.id)}
 
 
+@router.post("/models/{model_id}/context-revisions", status_code=201)
+def context_revision(
+    model_id: UUID, body: ContextRevisionInput, identity: FullIdentity, request: Request
+) -> dict[str, Any]:
+    privileged(identity)
+    old = scoped(identity, AIModel, model_id)
+    if body.context_ceiling <= old.context_ceiling:
+        raise HTTPException(422, "AI_CONTEXT_REVISION_MUST_INCREASE")
+    existing = identity.db.scalar(
+        select(AIModel).where(
+            AIModel.owner_id == identity.user.id,
+            AIModel.connection_id == old.connection_id,
+            AIModel.name == old.name,
+            AIModel.context_ceiling == body.context_ceiling,
+        )
+    )
+    if existing:
+        return {
+            "id": str(existing.id),
+            "previous_model_id": str(old.id),
+            "verification_required": True,
+        }
+    created = register_model(
+        ModelInput(
+            connection_id=old.connection_id, name=old.name, context_ceiling=body.context_ceiling
+        ),
+        identity,
+        request,
+    )
+    identity.audit(
+        "ai.model_context_revision",
+        entity_id=UUID(created["id"]),
+        after={
+            "previous_model_id": str(old.id),
+            "previous_ceiling": old.context_ceiling,
+            "context_ceiling": body.context_ceiling,
+            "verification_required": True,
+        },
+    )
+    return {**created, "previous_model_id": str(old.id), "verification_required": True}
+
+
 @router.post("/models/{model_id}/probe", response_model=AIJobView, status_code=202)
 def probe(model_id: UUID, body: ActionKey, identity: FullIdentity, request: Request) -> AIJobView:
-    privileged(identity)
+    if body.standing_authorization_id is None:
+        privileged(identity)
+    else:
+        require_owner(identity)
     try:
         model = snapshot(
             identity.db, identity.user.id, model_id, configured(request), verified=False
         )
     except ValueError as exc:
         raise HTTPException(409, "AI_MODEL_OR_CONNECTION_UNAVAILABLE") from exc
+    standing = action_authorization(
+        identity, configured(request), body, "PROBE", [UUID(model["connection_id"])]
+    )
     return enqueue(
         identity,
         request,
         key=body.key,
+        standing=standing,
         kind="PROBE",
         cloud_acknowledged=body.cloud_cost_acknowledged,
         role="LIGHTWEIGHT",
@@ -605,19 +723,35 @@ def route_role(body: RouteInput, identity: FullIdentity, request: Request) -> di
     return {"id": str(row.id), "revision": revision}
 
 
-@router.post("/requests", response_model=AIJobView, status_code=202)
-def submit(body: RequestInput, identity: FullIdentity, request: Request) -> AIJobView:
-    privileged(identity)
+def authorize_submission(body: RequestInput, identity: FullIdentity) -> None:
+    if body.standing_authorization_id is None:
+        privileged(identity)
+        from packages.ai.standing import latest
+
+        if latest(identity.db, identity.user.id) is not None:
+            raise HTTPException(409, "AI_STANDING_AUTHORIZATION_REQUIRED")
+        if not body.processing_acknowledged or not body.retain_structured_output:
+            raise HTTPException(409, "AI_STANDING_AUTHORIZATION_REQUIRED")
+    else:
+        require_owner(identity)
+
+
+@dataclass
+class Prepared:
+    models: list[dict[str, Any]]
+    binding: AIRoute
+    standing: AIStandingAuthorization | None
+    context: list[dict[str, Any]]
+    prompt: list[dict[str, str]]
+    budget: dict[str, int]
+    parameters: Generation
+    remote_allowed: bool
+
+
+def prepare_request(
+    body: RequestInput, identity: FullIdentity, request: Request, *, log: bool = True
+) -> Prepared:
     config = configured(request)
-    # Idempotency is checked before re-reading mutable context; retries must not silently change it.
-    previous = identity.db.scalar(
-        select(AIRequest).where(AIRequest.owner_id == identity.user.id, AIRequest.key == body.key)
-    )
-    fingerprint = digest(body.model_dump(mode="json"))
-    if previous:
-        if previous.digest != fingerprint:
-            raise HTTPException(409, "AI_IDEMPOTENCY_CONFLICT")
-        return job_view(identity.db, previous, config)
     binding = identity.db.scalar(
         select(AIRoute)
         .where(AIRoute.owner_id == identity.user.id, AIRoute.role == body.role)
@@ -636,11 +770,29 @@ def submit(body: RequestInput, identity: FullIdentity, request: Request) -> AIJo
         raise HTTPException(409, "AI_MODEL_REQUIRES_VERIFICATION") from exc
     if any(m.get("cloud") for m in selected) and len(selected) != 1:
         raise HTTPException(409, "AI_CLOUD_FALLBACK_PROHIBITED")
+    standing = None
+    if body.standing_authorization_id:
+        from packages.ai.standing import require
+
+        try:
+            standing = require(
+                identity.db,
+                identity.user.id,
+                body.standing_authorization_id,
+                config,
+                kind="INFER",
+                role=body.role,
+                categories=[r.kind for r in body.references],
+                connections=[UUID(m["connection_id"]) for m in selected],
+            )
+        except ValueError as exc:
+            raise HTTPException(409, str(exc)) from exc
+    remote_allowed = standing is not None or body.allow_remote
     context = assemble(ContextScope(identity.db, identity.user.id), body.references, config)
     for model in selected:
         policy = ConnectionInput.model_validate(model["profile"]).policy
         if model["remote"] and (
-            not body.allow_remote
+            not remote_allowed
             or not policy.remote_processing
             or (
                 any(r.kind not in {"strategy", "documentation"} for r in body.references)
@@ -649,8 +801,6 @@ def submit(body: RequestInput, identity: FullIdentity, request: Request) -> AIJo
         ):
             raise HTTPException(409, "AI_REMOTE_CONTEXT_POLICY_REFUSED")
         capabilities = model["capabilities"]
-        if body.parameters.context_tokens > capabilities.get("context_tokens", 0):
-            raise HTTPException(422, "AI_CONTEXT_BUDGET_UNVERIFIED")
         if (
             body.parameters.reasoning == "DISABLED"
             and capabilities.get("reasoning_controls") != "VERIFIED_DISABLED"
@@ -665,24 +815,122 @@ def submit(body: RequestInput, identity: FullIdentity, request: Request) -> AIJo
         prompt = messages(body.role, body.question, context)
     except ValueError as exc:
         raise HTTPException(422, "AI_SECRET_LIKE_INPUT_REFUSED") from exc
-    # Bytes conservatively bound text tokens; reserve chat/template overhead. Not a tokenizer claim.
-    if (
-        len(canonical(prompt).encode()) + body.parameters.output_tokens + 512
-        > body.parameters.context_tokens
-    ):
-        raise HTTPException(422, "AI_CONTEXT_BUDGET_EXCEEDED")
+    budget = measure(
+        prompt,
+        OUTPUTS[body.role].model_json_schema(),
+        body.parameters,
+        selected,
+        question=body.question,
+        context=context,
+        storage_limit=config.max_input_bytes,
+    )
+    mode = body.context_mode
+    if mode is None and "context_tokens" not in body.parameters.model_fields_set:
+        mode = "AUTO"
+    budget, failure = allocate(budget, mode, config.context_tiers)
+    if log:
+        logging.getLogger("research.requests").info(
+            canonical(
+                {
+                    "event": "ai.context_budget",
+                    "request_id": str(request.state.correlation_id),
+                    "method": "UTF8_BYTE_UPPER_BOUND_V1",
+                    "context_accepted": failure is None,
+                    **budget,
+                }
+            )
+        )
+    if failure:
+        # Existing string detail stays compatible. Only allowlisted integer sizes leave this gate.
+        raise HTTPException(422, failure, headers={"X-AI-Context-Budget": canonical(budget)})
+    return Prepared(
+        selected,
+        binding,
+        standing,
+        context,
+        prompt,
+        budget,
+        body.parameters.model_copy(update={"context_tokens": budget["selected_context_tokens"]}),
+        remote_allowed,
+    )
+
+
+@router.post("/requests/preview")
+def preview(body: RequestInput, identity: FullIdentity, request: Request) -> dict[str, Any]:
+    """Same assembly/authorization/capacity gate, with no provider call, job or reservation."""
+    authorize_submission(body, identity)
+    prepared = prepare_request(body, identity, request, log=False)
+    financial = None
+    if prepared.models[0].get("cloud"):
+        from packages.ai.cloud import budget_state, reservation_amount
+
+        financial = budget_state(
+            identity.db,
+            identity.user.id,
+            prepared.models[0]["cloud"],
+            reservation_amount(
+                prepared.models[0]["cloud"],
+                "INFER",
+                prepared.parameters.context_tokens,
+                prepared.parameters.output_tokens,
+            ),
+            prepared.standing.policy if prepared.standing else None,
+        )
+    if financial:
+        financial["daily_remaining_usd"] = str(
+            max(
+                Decimal(0),
+                Decimal(financial["daily_limit_usd"]) - Decimal(financial["daily_reserved_usd"]),
+            )
+        )
+        financial["monthly_remaining_usd"] = (
+            str(
+                max(
+                    Decimal(0),
+                    Decimal(financial["monthly_limit_usd"])
+                    - Decimal(financial["monthly_reserved_usd"]),
+                )
+            )
+            if financial["monthly_limit_usd"] is not None
+            else None
+        )
+    return {"budget": prepared.budget, "financial": financial, "provider_request_sent": False}
+
+
+@router.post("/requests", response_model=AIJobView, status_code=202)
+def submit(body: RequestInput, identity: FullIdentity, request: Request) -> AIJobView:
+    authorize_submission(body, identity)
+    config = configured(request)
+    # Old clients/queued retries retain their pre-context-mode fingerprint exactly.
+    payload = body.model_dump(
+        mode="json", exclude={"context_mode"} if body.context_mode is None else set()
+    )
+    fingerprint = digest(payload)
+    previous = identity.db.scalar(
+        select(AIRequest).where(AIRequest.owner_id == identity.user.id, AIRequest.key == body.key)
+    )
+    if previous:
+        if previous.digest != fingerprint:
+            raise HTTPException(409, "AI_IDEMPOTENCY_CONFLICT")
+        return job_view(identity.db, previous, config)
+    prepared = prepare_request(body, identity, request)
+    selected, binding, standing = prepared.models, prepared.binding, prepared.standing
+    context, prompt, remote_allowed = prepared.context, prepared.prompt, prepared.remote_allowed
     spec = {
         "models": selected,
         "route_id": str(binding.id),
         "route_revision": binding.revision,
-        "parameters": body.parameters.model_dump(mode="json"),
+        "parameters": prepared.parameters.model_dump(mode="json"),
+        "context_allocation": prepared.budget,
+        "context_mode": body.context_mode
+        or ("LEGACY" if "context_tokens" in body.parameters.model_fields_set else "AUTO"),
         "references": [r.model_dump() for r in body.references],
         "allowed_refs": [c["reference"] for c in context],
         "input_refs": [{"reference": c["reference"], "sha256": c["sha256"]} for c in context],
         "question_sha256": digest(body.question),
         "prompt_version": VERSION,
         "allow_fallback": body.allow_fallback,
-        "allow_remote": body.allow_remote,
+        "allow_remote": remote_allowed,
     }
     policies = [ConnectionInput.model_validate(m["profile"]).policy for m in selected]
     return enqueue(
@@ -690,6 +938,7 @@ def submit(body: RequestInput, identity: FullIdentity, request: Request) -> AIJo
         request,
         key=body.key,
         kind="INFER",
+        standing=standing,
         cloud_acknowledged=body.cloud_cost_acknowledged,
         role=body.role,
         fingerprint=fingerprint,

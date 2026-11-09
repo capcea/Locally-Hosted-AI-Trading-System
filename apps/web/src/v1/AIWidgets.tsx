@@ -133,7 +133,7 @@ export function AIQuickCard() {
       <p id="home-ai-reason">
         {ready
           ? 'Urmează revizuirea contextului și acordul explicit în AI Center. Nu trimitem automat întrebarea.'
-          : 'AI indisponibil. Sunt necesare un model privat verificat, un worker observat recent și acces de proprietar cu MFA.'}
+          : 'AI indisponibil. Sunt necesare un model privat verificat, un worker observat recent și o sesiune validă de proprietar.'}
       </p>
       <Link href={session?.state === 'FULL' ? '/setari/ai' : '/autentificare'}>
         {session?.state === 'FULL'

@@ -1,0 +1,160 @@
+{
+  "focused-frontend": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test",
+      "--",
+      "src/ai/cloud-policy.test.tsx",
+      "src/ai/ai.test.tsx",
+      "src/ai/ProviderError.test.tsx",
+      "src/ai/ModelProbe.test.tsx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.877,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/focused-frontend.txt"
+  },
+  "service-start": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "up",
+      "-d",
+      "--no-build",
+      "--no-deps",
+      "--wait",
+      "--wait-timeout",
+      "90",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 11.128,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/service-start.txt"
+  },
+  "check-final": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 18.014,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/check-final.txt"
+  },
+  "image-build": {
+    "command": [
+      "docker",
+      "compose",
+      "--env-file",
+      ".env",
+      "--env-file",
+      ".env.ai",
+      "-f",
+      "compose.yaml",
+      "-f",
+      "compose.ai.yaml",
+      "--profile",
+      "ai",
+      "--profile",
+      "campaigns",
+      "build",
+      "web"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.216,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/image-build.txt"
+  },
+  "focused-services": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.integration_services",
+      "--openrouter-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 46.582,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/focused-services.txt"
+  },
+  "check": {
+    "command": [
+      "make",
+      "check"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 2.236,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/check.txt"
+  },
+  "contracts": {
+    "command": [
+      "make",
+      "contracts-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.307,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/contracts.txt"
+  },
+  "secret-scan": {
+    "command": [
+      "make",
+      "secret-scan"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.093,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/secret-scan.txt"
+  },
+  "repository-check": {
+    "command": [
+      "make",
+      "repository-check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.139,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/repository-check.txt"
+  },
+  "smoke": {
+    "command": [
+      "make",
+      "smoke-demo"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.35,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/smoke.txt"
+  },
+  "diff-check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.036,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/diff-check.txt"
+  },
+  "browser-collection": {
+    "command": [
+      "npm",
+      "--prefix",
+      "apps/web",
+      "run",
+      "test:e2e",
+      "--",
+      "--list"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.136,
+    "output": "/Users/andy/Documents/ChatGPT/Sistem Trade Ai/.cache/cloud-save-ux-fix/browser-collection.txt"
+  }
+}

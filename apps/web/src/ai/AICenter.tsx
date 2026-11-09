@@ -7,11 +7,17 @@ import { Link, navigate, useRoute } from '../navigation/history';
 import { active, ai, jobLabel, roleLabels, roles, stateLabels, verified } from './api';
 import type { Binding, Connection, Endpoint, Job, Model, Role, Status, Submission } from './api';
 import { aiErrors } from './copy';
+import { verifiedContextWindow, afterSubmissionFailure } from './submission-budget';
+import { ContextBudgetControl } from './ContextBudget';
+import type { ContextMode } from './ContextBudget';
 import { AIRoles } from '../v1/AIWidgets';
 import { StatusPill } from '../v1/components';
 import { takeAIQuestion } from './draft';
 import { CloudSetup, CredentialEditor } from './CloudSetup';
 import AIChat from './AIChat';
+import { StandingAuthorization, standingAction } from './StandingAuthorization';
+import type { Standing } from './StandingAuthorization';
+import { ModelProbe } from './ModelProbe';
 
 const object = (value: unknown): Record<string, unknown> =>
   value && typeof value === 'object' && !Array.isArray(value)
@@ -103,6 +109,7 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
     [connections, setConnections] = useState<Connection[]>([]);
   const [readFailures, setReadFailures] = useState<string[]>([]);
   const [cloudCost, setCloudCost] = useState(false);
+  const [standing, setStanding] = useState<Standing | null>(null);
   const [error, setError] = useState(''),
     [busy, setBusy] = useState(false),
     [loading, setLoading] = useState(true);
@@ -118,6 +125,7 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
   const selected = route.jobId ?? null;
   const setSelected = (id: string) => navigate(`/testeaza/ai/${encodeURIComponent(id)}`);
   const frozen = useRef<Submission | null>(null);
+  const [contextMode, setContextMode] = useState<ContextMode>('AUTO');
   const [preview, setPreview] = useState<{ id: string; question: string } | null>(null);
   useEffect(() => {
     const handoff = takeAIQuestion(session.user.id);
@@ -132,8 +140,10 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
       ai<Job[]>('/requests'),
       ai<Endpoint[]>('/endpoints'),
       ai<Connection[]>('/connections'),
+      ai<Standing>('/standing-authorization'),
     ] as const);
-    const [s, m, r, j, e, c] = reads;
+    const [s, m, r, j, e, c, a] = reads;
+    setStanding(a.status === 'fulfilled' ? a.value : null);
     setStatus(s.status === 'fulfilled' ? s.value : null);
     setModels(m.status === 'fulfilled' ? m.value : []);
     setBindings(r.status === 'fulfilled' ? r.value : []);
@@ -147,6 +157,7 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
       'activitatea',
       'destinațiile',
       'conexiunile',
+      'autorizarea permanentă',
     ];
     setReadFailures(reads.flatMap((result, i) => (result.status === 'rejected' ? [names[i]] : [])));
   }, []);
@@ -223,6 +234,7 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
       await refresh();
       return result;
     } catch (e) {
+      if (path === '/requests') frozen.current = afterSubmissionFailure(frozen.current, e);
       setError(safeError(e));
       return undefined;
     } finally {
@@ -231,9 +243,14 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
   }
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (contextWindow === null) {
+      setError('Capacitatea modelului nu este verificată. Verifică modelul înainte de analiză.');
+      return;
+    }
     if (!frozen.current)
       frozen.current = {
         schema_version: 1,
+        context_mode: contextMode,
         key: crypto.randomUUID().replaceAll('-', ''),
         question,
         role,
@@ -241,7 +258,7 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
           ? [{ kind: referenceKind, id: reference }]
           : [{ kind: 'documentation', id: 'research-limits-v1' }],
         parameters: {
-          context_tokens: 4096,
+          context_tokens: contextWindow,
           output_tokens: 768,
           temperature: 0,
           top_p: 1,
@@ -264,10 +281,14 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
     }
   }
   const binding = bindings.find((b) => b.role === role);
-  const usable = binding && models.some((m) => m.id === binding.model_id && verified(m));
+  const contextWindow = verifiedContextWindow(models, binding, fallback);
+  const usable =
+    contextWindow !== null &&
+    binding &&
+    models.some((m) => m.id === binding.model_id && verified(m));
   const current = jobs.find((j) => j.id === selected);
   const unavailable = !owner
-    ? 'Numai proprietarul cu MFA recent poate solicita o analiză.'
+    ? 'Numai proprietarul autentificat poate solicita o analiză.'
     : !status
       ? 'Starea gateway-ului nu poate fi verificată. Reîncarcă informațiile; nu presupunem disponibilitatea.'
       : !status.configured
@@ -355,6 +376,13 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
                 ))}
               </select>
             </label>
+            <ContextBudgetControl
+              mode={contextMode}
+              onChange={setContextMode}
+              disabled={busy || !!frozen.current}
+              ceiling={contextWindow}
+              preview={null}
+            />
             <label>
               Întrebarea ta
               <textarea
@@ -498,8 +526,18 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
       {advanced && (
         <Registry
           models={models}
+          passwordAuth={session.auth_mode === 'PASSWORD'}
+          standing={standing}
           bindings={bindings}
           endpoints={endpoints}
+          connections={connections}
+          busy={busy || !owner || loading}
+          mutate={mutate}
+        />
+      )}
+      {advanced && (
+        <StandingAuthorization
+          passwordAuth={session.auth_mode === 'PASSWORD'}
           connections={connections}
           busy={busy || !owner || loading}
           mutate={mutate}
@@ -612,13 +650,17 @@ function LegacyAICenter({ session, advanced = false }: { session: Session; advan
 }
 
 export function Registry({
+  passwordAuth = false,
   models,
+  standing,
   bindings,
   endpoints,
   connections,
   busy,
   mutate,
 }: {
+  passwordAuth?: boolean;
+  standing?: Standing | null;
   models: Model[];
   bindings: Binding[];
   endpoints: Endpoint[];
@@ -629,7 +671,7 @@ export function Registry({
   const [destination, setDestination] = useState('');
   const [protocol, setProtocol] = useState('OLLAMA_NATIVE');
   const [credentialFor, setCredentialFor] = useState('');
-  const [cloudProbeConsent, setCloudProbeConsent] = useState(false);
+  const [cloudProbeConsent, setCloudProbeConsent] = useState<Record<string, boolean>>({});
   const chosen = endpoints.find((e) => e.id === destination) ?? endpoints[0];
   const publicCloud = chosen?.transport === 'OPENROUTER_PUBLIC';
   const value = (data: FormData, key: string) => String(data.get(key) ?? '');
@@ -643,12 +685,12 @@ export function Registry({
   }
   return (
     <section className="panel v1-ai-registry" aria-label="Registru AI">
-      <h3>Configurare avansată · proprietar cu MFA recent</h3>
+      <h3>Configurare avansată · proprietar autentificat</h3>
       <p>
         Adresele și secretele sunt configurate de operator în infrastructură. Browserul alege doar
         destinații aprobate. Salvarea unui model nu confirmă funcționarea sa.
       </p>
-      <CloudSetup busy={busy} mutate={mutate} />
+      <CloudSetup busy={busy} mutate={mutate} passwordAuth={passwordAuth} />
       <nav className="v1-filter-chips" aria-label="Configurare AI">
         <a href="#ai-destinations">Destinații și cloud</a>
         <a href="#ai-models">Modele</a>
@@ -833,6 +875,7 @@ export function Registry({
                 }
                 onClick={() => {
                   void mutate(`/connections/${c.id}/discover`, {
+                    standing_authorization_id: standingAction(standing, 'DISCOVER', c.id),
                     key: crypto.randomUUID().replaceAll('-', ''),
                   });
                 }}
@@ -895,7 +938,7 @@ export function Registry({
               name="context"
               type="number"
               min={1024}
-              max={32768}
+              max={131072}
               defaultValue={4096}
               required
             />
@@ -904,35 +947,60 @@ export function Registry({
             Înregistrează modelul neverificat
           </button>
         </form>
-        <label>
-          <input
-            type="checkbox"
-            checked={cloudProbeConsent}
-            onChange={(e) => setCloudProbeConsent(e.target.checked)}
-          />
-          Aprob o verificare OpenRouter cu o singură completare structurată, cu posibile costuri în
-          limita autorizată.
-        </label>
         <ul>
           {models.map((m) => (
             <li key={m.id}>
-              {m.name} · {verified(m) ? 'verificare curentă' : 'neverificat sau expirat'}
-              <button
-                type="button"
-                disabled={
-                  busy ||
-                  (connections.find((c) => c.id === m.connection_id)?.provider === 'OPENROUTER' &&
-                    !cloudProbeConsent)
-                }
-                onClick={() => {
-                  void mutate(`/models/${m.id}/probe`, {
-                    cloud_cost_acknowledged: cloudProbeConsent,
-                    key: crypto.randomUUID().replaceAll('-', ''),
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  const data = new FormData(event.currentTarget);
+                  void mutate(`/models/${m.id}/context-revisions`, {
+                    context_ceiling: Number(data.get('ceiling')),
                   });
                 }}
               >
-                Verifică printr-o solicitare reală
-              </button>
+                <label>
+                  Plafon pentru o versiune nouă
+                  <select
+                    name="ceiling"
+                    aria-label={`Plafon nou pentru ${m.name} ${m.context_ceiling}`}
+                    defaultValue="32768"
+                  >
+                    <option value="16384">16K</option>
+                    <option value="32768">32K</option>
+                  </select>
+                </label>
+                <button disabled={busy || m.context_ceiling >= 32768}>
+                  Pregătește versiunea cu context extins
+                </button>
+                <p>
+                  Versiunea și rolurile actuale rămân intacte. Verifică separat versiunea nouă, apoi
+                  atribuie rolurile dorite. Verificarea reală poate avea cost; nu pornește automat.
+                </p>
+              </form>
+              {m.name} · {m.context_ceiling / 1024}K configurat ·{' '}
+              {typeof m.verification?.context_tokens === 'number' && verified(m)
+                ? `${m.verification.context_tokens / 1024}K verificat`
+                : 'neverificat sau expirat'}
+              <ModelProbe
+                modelName={m.name}
+                connection={connections.find((c) => c.id === m.connection_id)}
+                busy={busy}
+                costApproved={cloudProbeConsent[m.id] ?? false}
+                standingAuthorized={Boolean(standingAction(standing, 'PROBE', m.connection_id))}
+                setCostApproved={(approved) =>
+                  setCloudProbeConsent((previous) => ({ ...previous, [m.id]: approved }))
+                }
+                submit={() => {
+                  const authorization = standingAction(standing, 'PROBE', m.connection_id);
+                  void mutate(`/models/${m.id}/probe`, {
+                    ...(authorization
+                      ? { standing_authorization_id: authorization }
+                      : { cloud_cost_acknowledged: cloudProbeConsent[m.id] ?? false }),
+                    key: crypto.randomUUID().replaceAll('-', ''),
+                  });
+                }}
+              />
               <Evidence title="Capabilități măsurate și expirare" value={m} />
             </li>
           ))}
@@ -972,7 +1040,7 @@ export function Registry({
                 .filter((m) => verified(m))
                 .map((m) => (
                   <option key={m.id} value={m.id}>
-                    {m.name} · {m.id.slice(0, 8)}
+                    {m.name} · {m.context_ceiling / 1024}K · {m.id.slice(0, 8)}
                   </option>
                 ))}
             </select>
@@ -985,7 +1053,7 @@ export function Registry({
                 .filter((m) => verified(m))
                 .map((m) => (
                   <option key={m.id} value={m.id}>
-                    {m.name} · {m.id.slice(0, 8)}
+                    {m.name} · {m.context_ceiling / 1024}K · {m.id.slice(0, 8)}
                   </option>
                 ))}
             </select>

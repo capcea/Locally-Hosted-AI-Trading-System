@@ -28,24 +28,24 @@ test.beforeEach(async ({ request }) => {
 
 test('browse real status, filter services, inspect governance and roadmap', async ({ page }) => {
   const observed = page.waitForResponse((r) => r.url().endsWith('/api/v1/overview') && r.ok());
-  await page.goto('/');
+  await page.goto('/setari/diagnostic');
   await assertObservedSidebar(page, parseOverview(await (await observed).json()));
-  await expect(page.getByRole('heading', { name: 'Acasă', exact: true })).toBeVisible();
-  const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
-  await expect(primary.getByRole('link')).toHaveCount(5);
   await expect(
-    page.getByText('Nu afișăm rezultate sau solduri presupuse.', { exact: false }),
+    page.getByRole('heading', { name: 'Starea serviciilor', exact: true }),
   ).toBeVisible();
-  await page.getByRole('link', { name: 'Vezi diagnostic', exact: true }).click();
+  const primary = page.getByRole('navigation', { name: 'Navigare principală', exact: true });
+  await expect(primary.locator('.cockpit-nav-link')).toHaveCount(3);
   await page.getByRole('textbox', { name: 'Caută un serviciu' }).fill('MetaTrader');
   await expect(page.getByText('MetaTrader 5', { exact: true })).toBeVisible();
   await expect(page.getByText('cTrader Open API', { exact: true })).toHaveCount(0);
-  await primary.getByRole('link', { name: 'Setări', exact: true }).click();
+  await primary.getByRole('link', { name: 'Settings', exact: true }).click();
+  await page.getByText('Secțiuni și instrumente avansate', { exact: true }).click();
   await page
     .getByRole('navigation', { name: 'În această secțiune' })
     .getByRole('link', { name: 'Capabilități și limite', exact: true })
     .click();
   await expect(page.getByText('DENY_ALL', { exact: true })).toBeVisible();
+  await page.getByText('Secțiuni și instrumente avansate', { exact: true }).click();
   await page
     .getByRole('navigation', { name: 'În această secțiune' })
     .getByRole('link', { name: 'Plan de dezvoltare', exact: true })

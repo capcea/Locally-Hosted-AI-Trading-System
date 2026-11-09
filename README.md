@@ -1,14 +1,22 @@
 # AI Trading Research Platform
 
-A local simulation-only research platform built from [the master specification](docs/PRODUCT_SPEC.md).
-Phase 5 adds eight reviewed quantitative baselines, vectorized exploratory screening, cost-aware
-event backtests through the actual simulator/risk gateway, immutable experiments, statistical validation,
-durable jobs and Romanian Strategy Lab. See [Phase 5 implementation and measured acceptance](PHASE5_COMPLETION_REPORT.md).
+A local simulation-only platform with three primary areas:
 
-All results are SIMULATED; actual dataset provenance is recorded separately. No profitable strategy,
-five-year history, external broker connectivity or independent untouched-holdout custody is certified.
-All external orders remain DENY_ALL. Generated-code execution, AI judges, paper/live promotion and
-Phase 6 are NOT IMPLEMENTED. Owner authentication/MFA and immutable risk/data boundaries are preserved.
+- **Trading Dashboard**: account-specific simulated PnL/statistics, selected research strategy and
+  actual job activity. Unavailable or stale data stays unknown.
+- **Strategy Lab**: develop hypotheses with a configured model, test reviewed strategies through the
+  existing backtesting/risk engine, inspect results and retain evidence-qualified research candidates.
+- **Settings**: guided account, AI/model authorization, historical data, risk and password/session setup.
+
+Ordinary authentication uses a password and protected session, without MFA codes by default. Existing
+MFA enrollment records are preserved. No automatic reset of users, credentials or development volumes.
+Read [the current product direction](docs/PRODUCT_DIRECTION_V2.md) and
+[implementation/acceptance evidence](PRODUCT_V2_IMPLEMENTATION_REPORT.md).
+
+A trading-specialized trained model, generated strategy-code runner and continuous broker-connected
+trader are **not implemented**. Provider verification alone does not establish trading skill. All
+external orders remain **SIMULATED / DENY_ALL**; actual research uses recorded dataset provenance,
+immutable results and protected final evaluation. Historical phase reports remain available.
 
 ## Start locally
 
@@ -24,13 +32,12 @@ make integration
 ```
 
 `make dev` also runs identity/market setup idempotently. Existing data-service secrets/volumes are preserved.
-Additive migrations through 0005 add data/jobs, execution journal and simulated risk ledgers. API/worker receive no admin storage credentials.
+Additive migrations through0012 include research/AI/campaign storage and append-only account strategy selections. API/worker receive no admin storage credentials.
 Use `make setup PYTHON=/absolute/path/to/python3.12` if needed. The initial MinIO image build compiles
 checksum-pinned upstream source and can take time. `make stop` preserves development volumes.
 
-Open [the dashboard](http://127.0.0.1:5173), choose “Cont & administrare”, and use the private
-AUTH_BOOTSTRAP_TOKEN from your ignored 0600 .env in the owner setup form. Choose your own password,
-enroll an authenticator and save recovery codes privately. Never paste secrets into chat/issues.
+Open [the dashboard](http://127.0.0.1:5173), sign in with your existing password. For a new installation, use the private
+AUTH_BOOTSTRAP_TOKEN from your ignored 0600 .env in the owner setup form. Choose your own password; no authenticator enrollment is required in the default PASSWORD policy. Never paste secrets into chat/issues.
 No development owner account was created automatically. See [the runbook](docs/RUNBOOKS.md).
 
 All published endpoints bind to loopback. This is not a public deployment. API runtime credentials

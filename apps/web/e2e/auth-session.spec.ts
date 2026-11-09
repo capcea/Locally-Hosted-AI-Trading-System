@@ -116,11 +116,22 @@ test('recent MFA, rotation, CSRF renewal and expired-session recovery keep the o
   );
   await form.getByRole('button', { name: 'Înregistrează autorizarea cloud', exact: true }).click();
   expect((await saved).status()).toBe(201);
+  await expect(region).toContainText(
+    'Salvare confirmată de server. Furnizor autorizat: synthetic-fixture.',
+  );
+  await expect(region).toContainText('Furnizor aprobat pe server:');
+  await expect(form.getByLabel('Identificatorul exact al furnizorului din amonte')).toHaveValue(
+    'synthetic-fixture',
+  );
   await page.goto('/setari/securitate');
   await page.goBack();
   await expect(page).toHaveURL(/\/setari\/ai#ai-models$/);
   await page.reload();
   await expect(page.getByRole('region', { name: 'Registru AI', exact: true })).toBeVisible();
+  await expect(region).toContainText('synthetic-fixture');
+  await expect(region.getByLabel('Identificatorul exact al furnizorului din amonte')).toHaveValue(
+    'synthetic-fixture',
+  );
   age('expire', after.session_id);
   await page.reload();
   await expect(

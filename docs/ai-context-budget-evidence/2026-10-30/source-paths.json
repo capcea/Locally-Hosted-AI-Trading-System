@@ -1,0 +1,17 @@
+[
+  "apps/api/ai/budget.py",
+  "apps/api/ai/context.py",
+  "apps/api/ai/routes.py",
+  "apps/web/src/ai/budget-diagnostics.ts",
+  "apps/web/src/ai/submission-budget.ts",
+  "apps/web/src/ai/AIChat.tsx",
+  "apps/web/src/ai/AICenter.tsx",
+  "apps/web/src/ai/copy.ts",
+  "apps/web/src/management-api.ts",
+  "tests/test_ai_context_budget.py",
+  "tests/test_ai_context_budget_integration.py",
+  "tests/test_password_ai_integration.py",
+  "apps/web/src/ai/submission-budget.test.ts",
+  "apps/web/e2e/phase6.spec.ts",
+  "scripts/integration_services.py"
+]

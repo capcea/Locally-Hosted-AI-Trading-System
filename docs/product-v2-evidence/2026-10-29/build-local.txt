@@ -1,0 +1,186 @@
+ Image ai-trading-research-migrate Building 
+ Image ai-trading-research-api Building 
+ Image ai-trading-research-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 2.01kB done
+#1 DONE 0.0s
+
+#2 [web internal] load build definition from Dockerfile
+#2 transferring dockerfile: 500B done
+#2 DONE 0.0s
+
+#3 [migrate internal] load build definition from Dockerfile
+#3 transferring dockerfile: 1.09kB done
+#3 DONE 0.0s
+
+#4 [migrate internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#4 ...
+
+#5 [web internal] load metadata for docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#5 DONE 0.7s
+
+#6 [web internal] load metadata for docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#6 DONE 0.8s
+
+#7 [web internal] load .dockerignore
+#7 transferring context: 108B done
+#7 DONE 0.0s
+
+#8 [web internal] load build context
+#8 DONE 0.0s
+
+#4 [api internal] load metadata for docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#4 DONE 0.8s
+
+#9 [migrate internal] load .dockerignore
+#9 transferring context: 293B done
+#9 DONE 0.0s
+
+#10 [migrate internal] load build context
+#10 DONE 0.0s
+
+#11 [migrate  1/14] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#11 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#11 ...
+
+#12 [web stage-1 1/3] FROM docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0
+#12 resolve docker.io/nginxinc/nginx-unprivileged:1.28.0-alpine@sha256:c97ff0bf7cbae369953c6da1232ec14ad9f971d66360c5698db0856a4cd657a0 0.4s done
+#12 DONE 0.4s
+
+#8 [web internal] load build context
+#8 transferring context: 935.19kB 0.0s done
+#8 DONE 0.0s
+
+#13 [web build 1/6] FROM docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f
+#13 resolve docker.io/library/node:24.7.0-alpine3.22@sha256:be4d5e92ac68483ec71440bf5934865b4b7fcb93588f17a24d411d15f0204e4f 0.4s done
+#13 DONE 0.4s
+
+#14 [web build 3/6] COPY package.json package-lock.json ./
+#14 CACHED
+
+#15 [web build 2/6] WORKDIR /app
+#15 CACHED
+
+#16 [web build 4/6] RUN npm ci --no-audit --no-fund
+#16 CACHED
+
+#17 [web build 5/6] COPY . .
+#17 DONE 0.0s
+
+#11 [api  1/14] FROM docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e
+#11 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.5s done
+#11 resolve docker.io/library/python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e 0.5s done
+#11 DONE 0.5s
+
+#10 [api internal] load build context
+#10 transferring context: 1.00MB 0.0s done
+#10 DONE 0.0s
+
+#18 [migrate  3/14] RUN pip install --no-cache-dir uv==0.13.5
+#18 CACHED
+
+#19 [migrate  4/14] COPY pyproject.toml uv.lock ./
+#19 CACHED
+
+#20 [migrate  2/14] WORKDIR /app
+#20 CACHED
+
+#21 [migrate  5/14] RUN uv sync --frozen --no-dev --no-cache
+#21 CACHED
+
+#22 [migrate  6/14] COPY apps/api apps/api
+#22 DONE 0.0s
+
+#23 [migrate  7/14] COPY apps/__init__.py apps/__init__.py
+#23 DONE 0.0s
+
+#24 [api  8/14] COPY packages packages
+#24 DONE 0.0s
+
+#25 [migrate  9/14] COPY workers workers
+#25 DONE 0.0s
+
+#26 [migrate 10/14] COPY migrations migrations
+#26 DONE 0.0s
+
+#27 [api 11/14] COPY scripts/__init__.py scripts/migrate_runtime.py scripts/provision_runtime.py scripts/provision_market.py scripts/market_worker.py scripts/risk_monitor.py scripts/research_worker.py scripts/campaign_worker.py scripts/
+#27 DONE 0.0s
+
+#28 [migrate 12/14] COPY alembic.ini ./
+#28 DONE 0.0s
+
+#29 [migrate 13/14] RUN /app/.venv/bin/python -m scripts.campaign_worker --help > /dev/null
+#29 DONE 1.6s
+
+#30 [api 14/14] RUN useradd --uid 10001 --create-home app
+#30 DONE 0.1s
+
+#31 [migrate] exporting to image
+#31 exporting layers 0.1s done
+#31 exporting manifest sha256:e7e596797b9e3d9c7e9d1b4abcc9a5fcb525383d36e16fd3e37e42d0793d216c done
+#31 exporting config sha256:9395c4aefba69a971ed973437e370da9787ecbd95b1c62d7cd000851c83e2c2d done
+#31 exporting attestation manifest sha256:a75e6977813e713b3916706cfabcc01d617f97a101364b2f448a2ba2422d2c69 done
+#31 exporting manifest list sha256:12e9d3cfa5da883a9a9a702f61a0abcc3cd7be9b6801c03ce4bd3ab97947ff0a done
+#31 naming to docker.io/library/ai-trading-research-migrate:latest done
+#31 unpacking to docker.io/library/ai-trading-research-migrate:latest 0.1s done
+#31 DONE 0.3s
+
+#32 [api] exporting to image
+#32 exporting layers 0.1s done
+#32 exporting manifest sha256:f150ad4b60aece5c6537043abbaf39c9943b2d47d1bf8e80f939294701e192df done
+#32 exporting config sha256:6b662b61d74bffdb781a354b08cc6dfd7ef0dc514dc1b0587af978e4aa4d152a done
+#32 exporting attestation manifest sha256:138148081d35dbced07d19c87ab9914a3c37b7dcd15d27e7939eac20c5099748 done
+#32 exporting manifest list sha256:4e85a4453e5b06efd61f6c12f9242ca01dc5eee9e565e832670fbc833b5ddf5f done
+#32 naming to docker.io/library/ai-trading-research-api:latest done
+#32 unpacking to docker.io/library/ai-trading-research-api:latest 0.1s done
+#32 DONE 0.3s
+
+#33 [migrate] resolving provenance for metadata file
+#33 DONE 0.0s
+
+#34 [api] resolving provenance for metadata file
+#34 DONE 0.0s
+
+#35 [web build 6/6] RUN npm run build
+#35 0.218 
+#35 0.218 > trading-research-web@0.1.0 build
+#35 0.218 > tsc -b && vite build
+#35 0.218 
+#35 4.122 vite v8.3.5 building client environment for production...
+#35 4.128 transforming...
+#35 4.344 ✓ 2088 modules transformed.
+#35 4.396 rendering chunks...
+#35 4.441 computing gzip size...
+#35 4.447 dist/index.html                   0.70 kB │ gzip:   0.42 kB
+#35 4.447 dist/assets/index-CHk0B0Ie.css   95.08 kB │ gzip:  19.20 kB
+#35 4.447 dist/assets/index-DIl_OCTK.js   630.02 kB │ gzip: 186.41 kB
+#35 4.447 
+#35 4.448 [plugin builtin:vite-reporter] 
+#35 4.448 (!) Some chunks are larger than 500 kB after minification. Consider:
+#35 4.448 - Using dynamic import() to code-split the application
+#35 4.448 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+#35 4.448 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+#35 4.448 ✓ built in 325ms
+#35 DONE 4.5s
+
+#36 [web stage-1 2/3] COPY nginx.conf /etc/nginx/conf.d/default.conf
+#36 CACHED
+
+#37 [web stage-1 3/3] COPY --from=build /app/dist /usr/share/nginx/html
+#37 DONE 0.0s
+
+#38 [web] exporting to image
+#38 exporting layers 0.0s done
+#38 exporting manifest sha256:52e507cd25d6b1fa02ece428dd7f5d0accf0aa49254cdc8822b9a31966a5a00a done
+#38 exporting config sha256:c9865d23a1ea0413061da6a6a7bd7903f43f61b1d0a79f3a71474b609cfcdf31 done
+#38 exporting attestation manifest sha256:3712ca7fd859667bcfe671bad434dc7555f104b74abd92da0f094bf8fc9eb9f8 done
+#38 exporting manifest list sha256:5963511feb59e43f59e67968c330d08566f1f29bd1a4df5a63b9edc4dde05c48 done
+#38 naming to docker.io/library/ai-trading-research-web:latest done
+#38 unpacking to docker.io/library/ai-trading-research-web:latest done
+#38 DONE 0.1s
+
+#39 [web] resolving provenance for metadata file
+#39 DONE 0.0s
+ Image ai-trading-research-migrate Built 
+ Image ai-trading-research-api Built 
+ Image ai-trading-research-web Built 

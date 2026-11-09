@@ -1,0 +1,54 @@
+{
+  "source": "https://openrouter.ai/api/v1/endpoints/zdr",
+  "method": "GET",
+  "credentials_sent": false,
+  "observed_at_utc": "2026-10-29T01:50:20.824749+00:00",
+  "http": 200,
+  "response_bytes": 1110576,
+  "matching_zdr_endpoints": [
+    {
+      "model_id": "openai/gpt-4.1-mini",
+      "tag": "azure/swedencentral",
+      "supported_parameters": [
+        "temperature",
+        "top_p",
+        "max_completion_tokens",
+        "tools",
+        "tool_choice",
+        "structured_outputs",
+        "response_format",
+        "seed"
+      ],
+      "pricing": {
+        "prompt": "0.00000044",
+        "completion": "0.00000176",
+        "web_search": "0.01",
+        "input_cache_read": "0.00000011",
+        "discount": 0
+      },
+      "status": 0
+    },
+    {
+      "model_id": "openai/gpt-4.1-mini",
+      "tag": "azure",
+      "supported_parameters": [
+        "temperature",
+        "top_p",
+        "max_completion_tokens",
+        "tools",
+        "tool_choice",
+        "structured_outputs",
+        "response_format",
+        "seed"
+      ],
+      "pricing": {
+        "prompt": "0.0000004",
+        "completion": "0.0000016",
+        "web_search": "0.01",
+        "input_cache_read": "0.0000001",
+        "discount": 0
+      },
+      "status": 0
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+
+> trading-research-web@0.1.0 test
+> vitest run src/management-api.test.ts
+
+
+ RUN  v5.0.5 /Users/andy/Documents/ChatGPT/Sistem Trade Ai/apps/web
+
+ ❯ src/management-api.test.ts (13 tests | 1 failed) 19ms
+   × forwards cancellation to the underlying read instead of leaving a pending request stuck 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/management-api.test.ts > forwards cancellation to the underlying read instead of leaving a pending request stuck
+AssertionError: expected undefined to be AbortSignal { aborted: false } // Object.is equality
+
+- Expected:
+AbortSignal {
+  Symbol(kEvents): Map {},
+  Symbol(events.maxEventTargetListeners): 0,
+  Symbol(events.maxEventTargetListenersWarned): false,
+  Symbol(kHandlers): Map {},
+  Symbol(kAborted): false,
+  Symbol(kReason): undefined,
+  Symbol(kComposite): false,
+}
+
++ Received:
+undefined
+
+ ❯ src/management-api.test.ts:179:43
+    177|   const options = { signal: controller.signal };
+    178|   await api('/workspace/library', options as Parameters<typeof api>[1]…
+    179|   expect(request.mock.calls[0][1].signal).toBe(controller.signal);
+       |                                           ^
+    180| });
+    181|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 12 passed (13)
+   Start at  20:20:29
+   Duration  156ms (import 55%, transform 22%, tests 21%, worker 2%)
+

@@ -1,0 +1,19 @@
+{
+  "preexisting_files": 1413,
+  "missing": [],
+  "changed_preexisting_files": [
+    "IMPLEMENTATION_STATUS.md",
+    "OPENROUTER_INTEGRATION_REPORT.md",
+    "apps/web/e2e/auth-session.spec.ts",
+    "apps/web/src/ai/CloudSetup.tsx",
+    "docs/IMPLEMENTATION_STATUS.md",
+    "tests/test_openrouter_integration.py"
+  ],
+  "credential_editor_unchanged": true,
+  "new_source_files": [
+    "apps/web/src/ai/cloud-policy.ts",
+    "apps/web/src/ai/CloudAuthorizationForm.tsx",
+    "apps/web/src/ai/cloud-policy.test.tsx"
+  ],
+  "backup": ".cache/cloud-save-ux-fix/before.tar.gz"
+}

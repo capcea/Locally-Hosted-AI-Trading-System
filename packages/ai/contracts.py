@@ -74,8 +74,12 @@ OUTPUTS: dict[str, type[Contract]] = {
 }
 
 
+ContextMode = Literal["AUTO", "RAPID", "STANDARD", "COMPLEX"]
+MAX_CONTEXT_TOKENS = 131072  # Structural bound; runtime tiers still default to at most32K.
+
+
 class Generation(Contract):
-    context_tokens: int = Field(default=4096, ge=1024, le=32768)
+    context_tokens: int = Field(default=4096, ge=1024, le=MAX_CONTEXT_TOKENS)
     output_tokens: int = Field(default=768, ge=64, le=4096)
     temperature: float = Field(default=0, ge=0, le=1, allow_inf_nan=False)
     top_p: float = Field(default=1, gt=0, le=1, allow_inf_nan=False)
@@ -109,7 +113,7 @@ class ConnectionInput(Contract):
 class ModelInput(Contract):
     connection_id: UUID
     name: str = Field(min_length=1, max_length=150, pattern=r"^[A-Za-z0-9_./:@+-]+$")
-    context_ceiling: int = Field(default=4096, ge=1024, le=32768)
+    context_ceiling: int = Field(default=4096, ge=1024, le=MAX_CONTEXT_TOKENS)
 
 
 class RouteInput(Contract):
@@ -126,7 +130,13 @@ class RouteInput(Contract):
         return self
 
 
+class ContextRevisionInput(Contract):
+    context_ceiling: int = Field(ge=1024, le=MAX_CONTEXT_TOKENS)
+
+
 class RequestInput(ResearchQuestion):
+    context_mode: ContextMode | None = None  # Omitted explicit legacy context stays compatible.
+    standing_authorization_id: UUID | None = None
     cloud_cost_acknowledged: bool = Field(default=False, strict=True)
     key: str = Field(min_length=16, max_length=80, pattern=r"^[A-Za-z0-9_-]+$")
     role: Role
@@ -134,8 +144,8 @@ class RequestInput(ResearchQuestion):
     parameters: Generation = Field(default_factory=Generation)
     allow_fallback: bool = False
     allow_remote: bool = False
-    processing_acknowledged: Literal[True]
-    retain_structured_output: Literal[True]
+    processing_acknowledged: bool = Field(default=False, strict=True)
+    retain_structured_output: bool = Field(default=False, strict=True)
 
 
 class ModelResponseMetadata(Contract):
@@ -181,6 +191,7 @@ class AIJobView(Contract):
 
 
 class ActionKey(Contract):
+    standing_authorization_id: UUID | None = None
     cloud_cost_acknowledged: bool = Field(default=False, strict=True)
     key: str = Field(min_length=16, max_length=80, pattern=r"^[A-Za-z0-9_-]+$")
 

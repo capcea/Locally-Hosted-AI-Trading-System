@@ -13,13 +13,25 @@ import httpx
 
 from packages.ai.cloud_contracts import CloudPolicy
 from packages.ai.contracts import Generation, Provider
+from packages.ai.diagnostics import safe_provider_diagnostic
 from packages.ai.settings import Endpoint, secret_path
 
 
 class ProviderFailure(RuntimeError):
-    def __init__(self, code: str, *, retryable: bool = False, ambiguous: bool = False):
+    def __init__(
+        self,
+        code: str,
+        *,
+        retryable: bool = False,
+        ambiguous: bool = False,
+        http_status: int | None = None,
+        operation: str = "PROVIDER_REQUEST",
+    ):
         super().__init__(code)
         self.code, self.retryable, self.ambiguous = code, retryable, ambiguous
+        self.diagnostic = safe_provider_diagnostic(
+            {"http_status": http_status, "operation": operation}
+        )
 
 
 @dataclass(frozen=True)
@@ -67,6 +79,7 @@ class Adapter:
     ):
         self.endpoint, self.provider = endpoint, provider
         self.cloud_policy = cloud_policy
+        self._cloud_metadata: dict[str, dict[str, Any]] = {}
         self._credential = bearer_token
         public = provider == "OPENROUTER"
         if public != (endpoint.transport == "OPENROUTER_PUBLIC"):
@@ -122,17 +135,31 @@ class Adapter:
         if status != 200:
             raise ProviderFailure("AI_PROVIDER_REQUEST_REFUSED")
 
-    def check_response(self, status: int) -> None:
-        if self.provider == "OPENROUTER" and status in {401, 402, 403}:
+    def check_response(self, status: int, *, operation: str = "PROVIDER_REQUEST") -> None:
+        try:
+            if self.provider == "OPENROUTER" and status in {401, 402, 403}:
+                raise ProviderFailure(
+                    "AI_PROVIDER_CREDIT_REQUIRED" if status == 402 else "AI_PROVIDER_AUTH_REFUSED"
+                )
+            self.check(status)
+        except ProviderFailure as exc:
             raise ProviderFailure(
-                "AI_PROVIDER_CREDIT_REQUIRED" if status == 402 else "AI_PROVIDER_AUTH_REFUSED"
-            )
-        self.check(status)
+                exc.code,
+                retryable=exc.retryable,
+                ambiguous=exc.ambiguous,
+                http_status=status,
+                operation=operation,
+            ) from None
 
     def request(self, method: str, path: str, body: dict[str, Any] | None = None) -> dict[str, Any]:
         try:
             with self.client.stream(method, path, json=body) as response:
-                self.check_response(response.status_code)
+                self.check_response(
+                    response.status_code,
+                    operation="MODEL_CATALOG"
+                    if path in {self.models_path, "/api/tags"}
+                    else "MODEL_METADATA",
+                )
                 data = bytearray()
                 for chunk in response.iter_bytes(8192):
                     data.extend(chunk)
@@ -187,6 +214,8 @@ class Adapter:
         if self.provider == "OPENROUTER":
             if not re.fullmatch(r"[A-Za-z0-9_-]+/[A-Za-z0-9][A-Za-z0-9_.:+-]{0,119}", name):
                 raise ProviderFailure("AI_EXACT_MODEL_ID_REQUIRED")
+            if name in self._cloud_metadata:
+                return self._cloud_metadata[name]
             data = self.request("GET", self.models_path + "/" + name + "/endpoints").get("data", {})
             if not isinstance(data, dict) or data.get("id") != name or self.cloud_policy is None:
                 raise ProviderFailure("AI_MODEL_NOT_AVAILABLE")
@@ -198,10 +227,47 @@ class Adapter:
             ]
             if not selected:
                 raise ProviderFailure("AI_APPROVED_UPSTREAM_UNAVAILABLE")
+            # Public model presence is not ZDR eligibility. Inspect metadata before any completion;
+            # never silently choose another provider or remove the authorized privacy constraints.
+            zdr = self.request("GET", "/api/v1/endpoints/zdr").get("data")
+            if not isinstance(zdr, list) or len(zdr) > 10000:
+                raise ProviderFailure("AI_PROVIDER_METADATA_INVALID")
+            approved = [
+                r
+                for r in zdr
+                if isinstance(r, dict)
+                and r.get("model_id") == name
+                and r.get("tag") == self.cloud_policy.upstream_provider
+            ]
+            if not approved:
+                raise ProviderFailure("AI_APPROVED_UPSTREAM_NOT_ZDR")
+            required = {"temperature", "top_p", "response_format", "structured_outputs"}
+            compatible = []
+            for row in approved:
+                parameters = row.get("supported_parameters")
+                if (
+                    isinstance(parameters, list)
+                    and all(isinstance(p, str) for p in parameters)
+                    and required.issubset(parameters)
+                    and {"max_tokens", "max_completion_tokens"}.intersection(parameters)
+                ):
+                    compatible.append(parameters)
+            if not compatible:
+                raise ProviderFailure("AI_APPROVED_PARAMETERS_UNAVAILABLE")
+            output_limit_key = (
+                "max_tokens"
+                if any("max_tokens" in parameters for parameters in compatible)
+                else "max_completion_tokens"
+            )
             lengths = [r.get("context_length") for r in selected]
             if any(type(n) is not int or n < 1024 for n in lengths):
                 raise ProviderFailure("AI_CONTEXT_LIMIT_UNKNOWN")
-            return {"context_length": min(int(n) for n in lengths if n is not None)}
+            result = {
+                "context_length": min(int(n) for n in lengths if n is not None),
+                "output_token_parameter": output_limit_key,
+            }
+            self._cloud_metadata[name] = result
+            return result
         self.identity(name)
         if self.provider not in {"PRIVATE_OPENAI", "OPENROUTER"}:
             result = self.request("POST", "/api/show", {"model": name})
@@ -253,6 +319,9 @@ class Adapter:
         if self.provider == "OPENROUTER":
             if self.cloud_policy is None:
                 raise ProviderFailure("AI_CLOUD_AUTHORIZATION_REQUIRED")
+            output_limit_key = self.describe(name)["output_token_parameter"]
+            if output_limit_key == "max_completion_tokens":
+                body["max_completion_tokens"] = body.pop("max_tokens")
             body["provider"] = self.cloud_policy.routing()
             body["stream_options"] = {"include_usage": True}
         return body
@@ -272,7 +341,7 @@ class Adapter:
         started = time.monotonic()
         try:
             with self.client.stream("POST", path, json=body) as response:
-                self.check_response(response.status_code)
+                self.check_response(response.status_code, operation="COMPLETION")
                 for chunk in response.iter_bytes():
                     if time.monotonic() - started > max_seconds:
                         raise ProviderFailure("AI_PROVIDER_DEADLINE", ambiguous=True)
@@ -361,7 +430,7 @@ class Adapter:
         if (
             self.provider == "OPENROUTER"
             and output_tokens is not None
-            and output_tokens > body.get("max_tokens", 0)
+            and output_tokens > body.get("max_tokens", body.get("max_completion_tokens", 0))
         ):
             raise ProviderFailure("AI_PROVIDER_OUTPUT_TOKEN_LIMIT")
         return Completion(text, input_tokens, output_tokens, reasoning_seen)
@@ -385,7 +454,7 @@ class Adapter:
         ]
         if not limits:
             raise ProviderFailure("AI_CONTEXT_LIMIT_UNKNOWN")
-        limit = min(min(limits), ceiling, 32768)
+        limit = min(min(limits), ceiling, 131072)
         schema = {
             "type": "object",
             "properties": {"probe": {"type": "string", "enum": ["ok"]}},
@@ -400,6 +469,8 @@ class Adapter:
         body = self.body(
             name, [{"role": "user", "content": 'Return only {"probe":"ok"}.'}], schema, parameters
         )
+        if progress:
+            progress("")  # Revalidate authorization after metadata reads and before completion.
         result = self.complete(
             body,
             max_bytes=1024,
